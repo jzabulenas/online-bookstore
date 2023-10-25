@@ -1,19 +1,22 @@
 import logo from "../assets/logo.png";
+import Home from "./Home";
+import Categories from "./Categories";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
-        <a
+        <Link
           className="navbar-brand"
-          href="#"
+          to={"/"}
         >
           <img
             src={logo}
             alt="Book Reservation App Logo"
             style={{ width: "40px" }}
           />
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -31,44 +34,44 @@ export default function Navbar() {
         >
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a
-                className="nav-link active"
-                href="#"
+              <Link
+                className="nav-link"
+                to={"/categories"}
               >
                 Categories
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a
+              <Link
                 className="nav-link"
-                href="#"
+                to={"/books"}
               >
                 Books
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a
+              <Link
                 className="nav-link"
-                href="#"
+                to={"/favorite"}
               >
                 Favorite Books
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a
+              <Link
                 className="nav-link"
-                href="#"
+                to={"/reserved"}
               >
                 Reserved Books
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a
+              <Link
                 className="nav-link"
-                href="#"
+                to={"/about"}
               >
                 About
-              </a>
+              </Link>
             </li>
           </ul>
           <form
