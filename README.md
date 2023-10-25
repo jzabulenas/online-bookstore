@@ -1,3 +1,5 @@
 # book-reservation-app
 
-A CRUD project with Spring Boot and React.
+A CRUD project which lets users to reserve books, they like. 
+
+Created using Spring Boot and React.
