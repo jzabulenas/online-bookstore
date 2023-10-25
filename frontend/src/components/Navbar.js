@@ -1,3 +1,5 @@
+import logo from "../assets/logo.png";
+
 export default function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -6,7 +8,11 @@ export default function Navbar() {
           className="navbar-brand"
           href="#"
         >
-          Navbar
+          <img
+            src={logo}
+            alt="Book Reservation App Logo"
+            style={{ width: "40px" }}
+          />
         </a>
         <button
           className="navbar-toggler"
@@ -27,10 +33,9 @@ export default function Navbar() {
             <li className="nav-item">
               <a
                 className="nav-link active"
-                aria-current="page"
                 href="#"
               >
-                Home
+                Categories
               </a>
             </li>
             <li className="nav-item">
@@ -38,7 +43,31 @@ export default function Navbar() {
                 className="nav-link"
                 href="#"
               >
-                Link
+                Books
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link"
+                href="#"
+              >
+                Favorite Books
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link"
+                href="#"
+              >
+                Reserved Books
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link"
+                href="#"
+              >
+                About
               </a>
             </li>
           </ul>
