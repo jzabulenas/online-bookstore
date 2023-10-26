@@ -22,7 +22,7 @@ public class CategoryController {
     }
 
     @PostMapping("/categories")
-    public void addCategory(@RequestBody Category category){
-        System.out.println(category);
+    public void addCategory(@RequestBody Category category) {
+        categoryRepository.save(category);
     }
 }
