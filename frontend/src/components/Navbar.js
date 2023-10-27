@@ -32,7 +32,7 @@ export default function Navbar() {
           className="collapse navbar-collapse"
           id="navbarSupportedContent"
         >
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0 w-100 justify-content-between">
             <li className="nav-item">
               <Link
                 className="nav-link"
@@ -73,24 +73,24 @@ export default function Navbar() {
                 About
               </Link>
             </li>
-          </ul>
-          <form
-            className="d-flex"
-            role="search"
-          >
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button
-              className="btn btn-outline-success"
-              type="submit"
+            <form
+              className="d-flex"
+              role="search"
             >
-              Search
-            </button>
-          </form>
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button
+                className="btn btn-outline-success"
+                type="submit"
+              >
+                Search
+              </button>
+            </form>
+          </ul>
         </div>
       </div>
     </nav>
