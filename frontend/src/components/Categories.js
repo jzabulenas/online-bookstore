@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import Add from "./Add";
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
+  const [addClicked, setAddClicked] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -49,6 +51,13 @@ export default function Categories() {
           );
         })}
       </select>
+      <button
+        className="btn btn-success"
+        onClick={() => setAddClicked(true)}
+      >
+        Add new category
+      </button>
+      {addClicked && <Add />}
     </div>
   );
 }
