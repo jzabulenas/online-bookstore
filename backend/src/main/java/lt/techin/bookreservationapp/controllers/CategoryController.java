@@ -32,12 +32,6 @@ public class CategoryController {
         return categoryRepository.findById(id).get();
     }
 
-//    @PostMapping("/categories")
-//    public void addCategory(@RequestBody Category category) {
-//        categoryRepository.save(category);
-//    }
-
-
     @PostMapping("/categories")
     public ResponseEntity<String> addPerson(@Valid @RequestBody Category category, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
