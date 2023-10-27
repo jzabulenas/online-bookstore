@@ -22,27 +22,32 @@ export default function Categories() {
     };
   }, []);
 
-  useEffect(() => {
-    console.log("Kategorijos"); // Log the updated categories content
-    console.log(categories); // Log the updated categories content
-  }, [categories]);
-
   return (
     <div className="container">
       <label htmlFor="category">Category:</label>
       <select
         className="form-select"
         name="category"
+        defaultValue="default"
       >
         <option
-          defaultValue="Select a category"
+          value="default"
           disabled
+          hidden
         >
           Select a category
         </option>
-        <option name="science-fiction">Science </option>
-        <option name="fantasy">Fantasy</option>
-        <option name="self-help">Self Help</option>
+
+        {categories.map((category, index) => {
+          return (
+            <option
+              key={index}
+              value={category.name}
+            >
+              {category.name}
+            </option>
+          );
+        })}
       </select>
     </div>
   );
