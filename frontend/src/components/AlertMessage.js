@@ -1,4 +1,4 @@
-export default function alertMessage({ message, type }) {
+export default function alertMessage({ message, type, handleAlertClose }) {
   return (
     <div id="liveAlertPlaceholder">
       <div
@@ -11,6 +11,7 @@ export default function alertMessage({ message, type }) {
           className="btn-close"
           data-bs-dismiss="alert"
           aria-label="Close"
+          onClick={handleAlertClose}
         ></button>
       </div>
     </div>

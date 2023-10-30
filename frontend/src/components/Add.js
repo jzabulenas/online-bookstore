@@ -18,6 +18,14 @@ export default function Add() {
     });
   };
 
+  const handleAlertClose = () => {
+    setMessage({
+      ...message,
+      name: "",
+      type: "",
+    });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCategoryField({
@@ -44,12 +52,13 @@ export default function Add() {
       if (response.ok) {
         // Successful response (2xx status code)
         handleMessages("Category created!", "success");
-        // You can also redirect the user or perform other actions on success
+      } else if (response.status === 400) {
+        const statusMessage = await response.text(); // Get the error message as plain text
+        handleMessages(statusMessage, "danger");
       } else {
         // Handle errors (non-2xx status codes)
         const errorData = await response.json();
         alert(`Error: ${errorData.message}`);
-        // You may want to display a more user-friendly message
       }
     } catch (error) {
       // Handle network errors or exceptions
@@ -71,6 +80,7 @@ export default function Add() {
         <AlertMessage
           message={message.name}
           type={message.type}
+          handleAlertClose={handleAlertClose}
         />
       )}
       <button
