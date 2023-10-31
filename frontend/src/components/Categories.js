@@ -22,7 +22,7 @@ export default function Categories() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [categories]);
 
   return (
     <div className="container">
