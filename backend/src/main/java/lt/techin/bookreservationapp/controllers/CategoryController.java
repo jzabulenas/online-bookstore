@@ -49,6 +49,11 @@ public class CategoryController {
             String errorMessage = errorMessageBuilder.toString();
             return ResponseEntity.badRequest().body(errorMessage);
         }
+
+        if (categoryRepository.existsByName(category.getName())) {
+            return ResponseEntity.badRequest().body("Category already exists");
+        }
+
         categoryRepository.save(category);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
