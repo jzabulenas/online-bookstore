@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import Add from "./Add";
+import Edit from "./Edit";
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
   const [addClicked, setAddClicked] = useState(false);
+  const [editClicked, setEditClicked] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -57,7 +59,14 @@ export default function Categories() {
       >
         Add new category
       </button>
+      <button
+        className="btn btn-info"
+        onClick={() => setEditClicked(true)}
+      >
+        Edit category
+      </button>
       {addClicked && <Add />}
+      {editClicked && <Edit />}
     </div>
   );
 }
