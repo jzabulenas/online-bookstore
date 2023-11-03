@@ -29,7 +29,6 @@ export default function Categories() {
 
   const handleSelectedCategory = (e) => {
     const selectedCategory = e.target.value;
-    // setSelectedCategoryId(e.target.key);
     categories.forEach((category) => {
       if (category.name === selectedCategory) {
         setSelectedCategoryId(category.id);

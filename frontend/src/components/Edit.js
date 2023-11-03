@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AlertMessage from "./AlertMessage";
 
-export default function Edit() {
+export default function Edit({ selectedCategoryId }) {
   const [categoryField, setCategoryField] = useState({
     name: "",
   });
@@ -9,6 +9,30 @@ export default function Edit() {
     name: "",
     type: "",
   });
+
+  useEffect(() => {
+    let active = true;
+
+    const fetchData = async () => {
+      const response = await fetch(
+        `http://localhost:8080/categories/${selectedCategoryId}`
+      );
+      const data = await response.json();
+
+      if (active) {
+        setCategoryField({
+          ...categoryField,
+          name: data.name,
+        });
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleMessages = (messageText, messageType) => {
     setMessage({
