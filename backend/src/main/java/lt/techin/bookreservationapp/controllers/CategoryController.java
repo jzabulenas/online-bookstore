@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
@@ -51,6 +52,23 @@ public class CategoryController {
         }
         categoryRepository.save(category);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping("/categories/{id}")
+    public Category updateCategory(@PathVariable int id, @RequestBody Category updatedCategory) {
+        Optional<Category> categoryFromDb = categoryRepository.findById(id);
+
+        if (categoryFromDb.isPresent()) {
+            Category category = categoryFromDb.get();
+
+            if (updatedCategory.getName() != null) {
+                category.setName(updatedCategory.getName());
+            }
+
+            return categoryRepository.save(category);
+        }
+
+        return categoryRepository.save(updatedCategory);
     }
 
 }
