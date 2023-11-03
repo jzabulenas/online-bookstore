@@ -6,6 +6,7 @@ export default function Categories() {
   const [categories, setCategories] = useState([]);
   const [addClicked, setAddClicked] = useState(false);
   const [editClicked, setEditClicked] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState();
 
   useEffect(() => {
     let active = true;
@@ -26,6 +27,16 @@ export default function Categories() {
     };
   }, []);
 
+  const handleSelectedCategory = (e) => {
+    const selectedCategory = e.target.value;
+    // setSelectedCategoryId(e.target.key);
+    categories.forEach((category) => {
+      if (category.name === selectedCategory) {
+        setSelectedCategoryId(category.id);
+      }
+    });
+  };
+
   return (
     <div className="container">
       <label htmlFor="category">Current categories:</label>
@@ -33,6 +44,7 @@ export default function Categories() {
         className="form-select"
         name="category"
         defaultValue="default"
+        onChange={handleSelectedCategory}
       >
         <option
           value="default"
@@ -42,10 +54,10 @@ export default function Categories() {
           Select a category
         </option>
 
-        {categories.map((category, index) => {
+        {categories.map((category) => {
           return (
             <option
-              key={index}
+              key={category.id}
               value={category.name}
             >
               {category.name}
@@ -66,7 +78,7 @@ export default function Categories() {
         Edit category
       </button>
       {addClicked && <Add />}
-      {editClicked && <Edit />}
+      {editClicked && <Edit selectedCategoryId={selectedCategoryId} />}
     </div>
   );
 }
