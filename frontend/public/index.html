@@ -1,34 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="icon"
+      href="%PUBLIC_URL%/favicon.ico"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
+    <meta
+      name="theme-color"
+      content="#000000"
+    />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="%PUBLIC_URL%/logo192.png"
+    />
 
-<head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="Web site created using create-react-app" />
-  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-  <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <link
+      rel="stylesheet"
+      href="./style.css"
+    />
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-  <title>Book Reservation App</title>
-</head>
+    <link
+      rel="manifest"
+      href="%PUBLIC_URL%/manifest.json"
+    />
+    <!-- <div class="hero__titles">
+      <h1>Welcome</h1>
+    </div>
+    <div class="hero__content">
+      <p>What are you looking for today?</p>
+    </div> -->
+    <title>Book Reservation App</title>
+  </head>
 
-<body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
-  <!--
+  <body class="bg-body-secondary">
+    <header>
+      <div class="container pt-4 pb-4">
+        <h1>Book Reservation</h1>
+        <h1>What are you looking for today?</h1>
+      </div>
+    </header>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -38,7 +60,149 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <main class="container mt-3">
+      <div class="row">
+        <article class="col-12 col-sm-8 border ms-3 bg-white">
+          <h2 class="h2homecolor pt-4 pb-4 ps-3">Home</h2>
+          <div class="container mb-3 bg bg-white">
+            <div class="row">
+              <div class="col-4">
+                <img
+                  src="https://b1992169.smushcdn.com/1992169/wp-content/uploads/2020/08/BN-Old-Leatherbound-books.jpg?lossy=0&strip=1&webp=1"
+                  class=""
+                  alt="..."
+                  width="200"
+                  height="150"
+                />
+                <h3 class="text-primary">Classic</h3>
+                <p>
+                  This page focuses on the original old style editions of the
+                  Barnes & Noble Collectible Leatherbound Classics, published
+                  between 1992-1996. If you are looking for one of the later
+                  collections
+                </p>
+                <a
+                  href="#"
+                  class="link-primary"
+                  >Learn More</a
+                >
+              </div>
+              <div class="col-4">
+                <img
+                  src="https://media.istockphoto.com/id/185330935/photo/antique-books-on-a-shelf.jpg?s=612x612&w=0&k=20&c=rJ4mGQKdmOqUBmPM-brqiLZ3IMutXpqR4pdwFgooc-w="
+                  class=""
+                  alt="..."
+                  width="200"
+                  height="150"
+                />
+                <h3 class="text-primary">The most popular</h3>
+                <p>
+                  This page focuses on the original old style editions of the
+                  Barnes & Noble Collectible Leatherbound Classics, published
+                  between 1992-1996. If you are looking for one of the later
+                  collections
+                </p>
+                <a
+                  href="#"
+                  class="link-primary"
+                  >Learn More</a
+                >
+              </div>
+              <div class="col-4">
+                <img
+                  src="https://media.istockphoto.com/id/1393151021/photo/antique-books-on-a-wooden-shelf.jpg?s=612x612&w=0&k=20&c=_SyQJaUUzafo96L0D6SA14qVaWjyz5PNjrfMhuaHsgM="
+                  class=""
+                  alt="..."
+                  width="200"
+                  height="150"
+                />
+                <h3 class="text-primary">The news</h3>
+                <p>
+                  This page focuses on the original old style editions of the
+                  Barnes & Noble Collectible Leatherbound Classics, published
+                  between 1992-1996. If you are looking for one of the later
+                  collections
+                </p>
+                <a
+                  href="#"
+                  class="link-primary"
+                  >Learn More</a
+                >
+              </div>
+              <div class="col-4">
+                <img
+                  src="https://media.istockphoto.com/id/1393151021/photo/antique-books-on-a-wooden-shelf.jpg?s=612x612&w=0&k=20&c=_SyQJaUUzafo96L0D6SA14qVaWjyz5PNjrfMhuaHsgM="
+                  class=""
+                  alt="..."
+                  width="200"
+                  height="150"
+                />
+                <h3 class="text-primary">The news</h3>
+                <p>
+                  This page focuses on the original old style editions of the
+                  Barnes & Noble Collectible Leatherbound Classics, published
+                  between 1992-1996. If you are looking for one of the later
+                  collections
+                </p>
+                <a
+                  href="#"
+                  class="link-primary"
+                  >Learn More</a
+                >
+              </div>
+            </div>
+          </div>
+        </article>
+        <aside class="col-12 col-sm-3 ms-2">
+          <div class="input-group border mb-3 bg-white">
+            <div
+              id="search-autocomplete"
+              class="form-outline p-5"
+            >
+              <input
+                type="search"
+                id="form1"
+                class="form-control"
+                placeholder="Bestsellers 2023"
+              />
+            </div>
+            <i class="fas fa-search"></i>
+          </div>
+          <div class="mt-4 border bg-white form-outline increase-pading">
+            <div class="mb-5">
+              <h4>News subscription</h4>
+            </div>
+            <div class="asideoctober mt-3">
+              <a
+                href="#"
+                class="link-primary"
+                >My favorites</a
+              >
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
 
+    <footer class="mt-3">
+      <div class="container pt-3 pb-2">
+        <div class="row">
+          <div class="div1 col-4">
+            <p>Contact us: tel. 00370 223322223</p>
+          </div>
+          <div class="div2 col-4">
+            <a
+              href="#"
+              class="link-primary"
+              >info@bookreservation.com</a
+            >
+          </div>
+          <div class="div3 col-4">
+            <p>&copy; Copyright 2023. All Rights Reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>
