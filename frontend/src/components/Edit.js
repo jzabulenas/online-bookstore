@@ -78,7 +78,7 @@ export default function Edit({ selectedCategoryId }) {
 
       if (response.ok) {
         // Successful response (2xx status code)
-        handleMessages("Category created!", "success");
+        handleMessages("Category updated!", "success");
       } else if (response.status === 400) {
         const statusMessage = await response.text(); // Get the error message as plain text
         handleMessages(statusMessage, "danger");
