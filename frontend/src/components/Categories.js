@@ -7,7 +7,7 @@ export default function Categories() {
   const [addClicked, setAddClicked] = useState(false);
   const [editClicked, setEditClicked] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState();
-  const [editBtnActive, setEditBtnActive] = useState("disabled");
+  const [editBtnActive, setEditBtnActive] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -29,7 +29,7 @@ export default function Categories() {
   }, [categories]);
 
   const handleSelectedCategory = (e) => {
-    setEditBtnActive("");
+    setEditBtnActive(true);
     const selectedCategory = e.target.value;
     categories.forEach((category) => {
       if (category.name === selectedCategory) {
@@ -72,12 +72,14 @@ export default function Categories() {
       >
         Add new category
       </button>
-      <button
-        className={`btn btn-info ${editBtnActive}`}
-        onClick={() => setEditClicked(true)}
-      >
-        Edit category
-      </button>
+      {editBtnActive && (
+        <button
+          className="btn btn-info"
+          onClick={() => setEditClicked(true)}
+        >
+          Edit category
+        </button>
+      )}
       {addClicked && <Add />}
       {editClicked && <Edit selectedCategoryId={selectedCategoryId} />}
     </div>
