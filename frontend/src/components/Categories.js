@@ -57,7 +57,7 @@ export default function Categories() {
       >
         Add new category
       </button>
-      {addClicked && <Add />}
+      {addClicked && <Add setAddClicked={setAddClicked} />}
     </div>
   );
 }
