@@ -80,7 +80,7 @@ export default function Categories() {
           Edit category
         </button>
       )}
-      {addClicked && <Add />}
+      {addClicked && <Add setAddClicked={setAddClicked} />}
       {editClicked && (
         <Edit
           selectedCategoryId={selectedCategoryId}
