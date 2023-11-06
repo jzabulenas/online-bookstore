@@ -84,13 +84,13 @@ export default function Add({ setAddClicked }) {
         />
       )}
       <button
-        className="btn btn-primary mt-3 mb-3"
+        className="btn btn-primary mt-3 mb-3 "
         type="submit"
       >
         Add
       </button>
       <button
-        className="btn btn-warning"
+        className="btn btn-warning ms-2"
         type="button"
         onClick={() => {
           setAddClicked(false);
