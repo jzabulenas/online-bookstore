@@ -25,7 +25,7 @@ export default function Categories() {
   }, [categories]);
 
   return (
-    <div className="container  col-12 col-sm-8  mt-3 mb-3">
+    <div className="container  col-12 col-sm-8 col-lg-4 mt-3 mb-3">
       <label htmlFor="category ">Current categories:</label>
       <select
         className="form-select mt-3 mb-3"
