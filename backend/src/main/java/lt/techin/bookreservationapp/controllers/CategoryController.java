@@ -18,6 +18,7 @@ import java.util.Optional;
 public class CategoryController {
 
     private final CategoryRepository categoryRepository;
+
     @Autowired
     public CategoryController(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
@@ -50,25 +51,49 @@ public class CategoryController {
             String errorMessage = errorMessageBuilder.toString();
             return ResponseEntity.badRequest().body(errorMessage);
         }
+
+        if (categoryRepository.existsByName(category.getName())) {
+            return ResponseEntity.badRequest().body("Category already exists");
+        }
+
         categoryRepository.save(category);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/categories/{id}")
-    public Category updateCategory(@PathVariable int id, @RequestBody Category updatedCategory) {
+    public ResponseEntity<String> updateCategory(@PathVariable int id, @Valid @RequestBody Category updatedCategory, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            StringBuilder errorMessageBuilder = new StringBuilder();
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+
+            for (int i = 0; i < fieldErrors.size(); i++) {
+                FieldError fieldError = fieldErrors.get(i);
+                errorMessageBuilder.append(fieldError.getDefaultMessage());
+                if (i < fieldErrors.size() - 1) {
+                    errorMessageBuilder.append(" | ");
+                }
+            }
+
+            String errorMessage = errorMessageBuilder.toString();
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
+
         Optional<Category> categoryFromDb = categoryRepository.findById(id);
 
         if (categoryFromDb.isPresent()) {
             Category category = categoryFromDb.get();
 
-            if (updatedCategory.getName() != null) {
-                category.setName(updatedCategory.getName());
+            if (categoryRepository.existsByName(updatedCategory.getName())) {
+                return ResponseEntity.badRequest().body("Category already exists");
             }
 
-            return categoryRepository.save(category);
+            category.setName(updatedCategory.getName());
+            categoryRepository.save(category);
+            return ResponseEntity.ok().build();
         }
 
-        return categoryRepository.save(updatedCategory);
+        categoryRepository.save(updatedCategory);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }
