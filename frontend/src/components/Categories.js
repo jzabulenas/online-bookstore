@@ -81,7 +81,12 @@ export default function Categories() {
         </button>
       )}
       {addClicked && <Add />}
-      {editClicked && <Edit selectedCategoryId={selectedCategoryId} />}
+      {editClicked && (
+        <Edit
+          selectedCategoryId={selectedCategoryId}
+          setEditClicked={setEditClicked}
+        />
+      )}
     </div>
   );
 }

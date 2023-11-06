@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import AlertMessage from "./AlertMessage";
 
-export default function Edit({ selectedCategoryId }) {
+export default function Edit({ selectedCategoryId, setEditClicked }) {
   const [categoryField, setCategoryField] = useState({
     name: "",
   });
@@ -115,6 +115,15 @@ export default function Edit({ selectedCategoryId }) {
         type="submit"
       >
         Update
+      </button>
+      <button
+        className="btn btn-warning"
+        type="button"
+        onClick={() => {
+          setEditClicked(false);
+        }}
+      >
+        Cancel
       </button>
     </form>
   );
