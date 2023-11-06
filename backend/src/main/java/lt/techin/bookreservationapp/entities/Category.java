@@ -14,7 +14,7 @@ public class Category {
 
     @NotNull(message = "The field must not be null")
     @NotEmpty(message = "The field must not be empty")
-    @Pattern(regexp = "^(?!.*([A-Za-z])\\1\\1)[A-Z][A-Za-z\\s\\W]{4,49}$", message = "Category name must start with an uppercase " +
+    @Pattern(regexp = "^(?!.*([A-Za-z])\\1\\1)[A-Z][A-Za-z\\s\\W]{2,49}$", message = "Category name must start with an uppercase " +
             "letter, followed by lowercase letters, without numbers, consecutive repeated characters, " +
             "and a length between 5 and 50 characters")
 
