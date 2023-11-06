@@ -65,13 +65,16 @@ export default function Edit({ selectedCategoryId }) {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/categories", {
-        method: "POST",
-        body: JSON.stringify(dataToPost),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/categories/${selectedCategoryId}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(dataToPost),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         // Successful response (2xx status code)

@@ -25,7 +25,7 @@ export default function Categories() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [categories]);
 
   const handleSelectedCategory = (e) => {
     const selectedCategory = e.target.value;
