@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AlertMessage from "./AlertMessage";
 
-export default function Add() {
+export default function Add({ setAddClicked }) {
   const [categoryField, setCategoryField] = useState({
     name: "",
   });
@@ -88,6 +88,15 @@ export default function Add() {
         type="submit"
       >
         Add
+      </button>
+      <button
+        className="btn btn-warning"
+        type="button"
+        onClick={() => {
+          setAddClicked(false);
+        }}
+      >
+        Cancel
       </button>
     </form>
   );
