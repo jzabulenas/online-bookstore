@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import AlertMessage from "./AlertMessage";
 
-export default function Edit({ selectedCategoryId, setEditClicked }) {
+export default function Edit({
+  selectedCategoryId,
+  setEditClicked,
+  setSelectCategoryActive,
+  setEditBtnActive,
+}) {
   const [categoryField, setCategoryField] = useState({
     name: "",
   });
@@ -93,6 +98,12 @@ export default function Edit({ selectedCategoryId, setEditClicked }) {
     }
   };
 
+  function handleCancelBtn() {
+    setEditClicked(false);
+    setSelectCategoryActive(true);
+    setEditBtnActive(false);
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <label>Category title:</label>
@@ -119,9 +130,7 @@ export default function Edit({ selectedCategoryId, setEditClicked }) {
       <button
         className="btn btn-warning"
         type="button"
-        onClick={() => {
-          setEditClicked(false);
-        }}
+        onClick={handleCancelBtn}
       >
         Cancel
       </button>

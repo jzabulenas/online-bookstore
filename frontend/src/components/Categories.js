@@ -8,6 +8,7 @@ export default function Categories() {
   const [editClicked, setEditClicked] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState();
   const [editBtnActive, setEditBtnActive] = useState(false);
+  const [selectCategoryActive, setSelectCategoryActive] = useState(true);
 
   useEffect(() => {
     let active = true;
@@ -38,53 +39,64 @@ export default function Categories() {
     });
   };
 
+  function handleEditClick() {
+    setEditClicked(true);
+    setSelectCategoryActive(false);
+  }
+
   return (
     <div className="container  col-12 col-sm-8 col-lg-4 mt-3 mb-3">
-      <label htmlFor="category ">Current categories:</label>
-      <select
-        className="form-select mt-3 mb-3"
-        name="category mt-3"
-        defaultValue="default"
-        onChange={handleSelectedCategory}
-      >
-        <option
-          value="default"
-          disabled
-          hidden
-        >
-          Select a category
-        </option>
-
-        {categories.map((category) => {
-          return (
+      {selectCategoryActive && (
+        <>
+          <label htmlFor="category ">Current categories:</label>
+          <select
+            className="form-select mt-3 mb-3"
+            name="category mt-3"
+            defaultValue="default"
+            onChange={handleSelectedCategory}
+          >
             <option
-              key={category.id}
-              value={category.name}
+              value="default"
+              disabled
+              hidden
             >
-              {category.name}
+              Select a category
             </option>
-          );
-        })}
-      </select>
-      <button
-        className="btn btn-success  mb-3"
-        onClick={() => setAddClicked(true)}
-      >
-        Add new category
-      </button>
-      {editBtnActive && (
-        <button
-          className="btn btn-info"
-          onClick={() => setEditClicked(true)}
-        >
-          Edit category
-        </button>
+
+            {categories.map((category) => {
+              return (
+                <option
+                  key={category.id}
+                  value={category.name}
+                >
+                  {category.name}
+                </option>
+              );
+            })}
+          </select>
+          <button
+            className="btn btn-success  mb-3"
+            onClick={() => setAddClicked(true)}
+          >
+            Add new category
+          </button>
+          {editBtnActive && (
+            <button
+              className="btn btn-info"
+              onClick={handleEditClick}
+            >
+              Edit category
+            </button>
+          )}
+        </>
       )}
       {addClicked && <Add setAddClicked={setAddClicked} />}
       {editClicked && (
         <Edit
           selectedCategoryId={selectedCategoryId}
           setEditClicked={setEditClicked}
+          setSelectCategoryActive={setSelectCategoryActive}
+          setEditBtnActive={setEditBtnActive}
         />
       )}
     </div>
