@@ -84,6 +84,7 @@ export default function Edit({
       if (response.ok) {
         // Successful response (2xx status code)
         handleMessages("Category updated!", "success");
+        setTimeout(showCategoryList, 1200);
       } else if (response.status === 400) {
         const statusMessage = await response.text(); // Get the error message as plain text
         handleMessages(statusMessage, "danger");
@@ -98,10 +99,14 @@ export default function Edit({
     }
   };
 
-  function handleCancelBtn() {
+  function showCategoryList() {
     setEditClicked(false);
     setSelectCategoryActive(true);
     setEditBtnActive(false);
+  }
+
+  function handleCancelBtn() {
+    showCategoryList();
   }
 
   return (

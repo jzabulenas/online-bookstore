@@ -56,6 +56,7 @@ export default function Add({
       if (response.ok) {
         // Successful response (2xx status code)
         handleMessages("Category created!", "success");
+        setTimeout(showCategoryList, 1200);
       } else if (response.status === 400) {
         const statusMessage = await response.text(); // Get the error message as plain text
         handleMessages(statusMessage, "danger");
@@ -70,10 +71,14 @@ export default function Add({
     }
   };
 
-  function handleCancelBtn() {
+  function showCategoryList() {
     setAddClicked(false);
     setEditBtnActive(false);
     setSelectCategoryActive(true);
+  }
+
+  function handleCancelBtn() {
+    showCategoryList();
   }
 
   return (
