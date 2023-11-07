@@ -39,11 +39,11 @@ export default function Categories() {
   };
 
   return (
-    <div className="container">
-      <label htmlFor="category">Current categories:</label>
+    <div className="container  col-12 col-sm-8 col-lg-4 mt-3 mb-3">
+      <label htmlFor="category ">Current categories:</label>
       <select
-        className="form-select"
-        name="category"
+        className="form-select mt-3 mb-3"
+        name="category mt-3"
         defaultValue="default"
         onChange={handleSelectedCategory}
       >
@@ -67,7 +67,7 @@ export default function Categories() {
         })}
       </select>
       <button
-        className="btn btn-success"
+        className="btn btn-success  mb-3"
         onClick={() => setAddClicked(true)}
       >
         Add new category
