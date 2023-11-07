@@ -39,6 +39,11 @@ export default function Categories() {
     });
   };
 
+  function handleAddClick() {
+    setAddClicked(true);
+    setSelectCategoryActive(false);
+  }
+
   function handleEditClick() {
     setEditClicked(true);
     setSelectCategoryActive(false);
@@ -76,7 +81,7 @@ export default function Categories() {
           </select>
           <button
             className="btn btn-success  mb-3"
-            onClick={() => setAddClicked(true)}
+            onClick={handleAddClick}
           >
             Add new category
           </button>
@@ -90,7 +95,13 @@ export default function Categories() {
           )}
         </>
       )}
-      {addClicked && <Add setAddClicked={setAddClicked} />}
+      {addClicked && (
+        <Add
+          setAddClicked={setAddClicked}
+          setSelectCategoryActive={setSelectCategoryActive}
+          setEditBtnActive={setEditBtnActive}
+        />
+      )}
       {editClicked && (
         <Edit
           selectedCategoryId={selectedCategoryId}

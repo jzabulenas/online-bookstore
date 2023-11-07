@@ -1,7 +1,11 @@
 import { useState } from "react";
 import AlertMessage from "./AlertMessage";
 
-export default function Add({ setAddClicked }) {
+export default function Add({
+  setAddClicked,
+  setSelectCategoryActive,
+  setEditBtnActive,
+}) {
   const [categoryField, setCategoryField] = useState({
     name: "",
   });
@@ -66,6 +70,12 @@ export default function Add({ setAddClicked }) {
     }
   };
 
+  function handleCancelBtn() {
+    setAddClicked(false);
+    setEditBtnActive(false);
+    setSelectCategoryActive(true);
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <label>Category title:</label>
@@ -92,9 +102,7 @@ export default function Add({ setAddClicked }) {
       <button
         className="btn btn-warning ms-2"
         type="button"
-        onClick={() => {
-          setAddClicked(false);
-        }}
+        onClick={handleCancelBtn}
       >
         Cancel
       </button>
