@@ -30,8 +30,15 @@ public class CategoryController {
     }
 
     @GetMapping("/categories/{id}")
-    public Category getCategory(@PathVariable int id) {
-        return categoryRepository.findById(id).get();
+    public ResponseEntity<Category> getCategory(@PathVariable int id) {
+        
+        Optional<Category> category = categoryRepository.findById(id);
+        if (category.isPresent()) {
+            return ResponseEntity.ok(category.get());
+        }
+
+        return ResponseEntity.notFound().build();
+
     }
 
     @PostMapping("/categories")
