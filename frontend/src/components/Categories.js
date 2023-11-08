@@ -36,9 +36,9 @@ export default function Categories() {
     setEditBtnActive(true);
     setDeleteBtnActive(true);
     setDeleteCategoryActive(true);
-    const selectedCategoryName = e.target.value;
+    const selectedCategory = e.target.value;
     categories.forEach((category) => {
-      if (category.name === selectedCategoryName) {
+      if (category.name === selectedCategory) {
         setSelectedCategory({
           ...selectedCategory,
           id: category.id,

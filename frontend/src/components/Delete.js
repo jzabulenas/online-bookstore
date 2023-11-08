@@ -39,7 +39,7 @@ export default function Delete({
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog">
+        <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             {/* Modal header */}
             <div className="modal-header">
