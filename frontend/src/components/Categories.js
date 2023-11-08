@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Add from "./Add";
 import Edit from "./Edit";
+import Delete from "./Delete";
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
@@ -10,6 +11,7 @@ export default function Categories() {
   const [editBtnActive, setEditBtnActive] = useState(false);
   const [deleteBtnActive, setDeleteBtnActive] = useState(false);
   const [selectCategoryActive, setSelectCategoryActive] = useState(true);
+  const [deleteCategoryActive, setDeleteCategoryActive] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -33,6 +35,7 @@ export default function Categories() {
   const handleSelectedCategory = (e) => {
     setEditBtnActive(true);
     setDeleteBtnActive(true);
+    setDeleteCategoryActive(true);
     const selectedCategory = e.target.value;
     categories.forEach((category) => {
       if (category.name === selectedCategory) {
@@ -117,6 +120,7 @@ export default function Categories() {
           setDeleteBtnActive={setDeleteBtnActive}
         />
       )}
+      {deleteCategoryActive && <Delete />}
     </div>
   );
 }
