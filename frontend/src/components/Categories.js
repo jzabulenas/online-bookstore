@@ -99,7 +99,14 @@ export default function Categories() {
             </button>
           )}
           {deleteBtnActive && (
-            <button className="btn btn-danger">Delete a category</button>
+            <button
+              type="button"
+              className="btn btn-danger"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+            >
+              Delete a category
+            </button>
           )}
         </>
       )}
