@@ -8,6 +8,7 @@ export default function Categories() {
   const [editClicked, setEditClicked] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState();
   const [editBtnActive, setEditBtnActive] = useState(false);
+  const [deleteBtnActive, setDeleteBtnActive] = useState(false);
   const [selectCategoryActive, setSelectCategoryActive] = useState(true);
 
   useEffect(() => {
@@ -93,6 +94,7 @@ export default function Categories() {
               Edit category
             </button>
           )}
+          {<button className="btn btn-danger">Delete a category</button>}
         </>
       )}
       {addClicked && (
