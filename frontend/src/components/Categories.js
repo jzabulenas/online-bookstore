@@ -7,7 +7,7 @@ export default function Categories() {
   const [categories, setCategories] = useState([]);
   const [addClicked, setAddClicked] = useState(false);
   const [editClicked, setEditClicked] = useState(false);
-  const [selectedCategoryId, setSelectedCategoryId] = useState();
+  const [selectedCategory, setSelectedCategory] = useState();
   const [editBtnActive, setEditBtnActive] = useState(false);
   const [deleteBtnActive, setDeleteBtnActive] = useState(false);
   const [selectCategoryActive, setSelectCategoryActive] = useState(true);
@@ -36,10 +36,14 @@ export default function Categories() {
     setEditBtnActive(true);
     setDeleteBtnActive(true);
     setDeleteCategoryActive(true);
-    const selectedCategory = e.target.value;
+    const selectedCategoryName = e.target.value;
     categories.forEach((category) => {
-      if (category.name === selectedCategory) {
-        setSelectedCategoryId(category.id);
+      if (category.name === selectedCategoryName) {
+        setSelectedCategory({
+          ...selectedCategory,
+          id: category.id,
+          name: category.name,
+        });
       }
     });
   };
@@ -120,14 +124,19 @@ export default function Categories() {
       )}
       {editClicked && (
         <Edit
-          selectedCategoryId={selectedCategoryId}
+          selectedCategoryId={selectedCategory.id}
           setEditClicked={setEditClicked}
           setSelectCategoryActive={setSelectCategoryActive}
           setEditBtnActive={setEditBtnActive}
           setDeleteBtnActive={setDeleteBtnActive}
         />
       )}
-      {deleteCategoryActive && <Delete />}
+      {deleteCategoryActive && (
+        <Delete
+          selectedCategoryName={selectedCategory.name}
+          selectedCategoryId={selectedCategory.id}
+        />
+      )}
     </div>
   );
 }
