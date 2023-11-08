@@ -32,6 +32,7 @@ export default function Categories() {
 
   const handleSelectedCategory = (e) => {
     setEditBtnActive(true);
+    setDeleteBtnActive(true);
     const selectedCategory = e.target.value;
     categories.forEach((category) => {
       if (category.name === selectedCategory) {
@@ -94,7 +95,9 @@ export default function Categories() {
               Edit category
             </button>
           )}
-          {<button className="btn btn-danger">Delete a category</button>}
+          {deleteBtnActive && (
+            <button className="btn btn-danger">Delete a category</button>
+          )}
         </>
       )}
       {addClicked && (
