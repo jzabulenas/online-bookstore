@@ -1,4 +1,12 @@
 export default function Delete({ selectedCategoryName, selectedCategoryId }) {
+  function handleDeleteYes() {
+    fetch(`http://localhost:8080/categories/${selectedCategoryId}`, {
+      method: "Delete",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
   return (
     <div>
       <div
@@ -40,6 +48,7 @@ export default function Delete({ selectedCategoryName, selectedCategoryId }) {
                 type="button"
                 className="btn btn-primary"
                 data-bs-dismiss="modal"
+                onClick={handleDeleteYes}
               >
                 Yes
               </button>
