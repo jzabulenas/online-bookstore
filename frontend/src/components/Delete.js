@@ -13,6 +13,19 @@ export default function Delete({
         "Content-Type": "application/json",
       },
     });
+
+    showCategoryList();
+  }
+
+  function handleDeleteNo() {
+    showCategoryList();
+  }
+
+  function showCategoryList() {
+    setEditBtnActive(false);
+    setDeleteBtnActive(false);
+    setDeleteCategoryActive(false);
+    setSelectCategoryActive(true);
   }
 
   return (
@@ -64,6 +77,7 @@ export default function Delete({
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                onClick={handleDeleteNo}
               >
                 No
               </button>
