@@ -1,4 +1,11 @@
-export default function Delete({ selectedCategoryName, selectedCategoryId }) {
+export default function Delete({
+  selectedCategoryName,
+  selectedCategoryId,
+  setEditBtnActive,
+  setDeleteBtnActive,
+  setDeleteCategoryActive,
+  setSelectCategoryActive,
+}) {
   function handleDeleteYes() {
     fetch(`http://localhost:8080/categories/${selectedCategoryId}`, {
       method: "Delete",
@@ -7,6 +14,7 @@ export default function Delete({ selectedCategoryName, selectedCategoryId }) {
       },
     });
   }
+
   return (
     <div>
       <div

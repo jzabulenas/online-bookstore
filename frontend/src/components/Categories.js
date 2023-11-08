@@ -141,6 +141,10 @@ export default function Categories() {
         <Delete
           selectedCategoryName={selectedCategory.name}
           selectedCategoryId={selectedCategory.id}
+          setEditBtnActive={setEditBtnActive}
+          setDeleteBtnActive={setDeleteBtnActive}
+          setDeleteCategoryActive={setDeleteCategoryActive}
+          setSelectCategoryActive={setSelectCategoryActive}
         />
       )}
     </div>
