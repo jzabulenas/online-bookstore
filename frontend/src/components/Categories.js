@@ -58,6 +58,11 @@ export default function Categories() {
     setSelectCategoryActive(false);
   }
 
+  function handleDeleteClick() {
+    setEditClicked(false);
+    setSelectCategoryActive(false);
+  }
+
   return (
     <div className="container  col-12 col-sm-8 col-lg-4 mt-3 mb-3">
       {selectCategoryActive && (
@@ -108,6 +113,7 @@ export default function Categories() {
               className="btn btn-danger"
               data-bs-toggle="modal"
               data-bs-target="#staticBackdrop"
+              onClick={handleDeleteClick}
             >
               Delete a category
             </button>
