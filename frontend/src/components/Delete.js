@@ -54,6 +54,7 @@ export default function Delete({
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                onClick={handleDeleteNo}
               ></button>
             </div>
 
