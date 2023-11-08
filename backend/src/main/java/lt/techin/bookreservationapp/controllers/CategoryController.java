@@ -103,4 +103,9 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @DeleteMapping("/categories/{id}")
+    public void deleteCategory(@PathVariable int id) {
+        categoryRepository.deleteById(id);
+    }
+
 }
