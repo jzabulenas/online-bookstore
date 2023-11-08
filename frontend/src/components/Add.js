@@ -5,6 +5,7 @@ export default function Add({
   setAddClicked,
   setSelectCategoryActive,
   setEditBtnActive,
+  setDeleteBtnActive,
 }) {
   const [categoryField, setCategoryField] = useState({
     name: "",
@@ -74,6 +75,7 @@ export default function Add({
   function showCategoryList() {
     setAddClicked(false);
     setEditBtnActive(false);
+    setDeleteBtnActive(false);
     setSelectCategoryActive(true);
   }
 

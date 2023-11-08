@@ -105,6 +105,7 @@ export default function Categories() {
           setAddClicked={setAddClicked}
           setSelectCategoryActive={setSelectCategoryActive}
           setEditBtnActive={setEditBtnActive}
+          setDeleteBtnActive={setDeleteBtnActive}
         />
       )}
       {editClicked && (
@@ -113,6 +114,7 @@ export default function Categories() {
           setEditClicked={setEditClicked}
           setSelectCategoryActive={setSelectCategoryActive}
           setEditBtnActive={setEditBtnActive}
+          setDeleteBtnActive={setDeleteBtnActive}
         />
       )}
     </div>

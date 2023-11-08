@@ -6,6 +6,7 @@ export default function Edit({
   setEditClicked,
   setSelectCategoryActive,
   setEditBtnActive,
+  setDeleteBtnActive,
 }) {
   const [categoryField, setCategoryField] = useState({
     name: "",
@@ -101,8 +102,9 @@ export default function Edit({
 
   function showCategoryList() {
     setEditClicked(false);
-    setSelectCategoryActive(true);
     setEditBtnActive(false);
+    setDeleteBtnActive(false);
+    setSelectCategoryActive(true);
   }
 
   function handleCancelBtn() {
