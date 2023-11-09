@@ -94,14 +94,14 @@ export default function Categories() {
             })}
           </select>
           <button
-            className="btn btn-success  mb-3"
+            className="btn btn-success mb-2 me-2"
             onClick={handleAddClick}
           >
             Add new category
           </button>
           {editBtnActive && (
             <button
-              className="btn btn-info"
+              className="btn btn-info mb-2 me-2"
               onClick={handleEditClick}
             >
               Edit category
@@ -110,7 +110,7 @@ export default function Categories() {
           {deleteBtnActive && (
             <button
               type="button"
-              className="btn btn-danger"
+              className="btn btn-danger mb-2"
               data-bs-toggle="modal"
               data-bs-target="#staticBackdrop"
               onClick={handleDeleteClick}
