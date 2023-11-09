@@ -15,12 +15,33 @@ export default function Delete({
   });
 
   async function handleDeleteYes() {
-    fetch(`http://localhost:8080/categories/${selectedCategoryId}`, {
-      method: "Delete",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const response = await fetch(
+        `http://localhost:8080/categories/${selectedCategoryId}`,
+        {
+          method: "Delete",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        // Successful response (2xx status code)
+        handleMessages("Category deleted!", "success");
+        setTimeout(showCategoryList, 1200);
+      } else if (response.status === 400) {
+        const statusMessage = await response.text(); // Get the error message as plain text
+        handleMessages(statusMessage, "danger");
+      } else {
+        // Handle errors (non-2xx status codes)
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message}`);
+      }
+    } catch (error) {
+      // Handle network errors or exceptions
+      alert(`An error occurred: ${error.message}`);
+    }
   }
 
   const handleMessages = (messageText, messageType) => {
