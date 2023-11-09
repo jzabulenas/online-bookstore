@@ -42,20 +42,22 @@ export default function Delete({
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             {/* Modal header */}
-            <div className="modal-header">
+            <div className="modal-header text-bg-danger">
               <h1
                 className="modal-title fs-5"
                 id="staticBackdropLabel"
               >
                 Do you want to delete?
               </h1>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                onClick={handleDeleteNo}
-              ></button>
+              <div data-bs-theme="dark">
+                <button
+                  type="button"
+                  className="btn-close "
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                  onClick={handleDeleteNo}
+                ></button>
+              </div>
             </div>
 
             {/* Modal body */}
@@ -68,7 +70,7 @@ export default function Delete({
             <div className="modal-footer">
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn btn-primary btn-danger"
                 data-bs-dismiss="modal"
                 onClick={handleDeleteYes}
               >
@@ -76,7 +78,7 @@ export default function Delete({
               </button>
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="btn btn-secondary btn-light"
                 data-bs-dismiss="modal"
                 onClick={handleDeleteNo}
               >
