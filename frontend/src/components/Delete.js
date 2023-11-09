@@ -1,3 +1,6 @@
+import AlertMessage from "./AlertMessage";
+import { useState } from "react";
+
 export default function Delete({
   selectedCategoryName,
   selectedCategoryId,
@@ -6,16 +9,35 @@ export default function Delete({
   setDeleteCategoryActive,
   setSelectCategoryActive,
 }) {
-  function handleDeleteYes() {
+  const [message, setMessage] = useState({
+    name: "",
+    type: "",
+  });
+
+  async function handleDeleteYes() {
     fetch(`http://localhost:8080/categories/${selectedCategoryId}`, {
       method: "Delete",
       headers: {
         "Content-Type": "application/json",
       },
     });
-
-    showCategoryList();
   }
+
+  const handleMessages = (messageText, messageType) => {
+    setMessage({
+      ...message,
+      name: messageText,
+      type: messageType,
+    });
+  };
+
+  const handleAlertClose = () => {
+    setMessage({
+      ...message,
+      name: "",
+      type: "",
+    });
+  };
 
   function handleDeleteNo() {
     showCategoryList();
@@ -88,6 +110,13 @@ export default function Delete({
           </div>
         </div>
       </div>
+      {message.name !== "" && (
+        <AlertMessage
+          message={message.name}
+          type={message.type}
+          handleAlertClose={handleAlertClose}
+        />
+      )}
     </div>
   );
 }
