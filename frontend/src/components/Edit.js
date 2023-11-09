@@ -6,6 +6,7 @@ export default function Edit({
   setEditClicked,
   setSelectCategoryActive,
   setEditBtnActive,
+  setDeleteBtnActive,
 }) {
   const [categoryField, setCategoryField] = useState({
     name: "",
@@ -101,8 +102,9 @@ export default function Edit({
 
   function showCategoryList() {
     setEditClicked(false);
-    setSelectCategoryActive(true);
     setEditBtnActive(false);
+    setDeleteBtnActive(false);
+    setSelectCategoryActive(true);
   }
 
   function handleCancelBtn() {
@@ -113,7 +115,7 @@ export default function Edit({
     <form onSubmit={handleSubmit}>
       <label>Category title:</label>
       <input
-        className="form-control"
+        className="form-control mt-3 mb-3"
         type="text"
         name="category"
         value={categoryField.name}
@@ -127,13 +129,13 @@ export default function Edit({
         />
       )}
       <button
-        className="btn btn-primary"
+        className="btn btn-primary mb-3"
         type="submit"
       >
         Update
       </button>
       <button
-        className="btn btn-warning"
+        className="btn btn-warning ms-2 mb-3"
         type="button"
         onClick={handleCancelBtn}
       >

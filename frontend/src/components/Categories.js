@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import Add from "./Add";
 import Edit from "./Edit";
+import Delete from "./Delete";
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
   const [addClicked, setAddClicked] = useState(false);
   const [editClicked, setEditClicked] = useState(false);
-  const [selectedCategoryId, setSelectedCategoryId] = useState();
+  const [selectedCategory, setSelectedCategory] = useState();
   const [editBtnActive, setEditBtnActive] = useState(false);
+  const [deleteBtnActive, setDeleteBtnActive] = useState(false);
   const [selectCategoryActive, setSelectCategoryActive] = useState(true);
+  const [deleteCategoryActive, setDeleteCategoryActive] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -31,10 +34,16 @@ export default function Categories() {
 
   const handleSelectedCategory = (e) => {
     setEditBtnActive(true);
+    setDeleteBtnActive(true);
+    setDeleteCategoryActive(true);
     const selectedCategory = e.target.value;
     categories.forEach((category) => {
       if (category.name === selectedCategory) {
-        setSelectedCategoryId(category.id);
+        setSelectedCategory({
+          ...selectedCategory,
+          id: category.id,
+          name: category.name,
+        });
       }
     });
   };
@@ -46,6 +55,11 @@ export default function Categories() {
 
   function handleEditClick() {
     setEditClicked(true);
+    setSelectCategoryActive(false);
+  }
+
+  function handleDeleteClick() {
+    setEditClicked(false);
     setSelectCategoryActive(false);
   }
 
@@ -80,17 +94,28 @@ export default function Categories() {
             })}
           </select>
           <button
-            className="btn btn-success  mb-3"
+            className="btn btn-success mb-2 me-2"
             onClick={handleAddClick}
           >
             Add new category
           </button>
           {editBtnActive && (
             <button
-              className="btn btn-info"
+              className="btn btn-info mb-2 me-2"
               onClick={handleEditClick}
             >
               Edit category
+            </button>
+          )}
+          {deleteBtnActive && (
+            <button
+              type="button"
+              className="btn btn-danger mb-2"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+              onClick={handleDeleteClick}
+            >
+              Delete a category
             </button>
           )}
         </>
@@ -100,14 +125,26 @@ export default function Categories() {
           setAddClicked={setAddClicked}
           setSelectCategoryActive={setSelectCategoryActive}
           setEditBtnActive={setEditBtnActive}
+          setDeleteBtnActive={setDeleteBtnActive}
         />
       )}
       {editClicked && (
         <Edit
-          selectedCategoryId={selectedCategoryId}
+          selectedCategoryId={selectedCategory.id}
           setEditClicked={setEditClicked}
           setSelectCategoryActive={setSelectCategoryActive}
           setEditBtnActive={setEditBtnActive}
+          setDeleteBtnActive={setDeleteBtnActive}
+        />
+      )}
+      {deleteCategoryActive && (
+        <Delete
+          selectedCategoryName={selectedCategory.name}
+          selectedCategoryId={selectedCategory.id}
+          setEditBtnActive={setEditBtnActive}
+          setDeleteBtnActive={setDeleteBtnActive}
+          setDeleteCategoryActive={setDeleteCategoryActive}
+          setSelectCategoryActive={setSelectCategoryActive}
         />
       )}
     </div>

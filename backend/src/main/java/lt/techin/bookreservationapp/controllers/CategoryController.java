@@ -87,12 +87,12 @@ public class CategoryController {
 
         Optional<Category> categoryFromDb = categoryRepository.findById(id);
 
+        if (categoryRepository.existsByName(updatedCategory.getName())) {
+            return ResponseEntity.badRequest().body("Category already exists");
+        }
+
         if (categoryFromDb.isPresent()) {
             Category category = categoryFromDb.get();
-
-            if (categoryRepository.existsByName(updatedCategory.getName())) {
-                return ResponseEntity.badRequest().body("Category already exists");
-            }
 
             category.setName(updatedCategory.getName());
             categoryRepository.save(category);
@@ -101,6 +101,11 @@ public class CategoryController {
 
         categoryRepository.save(updatedCategory);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/categories/{id}")
+    public void deleteCategory(@PathVariable int id) {
+        categoryRepository.deleteById(id);
     }
 
 }

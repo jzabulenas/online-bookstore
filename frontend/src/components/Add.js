@@ -5,6 +5,7 @@ export default function Add({
   setAddClicked,
   setSelectCategoryActive,
   setEditBtnActive,
+  setDeleteBtnActive,
 }) {
   const [categoryField, setCategoryField] = useState({
     name: "",
@@ -74,6 +75,7 @@ export default function Add({
   function showCategoryList() {
     setAddClicked(false);
     setEditBtnActive(false);
+    setDeleteBtnActive(false);
     setSelectCategoryActive(true);
   }
 
@@ -85,7 +87,7 @@ export default function Add({
     <form onSubmit={handleSubmit}>
       <label>Category title:</label>
       <input
-        className="form-control mt-3"
+        className="form-control mt-3 mb-3"
         type="text"
         name="category"
         value={categoryField.name}
@@ -99,13 +101,13 @@ export default function Add({
         />
       )}
       <button
-        className="btn btn-primary mt-3 mb-3 "
+        className="btn btn-primary mb-3"
         type="submit"
       >
         Add
       </button>
       <button
-        className="btn btn-warning ms-2"
+        className="btn btn-warning ms-2 mb-3"
         type="button"
         onClick={handleCancelBtn}
       >
