@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AlertMessage from "./AlertMessage";
 
-export default function Add({
-  setAddClicked,
+export default function Edit({
+  selectedCategoryId,
+  setEditClicked,
   setSelectCategoryActive,
   setEditBtnActive,
 }) {
@@ -13,6 +14,30 @@ export default function Add({
     name: "",
     type: "",
   });
+
+  useEffect(() => {
+    let active = true;
+
+    const fetchData = async () => {
+      const response = await fetch(
+        `http://localhost:8080/categories/${selectedCategoryId}`
+      );
+      const data = await response.json();
+
+      if (active) {
+        setCategoryField({
+          ...categoryField,
+          name: data.name,
+        });
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleMessages = (messageText, messageType) => {
     setMessage({
@@ -45,17 +70,20 @@ export default function Add({
     };
 
     try {
-      const response = await fetch("http://localhost:8080/categories", {
-        method: "POST",
-        body: JSON.stringify(dataToPost),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8080/categories/${selectedCategoryId}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(dataToPost),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         // Successful response (2xx status code)
-        handleMessages("Category created!", "success");
+        handleMessages("Category updated!", "success");
         setTimeout(showCategoryList, 1200);
       } else if (response.status === 400) {
         const statusMessage = await response.text(); // Get the error message as plain text
@@ -72,9 +100,9 @@ export default function Add({
   };
 
   function showCategoryList() {
-    setAddClicked(false);
-    setEditBtnActive(false);
+    setEditClicked(false);
     setSelectCategoryActive(true);
+    setEditBtnActive(false);
   }
 
   function handleCancelBtn() {
@@ -85,7 +113,7 @@ export default function Add({
     <form onSubmit={handleSubmit}>
       <label>Category title:</label>
       <input
-        className="form-control mt-3"
+        className="form-control"
         type="text"
         name="category"
         value={categoryField.name}
@@ -99,13 +127,13 @@ export default function Add({
         />
       )}
       <button
-        className="btn btn-primary mt-3 mb-3 "
+        className="btn btn-primary"
         type="submit"
       >
-        Add
+        Update
       </button>
       <button
-        className="btn btn-warning ms-2"
+        className="btn btn-warning"
         type="button"
         onClick={handleCancelBtn}
       >
