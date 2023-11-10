@@ -21,7 +21,7 @@ public class Book {
     )
     private List<Category> categories;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "CLOB")
     private String description;
 
     private String pictureUrl;
@@ -34,5 +34,73 @@ public class Book {
     private LocalDate publicationDate;
 
     private String language;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public int getPages() {
+        return pages;
+    }
+
+    public String getIsbn() {
+        return Isbn;
+    }
+
+    public LocalDate getPublicationDate() {
+        return publicationDate;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
+    public void setIsbn(String isbn) {
+        Isbn = isbn;
+    }
+
+    public void setPublicationDate(LocalDate publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
 }
