@@ -23,6 +23,9 @@ export default function Footer() {
                 <a href="contact.html">Adress</a>
               </li>
               <li>
+                <a href="contact.html">About us</a>
+              </li>
+              <li>
                 <a href="facebook.com/SheCodes">Follow us on Facebook</a>
               </li>
               <li>
