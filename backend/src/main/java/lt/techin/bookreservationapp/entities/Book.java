@@ -1,5 +1,7 @@
 package lt.techin.bookreservationapp.entities;
 import java.time.LocalDate;
+import java.util.List;
+
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,8 +13,13 @@ public class Book {
     private int id;
 
     private String title;
-
-    //Place for Category column
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "Books_categories",
+            joinColumns = @JoinColumn(name = "Book_id"),
+            inverseJoinColumns = @JoinColumn(name = "Category_id")
+    )
+    private List<Category> categories;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -24,7 +31,6 @@ public class Book {
     private String Isbn;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-//    @Column(name = "date")
     private LocalDate publicationDate;
 
     private String language;
