@@ -1,7 +1,6 @@
 package lt.techin.bookreservationapp.controllers;
 
 import lt.techin.bookreservationapp.entities.Book;
-import lt.techin.bookreservationapp.entities.Category;
 import lt.techin.bookreservationapp.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
