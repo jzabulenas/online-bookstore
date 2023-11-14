@@ -1,8 +1,12 @@
 package lt.techin.bookreservationapp.entities;
+
 import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -11,8 +15,12 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    @NotNull(message = "The title field must not be null")
+    @NotEmpty(message = "The title field must not be empty")
     private String title;
+
+    @NotNull(message = "The author field must not be null")
+    @NotEmpty(message = "The author field must not be empty")
     private String author;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -22,18 +30,28 @@ public class Book {
     )
     private List<Category> categories;
 
+    @NotNull(message = "The description field must not be null")
+    @NotEmpty(message = "The description field must not be empty")
     @Column(columnDefinition = "CLOB")
     private String description;
 
+    @NotNull(message = "The picture url field must not be null")
+    @NotEmpty(message = "The picture url field must not be empty")
     private String pictureUrl;
 
+    @Min(value = 1, message = "Pages field must have a value greater than 0")
     private int pages;
 
+    @NotNull(message = "The ISBN field must not be null")
+    @NotEmpty(message = "The ISBN field must not be empty")
     private String Isbn;
 
+    @NotNull(message = "Publication date field cannot be null")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate publicationDate;
 
+    @NotNull(message = "The language field must not be null")
+    @NotEmpty(message = "The language field must not be empty")
     private String language;
 
     public int getId() {
