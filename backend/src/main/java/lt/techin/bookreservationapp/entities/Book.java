@@ -54,11 +54,13 @@ public class Book {
     private String Isbn;
 
     @NotNull(message = "Publication date field cannot be null")
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate publicationDate;
 
     @NotNull(message = "The language field must not be null")
     @NotEmpty(message = "The language field must not be empty")
+    @Pattern(regexp = "^[A-Z][a-z]+$", message = "Language must start with an uppercase " +
+            "letter, that can be followed by one or more lowercase letters")
     private String language;
 
     public int getId() {
