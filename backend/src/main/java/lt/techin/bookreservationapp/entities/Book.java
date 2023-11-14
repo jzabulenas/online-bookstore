@@ -56,7 +56,7 @@ public class Book {
     @Pattern(regexp = "((978[\\--– ])?[0-9][0-9\\--– ]{10}[\\--– ][0-9xX])|((978)?[0-9]{9}[0-9Xx])", message = "ISBN " +
             "is incorrect")
     @Column(unique = true)
-    private String Isbn;
+    private String isbn;
 
     @NotNull(message = "Publication date field cannot be null")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -97,7 +97,7 @@ public class Book {
     }
 
     public String getIsbn() {
-        return Isbn;
+        return isbn;
     }
 
     public LocalDate getPublicationDate() {
@@ -133,7 +133,7 @@ public class Book {
     }
 
     public void setIsbn(String isbn) {
-        Isbn = isbn;
+        this.isbn = isbn;
     }
 
     public void setPublicationDate(LocalDate publicationDate) {

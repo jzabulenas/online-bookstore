@@ -63,6 +63,11 @@ public class BookController {
             return ResponseEntity.badRequest().body(errorMessage);
         }
 
+        if (bookRepository.existsByIsbn(book.getIsbn())) {
+            System.out.println(book.getIsbn());
+            return ResponseEntity.badRequest().body("ISBN already exists");
+        }
+
         List<Category> categories = new ArrayList<>();
         for (Category category : book.getCategories()) {
             Category existingCategory = categoryRepository.findByName(category.getName());
