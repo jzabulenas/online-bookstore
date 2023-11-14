@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -17,6 +18,8 @@ public class Book {
     private int id;
     @NotNull(message = "The title field must not be null")
     @NotEmpty(message = "The title field must not be empty")
+    @Pattern(regexp = "^[A-Z][a-zA-Z0-9 .,:'\"!?&()-]+$", message = "Book title must start with an uppercase " +
+            "letter, that can be followed by a mix of alphanumeric characters, spaces, and certain punctuation marks.")
     private String title;
 
     @NotNull(message = "The author field must not be null")
