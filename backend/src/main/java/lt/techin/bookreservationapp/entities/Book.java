@@ -24,8 +24,8 @@ public class Book {
 
     @NotNull(message = "The author field must not be null")
     @NotEmpty(message = "The author field must not be empty")
-    @Pattern(regexp = "^[A-Z][a-z]+ [A-Z][a-z]+$", message = "Author's first and last name must start with an uppercase " +
-            "letter, that can be followed by one or more lowercase letters")
+    @Pattern(regexp = "^[A-Z][a-z]+ [A-Z][a-z]+$", message = "Author's first and last name must start with " +
+            "an uppercase letter, that can be followed by one or more lowercase letters")
     private String author;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -38,12 +38,14 @@ public class Book {
     @NotNull(message = "The description field must not be null")
     @NotEmpty(message = "The description field must not be empty")
     @Column(columnDefinition = "CLOB")
-    @Pattern(regexp = "^[A-Z].{0,299}$", message = "Description should start with a capital letter and is limited to a maximum of 300 characters")
+    @Pattern(regexp = "^[A-Z].{0,299}$", message = "Description should start with a capital letter " +
+            "and is limited to a maximum of 300 characters")
     private String description;
 
     @NotNull(message = "The picture url field must not be null")
     @NotEmpty(message = "The picture url field must not be empty")
-        @Pattern(regexp = "^(https?)://[^\\s$]+\\.(jpg|png)$", message = "URl should start with either \"http://\" or \"https://\" and end with \".jpg\" or \".png")
+        @Pattern(regexp = "^(https?)://[^\\s$]+\\.(jpg|png)$", message = "URl should start with either " +
+                "\"http://\" or \"https://\" and end with \".jpg\" or \".png")
     private String pictureUrl;
 
     @Min(value = 1, message = "Pages field must have a value greater than 0")
@@ -51,6 +53,9 @@ public class Book {
 
     @NotNull(message = "The ISBN field must not be null")
     @NotEmpty(message = "The ISBN field must not be empty")
+    @Pattern(regexp = "((978[\\--– ])?[0-9][0-9\\--– ]{10}[\\--– ][0-9xX])|((978)?[0-9]{9}[0-9Xx])", message = "ISBN " +
+            "is incorrect")
+    @Column(unique = true)
     private String Isbn;
 
     @NotNull(message = "Publication date field cannot be null")
