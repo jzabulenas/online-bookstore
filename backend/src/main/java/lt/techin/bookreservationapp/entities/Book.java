@@ -19,11 +19,13 @@ public class Book {
     @NotNull(message = "The title field must not be null")
     @NotEmpty(message = "The title field must not be empty")
     @Pattern(regexp = "^[A-Z][a-zA-Z0-9 .,:'\"!?&()-]+$", message = "Book title must start with an uppercase " +
-            "letter, that can be followed by a mix of alphanumeric characters, spaces, and certain punctuation marks.")
+            "letter, that can be followed by a mix of alphanumeric characters, spaces, and certain punctuation marks")
     private String title;
 
     @NotNull(message = "The author field must not be null")
     @NotEmpty(message = "The author field must not be empty")
+    @Pattern(regexp = "^[A-Z][a-z]+ [A-Z][a-z]+$", message = "Author's first and last name must start with an uppercase " +
+            "letter, that can be followed by one or more lowercase letters")
     private String author;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
