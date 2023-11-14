@@ -38,6 +38,7 @@ public class Book {
     @NotNull(message = "The description field must not be null")
     @NotEmpty(message = "The description field must not be empty")
     @Column(columnDefinition = "CLOB")
+    @Pattern(regexp = "^[A-Z].{0,299}$", message = "Description should start with a capital letter and is limited to a maximum of 300 characters")
     private String description;
 
     @NotNull(message = "The picture url field must not be null")
