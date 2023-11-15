@@ -6,11 +6,11 @@ export default function Footer() {
         class="container-fluid"
       >
         <div class="border pt-3 pb-2 container-fluid ">
-          <div class="row  col-3 col-sm-12 ms-3 ">
-            <div class="div1 col-3">
+          <div class="row ms-3 ">
+            <div class="div1 col-12 col-sm-3">
               {<p>Contact us: tel. 00370 223322223</p>}
             </div>
-            <div class="div2 col-3">
+            <div class="div2 col-12 col-sm-3">
               <a
                 href="#"
                 class="link-primary"
@@ -18,10 +18,10 @@ export default function Footer() {
                 info@bookreservation.com
               </a>
             </div>
-            <div class="div3 col-3">
+            <div class="div3 col-12 col-sm-3">
               <p>&copy; Copyright 2023. All Rights Reserved.</p>
             </div>
-            <div class="footer div4 col-3">
+            <div class="footer div4 col-12 col-sm-3">
               <ul>
                 <li>
                   <a href="contact.html">Address</a>
