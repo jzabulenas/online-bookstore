@@ -33,6 +33,8 @@ public class Book {
             joinColumns = @JoinColumn(name = "Book_id"),
             inverseJoinColumns = @JoinColumn(name = "Category_id")
     )
+    @NotEmpty(message = "The categories field must not be empty")
+    @NotNull(message = "The categories field must not be null")
     private List<Category> categories;
 
     @NotNull(message = "The description field must not be null")

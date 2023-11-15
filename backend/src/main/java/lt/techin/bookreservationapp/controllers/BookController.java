@@ -80,9 +80,11 @@ public class BookController {
 
         }
 
-        book.setCategories(categories);
-        bookRepository.save(book);
+        if (categories.contains(null)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No such categories exist!");
+        }
 
+        book.setCategories(categories);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
