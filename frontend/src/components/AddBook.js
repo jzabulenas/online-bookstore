@@ -16,10 +16,12 @@ export default function AddBook() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, value);
     setBookData({
       ...bookData,
       [name]: value,
     });
+    console.log(bookData);
   };
 
   return (
@@ -48,7 +50,7 @@ export default function AddBook() {
         />
 
         <label className="form-label">Select a categorie</label>
-        <CategoriesAddBook />
+        <CategoriesAddBook handleChange={handleChange} />
 
         <label className="form-label">Description</label>
         <textarea

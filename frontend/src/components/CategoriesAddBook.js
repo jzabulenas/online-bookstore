@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function CategoriesAddBook() {
+export default function CategoriesAddBook({ handleChange }) {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function CategoriesAddBook() {
       className="form-select"
       name="category"
       defaultValue="default"
-      //   onChange={handleSelectedCategory}
+      onChange={handleChange}
     >
       <option
         value="default"
