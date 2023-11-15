@@ -29,8 +29,14 @@ public class BookController {
     }
 
     @GetMapping("/books")
-    public List<Book> getBooks() {
-        return bookRepository.findAll();
+    public ResponseEntity<?> getBooks() {
+        List<Book> books = bookRepository.findAll();
+
+        if (!books.isEmpty()) {
+            return ResponseEntity.ok(books);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No books found");
+        }
     }
 
     @GetMapping("/books/{id}")
@@ -64,7 +70,6 @@ public class BookController {
         }
 
         if (bookRepository.existsByIsbn(book.getIsbn())) {
-            System.out.println(book.getIsbn());
             return ResponseEntity.badRequest().body("ISBN already exists");
         }
 
