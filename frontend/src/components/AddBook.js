@@ -1,4 +1,5 @@
 import { useState } from "react";
+import CategoriesAddBook from "./CategoriesAddBook";
 
 export default function AddBook() {
   return (
@@ -23,19 +24,7 @@ export default function AddBook() {
         />
 
         <label className="form-label">Select a categorie</label>
-        <select
-          className="form-select"
-          name="category"
-          defaultValue="default"
-        >
-          <option
-            value="default"
-            disabled
-            hidden
-          >
-            Select a category
-          </option>
-        </select>
+        <CategoriesAddBook />
 
         <label className="form-label">Description</label>
         <textarea
