@@ -13,6 +13,15 @@ export default function AddBook() {
     publicationDate: "",
     language: "",
   });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setBookData({
+      ...bookData,
+      [name]: value,
+    });
+  };
+
   return (
     <div className="container  col-12 col-sm-8 col-lg-4 mt-3 mb-3">
       <h4>Add a new book:</h4>
@@ -24,6 +33,8 @@ export default function AddBook() {
           type="text"
           name="title"
           placeholder="Enter the book title"
+          value={bookData.title}
+          onChange={handleChange}
         />
 
         <label className="form-label">Author</label>
@@ -32,6 +43,8 @@ export default function AddBook() {
           type="text"
           name="author"
           placeholder="Enter the author's full name"
+          value={bookData.author}
+          onChange={handleChange}
         />
 
         <label className="form-label">Select a categorie</label>
@@ -43,6 +56,8 @@ export default function AddBook() {
           name="description"
           rows="3"
           placeholder="Enter a brief description of the book (max 300 characters)"
+          value={bookData.description}
+          onChange={handleChange}
         ></textarea>
 
         <label className="form-label">Picture Url</label>
@@ -51,6 +66,8 @@ export default function AddBook() {
           type="text"
           name="pictureUrl"
           placeholder="Enter the URL of the book cover picture"
+          value={bookData.pictureUrl}
+          onChange={handleChange}
         />
 
         <label className="form-label">Pages</label>
@@ -59,6 +76,8 @@ export default function AddBook() {
           type="number"
           name="pages"
           placeholder="Enter the number of pages"
+          value={bookData.pages}
+          onChange={handleChange}
         />
 
         <label className="form-label">ISBN</label>
@@ -67,6 +86,8 @@ export default function AddBook() {
           type="text"
           name="isbn"
           placeholder="Enter the book's ISBN"
+          value={bookData.isbn}
+          onChange={handleChange}
         />
 
         <label className="form-label">Publication Date</label>
@@ -74,6 +95,8 @@ export default function AddBook() {
           className="form-control"
           type="date"
           name="publicationDate"
+          value={bookData.publicationDate}
+          onChange={handleChange}
         />
 
         <label className="form-label">Language</label>
@@ -82,6 +105,8 @@ export default function AddBook() {
           type="text"
           name="language"
           placeholder="Enter the language of the book"
+          value={bookData.language}
+          onChange={handleChange}
         />
 
         <button
