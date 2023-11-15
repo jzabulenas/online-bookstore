@@ -2,6 +2,17 @@ import { useState } from "react";
 import CategoriesAddBook from "./CategoriesAddBook";
 
 export default function AddBook() {
+  const [bookData, setBookData] = useState({
+    title: "",
+    author: "",
+    categories: [""],
+    description: "",
+    pictureUrl: "",
+    pages: "",
+    isbn: "",
+    publicationDate: "",
+    language: "",
+  });
   return (
     <div className="container  col-12 col-sm-8 col-lg-4 mt-3 mb-3">
       <h4>Add a new book:</h4>
