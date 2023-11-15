@@ -70,7 +70,7 @@ export default function Categories() {
           <label htmlFor="category ">Current categories:</label>
           <select
             className="form-select mt-3 mb-3"
-            name="category mt-3"
+            name="category"
             defaultValue="default"
             onChange={handleSelectedCategory}
           >
