@@ -16,12 +16,34 @@ export default function AddBook() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
+    // console.log(name, value);
     setBookData({
       ...bookData,
       [name]: value,
     });
     console.log(bookData);
+  };
+
+  const handleCategoryChange = (index, value) => {
+    const newCategories = [...bookData.categories];
+
+    // console.log(index, value);
+
+    newCategories[index] = value;
+    setBookData({
+      ...bookData,
+      categories: newCategories,
+    });
+    // console.log(newCategories);
+    // console.log(bookData.categories);
+    console.log(bookData);
+  };
+
+  const handlePLusBtn = () => {
+    setBookData({
+      ...bookData,
+      categories: [...bookData.categories, ""],
+    });
   };
 
   return (
@@ -50,17 +72,31 @@ export default function AddBook() {
         />
 
         <label className="form-label">Select a categorie</label>
-        <CategoriesAddBook handleChange={handleChange} />
+        {bookData.categories.map((categorie, index) => (
+          <CategoriesAddBook
+            key={index}
+            handleChange={(e) => handleCategoryChange(index, e.target.value)}
+          />
+        ))}
 
-        <label className="form-label">Description</label>
-        <textarea
-          className="form-control"
-          name="description"
-          rows="3"
-          placeholder="Enter a brief description of the book (max 300 characters)"
-          value={bookData.description}
-          onChange={handleChange}
-        ></textarea>
+        <button
+          className="btn btn-primary rounded-circle"
+          type="button"
+          onClick={handlePLusBtn}
+        >
+          +
+        </button>
+        <div>
+          <label className="form-label">Description</label>
+          <textarea
+            className="form-control"
+            name="description"
+            rows="3"
+            placeholder="Enter a brief description of the book (max 300 characters)"
+            value={bookData.description}
+            onChange={handleChange}
+          ></textarea>
+        </div>
 
         <label className="form-label">Picture Url</label>
         <input
