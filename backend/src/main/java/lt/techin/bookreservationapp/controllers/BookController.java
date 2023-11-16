@@ -69,6 +69,10 @@ public class BookController {
             return ResponseEntity.badRequest().body(errorMessage);
         }
 
+        if (bookRepository.existsByTitle(book.getTitle())) {
+            return ResponseEntity.badRequest().body("Title already exists");
+        }
+
         if (bookRepository.existsByIsbn(book.getIsbn())) {
             return ResponseEntity.badRequest().body("ISBN already exists");
         }

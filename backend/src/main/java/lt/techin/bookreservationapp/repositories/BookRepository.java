@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookRepository extends JpaRepository<Book,Integer> {
     Boolean existsByIsbn(String name);
+    Boolean existsByTitle(String name);
 }
