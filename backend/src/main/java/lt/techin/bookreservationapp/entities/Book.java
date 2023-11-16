@@ -18,7 +18,7 @@ public class Book {
     private int id;
     @NotNull(message = "The title field must not be null")
     @NotEmpty(message = "The title field must not be empty")
-    @Pattern(regexp = "^[A-Z][a-zA-Z0-9 .,:'\"!?&()-]+$", message = "Book title must start with an uppercase " +
+    @Pattern(regexp = "^[A-Z0-9][a-zA-Z0-9 .,:'\"!?&()-]+$", message = "Book title must start with an uppercase " +
             "letter, that can be followed by a mix of alphanumeric characters, spaces, and certain punctuation marks")
     @Column(unique = true)
     private String title;
