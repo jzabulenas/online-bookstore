@@ -12,9 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -78,7 +76,14 @@ public class BookController {
         }
 
         List<Category> categories = new ArrayList<>();
+        Set<String> uniqueCategoryNames = new HashSet<>();
+
         for (Category category : book.getCategories()) {
+
+            if (!uniqueCategoryNames.add(category.getName())) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categories cannot be duplicated!");
+            }
+
             Category existingCategory = categoryRepository.findByName(category.getName());
             categories.add(existingCategory);
 
