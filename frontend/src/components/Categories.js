@@ -97,14 +97,14 @@ export default function Categories() {
             className="btn btn-success mb-2 me-2"
             onClick={handleAddClick}
           >
-            Add new category
+            Add
           </button>
           {editBtnActive && (
             <button
               className="btn btn-info mb-2 me-2"
               onClick={handleEditClick}
             >
-              Edit category
+              Edit
             </button>
           )}
           {deleteBtnActive && (
@@ -115,7 +115,7 @@ export default function Categories() {
               data-bs-target="#staticBackdrop"
               onClick={handleDeleteClick}
             >
-              Delete a category
+              Delete
             </button>
           )}
         </>
