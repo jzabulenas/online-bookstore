@@ -14,9 +14,11 @@ export default function AddBook() {
     language: "",
   });
 
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [activePlusBtn, setActivePlusBtn] = useState("");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // console.log(name, value);
     setBookData({
       ...bookData,
       [name]: value,
@@ -27,19 +29,22 @@ export default function AddBook() {
   const handleCategoryChange = (index, value) => {
     const newCategories = [...bookData.categories];
 
-    // console.log(index, value);
-
     newCategories[index] = value;
     setBookData({
       ...bookData,
       categories: newCategories,
     });
-    // console.log(newCategories);
-    // console.log(bookData.categories);
-    console.log(bookData);
+
+    console.log("pasirinkgotos kategorijos");
+    console.log(selectedCategories);
+
+    setSelectedCategories([...newCategories]);
   };
 
   const handlePLusBtn = () => {
+    if (bookData.categories.length >= 2) {
+      setActivePlusBtn("disabled");
+    }
     setBookData({
       ...bookData,
       categories: [...bookData.categories, ""],
@@ -71,16 +76,17 @@ export default function AddBook() {
           onChange={handleChange}
         />
 
-        <label className="form-label">Select a categorie</label>
-        {bookData.categories.map((categorie, index) => (
+        <label className="form-label">Select a category</label>
+        {bookData.categories.map((category, index) => (
           <CategoriesAddBook
             key={index}
             handleChange={(e) => handleCategoryChange(index, e.target.value)}
+            selectedCategories={selectedCategories}
           />
         ))}
 
         <button
-          className="btn btn-primary rounded-circle"
+          className={`btn btn-primary rounded-circle ${activePlusBtn}`}
           type="button"
           onClick={handlePLusBtn}
         >

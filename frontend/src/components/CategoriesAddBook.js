@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 
-export default function CategoriesAddBook({ handleChange }) {
+export default function CategoriesAddBook({
+  handleChange,
+  selectedCategories,
+  index,
+}) {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -11,7 +15,11 @@ export default function CategoriesAddBook({ handleChange }) {
       const data = await response.json();
 
       if (active) {
-        setCategories(data);
+        const filteredCategories = data.filter(
+          (category) => !selectedCategories.includes(category.name)
+        );
+
+        setCategories(filteredCategories);
       }
     };
 
