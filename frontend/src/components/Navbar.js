@@ -1,9 +1,20 @@
 import logo from "../assets/logo.png";
-import Home from "./Home";
-import Categories from "./Categories";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const cleanedPathname = location.pathname.replace(/\/\/+/g, "/");
+
+    if (location.pathname !== cleanedPathname) {
+      navigate(cleanedPathname, { replace: true });
+    }
+  }, [location.pathname, navigate]);
+
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
