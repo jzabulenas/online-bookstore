@@ -15,9 +15,15 @@ export default function CategoriesAddBook({
       const data = await response.json();
 
       if (active) {
-        const filteredCategories = data.filter(
-          (category) => !selectedCategories.includes(category.name)
-        );
+        const filteredCategories = data.filter((category) => {
+          const isCategorieNameInSelectedArray = selectedCategories.includes(
+            category.name
+          );
+          const isLocalSelecetionSelected =
+            category.name === selectedCategories[index];
+
+          return !isCategorieNameInSelectedArray || isLocalSelecetionSelected;
+        });
 
         setCategories(filteredCategories);
       }
@@ -28,7 +34,7 @@ export default function CategoriesAddBook({
     return () => {
       active = false;
     };
-  }, []);
+  }, [selectedCategories]);
 
   return (
     <select

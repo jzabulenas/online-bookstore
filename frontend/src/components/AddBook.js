@@ -35,9 +35,6 @@ export default function AddBook() {
       categories: newCategories,
     });
 
-    console.log("pasirinkgotos kategorijos");
-    console.log(selectedCategories);
-
     setSelectedCategories([...newCategories]);
   };
 
@@ -82,6 +79,7 @@ export default function AddBook() {
             key={index}
             handleChange={(e) => handleCategoryChange(index, e.target.value)}
             selectedCategories={selectedCategories}
+            index={index}
           />
         ))}
 
