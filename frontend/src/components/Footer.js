@@ -1,14 +1,13 @@
 export default function Footer() {
   return (
-    <footer className="mt-3 w-100">
+    <footer className="mt-3 w-100 text-size 10px">
       <div
         id="footer"
         className="container-fluid"
       >
-        {/* <div className=" container pt-3 pb-2 container-fluid "> */}
         <div className="row ms-3 ">
-          <div className="div1 col-12 col-lg-3 d-flex justify-content-center">
-            {<p>Contact us: tel. 00370 223322223</p>}
+          <div className="div1 col-12 col-lg-3 d-flex justify-content-center ">
+            {<p class="fs-6">textContact us: tel. 00370 223322223</p>}
           </div>
           <div className="div2 col-12 col-lg-3 d-flex justify-content-center">
             <a
@@ -24,10 +23,10 @@ export default function Footer() {
           <div className="footer div4 col-12 col-lg-3 d-flex justify-content-center">
             <ul>
               <li>
-                <a href="contact.html">Address</a>
+                <a href="https://techin.lt/">Address</a>
               </li>
               <li>
-                <a href="contact.html">About us</a>
+                <a href="http://localhost:3000/about">About us</a>
               </li>
               <li>
                 <img
@@ -37,7 +36,9 @@ export default function Footer() {
                   width="30"
                   height="30"
                 ></img>
-                <a href="facebook.com/SheCodes">Follow us on Facebook</a>
+                <a href="https://www.facebook.com/ateitiesprofesija/">
+                  Follow us on Facebook
+                </a>
               </li>
               <li>
                 <img
@@ -47,15 +48,16 @@ export default function Footer() {
                   width="30"
                   height="30"
                 ></img>
-                <a href="twitter.com/SheCodes">Follow us on Twitter</a>
+                <a href="https://twitter.com/github">Follow us on Twitter</a>
               </li>
               <li>
-                <a href="newsletter.html">Sign up for our newsletter</a>
+                <a href="https://www.vtmc.lt/naujienos/">
+                  Sign up for our newsletter
+                </a>
               </li>
             </ul>
           </div>
         </div>
-        {/* </div> */}
       </div>
     </footer>
   );
