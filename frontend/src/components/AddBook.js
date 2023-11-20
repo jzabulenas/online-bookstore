@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CategoriesAddBook from "./CategoriesAddBook";
+import AlertMessage from "./AlertMessage";
 
 export default function AddBook() {
   const [bookData, setBookData] = useState({
@@ -16,6 +17,11 @@ export default function AddBook() {
 
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [activePlusBtn, setActivePlusBtn] = useState("");
+
+  const [message, setMessage] = useState({
+    name: "",
+    type: "",
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -85,6 +91,22 @@ export default function AddBook() {
     } catch (error) {
       alert(`An error occurred: ${error.message}`);
     }
+  };
+
+  const handleMessages = (messageText, messageType) => {
+    setMessage({
+      ...message,
+      name: messageText,
+      type: messageType,
+    });
+  };
+
+  const handleAlertClose = () => {
+    setMessage({
+      ...message,
+      name: "",
+      type: "",
+    });
   };
 
   return (
@@ -190,6 +212,14 @@ export default function AddBook() {
           value={bookData.language}
           onChange={handleChange}
         />
+
+        {message.name !== "" && (
+          <AlertMessage
+            message={message.name}
+            type={message.type}
+            handleAlertClose={handleAlertClose}
+          />
+        )}
 
         <button
           className="btn btn-primary"
