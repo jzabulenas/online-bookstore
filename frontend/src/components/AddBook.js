@@ -52,6 +52,16 @@ export default function AddBook() {
     });
   };
 
+  const handleMinusBtn = () => {
+    const newCategories = [...bookData.categories];
+    newCategories.pop();
+    setBookData({
+      ...bookData,
+      categories: newCategories,
+    });
+    setSelectedCategories([...newCategories]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dataToPost = {
@@ -161,6 +171,7 @@ export default function AddBook() {
           className={`btn btn-danger rounded-circle`}
           style={{ padding: "6px 15px" }}
           type="button"
+          onClick={handleMinusBtn}
         >
           -
         </button>
