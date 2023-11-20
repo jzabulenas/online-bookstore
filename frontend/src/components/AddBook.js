@@ -17,6 +17,7 @@ export default function AddBook() {
 
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [activePlusBtn, setActivePlusBtn] = useState("");
+  const [activeMinusBtn, setActiveMinusBtn] = useState("");
 
   const [message, setMessage] = useState({
     name: "",
@@ -156,6 +157,7 @@ export default function AddBook() {
             selectedCategories={selectedCategories}
             index={index}
             setActivePlusBtn={setActivePlusBtn}
+            setActiveMinusBtn={setActiveMinusBtn}
           />
         ))}
 

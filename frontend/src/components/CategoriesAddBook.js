@@ -5,6 +5,7 @@ export default function CategoriesAddBook({
   selectedCategories,
   index,
   setActivePlusBtn,
+  setActiveMinusBtn,
 }) {
   const [categories, setCategories] = useState([]);
 
