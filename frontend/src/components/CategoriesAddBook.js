@@ -4,6 +4,7 @@ export default function CategoriesAddBook({
   handleChange,
   selectedCategories,
   index,
+  setActivePlusBtn,
 }) {
   const [categories, setCategories] = useState([]);
 
@@ -31,10 +32,24 @@ export default function CategoriesAddBook({
 
     fetchData();
 
+    togglePlusBtn();
+
     return () => {
       active = false;
     };
   }, [selectedCategories]);
+
+  function togglePlusBtn() {
+    const isCategorychosen =
+      selectedCategories[index] === undefined ||
+      selectedCategories[index] === "";
+    const oneMoreCategoryList = index === 2 || categories.length <= 1;
+    if (isCategorychosen || oneMoreCategoryList) {
+      setActivePlusBtn("disabled");
+    } else {
+      setActivePlusBtn("");
+    }
+  }
 
   return (
     <select

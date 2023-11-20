@@ -39,9 +39,6 @@ export default function AddBook() {
   };
 
   const handlePLusBtn = () => {
-    if (bookData.categories.length >= 2) {
-      setActivePlusBtn("disabled");
-    }
     setBookData({
       ...bookData,
       categories: [...bookData.categories, ""],
@@ -80,6 +77,7 @@ export default function AddBook() {
             handleChange={(e) => handleCategoryChange(index, e.target.value)}
             selectedCategories={selectedCategories}
             index={index}
+            setActivePlusBtn={setActivePlusBtn}
           />
         ))}
 
