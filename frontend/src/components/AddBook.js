@@ -170,7 +170,7 @@ export default function AddBook() {
         </button>
 
         <button
-          className={`btn btn-danger rounded-circle`}
+          className={`btn btn-danger rounded-circle ${activeMinusBtn}`}
           style={{ padding: "6px 15px" }}
           type="button"
           onClick={handleMinusBtn}

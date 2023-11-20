@@ -34,6 +34,7 @@ export default function CategoriesAddBook({
     fetchData();
 
     togglePlusBtn();
+    toggleMinusBtn();
 
     return () => {
       active = false;
@@ -49,6 +50,15 @@ export default function CategoriesAddBook({
       setActivePlusBtn("disabled");
     } else {
       setActivePlusBtn("");
+    }
+  }
+
+  function toggleMinusBtn() {
+    const categoryFieldIndex = index === 0;
+    if (categoryFieldIndex) {
+      setActiveMinusBtn("disabled");
+    } else {
+      setActiveMinusBtn("");
     }
   }
 
