@@ -23,7 +23,6 @@ export default function AddBook() {
       ...bookData,
       [name]: value,
     });
-    console.log(bookData);
   };
 
   const handleCategoryChange = (index, value) => {
@@ -36,6 +35,8 @@ export default function AddBook() {
     });
 
     setSelectedCategories([...newCategories]);
+
+    console.log(bookData);
   };
 
   const handlePLusBtn = () => {
@@ -45,11 +46,29 @@ export default function AddBook() {
     });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const dataToPost = {
+      title: bookData.title,
+      author: bookData.author,
+      categories: bookData.categories.map((category) => ({
+        name: category,
+      })),
+
+      description: bookData.description,
+      pictureUrl: bookData.pictureUrl,
+      pages: bookData.pages,
+      isbn: bookData.isbn,
+      publicationDate: bookData.publicationDate,
+      language: bookData.language,
+    };
+  };
+
   return (
     <div className="container  col-12 col-sm-8 col-lg-4 mt-3 mb-3">
       <h4>Add a new book:</h4>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <label className="form-label">Title</label>
         <input
           className="form-control"
