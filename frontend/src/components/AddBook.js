@@ -46,7 +46,7 @@ export default function AddBook() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const dataToPost = {
       title: bookData.title,
@@ -63,13 +63,28 @@ export default function AddBook() {
       language: bookData.language,
     };
 
-    fetch("http://localhost:8080/books", {
-      method: "POST",
-      body: JSON.stringify(dataToPost),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const response = await fetch("http://localhost:8080/books", {
+        method: "POST",
+        body: JSON.stringify(dataToPost),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        alert("Book created");
+      } else {
+        const statusMessage =
+          response.status === 400 || response.status === 404
+            ? await response.text()
+            : `Error: ${await response.json().message}`;
+
+        alert(statusMessage);
+      }
+    } catch (error) {
+      alert(`An error occurred: ${error.message}`);
+    }
   };
 
   return (
