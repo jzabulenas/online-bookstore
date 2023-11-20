@@ -79,16 +79,20 @@ export default function AddBook() {
       });
 
       if (response.ok) {
-        alert("Book created");
-      } else {
-        const statusMessage =
-          response.status === 400 || response.status === 404
-            ? await response.text()
-            : `Error: ${await response.json().message}`;
+        // Successful response (2xx status code)
+        handleMessages("Book created!", "success");
 
-        alert(statusMessage);
+        setTimeout(handleAlertClose, 1200);
+      } else if (response.status === 400 || response.status === 404) {
+        const statusMessage = await response.text(); // Get the error message as plain text
+        handleMessages(statusMessage, "danger");
+      } else {
+        // Handle errors (non-2xx status codes)
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message}`);
       }
     } catch (error) {
+      // Handle network errors or exceptions
       alert(`An error occurred: ${error.message}`);
     }
   };
