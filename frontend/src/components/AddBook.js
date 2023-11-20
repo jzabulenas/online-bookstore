@@ -62,6 +62,14 @@ export default function AddBook() {
       publicationDate: bookData.publicationDate,
       language: bookData.language,
     };
+
+    fetch("http://localhost:8080/books", {
+      method: "POST",
+      body: JSON.stringify(dataToPost),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   };
 
   return (
