@@ -156,6 +156,15 @@ export default function AddBook() {
         >
           +
         </button>
+
+        <button
+          className={`btn btn-danger rounded-circle`}
+          style={{ padding: "6px 15px" }}
+          type="button"
+        >
+          -
+        </button>
+
         <div>
           <label className="form-label">Description</label>
           <textarea
