@@ -24,11 +24,18 @@ export default function AddBook() {
     type: "",
   });
 
+  const [errors, setErrors] = useState({});
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setBookData({
       ...bookData,
       [name]: value,
+    });
+
+    setErrors({
+      ...errors,
+      [name]: "",
     });
   };
 
@@ -42,6 +49,10 @@ export default function AddBook() {
     });
 
     setSelectedCategories([...newCategories]);
+    setErrors({
+      ...errors,
+      category: "",
+    });
   };
 
   const handlePLusBtn = () => {
@@ -64,46 +75,94 @@ export default function AddBook() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const dataToPost = {
-      title: bookData.title,
-      author: bookData.author,
-      categories: bookData.categories.map((category) => ({
-        name: category,
-      })),
 
-      description: bookData.description,
-      pictureUrl: bookData.pictureUrl,
-      pages: bookData.pages,
-      isbn: bookData.isbn,
-      publicationDate: bookData.publicationDate,
-      language: bookData.language,
-    };
+    // Validation before submission
+    const newErrors = {};
 
-    try {
-      const response = await fetch("http://localhost:8080/books", {
-        method: "POST",
-        body: JSON.stringify(dataToPost),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+    if (!/^[A-Z0-9][a-zA-Z0-9 .,:'"!?&()-]+$/.test(bookData.title)) {
+      newErrors["title"] =
+        "Book title must start with an uppercase " +
+        "letter, that can be followed by a mix of alphanumeric characters, spaces, and certain punctuation marks!";
+    }
+    if (!/^[A-Z][a-z]+ [A-Z][a-z]+$/.test(bookData.author)) {
+      newErrors["author"] =
+        "Author's first and last name must start with " +
+        "an uppercase letter, that can be followed by one or more lowercase letters!";
+    }
+    if (selectedCategories.length === 0) {
+      newErrors["category"] = "Select one category at least!";
+    }
+    if (!/^[A-Z].{0,299}$/.test(bookData.description)) {
+      newErrors["description"] =
+        "Description should start with a capital letter " +
+        "and is limited to a maximum of 300 characters!";
+    }
+    if (!/^(https?):\/\/[^\s$]+\.(jpg|png)$/.test(bookData.pictureUrl)) {
+      newErrors["pictureUrl"] =
+        'URl should start with either "http://" or "https://" and end with ".jpg" or ".png!';
+    }
+    if (bookData.pages < 1) {
+      newErrors["pages"] = "Pages field must have a value greater than 0!";
+    }
+    if (
+      !/((978[\--– ])?[0-9][0-9\--– ]{10}[\--– ][0-9xX])|((978)?[0-9]{9}[0-9Xx])/.test(
+        bookData.isbn
+      )
+    ) {
+      newErrors["isbn"] = "ISBN is incorrect";
+    }
+    if (!/(\d{4})-(\d{2})-(\d{2})/.test(bookData.publicationDate)) {
+      newErrors["publicationDate"] = "Select a date, please!";
+    }
+    if (!/^[A-Z][a-z]+$/.test(bookData.language)) {
+      newErrors["language"] =
+        "Language must start with an uppercase " +
+        "letter, that can be followed by one or more lowercase letters!";
+    }
 
-      if (response.ok) {
-        // Successful response (2xx status code)
-        handleMessages("Book created!", "success");
+    if (Object.keys(newErrors).length !== 0) {
+      // Proceed with submission
+      setErrors(newErrors);
+    } else {
+      const dataToPost = {
+        title: bookData.title,
+        author: bookData.author,
+        categories: bookData.categories.map((category) => ({
+          name: category,
+        })),
 
-        setTimeout(handleAlertClose, 1200);
-      } else if (response.status === 400 || response.status === 404) {
-        const statusMessage = await response.text(); // Get the error message as plain text
-        handleMessages(statusMessage, "danger");
-      } else {
-        // Handle errors (non-2xx status codes)
-        const errorData = await response.json();
-        alert(`Error: ${errorData.message}`);
+        description: bookData.description,
+        pictureUrl: bookData.pictureUrl,
+        pages: bookData.pages,
+        isbn: bookData.isbn,
+        publicationDate: bookData.publicationDate,
+        language: bookData.language,
+      };
+
+      try {
+        const response = await fetch("http://localhost:8080/books", {
+          method: "POST",
+          body: JSON.stringify(dataToPost),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          handleMessages("Book created!", "success");
+          setTimeout(handleAlertClose, 1200);
+        } else if (response.status === 400 || response.status === 404) {
+          const statusMessage = await response.text(); // Get the error message as plain text
+          handleMessages(statusMessage, "danger");
+        } else {
+          // Handle errors (non-2xx status codes)
+          const errorData = await response.json();
+          alert(`Error: ${errorData.message}`);
+        }
+      } catch (error) {
+        // Handle network errors or exceptions
+        alert(`An error occurred: ${error.message}`);
       }
-    } catch (error) {
-      // Handle network errors or exceptions
-      alert(`An error occurred: ${error.message}`);
     }
   };
 
@@ -143,6 +202,13 @@ export default function AddBook() {
           value={bookData.title}
           onChange={handleChange}
         />
+        {errors.title && (
+          <AlertMessage
+            message={errors.title}
+            type="danger"
+            handleAlertClose={handleAlertClose}
+          />
+        )}
 
         <label
           className="form-label"
@@ -159,6 +225,13 @@ export default function AddBook() {
           value={bookData.author}
           onChange={handleChange}
         />
+        {errors.author && (
+          <AlertMessage
+            message={errors.author}
+            type="danger"
+            handleAlertClose={handleAlertClose}
+          />
+        )}
 
         <label
           className="form-label"
@@ -176,6 +249,13 @@ export default function AddBook() {
             setActiveMinusBtn={setActiveMinusBtn}
           />
         ))}
+        {errors.category && (
+          <AlertMessage
+            message={errors.category}
+            type="danger"
+            handleAlertClose={handleAlertClose}
+          />
+        )}
 
         <button
           className={`btn btn-primary rounded-circle ${activePlusBtn}`}
@@ -210,6 +290,13 @@ export default function AddBook() {
             value={bookData.description}
             onChange={handleChange}
           ></textarea>
+          {errors.description && (
+            <AlertMessage
+              message={errors.description}
+              type="danger"
+              handleAlertClose={handleAlertClose}
+            />
+          )}
         </div>
 
         <label
@@ -227,6 +314,13 @@ export default function AddBook() {
           value={bookData.pictureUrl}
           onChange={handleChange}
         />
+        {errors.pictureUrl && (
+          <AlertMessage
+            message={errors.pictureUrl}
+            type="danger"
+            handleAlertClose={handleAlertClose}
+          />
+        )}
 
         <label
           className="form-label"
@@ -243,6 +337,13 @@ export default function AddBook() {
           value={bookData.pages}
           onChange={handleChange}
         />
+        {errors.pages && (
+          <AlertMessage
+            message={errors.pages}
+            type="danger"
+            handleAlertClose={handleAlertClose}
+          />
+        )}
 
         <label
           className="form-label"
@@ -259,6 +360,13 @@ export default function AddBook() {
           value={bookData.isbn}
           onChange={handleChange}
         />
+        {errors.isbn && (
+          <AlertMessage
+            message={errors.isbn}
+            type="danger"
+            handleAlertClose={handleAlertClose}
+          />
+        )}
 
         <label
           className="form-label"
@@ -274,6 +382,13 @@ export default function AddBook() {
           value={bookData.publicationDate}
           onChange={handleChange}
         />
+        {errors.publicationDate && (
+          <AlertMessage
+            message={errors.publicationDate}
+            type="danger"
+            handleAlertClose={handleAlertClose}
+          />
+        )}
 
         <label
           className="form-label"
@@ -290,6 +405,13 @@ export default function AddBook() {
           value={bookData.language}
           onChange={handleChange}
         />
+        {errors.language && (
+          <AlertMessage
+            message={errors.language}
+            type="danger"
+            handleAlertClose={handleAlertClose}
+          />
+        )}
 
         {message.name !== "" && (
           <AlertMessage
