@@ -9,7 +9,7 @@ export default function Footer() {
       >
         <div className="row ms-3 ">
           <div className="div1 col-12 col-lg-3 d-flex  justify-content-center">
-            {<p>Contact us: tel. 00370 223322223</p>}
+            {<p>Tel. 00370 223322223</p>}
           </div>
           <div className="div2 col-12 col-lg-3 d-flex justify-content-center">
             <a
@@ -20,7 +20,7 @@ export default function Footer() {
             </a>
           </div>
           <div className="div3 col-12 col-lg-3 d-flex justify-content-center">
-            <p>&copy; Copyright 2023. All Rights Reserved.</p>
+            <p>&copy; Copyright 2023.</p>
           </div>
           <div className="footer div4 col-12 col-lg-3 d-flex justify-content-center">
             <ul>
