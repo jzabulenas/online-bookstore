@@ -2,13 +2,13 @@ import "./Footer.css";
 
 export default function Footer() {
   return (
-    <footer className="mt-3 w-100 text-font-size">
+    <footer className="mt-10 w-100 text-font-size  text-center text-lg-start fixed-bottom ">
       <div
         id="footer"
         className="container-fluid"
       >
         <div className="row ms-3 ">
-          <div className="div1 col-12 col-lg-3 d-flex justify-content-center">
+          <div className="div1 col-12 col-lg-3 d-flex  justify-content-center">
             {<p>Contact us: tel. 00370 223322223</p>}
           </div>
           <div className="div2 col-12 col-lg-3 d-flex justify-content-center">
