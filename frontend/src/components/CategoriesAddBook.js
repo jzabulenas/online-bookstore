@@ -8,6 +8,7 @@ export default function CategoriesAddBook({
   setActiveMinusBtn,
 }) {
   const [categories, setCategories] = useState([]);
+  const [categoriesCount, setCategoriesCount] = useState([]);
 
   useEffect(() => {
     let active = true;
@@ -27,6 +28,8 @@ export default function CategoriesAddBook({
           return !isCategorieNameInSelectedArray || isLocalSelecetionSelected;
         });
 
+        setCategoriesCount(data.length);
+
         setCategories(filteredCategories);
       }
     };
@@ -45,7 +48,7 @@ export default function CategoriesAddBook({
     const isCategorychosen =
       selectedCategories[index] === undefined ||
       selectedCategories[index] === "";
-    const oneMoreCategoryList = index === 2 || categories.length <= 1;
+    const oneMoreCategoryList = index === 2 || categoriesCount - index <= 1;
     if (isCategorychosen || oneMoreCategoryList) {
       setActivePlusBtn("disabled");
     } else {

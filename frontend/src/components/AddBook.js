@@ -42,8 +42,6 @@ export default function AddBook() {
     });
 
     setSelectedCategories([...newCategories]);
-
-    console.log(bookData);
   };
 
   const handlePLusBtn = () => {
@@ -60,6 +58,7 @@ export default function AddBook() {
       ...bookData,
       categories: newCategories,
     });
+
     setSelectedCategories([...newCategories]);
   };
 
