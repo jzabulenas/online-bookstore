@@ -128,27 +128,44 @@ export default function AddBook() {
       <h4>Add a new book:</h4>
 
       <form onSubmit={handleSubmit}>
-        <label className="form-label">Title</label>
+        <label
+          className="form-label"
+          htmlFor="title"
+        >
+          Title
+        </label>
         <input
           className="form-control"
           type="text"
           name="title"
+          id="title"
           placeholder="Enter the book title"
           value={bookData.title}
           onChange={handleChange}
         />
 
-        <label className="form-label">Author</label>
+        <label
+          className="form-label"
+          htmlFor="author"
+        >
+          Author
+        </label>
         <input
           className="form-control"
           type="text"
           name="author"
+          id="author"
           placeholder="Enter the author's full name"
           value={bookData.author}
           onChange={handleChange}
         />
 
-        <label className="form-label">Select a category</label>
+        <label
+          className="form-label"
+          htmlFor="category"
+        >
+          Select a category
+        </label>
         {bookData.categories.map((category, index) => (
           <CategoriesAddBook
             key={index}
@@ -178,10 +195,16 @@ export default function AddBook() {
         </button>
 
         <div>
-          <label className="form-label">Description</label>
+          <label
+            className="form-label"
+            htmlFor="description"
+          >
+            Description
+          </label>
           <textarea
             className="form-control"
             name="description"
+            id="description"
             rows="3"
             placeholder="Enter a brief description of the book (max 300 characters)"
             value={bookData.description}
@@ -189,50 +212,80 @@ export default function AddBook() {
           ></textarea>
         </div>
 
-        <label className="form-label">Picture Url</label>
+        <label
+          className="form-label"
+          htmlFor="picture-url"
+        >
+          Picture Url
+        </label>
         <input
           className="form-control"
           type="text"
           name="pictureUrl"
+          id="picture-url"
           placeholder="Enter the URL of the book cover picture"
           value={bookData.pictureUrl}
           onChange={handleChange}
         />
 
-        <label className="form-label">Pages</label>
+        <label
+          className="form-label"
+          htmlFor="pages"
+        >
+          Pages
+        </label>
         <input
           className="form-control"
           type="number"
           name="pages"
+          id="pages"
           placeholder="Enter the number of pages"
           value={bookData.pages}
           onChange={handleChange}
         />
 
-        <label className="form-label">ISBN</label>
+        <label
+          className="form-label"
+          htmlFor="isbn"
+        >
+          ISBN
+        </label>
         <input
           className="form-control"
           type="text"
           name="isbn"
+          id="isbn"
           placeholder="Enter the book's ISBN"
           value={bookData.isbn}
           onChange={handleChange}
         />
 
-        <label className="form-label">Publication Date</label>
+        <label
+          className="form-label"
+          htmlFor="publication-date"
+        >
+          Publication Date
+        </label>
         <input
           className="form-control"
           type="date"
           name="publicationDate"
+          id="publication-date"
           value={bookData.publicationDate}
           onChange={handleChange}
         />
 
-        <label className="form-label">Language</label>
+        <label
+          className="form-label"
+          htmlFor="language"
+        >
+          Language
+        </label>
         <input
           className="form-control"
           type="text"
           name="language"
+          id="language"
           placeholder="Enter the language of the book"
           value={bookData.language}
           onChange={handleChange}

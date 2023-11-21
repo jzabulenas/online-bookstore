@@ -69,6 +69,7 @@ export default function CategoriesAddBook({
     <select
       className="form-select"
       name="category"
+      id="category"
       defaultValue="default"
       onChange={handleChange}
     >
