@@ -126,9 +126,11 @@ export default function AddBook() {
       const dataToPost = {
         title: bookData.title,
         author: bookData.author,
-        categories: bookData.categories.map((category) => ({
-          name: category,
-        })),
+        categories: bookData.categories
+          .filter((category) => category !== "")
+          .map((category) => ({
+            name: category,
+          })),
 
         description: bookData.description,
         pictureUrl: bookData.pictureUrl,
