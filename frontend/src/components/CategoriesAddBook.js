@@ -67,7 +67,7 @@ export default function CategoriesAddBook({
 
   return (
     <select
-      className="form-select"
+      className="form-select mb-2"
       name="category"
       id="category"
       defaultValue="default"

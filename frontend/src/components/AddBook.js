@@ -183,98 +183,106 @@ export default function AddBook() {
   };
 
   return (
-    <div className="container  col-12 col-sm-8 col-lg-4 mt-3 mb-3">
+    <div className="container col-12 col-sm-8 col-lg-4 mt-3 mb-3">
       <h4>Add a new book:</h4>
 
       <form onSubmit={handleSubmit}>
-        <label
-          className="form-label"
-          htmlFor="title"
-        >
-          Title
-        </label>
-        <input
-          className="form-control"
-          type="text"
-          name="title"
-          id="title"
-          placeholder="Enter the book title"
-          value={bookData.title}
-          onChange={handleChange}
-        />
-        {errors.title && (
-          <AlertMessage
-            message={errors.title}
-            type="danger"
-            handleAlertClose={handleAlertClose}
+        <div className="mb-3">
+          <label
+            className="form-label"
+            htmlFor="title"
+          >
+            Title
+          </label>
+          <input
+            className="form-control mb-2"
+            type="text"
+            name="title"
+            id="title"
+            placeholder="Enter the book title"
+            value={bookData.title}
+            onChange={handleChange}
           />
-        )}
+          {errors.title && (
+            <AlertMessage
+              message={errors.title}
+              type="danger"
+              handleAlertClose={handleAlertClose}
+            />
+          )}
+        </div>
 
-        <label
-          className="form-label"
-          htmlFor="author"
-        >
-          Author
-        </label>
-        <input
-          className="form-control"
-          type="text"
-          name="author"
-          id="author"
-          placeholder="Enter the author's full name"
-          value={bookData.author}
-          onChange={handleChange}
-        />
-        {errors.author && (
-          <AlertMessage
-            message={errors.author}
-            type="danger"
-            handleAlertClose={handleAlertClose}
+        <div className="mb-3">
+          <label
+            className="form-label"
+            htmlFor="author"
+          >
+            Author
+          </label>
+          <input
+            className="form-control mb-2"
+            type="text"
+            name="author"
+            id="author"
+            placeholder="Enter the author's full name"
+            value={bookData.author}
+            onChange={handleChange}
           />
-        )}
+          {errors.author && (
+            <AlertMessage
+              message={errors.author}
+              type="danger"
+              handleAlertClose={handleAlertClose}
+            />
+          )}
+        </div>
 
-        <label
-          className="form-label"
-          htmlFor="category"
-        >
-          Select a category
-        </label>
-        {bookData.categories.map((category, index) => (
-          <CategoriesAddBook
-            key={index}
-            handleChange={(e) => handleCategoryChange(index, e.target.value)}
-            selectedCategories={selectedCategories}
-            index={index}
-            setActivePlusBtn={setActivePlusBtn}
-            setActiveMinusBtn={setActiveMinusBtn}
-          />
-        ))}
-        {errors.category && (
-          <AlertMessage
-            message={errors.category}
-            type="danger"
-            handleAlertClose={handleAlertClose}
-          />
-        )}
+        <div className="mb-3">
+          <label
+            className="form-label"
+            htmlFor="category"
+          >
+            Select a category
+          </label>
 
-        <button
-          className={`btn btn-primary rounded-circle ${activePlusBtn}`}
-          type="button"
-          onClick={handlePLusBtn}
-        >
-          +
-        </button>
+          {bookData.categories.map((category, index) => (
+            <CategoriesAddBook
+              key={index}
+              handleChange={(e) => handleCategoryChange(index, e.target.value)}
+              selectedCategories={selectedCategories}
+              index={index}
+              setActivePlusBtn={setActivePlusBtn}
+              setActiveMinusBtn={setActiveMinusBtn}
+            />
+          ))}
+          <button
+            className={`btn btn-primary rounded-circle ${activePlusBtn} me-1`}
+            type="button"
+            onClick={handlePLusBtn}
+          >
+            +
+          </button>
 
-        <button
-          className={`btn btn-danger rounded-circle ${activeMinusBtn}`}
-          style={{ padding: "6px 15px" }}
-          type="button"
-          onClick={handleMinusBtn}
-        >
-          -
-        </button>
+          <button
+            className={`btn btn-danger rounded-circle ${activeMinusBtn}`}
+            style={{ padding: "6px 15px" }}
+            type="button"
+            onClick={handleMinusBtn}
+          >
+            -
+          </button>
+          <div className="mt-2">
+            {errors.category && (
+              <AlertMessage
+                message={errors.category}
+                type="danger"
+                handleAlertClose={handleAlertClose}
+              />
+            )}
+          </div>
+        </div>
 
-        <div>
+        <div className="mb-3">
           <label
             className="form-label"
             htmlFor="description"
@@ -282,7 +290,7 @@ export default function AddBook() {
             Description
           </label>
           <textarea
-            className="form-control"
+            className="form-control mb-2"
             name="description"
             id="description"
             rows="3"
@@ -299,127 +307,139 @@ export default function AddBook() {
           )}
         </div>
 
-        <label
-          className="form-label"
-          htmlFor="picture-url"
-        >
-          Picture Url
-        </label>
-        <input
-          className="form-control"
-          type="text"
-          name="pictureUrl"
-          id="picture-url"
-          placeholder="Enter the URL of the book cover picture"
-          value={bookData.pictureUrl}
-          onChange={handleChange}
-        />
-        {errors.pictureUrl && (
-          <AlertMessage
-            message={errors.pictureUrl}
-            type="danger"
-            handleAlertClose={handleAlertClose}
+        <div className="mb-3">
+          <label
+            className="form-label"
+            htmlFor="picture-url"
+          >
+            Picture Url
+          </label>
+          <input
+            className="form-control mb-2"
+            type="text"
+            name="pictureUrl"
+            id="picture-url"
+            placeholder="Enter the URL of the book cover picture"
+            value={bookData.pictureUrl}
+            onChange={handleChange}
           />
-        )}
+          {errors.pictureUrl && (
+            <AlertMessage
+              message={errors.pictureUrl}
+              type="danger"
+              handleAlertClose={handleAlertClose}
+            />
+          )}
+        </div>
 
-        <label
-          className="form-label"
-          htmlFor="pages"
-        >
-          Pages
-        </label>
-        <input
-          className="form-control"
-          type="number"
-          name="pages"
-          id="pages"
-          placeholder="Enter the number of pages"
-          value={bookData.pages}
-          onChange={handleChange}
-        />
-        {errors.pages && (
-          <AlertMessage
-            message={errors.pages}
-            type="danger"
-            handleAlertClose={handleAlertClose}
-          />
-        )}
+        <div className="row">
+          <div className="col-md-6 mb-2">
+            <label
+              className="form-label"
+              htmlFor="pages"
+            >
+              Pages
+            </label>
+            <input
+              className="form-control mb-2"
+              type="number"
+              name="pages"
+              id="pages"
+              placeholder="Enter the number of pages"
+              value={bookData.pages}
+              onChange={handleChange}
+            />
+            {errors.pages && (
+              <AlertMessage
+                message={errors.pages}
+                type="danger"
+                handleAlertClose={handleAlertClose}
+              />
+            )}
+          </div>
 
-        <label
-          className="form-label"
-          htmlFor="isbn"
-        >
-          ISBN
-        </label>
-        <input
-          className="form-control"
-          type="text"
-          name="isbn"
-          id="isbn"
-          placeholder="Enter the book's ISBN"
-          value={bookData.isbn}
-          onChange={handleChange}
-        />
-        {errors.isbn && (
-          <AlertMessage
-            message={errors.isbn}
-            type="danger"
-            handleAlertClose={handleAlertClose}
-          />
-        )}
+          <div className="col-md-6 mb-2">
+            <label
+              className="form-label"
+              htmlFor="isbn"
+            >
+              ISBN
+            </label>
+            <input
+              className="form-control mb-2"
+              type="text"
+              name="isbn"
+              id="isbn"
+              placeholder="Enter the book's ISBN"
+              value={bookData.isbn}
+              onChange={handleChange}
+            />
+            {errors.isbn && (
+              <AlertMessage
+                message={errors.isbn}
+                type="danger"
+                handleAlertClose={handleAlertClose}
+              />
+            )}
+          </div>
 
-        <label
-          className="form-label"
-          htmlFor="publication-date"
-        >
-          Publication Date
-        </label>
-        <input
-          className="form-control"
-          type="date"
-          name="publicationDate"
-          id="publication-date"
-          value={bookData.publicationDate}
-          onChange={handleChange}
-        />
-        {errors.publicationDate && (
-          <AlertMessage
-            message={errors.publicationDate}
-            type="danger"
-            handleAlertClose={handleAlertClose}
-          />
-        )}
+          <div className="col-md-6 mb-3">
+            <label
+              className="form-label"
+              htmlFor="publication-date"
+            >
+              Publication Date
+            </label>
+            <input
+              className="form-control mb-2"
+              type="date"
+              name="publicationDate"
+              id="publication-date"
+              value={bookData.publicationDate}
+              onChange={handleChange}
+            />
+            {errors.publicationDate && (
+              <AlertMessage
+                message={errors.publicationDate}
+                type="danger"
+                handleAlertClose={handleAlertClose}
+              />
+            )}
+          </div>
 
-        <label
-          className="form-label"
-          htmlFor="language"
-        >
-          Language
-        </label>
-        <input
-          className="form-control"
-          type="text"
-          name="language"
-          id="language"
-          placeholder="Enter the language of the book"
-          value={bookData.language}
-          onChange={handleChange}
-        />
-        {errors.language && (
-          <AlertMessage
-            message={errors.language}
-            type="danger"
-            handleAlertClose={handleAlertClose}
-          />
-        )}
+          <div className="col-md-6">
+            <label
+              className="form-label"
+              htmlFor="language"
+            >
+              Language
+            </label>
+            <input
+              className="form-control mb-2"
+              type="text"
+              name="language"
+              id="language"
+              placeholder="Enter the language of the book"
+              value={bookData.language}
+              onChange={handleChange}
+            />
+            {errors.language && (
+              <AlertMessage
+                message={errors.language}
+                type="danger"
+                handleAlertClose={handleAlertClose}
+              />
+            )}
+          </div>
+        </div>
 
-        {message.name !== "" && (
+        {/* {message.name !== "" && (
           <AlertMessage
             message={message.name}
             type={message.type}
             handleAlertClose={handleAlertClose}
           />
-        )}
+        )} */}
 
         <button
           className="btn btn-primary"
