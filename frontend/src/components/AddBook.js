@@ -150,6 +150,9 @@ export default function AddBook() {
         if (response.ok) {
           handleMessages("Book created!", "success");
           setTimeout(handleAlertClose, 1200);
+
+          e.target.reset();
+          clearForm();
         } else if (response.status === 400 || response.status === 404) {
           const statusMessage = await response.text(); // Get the error message as plain text
           handleMessages(statusMessage, "danger");
@@ -184,6 +187,22 @@ export default function AddBook() {
       ...prevErrors,
       [key]: "",
     }));
+  };
+
+  const clearForm = () => {
+    console.log(bookData);
+    setBookData({
+      title: "",
+      author: "",
+      categories: [""],
+      description: "",
+      pictureUrl: "",
+      pages: "",
+      isbn: "",
+      publicationDate: "",
+      language: "",
+    });
+    setSelectedCategories([]);
   };
 
   return (
