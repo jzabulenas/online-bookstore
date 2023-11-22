@@ -76,7 +76,6 @@ export default function AddBook() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation before submission
     const newErrors = {};
 
     if (!/^[A-Z0-9][a-zA-Z0-9 .,:'"!?&()-]+$/.test(bookData.title)) {
@@ -174,12 +173,17 @@ export default function AddBook() {
     });
   };
 
-  const handleAlertClose = () => {
+  const handleAlertClose = (key) => {
     setMessage({
       ...message,
       name: "",
       type: "",
     });
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [key]: "",
+    }));
   };
 
   return (
@@ -203,11 +207,12 @@ export default function AddBook() {
             value={bookData.title}
             onChange={handleChange}
           />
+
           {errors.title && (
             <AlertMessage
               message={errors.title}
               type="danger"
-              handleAlertClose={handleAlertClose}
+              handleAlertClose={() => handleAlertClose("title")}
             />
           )}
         </div>
@@ -228,11 +233,12 @@ export default function AddBook() {
             value={bookData.author}
             onChange={handleChange}
           />
+
           {errors.author && (
             <AlertMessage
               message={errors.author}
               type="danger"
-              handleAlertClose={handleAlertClose}
+              handleAlertClose={() => handleAlertClose("author")}
             />
           )}
         </div>
@@ -276,7 +282,7 @@ export default function AddBook() {
               <AlertMessage
                 message={errors.category}
                 type="danger"
-                handleAlertClose={handleAlertClose}
+                handleAlertClose={() => handleAlertClose("category")}
               />
             )}
           </div>
@@ -298,11 +304,12 @@ export default function AddBook() {
             value={bookData.description}
             onChange={handleChange}
           ></textarea>
+
           {errors.description && (
             <AlertMessage
               message={errors.description}
               type="danger"
-              handleAlertClose={handleAlertClose}
+              handleAlertClose={() => handleAlertClose("description")}
             />
           )}
         </div>
@@ -323,11 +330,12 @@ export default function AddBook() {
             value={bookData.pictureUrl}
             onChange={handleChange}
           />
+
           {errors.pictureUrl && (
             <AlertMessage
               message={errors.pictureUrl}
               type="danger"
-              handleAlertClose={handleAlertClose}
+              handleAlertClose={() => handleAlertClose("pictureUrl")}
             />
           )}
         </div>
@@ -353,7 +361,7 @@ export default function AddBook() {
               <AlertMessage
                 message={errors.pages}
                 type="danger"
-                handleAlertClose={handleAlertClose}
+                handleAlertClose={() => handleAlertClose("pages")}
               />
             )}
           </div>
@@ -378,7 +386,7 @@ export default function AddBook() {
               <AlertMessage
                 message={errors.isbn}
                 type="danger"
-                handleAlertClose={handleAlertClose}
+                handleAlertClose={() => handleAlertClose("isbn")}
               />
             )}
           </div>
@@ -402,7 +410,7 @@ export default function AddBook() {
               <AlertMessage
                 message={errors.publicationDate}
                 type="danger"
-                handleAlertClose={handleAlertClose}
+                handleAlertClose={() => handleAlertClose("publicationDate")}
               />
             )}
           </div>
@@ -427,19 +435,19 @@ export default function AddBook() {
               <AlertMessage
                 message={errors.language}
                 type="danger"
-                handleAlertClose={handleAlertClose}
+                handleAlertClose={() => handleAlertClose("language")}
               />
             )}
           </div>
         </div>
 
-        {/* {message.name !== "" && (
+        {message.name !== "" && (
           <AlertMessage
             message={message.name}
             type={message.type}
             handleAlertClose={handleAlertClose}
           />
-        )} */}
+        )}
 
         <button
           className="btn btn-primary"
