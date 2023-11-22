@@ -2,7 +2,7 @@ import "./Footer.css";
 
 export default function Footer() {
   return (
-    <footer className="mt-10 w-100 text-font-size  text-center text-lg-start fixed-bottom ">
+    <footer className="mt-10  w-100 text-font-size  text-center text-lg-start ">
       <div
         id="footer"
         className="container-fluid"
