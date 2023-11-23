@@ -156,7 +156,7 @@ export default function AddBook({ setAddBookSubmitted, handleAddBook }) {
           e.target.reset();
           clearForm();
           setAddBookSubmitted(true);
-          handleAddBook();
+          setTimeout(handleAddBook, 1600);
         } else if (response.status === 400 || response.status === 404) {
           const statusMessage = await response.text(); // Get the error message as plain text
           handleMessages(statusMessage, "danger");
