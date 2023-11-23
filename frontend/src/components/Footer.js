@@ -2,10 +2,10 @@ import "./Footer.css";
 
 export default function Footer() {
   return (
-    <footer className="mt-10  w-100 text-font-size  text-center text-lg-start ">
+    <footer className="  w-100 text-font-size  text-center text-lg-start ">
       <div
         id="footer"
-        className="container-fluid"
+        className=" container-fluid "
       >
         <div className="row ms-3 ">
           <div className="div1 col-12 col-lg-3 d-flex  justify-content-center">
