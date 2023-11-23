@@ -2,7 +2,7 @@ import { useState } from "react";
 import CategoriesAddBook from "./CategoriesAddBook";
 import AlertMessage from "./AlertMessage";
 
-export default function AddBook() {
+export default function AddBook({ setAddBookSubmitted, handleAddBook }) {
   const [bookData, setBookData] = useState({
     title: "",
     author: "",
@@ -155,6 +155,8 @@ export default function AddBook() {
 
           e.target.reset();
           clearForm();
+          setAddBookSubmitted(true);
+          handleAddBook();
         } else if (response.status === 400 || response.status === 404) {
           const statusMessage = await response.text(); // Get the error message as plain text
           handleMessages(statusMessage, "danger");
@@ -208,7 +210,7 @@ export default function AddBook() {
   };
 
   return (
-    <div className="container col-12 col-sm-8 col-lg-4 mt-3 mb-3">
+    <>
       <h4>Add a new book:</h4>
 
       <form onSubmit={handleSubmit}>
@@ -477,6 +479,6 @@ export default function AddBook() {
           Submit
         </button>
       </form>
-    </div>
+    </>
   );
 }
