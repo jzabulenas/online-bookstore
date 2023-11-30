@@ -7,6 +7,7 @@ import FavoriteBooks from "./components/FavoriteBooks";
 import ReservedBooks from "./components/ReservedBooks";
 import About from "./components/About";
 import ErrorPage from "./components/ErrorPage";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           />
         </Routes>
       </main>
+      <Footer />
     </>
   );
 }
