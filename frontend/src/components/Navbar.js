@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const role = localStorage.getItem("role");
 
   useEffect(() => {
     const cleanedPathname = location.pathname.replace(/\/\/+/g, "/");
@@ -44,38 +45,50 @@ export default function Navbar() {
           id="navbarSupportedContent"
         >
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 w-100 justify-content-between">
-            <li className="nav-item">
-              <Link
-                className="nav-link"
-                to={"/categories"}
-              >
-                Categories
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                className="nav-link"
-                to={"/books"}
-              >
-                Books
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                className="nav-link"
-                to={"/favorite"}
-              >
-                Favorite Books
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                className="nav-link"
-                to={"/reserved"}
-              >
-                Reserved Books
-              </Link>
-            </li>
+            {role === "ADMIN" && (
+              <li className="nav-item">
+                <Link
+                  className="nav-link"
+                  to={"/categories"}
+                >
+                  Categories
+                </Link>
+              </li>
+            )}
+
+            {(role === "ADMIN" || role === "USER") && (
+              <li className="nav-item">
+                <Link
+                  className="nav-link"
+                  to={"/books"}
+                >
+                  Books
+                </Link>
+              </li>
+            )}
+
+            {role === "USER" && (
+              <>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to={"/favorite"}
+                  >
+                    Favorite Books
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to={"/reserved"}
+                  >
+                    Reserved Books
+                  </Link>
+                </li>
+              </>
+            )}
+
             <li className="nav-item">
               <Link
                 className="nav-link"
@@ -84,24 +97,49 @@ export default function Navbar() {
                 About
               </Link>
             </li>
-            <form
-              className="d-flex"
-              role="search"
-            >
-              <input
-                className="form-control me-2"
-                type="search"
-                name="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button
-                className="btn btn-outline-success"
-                type="submit"
+
+            {role === "USER" && (
+              <form
+                className="d-flex"
+                role="search"
               >
-                Search
-              </button>
-            </form>
+                <input
+                  className="form-control me-2"
+                  type="search"
+                  name="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                />
+                <button
+                  className="btn btn-outline-success"
+                  type="submit"
+                >
+                  Search
+                </button>
+              </form>
+            )}
+
+            {(role !== "USER" || role !== "ADMIN") && (
+              <>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to={"/categories"}
+                  >
+                    Log in
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to={"/categories"}
+                  >
+                    Sign up
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
