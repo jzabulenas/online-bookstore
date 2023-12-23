@@ -16,6 +16,13 @@ export default function Navbar() {
     }
   }, [location.pathname, navigate]);
 
+  const logout = () => {
+    localStorage.removeItem("role");
+    localStorage.removeItem("username");
+    localStorage.removeItem("password");
+    navigate("/");
+  };
+
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
@@ -139,6 +146,17 @@ export default function Navbar() {
                   </Link>
                 </li>
               </>
+            )}
+
+            {(role === "ADMIN" || role === "USER") && (
+              <li className="nav-item">
+                <button
+                  className="nav-link"
+                  onClick={logout}
+                >
+                  Log out
+                </button>
+              </li>
             )}
           </ul>
         </div>
