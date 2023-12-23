@@ -119,7 +119,7 @@ export default function Navbar() {
               </form>
             )}
 
-            {(role !== "USER" || role !== "ADMIN") && (
+            {role !== "USER" && role !== "ADMIN" && (
               <>
                 <li className="nav-item">
                   <Link
