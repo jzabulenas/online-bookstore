@@ -140,7 +140,7 @@ export default function Navbar() {
                 <li className="nav-item">
                   <Link
                     className="nav-link"
-                    to={"/categories"}
+                    to={"/signup"}
                   >
                     Sign up
                   </Link>
