@@ -14,21 +14,19 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) 
+	public SecurityFilterChain securityFilterChain(HttpSecurity http)
 			throws Exception {
-		http
-				.authorizeHttpRequests(authorize -> authorize
-						.requestMatchers("/signup").permitAll()
+		http.authorizeHttpRequests(
+				authorize -> authorize.requestMatchers("/signup").permitAll()
 						.requestMatchers("/login").permitAll()
 						.requestMatchers("/h2-console/**").permitAll()
-						.anyRequest().authenticated())
+						.requestMatchers("/**").permitAll().anyRequest().authenticated())
 				.headers(headers -> headers.frameOptions(f -> f.disable()))
 				.csrf(csrf -> csrf.disable())
 				.httpBasic(Customizer.withDefaults());
 
 		return http.build();
 	}
-	
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {

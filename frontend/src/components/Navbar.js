@@ -21,6 +21,15 @@ export default function Navbar() {
     localStorage.removeItem("username");
     localStorage.removeItem("password");
     navigate("/");
+    handleLinkClick();
+  };
+
+  const handleLinkClick = () => {
+    // Get the navbar collapse element
+    const navbarCollapse = document.querySelector(".navbar-collapse");
+
+    // Toggle the 'show' class on the navbar collapse element to hide it
+    navbarCollapse.classList.remove("show");
   };
 
   return (
@@ -57,6 +66,7 @@ export default function Navbar() {
                 <Link
                   className="nav-link"
                   to={"/categories"}
+                  onClick={handleLinkClick}
                 >
                   Categories
                 </Link>
@@ -68,6 +78,7 @@ export default function Navbar() {
                 <Link
                   className="nav-link"
                   to={"/books"}
+                  onClick={handleLinkClick}
                 >
                   Books
                 </Link>
@@ -80,6 +91,7 @@ export default function Navbar() {
                   <Link
                     className="nav-link"
                     to={"/favorite"}
+                    onClick={handleLinkClick}
                   >
                     Favorite Books
                   </Link>
@@ -89,6 +101,7 @@ export default function Navbar() {
                   <Link
                     className="nav-link"
                     to={"/reserved"}
+                    onClick={handleLinkClick}
                   >
                     Reserved Books
                   </Link>
@@ -100,6 +113,7 @@ export default function Navbar() {
               <Link
                 className="nav-link"
                 to={"/about"}
+                onClick={handleLinkClick}
               >
                 About
               </Link>
@@ -132,6 +146,7 @@ export default function Navbar() {
                   <Link
                     className="nav-link"
                     to={"/login"}
+                    onClick={handleLinkClick}
                   >
                     Log in
                   </Link>
@@ -140,7 +155,8 @@ export default function Navbar() {
                 <li className="nav-item">
                   <Link
                     className="nav-link"
-                    to={"/categories"}
+                    to={"/signup"}
+                    onClick={handleLinkClick}
                   >
                     Sign up
                   </Link>

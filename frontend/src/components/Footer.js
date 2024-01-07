@@ -4,11 +4,11 @@ export default function Footer() {
   return (
     <footer className="container-fluid text-font-size">
       <div className="row">
-        <div className="col-12 col-lg-3 d-flex justify-content-center border">
+        <div className="col-12 col-lg-3 d-flex justify-content-center">
           <p>Tel. 00370 223322223</p>
         </div>
 
-        <div className="col-12 col-lg-3 d-flex justify-content-center border">
+        <div className="col-12 col-lg-3 d-flex justify-content-center">
           <a
             href="https://www.vtmc.lt/kontaktai/"
             className=""
@@ -17,11 +17,11 @@ export default function Footer() {
           </a>
         </div>
 
-        <div className="col-12 col-lg-3 d-flex justify-content-center border">
+        <div className="col-12 col-lg-3 d-flex justify-content-center">
           <p>&copy; Copyright 2023</p>
         </div>
 
-        <div className="col-12 col-lg-3 d-flex justify-content-center border">
+        <div className="col-12 col-lg-3 d-flex justify-content-center">
           <ul className="list-unstyled">
             <li>
               <a href="https://techin.lt/">Address</a>
