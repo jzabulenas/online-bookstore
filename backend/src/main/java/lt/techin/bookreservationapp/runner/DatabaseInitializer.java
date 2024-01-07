@@ -1,25 +1,34 @@
 package lt.techin.bookreservationapp.runner;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import lt.techin.bookreservationapp.controllers.CategoryController;
-import lt.techin.bookreservationapp.entities.Category;
+import lt.techin.bookreservationapp.entities.User;
+import lt.techin.bookreservationapp.repositories.UserRepository;
 
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
 
-	private final CategoryController categoryController;
+	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 
-	public DatabaseInitializer(CategoryController categoryController) {
-		this.categoryController = categoryController;
+	public DatabaseInitializer(UserRepository userRepository,
+			PasswordEncoder passwordEncoder) {
+		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		Category category = new Category();
-		category.setName("Arts & Photography");
-//		categoryController.addCategory(category);
+		User user = new User();
+		user.setUsername("tony");
+		user.setPassword(passwordEncoder.encode("soprano"));
+		user.setRole("ADMIN");
+
+		if (!userRepository.existsByUsername(user.getUsername())) {
+			userRepository.save(user);
+		}
 	}
 
 }
