@@ -21,13 +21,14 @@ public class DatabaseInitializer implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		User user = new User();
-		user.setUsername("tony");
-		user.setPassword(passwordEncoder.encode("soprano"));
-		user.setRole("ADMIN");
+//		Create admin
+		User admin = new User();
+		admin.setUsername("tony");
+		admin.setPassword(passwordEncoder.encode("soprano"));
+		admin.setRole("ADMIN");
 
-		if (!userRepository.existsByUsername(user.getUsername())) {
-			userRepository.save(user);
+		if (!userRepository.existsByUsername(admin.getUsername())) {
+			userRepository.save(admin);
 		}
 	}
 
