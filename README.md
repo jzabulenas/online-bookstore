@@ -1,5 +1,12 @@
-# book-reservation-app
+# Online bookstore
+The application uses an embedded H2 database - you do not need to worry about hooking up your own.
 
-A CRUD project which lets users to reserve books, they like. 
+## Requirements
++ JDK 17
++ Node 18
 
-Created using Spring Boot and React.
+## How to run it
+### Backend
+Once the repository is cloned, `cd` into `online-bookstore` folder, then into `backend`.
+
+In the `backend` folder, open a terminal. Execute the `./mvnw` command to run the backend.
