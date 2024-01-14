@@ -30,6 +30,16 @@ public class DatabaseInitializer implements CommandLineRunner {
 		if (!userRepository.existsByUsername(admin.getUsername())) {
 			userRepository.save(admin);
 		}
+
+//		Create regular user
+		User regularUser = new User();
+		regularUser.setUsername("jeff");
+		regularUser.setPassword(passwordEncoder.encode("goldblum"));
+		regularUser.setRole("USER");
+
+		if (!userRepository.existsByUsername(regularUser.getUsername())) {
+			userRepository.save(regularUser);
+		}
 	}
 
 }
