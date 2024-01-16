@@ -43,14 +43,7 @@ public class CategoryController {
 
 	@GetMapping("/categories/{id}")
 	public ResponseEntity<Category> getCategory(@PathVariable int id) {
-
-		Optional<Category> category = categoryRepository.findById(id);
-		if (category.isPresent()) {
-			return ResponseEntity.ok(category.get());
-		}
-
-		return ResponseEntity.notFound().build();
-
+		return ResponseEntity.of(categoryService.getCategory(id));
 	}
 
 	@PostMapping("/categories")
