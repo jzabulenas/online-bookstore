@@ -21,6 +21,7 @@ import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.entities.Category;
 import lt.techin.bookreservationapp.repositories.CategoryRepository;
 import lt.techin.bookreservationapp.services.CategoryService;
+import lt.techin.bookreservationapp.services.ValidationService;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -50,20 +51,10 @@ public class CategoryController {
 	public ResponseEntity<String> addCategory(
 			@Valid @RequestBody Category category,
 			BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			StringBuilder errorMessageBuilder = new StringBuilder();
-			List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-
-			for (int i = 0; i < fieldErrors.size(); i++) {
-				FieldError fieldError = fieldErrors.get(i);
-				errorMessageBuilder.append(fieldError.getDefaultMessage());
-				if (i < fieldErrors.size() - 1) {
-					errorMessageBuilder.append(" | ");
-				}
-			}
-
-			String errorMessage = errorMessageBuilder.toString();
-			return ResponseEntity.badRequest().body(errorMessage);
+		ResponseEntity<String> errorResponse = ValidationService
+				.processFieldErrors(bindingResult);
+		if (errorResponse != null) {
+			return errorResponse;
 		}
 
 		if (categoryRepository.existsByName(category.getName())) {
