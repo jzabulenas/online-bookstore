@@ -51,10 +51,10 @@ public class CategoryController {
 	public ResponseEntity<String> addCategory(
 			@Valid @RequestBody Category category,
 			BindingResult bindingResult) {
-		ResponseEntity<String> errorResponse = ValidationService
+		String errorResponse = ValidationService
 				.processFieldErrors(bindingResult);
 		if (errorResponse != null) {
-			return errorResponse;
+			return ResponseEntity.badRequest().body(errorResponse);
 		}
 
 		if (categoryRepository.existsByName(category.getName())) {

@@ -2,13 +2,12 @@ package lt.techin.bookreservationapp.services;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 public class ValidationService {
 
-	public static ResponseEntity<String> processFieldErrors(
+	public static String processFieldErrors(
 			BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			StringBuilder errorMessageBuilder = new StringBuilder();
@@ -23,7 +22,7 @@ public class ValidationService {
 			}
 
 			String errorMessage = errorMessageBuilder.toString();
-			return ResponseEntity.badRequest().body(errorMessage);
+			return errorMessage;
 		}
 
 		return null;
