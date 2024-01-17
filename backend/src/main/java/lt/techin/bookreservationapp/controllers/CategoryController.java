@@ -44,7 +44,7 @@ public class CategoryController {
 
 	@GetMapping("/categories/{id}")
 	public ResponseEntity<Category> getCategory(@PathVariable int id) {
-		return ResponseEntity.of(categoryService.getCategory(id));
+		return ResponseEntity.of(categoryService.findById(id));
 	}
 
 	@PostMapping("/categories")
