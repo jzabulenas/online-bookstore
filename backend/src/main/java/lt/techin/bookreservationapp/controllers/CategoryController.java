@@ -39,7 +39,7 @@ public class CategoryController {
 
 	@GetMapping("/categories")
 	public List<Category> getCategories() {
-		return categoryService.getCategories();
+		return categoryService.findAll();
 	}
 
 	@GetMapping("/categories/{id}")

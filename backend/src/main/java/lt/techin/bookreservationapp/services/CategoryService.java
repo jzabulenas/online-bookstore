@@ -17,7 +17,7 @@ public class CategoryService {
 		this.categoryRepository = categoryRepository;
 	}
 
-	public List<Category> getCategories() {
+	public List<Category> findAll() {
 		return categoryRepository.findAll();
 	}
 
