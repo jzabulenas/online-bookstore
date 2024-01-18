@@ -57,11 +57,11 @@ public class CategoryController {
 			return ResponseEntity.badRequest().body(errorResponse);
 		}
 
-		if (categoryRepository.existsByName(category.getName())) {
+		if (categoryService.existsByName(category.getName())) {
 			return ResponseEntity.badRequest().body("Category already exists");
 		}
 
-		categoryRepository.save(category);
+		categoryService.save(category);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 

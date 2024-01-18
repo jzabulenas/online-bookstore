@@ -24,4 +24,12 @@ public class CategoryService {
 	public Optional<Category> findById(int id) {
 		return categoryRepository.findById(id);
 	}
+
+	public boolean existsByName(String category) {
+		return categoryRepository.existsByName(category);
+	}
+
+	public void save(Category category) {
+		categoryRepository.save(category);
+	}
 }
