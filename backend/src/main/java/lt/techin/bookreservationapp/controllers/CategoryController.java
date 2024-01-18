@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,39 +66,28 @@ public class CategoryController {
 
 	@PutMapping("/categories/{id}")
 	public ResponseEntity<String> updateCategory(@PathVariable int id,
-			@Valid @RequestBody Category updatedCategory,
+			@Valid @RequestBody Category category,
 			BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			StringBuilder errorMessageBuilder = new StringBuilder();
-			List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-
-			for (int i = 0; i < fieldErrors.size(); i++) {
-				FieldError fieldError = fieldErrors.get(i);
-				errorMessageBuilder.append(fieldError.getDefaultMessage());
-				if (i < fieldErrors.size() - 1) {
-					errorMessageBuilder.append(" | ");
-				}
-			}
-
-			String errorMessage = errorMessageBuilder.toString();
-			return ResponseEntity.badRequest().body(errorMessage);
+		String errorResponse = ValidationService
+				.processFieldErrors(bindingResult);
+		if (errorResponse != null) {
+			return ResponseEntity.badRequest().body(errorResponse);
 		}
 
-		Optional<Category> categoryFromDb = categoryRepository.findById(id);
+		Optional<Category> currentCategory = categoryService.findById(id);
 
-		if (categoryRepository.existsByName(updatedCategory.getName())) {
+		if (categoryService.existsByName(category.getName())) {
 			return ResponseEntity.badRequest().body("Category already exists");
 		}
 
-		if (categoryFromDb.isPresent()) {
-			Category category = categoryFromDb.get();
+		if (currentCategory.isPresent()) {
+			currentCategory.get().setName(category.getName());
+			categoryService.save(currentCategory.get());
 
-			category.setName(updatedCategory.getName());
-			categoryRepository.save(category);
 			return ResponseEntity.ok().build();
 		}
 
-		categoryRepository.save(updatedCategory);
+		categoryService.save(category);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
