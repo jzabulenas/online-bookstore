@@ -46,4 +46,15 @@ public class CategoryServiceTest {
 		then(category.getId()).isNotNull();
 	}
 
+	@Test
+	public void existsByName_savedCategory_isTrue() {
+		Category category = categoryRepository
+				.save(new Category("Literature & Fiction"));
+
+		boolean doesCategoryExist = categoryService
+				.existsByName(category.getName());
+
+		then(doesCategoryExist).isTrue();
+	}
+
 }
