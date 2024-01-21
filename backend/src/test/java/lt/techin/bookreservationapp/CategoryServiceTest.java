@@ -24,17 +24,6 @@ public class CategoryServiceTest {
 	private CategoryService categoryService;
 
 	@Test
-	public void findById_forSavedCategory_isReturned() {
-		Category savedCategory = categoryRepository
-				.save(new Category("Nonfiction"));
-
-		Category category = categoryService.findById(savedCategory.getId());
-
-		then(category.getName()).isEqualTo("Nonfiction");
-		then(category.getId()).isNotNull();
-	}
-
-	@Test
 	public void findAll_savedCategories_areReturned() {
 		Category savedCategory1 = categoryRepository
 				.save(new Category("Business & Money"));
@@ -45,4 +34,16 @@ public class CategoryServiceTest {
 
 		then(categories).contains(savedCategory1, savedCategory2);
 	}
+
+	@Test
+	public void findById_forSavedCategory_isReturned() {
+		Category savedCategory = categoryRepository
+				.save(new Category("Nonfiction"));
+
+		Category category = categoryService.findById(savedCategory.getId());
+
+		then(category.getName()).isEqualTo("Nonfiction");
+		then(category.getId()).isNotNull();
+	}
+
 }
