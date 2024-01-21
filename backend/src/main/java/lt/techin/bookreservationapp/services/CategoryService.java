@@ -1,7 +1,6 @@
 package lt.techin.bookreservationapp.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -21,8 +20,8 @@ public class CategoryService {
 		return categoryRepository.findAll();
 	}
 
-	public Optional<Category> findById(int id) {
-		return categoryRepository.findById(id);
+	public Category findById(int id) {
+		return categoryRepository.findById(id).orElse(null);
 	}
 
 	public boolean existsByName(String category) {
