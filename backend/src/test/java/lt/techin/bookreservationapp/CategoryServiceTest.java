@@ -2,6 +2,8 @@ package lt.techin.bookreservationapp;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,5 +32,17 @@ public class CategoryServiceTest {
 
 		then(category.getName()).isEqualTo("Nonfiction");
 		then(category.getId()).isNotNull();
+	}
+
+	@Test
+	public void findAll_savedCategories_areReturned() {
+		Category savedCategory1 = categoryRepository
+				.save(new Category("Business & Money"));
+		Category savedCategory2 = categoryRepository
+				.save(new Category("Mystery, Thriller & Suspense"));
+
+		List<Category> categories = categoryService.findAll();
+
+		then(categories).contains(savedCategory1, savedCategory2);
 	}
 }
