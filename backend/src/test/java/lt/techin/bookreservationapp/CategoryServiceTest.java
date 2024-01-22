@@ -57,4 +57,13 @@ public class CategoryServiceTest {
 		then(doesCategoryExist).isTrue();
 	}
 
+	@Test
+	void save_savedCategory_isReturned() {
+		categoryService.save(new Category("Biographies & Memoirs"));
+
+		boolean doesCategoryExist = categoryRepository
+				.existsByName("Biographies & Memoirs");
+
+		then(doesCategoryExist).isTrue();
+	}
 }
