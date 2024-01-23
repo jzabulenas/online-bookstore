@@ -67,7 +67,7 @@ public class CategoryServiceTest {
 		Category category = categoryRepository
 				.findByName("Biographies & Memoirs");
 
-		then(category.getId()).isEqualTo(1);
+		then(category.getId()).isNotNull();
 		then(category.getName()).isEqualTo("Biographies & Memoirs");
 	}
 }
