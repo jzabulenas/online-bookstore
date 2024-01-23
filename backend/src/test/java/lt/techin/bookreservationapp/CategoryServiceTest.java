@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.ActiveProfiles;
 
 import jakarta.transaction.Transactional;
 import lt.techin.bookreservationapp.entities.Category;
@@ -16,6 +17,8 @@ import lt.techin.bookreservationapp.services.CategoryService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @Transactional
+// To use application-test.properties file, for another database
+@ActiveProfiles("test")
 public class CategoryServiceTest {
 
 	@Autowired
@@ -61,9 +64,10 @@ public class CategoryServiceTest {
 	void save_savedCategory_isReturned() {
 		categoryService.save(new Category("Biographies & Memoirs"));
 
-		boolean doesCategoryExist = categoryRepository
-				.existsByName("Biographies & Memoirs");
+		Category category = categoryRepository
+				.findByName("Biographies & Memoirs");
 
-		then(doesCategoryExist).isTrue();
+		then(category.getId()).isEqualTo(1);
+		then(category.getName()).isEqualTo("Biographies & Memoirs");
 	}
 }
