@@ -49,7 +49,7 @@ public class CategoryServiceTest {
 		Category category = categoryService.findById(savedCategory.getId());
 
 		then(category.getName()).isEqualTo("Nonfiction");
-		then(category.getId()).isNotNull();
+		then(category.getId()).isNotEqualTo(0);
 	}
 
 	@Test
@@ -70,7 +70,7 @@ public class CategoryServiceTest {
 		Category category = categoryRepository
 				.findByName("Biographies & Memoirs");
 
-		then(category.getId()).isNotNull();
 		then(category.getName()).isEqualTo("Biographies & Memoirs");
+		then(category.getId()).isNotEqualTo(0);
 	}
 }
