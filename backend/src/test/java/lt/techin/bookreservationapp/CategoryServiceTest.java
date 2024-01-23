@@ -35,7 +35,10 @@ public class CategoryServiceTest {
 
 		List<Category> categories = categoryService.findAll();
 
-		then(categories).contains(savedCategory1, savedCategory2);
+		then(categories.get(0).getName()).isEqualTo(savedCategory1.getName());
+		then(categories.get(0).getId()).isNotEqualTo(0);
+		then(categories.get(1).getName()).isEqualTo(savedCategory2.getName());
+		then(categories.get(1).getId()).isNotEqualTo(0);
 	}
 
 	@Test
