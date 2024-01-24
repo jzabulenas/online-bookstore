@@ -43,4 +43,13 @@ public class CategoryControllerTest {
 						.value("Engineering & Transportation"));
 
 	}
+
+	@Test
+	void getCategories_emptyList_returnNotFound() throws Exception {
+		given(categoryService.findAll())
+				.willReturn(List.of());
+
+		mockMvc.perform(get("/categories"))
+				.andExpect(status().isNotFound());
+	}
 }
