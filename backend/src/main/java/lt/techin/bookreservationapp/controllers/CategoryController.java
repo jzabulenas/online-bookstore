@@ -1,7 +1,6 @@
 package lt.techin.bookreservationapp.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,21 +35,26 @@ public class CategoryController {
 	}
 
 	@GetMapping("/categories")
-	public List<Category> getCategories() {
-		return categoryService.findAll();
+	public ResponseEntity<List<Category>> getCategories() {
+		if (!categoryService.findAll().isEmpty()) {
+			return ResponseEntity.ok(categoryService.findAll());
+		}
+
+		return ResponseEntity.notFound().build();
 	}
 
 	@GetMapping("/categories/{id}")
 	public ResponseEntity<Category> getCategory(@PathVariable int id) {
-		return ResponseEntity.of(categoryService.findById(id));
+		return ResponseEntity.ok(categoryService.findById(id));
 	}
 
 	@PostMapping("/categories")
-	public ResponseEntity<String> addCategory(
+	public ResponseEntity<?> addCategory(
 			@Valid @RequestBody Category category,
 			BindingResult bindingResult) {
 		String errorResponse = ValidationService
 				.processFieldErrors(bindingResult);
+
 		if (errorResponse != null) {
 			return ResponseEntity.badRequest().body(errorResponse);
 		}
@@ -60,36 +63,36 @@ public class CategoryController {
 			return ResponseEntity.badRequest().body("Category already exists");
 		}
 
-		categoryService.save(category);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		Category savedCategory = categoryService.save(category);
+		return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
 	}
 
-	@PutMapping("/categories/{id}")
-	public ResponseEntity<String> updateCategory(@PathVariable int id,
-			@Valid @RequestBody Category category,
-			BindingResult bindingResult) {
-		String errorResponse = ValidationService
-				.processFieldErrors(bindingResult);
-		if (errorResponse != null) {
-			return ResponseEntity.badRequest().body(errorResponse);
-		}
-
-		Optional<Category> currentCategory = categoryService.findById(id);
-
-		if (categoryService.existsByName(category.getName())) {
-			return ResponseEntity.badRequest().body("Category already exists");
-		}
-
-		if (currentCategory.isPresent()) {
-			currentCategory.get().setName(category.getName());
-			categoryService.save(currentCategory.get());
-
-			return ResponseEntity.ok().build();
-		}
-
-		categoryService.save(category);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
+//	@PutMapping("/categories/{id}")
+//	public ResponseEntity<String> updateCategory(@PathVariable int id,
+//			@Valid @RequestBody Category category,
+//			BindingResult bindingResult) {
+//		String errorResponse = ValidationService
+//				.processFieldErrors(bindingResult);
+//		if (errorResponse != null) {
+//			return ResponseEntity.badRequest().body(errorResponse);
+//		}
+//
+//		Optional<Category> currentCategory = categoryService.findById(id);
+//
+//		if (categoryService.existsByName(category.getName())) {
+//			return ResponseEntity.badRequest().body("Category already exists");
+//		}
+//
+//		if (currentCategory.isPresent()) {
+//			currentCategory.get().setName(category.getName());
+//			categoryService.save(currentCategory.get());
+//
+//			return ResponseEntity.ok().build();
+//		}
+//
+//		categoryService.save(category);
+//		return ResponseEntity.status(HttpStatus.CREATED).build();
+//	}
 
 	@DeleteMapping("/categories/{id}")
 	public void deleteCategory(@PathVariable int id) {
