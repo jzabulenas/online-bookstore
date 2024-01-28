@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.ActiveProfiles;
 
 import jakarta.transaction.Transactional;
 import lt.techin.bookreservationapp.entities.Category;
@@ -16,6 +17,8 @@ import lt.techin.bookreservationapp.services.CategoryService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @Transactional
+// To use application-test.properties file, for another database
+@ActiveProfiles("test")
 public class CategoryServiceTest {
 
 	@Autowired
@@ -32,7 +35,10 @@ public class CategoryServiceTest {
 
 		List<Category> categories = categoryService.findAll();
 
-		then(categories).contains(savedCategory1, savedCategory2);
+		then(categories.get(0).getName()).isEqualTo(savedCategory1.getName());
+		then(categories.get(0).getId()).isNotEqualTo(0);
+		then(categories.get(1).getName()).isEqualTo(savedCategory2.getName());
+		then(categories.get(1).getId()).isNotEqualTo(0);
 	}
 
 	@Test
@@ -43,7 +49,7 @@ public class CategoryServiceTest {
 		Category category = categoryService.findById(savedCategory.getId());
 
 		then(category.getName()).isEqualTo("Nonfiction");
-		then(category.getId()).isNotNull();
+		then(category.getId()).isNotEqualTo(0);
 	}
 
 	@Test
@@ -57,4 +63,14 @@ public class CategoryServiceTest {
 		then(doesCategoryExist).isTrue();
 	}
 
+	@Test
+	void save_savedCategory_isReturned() {
+		categoryService.save(new Category("Biographies & Memoirs"));
+
+		Category category = categoryRepository
+				.findByName("Biographies & Memoirs");
+
+		then(category.getName()).isEqualTo("Biographies & Memoirs");
+		then(category.getId()).isNotEqualTo(0);
+	}
 }
