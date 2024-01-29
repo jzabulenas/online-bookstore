@@ -36,8 +36,10 @@ public class CategoryController {
 
 	@GetMapping("/categories")
 	public ResponseEntity<List<Category>> getCategories() {
-		if (!categoryService.findAll().isEmpty()) {
-			return ResponseEntity.ok(categoryService.findAll());
+		List<Category> allCategories = categoryService.findAll();
+
+		if (!allCategories.isEmpty()) {
+			return ResponseEntity.ok(allCategories);
 		}
 
 		return ResponseEntity.notFound().build();
