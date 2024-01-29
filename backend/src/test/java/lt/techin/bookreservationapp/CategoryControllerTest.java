@@ -39,16 +39,22 @@ public class CategoryControllerTest {
 
 	@Test
 	void getCategories_savedCategories_returned() throws Exception {
+//		given
 		given(categoryService.findAll())
 				.willReturn(List.of(new Category("Reference"),
 						new Category("Engineering & Transportation")));
 
+//		when
 		mockMvc.perform(get("/categories"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].name").value("Reference"))
 				.andExpect(jsonPath("$[1].name")
 						.value("Engineering & Transportation"));
 
+//		then
+		then(categoryService)
+				.should()
+				.findAll();
 	}
 
 	@Test
