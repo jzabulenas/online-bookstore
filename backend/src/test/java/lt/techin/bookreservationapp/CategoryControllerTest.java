@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -60,10 +61,16 @@ public class CategoryControllerTest {
 	@Test
 	void getCategories_emptyList_returnNotFound() throws Exception {
 		given(categoryService.findAll())
-				.willReturn(List.of());
+				.willReturn(Collections.emptyList());
 
 		mockMvc.perform(get("/categories"))
-				.andExpect(status().isNotFound());
+				.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$").isArray())
+				.andExpect(jsonPath("$").isEmpty());
+
+		then(categoryService)
+				.should()
+				.findAll();
 	}
 
 	@Test
