@@ -1,5 +1,6 @@
 package lt.techin.bookreservationapp.controllers;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,8 @@ public class CategoryController {
 			return ResponseEntity.ok(allCategories);
 		}
 
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(Collections.emptyList());
 	}
 
 	@GetMapping("/categories/{id}")
