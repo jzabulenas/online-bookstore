@@ -1,10 +1,12 @@
 package lt.techin.bookreservationapp;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -94,5 +96,25 @@ public class CategoryControllerTest {
 		then(categoryService)
 				.should()
 				.save(any(Category.class));
+	}
+
+	@Test
+	void addCategory_whenCategoryNotFound_thenReturn400() throws Exception {
+		Category category = new Category("Crafts, Hobbies & Home");
+		given(categoryService.existsByName(anyString()))
+				.willReturn(true);
+
+		mockMvc.perform(post("/categories")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(category))
+				.accept(MediaType.TEXT_PLAIN))
+				.andExpect(status().isBadRequest())
+				.andExpect(content()
+						.string("Category already exists"));
+
+		then(categoryService)
+				.should()
+				.existsByName(anyString());
+
 	}
 }
