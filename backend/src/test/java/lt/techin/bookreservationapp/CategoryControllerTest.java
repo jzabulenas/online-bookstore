@@ -107,7 +107,7 @@ public class CategoryControllerTest {
 		mockMvc.perform(post("/categories")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(category))
-				.accept(MediaType.TEXT_PLAIN))
+				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andExpect(content()
 						.string("Category already exists"));

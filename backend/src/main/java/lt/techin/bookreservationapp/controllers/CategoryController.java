@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,6 @@ import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.entities.Category;
 import lt.techin.bookreservationapp.repositories.CategoryRepository;
 import lt.techin.bookreservationapp.services.CategoryService;
-import lt.techin.bookreservationapp.services.ValidationService;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -54,15 +52,7 @@ public class CategoryController {
 
 	@PostMapping("/categories")
 	public ResponseEntity<?> addCategory(
-			@Valid @RequestBody Category category,
-			BindingResult bindingResult) {
-		String errorResponse = ValidationService
-				.processFieldErrors(bindingResult);
-
-		if (errorResponse != null) {
-			return ResponseEntity.badRequest().body(errorResponse);
-		}
-
+			@Valid @RequestBody Category category) {
 		if (categoryService.existsByName(category.getName())) {
 			return ResponseEntity.badRequest().body("Category already exists");
 		}
