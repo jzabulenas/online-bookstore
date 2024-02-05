@@ -1,0 +1,6 @@
+Maybe will need this?
+
+BindingResult bindingResult = mock(BindingResult.class);
+given(ValidationService.processFieldErrors(bindingResult))
+ .willReturn(false);
+given(bindingResult.hasErrors()).willReturn(false);

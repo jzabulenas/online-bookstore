@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>lt.techin</groupId>
-	<artifactId>book-reservation-app</artifactId>
+	<artifactId>online-bookstore</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>book-reservation-app</name>
 	<description>Project for Spring Boot</description>
