@@ -1,7 +1,9 @@
 package lt.techin.bookreservationapp.controllers;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,7 +56,9 @@ public class CategoryController {
 	public ResponseEntity<?> addCategory(
 			@Valid @RequestBody Category category) {
 		if (categoryService.existsByName(category.getName())) {
-			return ResponseEntity.badRequest().body("Category already exists");
+			Map<String, String> categoryMap = new HashMap<String, String>();
+			categoryMap.put("name", "Category already exists");
+			return ResponseEntity.badRequest().body(categoryMap);
 		}
 
 		Category savedCategory = categoryService.save(category);
