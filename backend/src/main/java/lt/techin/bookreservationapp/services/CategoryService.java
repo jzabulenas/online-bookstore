@@ -10,25 +10,26 @@ import lt.techin.bookreservationapp.repositories.CategoryRepository;
 @Service
 public class CategoryService {
 
-	private final CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-	public CategoryService(CategoryRepository categoryRepository) {
-		this.categoryRepository = categoryRepository;
-	}
+    public CategoryService(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
-	public List<Category> findAll() {
-		return categoryRepository.findAll();
-	}
+    public List<Category> findAll() {
+        return categoryRepository.findAll();
+    }
 
-	public Category findById(int id) {
-		return categoryRepository.findById(id).orElse(null);
-	}
+    public Category findById(int id) {
+        return categoryRepository.findById(id).orElse(null);
+    }
 
-	public boolean existsByName(String category) {
-		return categoryRepository.existsByName(category);
-	}
+    public boolean existsByName(String category) {
+        return categoryRepository.existsByName(category);
+    }
 
-	public Category save(Category category) {
-		return categoryRepository.save(category);
-	}
+    public Category save(Category category) {
+        return categoryRepository.save(category);
+    }
+
 }

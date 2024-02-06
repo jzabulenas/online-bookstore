@@ -25,76 +25,74 @@ import lt.techin.bookreservationapp.services.CategoryService;
 @RestController
 public class CategoryController {
 
-	private final CategoryRepository categoryRepository;
-	private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
 
-	@Autowired
-	public CategoryController(CategoryRepository categoryRepository,
-			CategoryService categoryService) {
-		this.categoryRepository = categoryRepository;
-		this.categoryService = categoryService;
-	}
+    private final CategoryService categoryService;
 
-	@GetMapping("/categories")
-	public ResponseEntity<List<Category>> getCategories() {
-		List<Category> allCategories = categoryService.findAll();
+    @Autowired
+    public CategoryController(CategoryRepository categoryRepository, CategoryService categoryService) {
+        this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
+    }
 
-		if (!allCategories.isEmpty()) {
-			return ResponseEntity.ok(allCategories);
-		}
+    @GetMapping("/categories")
+    public ResponseEntity<List<Category>> getCategories() {
+        List<Category> allCategories = categoryService.findAll();
 
-		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(Collections.emptyList());
-	}
+        if (!allCategories.isEmpty()) {
+            return ResponseEntity.ok(allCategories);
+        }
 
-	@GetMapping("/categories/{id}")
-	public ResponseEntity<Category> getCategory(@PathVariable int id) {
-		return ResponseEntity.ok(categoryService.findById(id));
-	}
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
+    }
 
-	@PostMapping("/categories")
-	public ResponseEntity<?> addCategory(
-			@Valid @RequestBody Category category) {
-		if (categoryService.existsByName(category.getName())) {
-			Map<String, String> categoryMap = new HashMap<String, String>();
-			categoryMap.put("name", "Category already exists");
-			return ResponseEntity.badRequest().body(categoryMap);
-		}
+    @GetMapping("/categories/{id}")
+    public ResponseEntity<Category> getCategory(@PathVariable int id) {
+        return ResponseEntity.ok(categoryService.findById(id));
+    }
 
-		Category savedCategory = categoryService.save(category);
-		return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
-	}
+    @PostMapping("/categories")
+    public ResponseEntity<?> addCategory(@Valid @RequestBody Category category) {
+        if (categoryService.existsByName(category.getName())) {
+            Map<String, String> categoryMap = new HashMap<String, String>();
+            categoryMap.put("name", "Category already exists");
+            return ResponseEntity.badRequest().body(categoryMap);
+        }
 
-	// @PutMapping("/categories/{id}")
-	// public ResponseEntity<String> updateCategory(@PathVariable int id,
-	// @Valid @RequestBody Category category,
-	// BindingResult bindingResult) {
-	// String errorResponse = ValidationService
-	// .processFieldErrors(bindingResult);
-	// if (errorResponse != null) {
-	// return ResponseEntity.badRequest().body(errorResponse);
-	// }
-	//
-	// Optional<Category> currentCategory = categoryService.findById(id);
-	//
-	// if (categoryService.existsByName(category.getName())) {
-	// return ResponseEntity.badRequest().body("Category already exists");
-	// }
-	//
-	// if (currentCategory.isPresent()) {
-	// currentCategory.get().setName(category.getName());
-	// categoryService.save(currentCategory.get());
-	//
-	// return ResponseEntity.ok().build();
-	// }
-	//
-	// categoryService.save(category);
-	// return ResponseEntity.status(HttpStatus.CREATED).build();
-	// }
+        Category savedCategory = categoryService.save(category);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
+    }
 
-	@DeleteMapping("/categories/{id}")
-	public void deleteCategory(@PathVariable int id) {
-		categoryRepository.deleteById(id);
-	}
+    // @PutMapping("/categories/{id}")
+    // public ResponseEntity<String> updateCategory(@PathVariable int id,
+    // @Valid @RequestBody Category category,
+    // BindingResult bindingResult) {
+    // String errorResponse = ValidationService
+    // .processFieldErrors(bindingResult);
+    // if (errorResponse != null) {
+    // return ResponseEntity.badRequest().body(errorResponse);
+    // }
+    //
+    // Optional<Category> currentCategory = categoryService.findById(id);
+    //
+    // if (categoryService.existsByName(category.getName())) {
+    // return ResponseEntity.badRequest().body("Category already exists");
+    // }
+    //
+    // if (currentCategory.isPresent()) {
+    // currentCategory.get().setName(category.getName());
+    // categoryService.save(currentCategory.get());
+    //
+    // return ResponseEntity.ok().build();
+    // }
+    //
+    // categoryService.save(category);
+    // return ResponseEntity.status(HttpStatus.CREATED).build();
+    // }
+
+    @DeleteMapping("/categories/{id}")
+    public void deleteCategory(@PathVariable int id) {
+        categoryRepository.deleteById(id);
+    }
 
 }

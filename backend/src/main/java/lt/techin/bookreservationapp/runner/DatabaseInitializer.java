@@ -10,36 +10,36 @@ import lt.techin.bookreservationapp.repositories.UserRepository;
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
 
-	private final UserRepository userRepository;
-	private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
-	public DatabaseInitializer(UserRepository userRepository,
-			PasswordEncoder passwordEncoder) {
-		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
-	}
+    private final PasswordEncoder passwordEncoder;
 
-	@Override
-	public void run(String... args) throws Exception {
-		// Create admin
-		User admin = new User();
-		admin.setUsername("tony");
-		admin.setPassword(passwordEncoder.encode("soprano"));
-		admin.setRole("ADMIN");
+    public DatabaseInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-		if (!userRepository.existsByUsername(admin.getUsername())) {
-			userRepository.save(admin);
-		}
+    @Override
+    public void run(String... args) throws Exception {
+        // Create admin
+        User admin = new User();
+        admin.setUsername("tony");
+        admin.setPassword(passwordEncoder.encode("soprano"));
+        admin.setRole("ADMIN");
 
-		// Create regular user
-		User regularUser = new User();
-		regularUser.setUsername("jeff");
-		regularUser.setPassword(passwordEncoder.encode("goldblum"));
-		regularUser.setRole("USER");
+        if (!userRepository.existsByUsername(admin.getUsername())) {
+            userRepository.save(admin);
+        }
 
-		if (!userRepository.existsByUsername(regularUser.getUsername())) {
-			userRepository.save(regularUser);
-		}
-	}
+        // Create regular user
+        User regularUser = new User();
+        regularUser.setUsername("jeff");
+        regularUser.setPassword(passwordEncoder.encode("goldblum"));
+        regularUser.setRole("USER");
+
+        if (!userRepository.existsByUsername(regularUser.getUsername())) {
+            userRepository.save(regularUser);
+        }
+    }
 
 }

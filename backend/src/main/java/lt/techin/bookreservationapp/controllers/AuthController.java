@@ -14,32 +14,31 @@ import lt.techin.bookreservationapp.repositories.UserRepository;
 @CrossOrigin("http://localhost:3000")
 public class AuthController {
 
-	private final UserRepository userRepository;
-	private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
-	@Autowired
-	public AuthController(UserRepository userRepository,
-			PasswordEncoder passwordEncoder) {
-		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
-	}
+    private final PasswordEncoder passwordEncoder;
 
-	@PostMapping("/signup")
-	public void signup(@RequestBody User user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		user.setRole("USER");
+    @Autowired
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-		userRepository.save(user);
-	}
+    @PostMapping("/signup")
+    public void signup(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("USER");
 
-	@PostMapping("/login")
-	public User login(@RequestBody User user) {
-		User userDb = userRepository.findUserByUsername(user.getUsername())
-				.filter(uDb -> passwordEncoder.matches(user.getPassword(),
-						uDb.getPassword()))
-				.get();
+        userRepository.save(user);
+    }
 
-		return userDb;
-	}
+    @PostMapping("/login")
+    public User login(@RequestBody User user) {
+        User userDb = userRepository.findUserByUsername(user.getUsername())
+            .filter(uDb -> passwordEncoder.matches(user.getPassword(), uDb.getPassword()))
+            .get();
+
+        return userDb;
+    }
 
 }
