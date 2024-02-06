@@ -6,8 +6,8 @@ import lt.techin.bookreservationapp.entities.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
-    Boolean existsByName(String name);
+	Boolean existsByName(String name);
 
-    Category findByName(String name);
+	Category findByName(String name);
 
 }

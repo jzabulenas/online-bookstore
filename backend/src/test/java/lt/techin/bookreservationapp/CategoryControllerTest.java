@@ -31,75 +31,75 @@ import lt.techin.bookreservationapp.services.CategoryService;
 // @WithMockUser
 public class CategoryControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    @MockBean
-    private CategoryService categoryService;
+	@MockBean
+	private CategoryService categoryService;
 
-    @MockBean
-    private CategoryRepository categoryRepository;
+	@MockBean
+	private CategoryRepository categoryRepository;
 
-    @Test
-    void getCategories_savedCategories_returned() throws Exception {
-        // given
-        given(categoryService.findAll())
-            .willReturn(List.of(new Category("Reference"), new Category("Engineering & Transportation")));
+	@Test
+	void getCategories_savedCategories_returned() throws Exception {
+		// given
+		given(categoryService.findAll())
+			.willReturn(List.of(new Category("Reference"), new Category("Engineering & Transportation")));
 
-        // when
-        mockMvc.perform(get("/categories"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].name").value("Reference"))
-            .andExpect(jsonPath("$[1].name").value("Engineering & Transportation"));
+		// when
+		mockMvc.perform(get("/categories"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$[0].name").value("Reference"))
+			.andExpect(jsonPath("$[1].name").value("Engineering & Transportation"));
 
-        // then
-        then(categoryService).should().findAll();
-    }
+		// then
+		then(categoryService).should().findAll();
+	}
 
-    @Test
-    void getCategories_emptyList_returnNotFound() throws Exception {
-        given(categoryService.findAll()).willReturn(Collections.emptyList());
+	@Test
+	void getCategories_emptyList_returnNotFound() throws Exception {
+		given(categoryService.findAll()).willReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/categories"))
-            .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").isEmpty());
+		mockMvc.perform(get("/categories"))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$").isArray())
+			.andExpect(jsonPath("$").isEmpty());
 
-        then(categoryService).should().findAll();
-    }
+		then(categoryService).should().findAll();
+	}
 
-    @Test
-    void addCategory_whenSaveCategory_thenReturnIt() throws Exception {
-        // given
-        Category category = new Category("Health, Fitness & Dieting");
-        given(categoryService.existsByName(category.getName())).willReturn(false);
-        given(categoryService.save(any(Category.class))).willReturn(category);
+	@Test
+	void addCategory_whenSaveCategory_thenReturnIt() throws Exception {
+		// given
+		Category category = new Category("Health, Fitness & Dieting");
+		given(categoryService.existsByName(category.getName())).willReturn(false);
+		given(categoryService.save(any(Category.class))).willReturn(category);
 
-        // when
-        mockMvc
-            .perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(category))
-                .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("name").value("Health, Fitness & Dieting"));
+		// when
+		mockMvc
+			.perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(category))
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("name").value("Health, Fitness & Dieting"));
 
-        // then
-        then(categoryService).should().save(any(Category.class));
-    }
+		// then
+		then(categoryService).should().save(any(Category.class));
+	}
 
-    @Test
-    void addCategory_whenCategoryNotFound_thenReturn400() throws Exception {
-        Category category = new Category("Crafts, Hobbies & Home");
-        given(categoryService.existsByName(anyString())).willReturn(true);
+	@Test
+	void addCategory_whenCategoryNotFound_thenReturn400() throws Exception {
+		Category category = new Category("Crafts, Hobbies & Home");
+		given(categoryService.existsByName(anyString())).willReturn(true);
 
-        mockMvc
-            .perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(category))
-                .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("name").value("Category already exists"));
+		mockMvc
+			.perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(category))
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("name").value("Category already exists"));
 
-        then(categoryService).should().existsByName(anyString());
-    }
+		then(categoryService).should().existsByName(anyString());
+	}
 
 }
