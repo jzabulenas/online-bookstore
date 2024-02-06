@@ -34,12 +34,12 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public User login(@RequestBody User user) {
-		User userDb = userRepository
-				.findUserByUsername(user.getUsername())
+		User userDb = userRepository.findUserByUsername(user.getUsername())
 				.filter(uDb -> passwordEncoder.matches(user.getPassword(),
 						uDb.getPassword()))
 				.get();
 
 		return userDb;
 	}
+
 }

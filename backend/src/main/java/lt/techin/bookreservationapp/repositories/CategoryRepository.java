@@ -1,9 +1,11 @@
 package lt.techin.bookreservationapp.repositories;
 
-import lt.techin.bookreservationapp.entities.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CategoryRepository extends JpaRepository<Category,Integer> {
-    Boolean existsByName(String name);
-    Category findByName(String name);
+import lt.techin.bookreservationapp.entities.Category;
+
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
+	Boolean existsByName(String name);
+
+	Category findByName(String name);
 }

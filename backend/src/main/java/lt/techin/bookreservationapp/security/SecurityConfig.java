@@ -20,7 +20,8 @@ public class SecurityConfig {
 				authorize -> authorize.requestMatchers("/signup").permitAll()
 						.requestMatchers("/login").permitAll()
 						.requestMatchers("/h2-console/**").permitAll()
-						.requestMatchers("/**").permitAll().anyRequest().authenticated())
+						.requestMatchers("/**").permitAll().anyRequest()
+						.authenticated())
 				.headers(headers -> headers.frameOptions(f -> f.disable()))
 				.csrf(csrf -> csrf.disable())
 				.httpBasic(Customizer.withDefaults());
@@ -32,4 +33,5 @@ public class SecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
 }

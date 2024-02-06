@@ -65,32 +65,32 @@ public class CategoryController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
 	}
 
-//	@PutMapping("/categories/{id}")
-//	public ResponseEntity<String> updateCategory(@PathVariable int id,
-//			@Valid @RequestBody Category category,
-//			BindingResult bindingResult) {
-//		String errorResponse = ValidationService
-//				.processFieldErrors(bindingResult);
-//		if (errorResponse != null) {
-//			return ResponseEntity.badRequest().body(errorResponse);
-//		}
-//
-//		Optional<Category> currentCategory = categoryService.findById(id);
-//
-//		if (categoryService.existsByName(category.getName())) {
-//			return ResponseEntity.badRequest().body("Category already exists");
-//		}
-//
-//		if (currentCategory.isPresent()) {
-//			currentCategory.get().setName(category.getName());
-//			categoryService.save(currentCategory.get());
-//
-//			return ResponseEntity.ok().build();
-//		}
-//
-//		categoryService.save(category);
-//		return ResponseEntity.status(HttpStatus.CREATED).build();
-//	}
+	// @PutMapping("/categories/{id}")
+	// public ResponseEntity<String> updateCategory(@PathVariable int id,
+	// @Valid @RequestBody Category category,
+	// BindingResult bindingResult) {
+	// String errorResponse = ValidationService
+	// .processFieldErrors(bindingResult);
+	// if (errorResponse != null) {
+	// return ResponseEntity.badRequest().body(errorResponse);
+	// }
+	//
+	// Optional<Category> currentCategory = categoryService.findById(id);
+	//
+	// if (categoryService.existsByName(category.getName())) {
+	// return ResponseEntity.badRequest().body("Category already exists");
+	// }
+	//
+	// if (currentCategory.isPresent()) {
+	// currentCategory.get().setName(category.getName());
+	// categoryService.save(currentCategory.get());
+	//
+	// return ResponseEntity.ok().build();
+	// }
+	//
+	// categoryService.save(category);
+	// return ResponseEntity.status(HttpStatus.CREATED).build();
+	// }
 
 	@DeleteMapping("/categories/{id}")
 	public void deleteCategory(@PathVariable int id) {
