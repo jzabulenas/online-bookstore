@@ -60,7 +60,8 @@ public class CategoryControllerTest {
 	}
 
 	@Test
-	void getCategories_emptyList_returnNotFound() throws Exception {
+	@WithMockUser
+	void getCategories_whenAuthenticatedCallsEmptyList_thenReturn404() throws Exception {
 		given(categoryService.findAll()).willReturn(Collections.emptyList());
 
 		mockMvc.perform(get("/categories"))
