@@ -73,7 +73,8 @@ public class CategoryControllerTest {
 	}
 
 	@Test
-	void addCategory_whenSaveCategory_thenReturnIt() throws Exception {
+	@WithMockUser(roles = { "ADMIN" })
+	void addCategory_whenAdminSavesCategory_then201() throws Exception {
 		// given
 		Category category = new Category("Health, Fitness & Dieting");
 		given(categoryService.existsByName(category.getName())).willReturn(false);
