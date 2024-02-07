@@ -14,10 +14,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,10 +26,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.techin.bookreservationapp.controllers.CategoryController;
 import lt.techin.bookreservationapp.entities.Category;
 import lt.techin.bookreservationapp.repositories.CategoryRepository;
+import lt.techin.bookreservationapp.security.SecurityConfig;
 import lt.techin.bookreservationapp.services.CategoryService;
 
-@WebMvcTest(controllers = CategoryController.class, excludeAutoConfiguration = { SecurityAutoConfiguration.class })
-// @WithMockUser
+@WebMvcTest(controllers = CategoryController.class)
+@Import(SecurityConfig.class)
 public class CategoryControllerTest {
 
 	@Autowired
@@ -41,7 +43,8 @@ public class CategoryControllerTest {
 	private CategoryRepository categoryRepository;
 
 	@Test
-	void getCategories_savedCategories_returned() throws Exception {
+	@WithMockUser
+	void getCategories_whenAuthenticatedCalls_thenReturnList() throws Exception {
 		// given
 		given(categoryService.findAll())
 			.willReturn(List.of(new Category("Reference"), new Category("Engineering & Transportation")));
