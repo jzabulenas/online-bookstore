@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.never;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -93,7 +94,27 @@ public class CategoryControllerTest {
 	}
 
 	@Test
-	void addCategory_whenCategoryNotFound_thenReturn400() throws Exception {
+	@WithMockUser
+	void addCategory_whenAuthenticatedSavesCategory_then403() throws Exception {
+		// given
+		Category category = new Category("Health, Fitness & Dieting");
+		given(categoryService.existsByName(category.getName())).willReturn(false);
+		given(categoryService.save(any(Category.class))).willReturn(category);
+
+		// when
+		mockMvc
+			.perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(category))
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isForbidden());
+
+		// then
+		then(categoryService).should(never()).save(any(Category.class));
+	}
+
+	@Test
+	@WithMockUser(roles = { "ADMIN" })
+	void addCategory_whenAdminSavesAlreadyExistingCategory_thenReturn400() throws Exception {
 		Category category = new Category("Crafts, Hobbies & Home");
 		given(categoryService.existsByName(anyString())).willReturn(true);
 
@@ -105,6 +126,7 @@ public class CategoryControllerTest {
 			.andExpect(jsonPath("name").value("Category already exists"));
 
 		then(categoryService).should().existsByName(anyString());
+		then(categoryService).should(never()).save(any(Category.class));
 	}
 
 }
