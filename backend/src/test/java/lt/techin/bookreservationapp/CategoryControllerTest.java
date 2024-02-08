@@ -129,4 +129,20 @@ public class CategoryControllerTest {
 		then(categoryService).should(never()).save(any(Category.class));
 	}
 
+	@Test
+	@WithMockUser
+	void addCategory_whenAuthenticatedSavesAlreadyExistingCategory_thenReturn403() throws Exception {
+		Category category = new Category("Crafts, Hobbies & Home");
+		given(categoryService.existsByName(anyString())).willReturn(true);
+
+		mockMvc
+			.perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(category))
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isForbidden());
+
+		then(categoryService).should(never()).existsByName(anyString());
+		then(categoryService).should(never()).save(any(Category.class));
+	}
+
 }
