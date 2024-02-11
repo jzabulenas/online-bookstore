@@ -1,9 +1,13 @@
 package lt.techin.bookreservationapp.repositories;
 
-import lt.techin.bookreservationapp.entities.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BookRepository extends JpaRepository<Book,Integer> {
-    Boolean existsByIsbn(String name);
-    Boolean existsByTitle(String name);
+import lt.techin.bookreservationapp.entities.Book;
+
+public interface BookRepository extends JpaRepository<Book, Integer> {
+
+	Boolean existsByIsbn(String name);
+
+	Boolean existsByTitle(String name);
+
 }

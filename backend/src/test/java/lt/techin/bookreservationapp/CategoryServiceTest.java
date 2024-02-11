@@ -23,15 +23,14 @@ public class CategoryServiceTest {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
+
 	@Autowired
 	private CategoryService categoryService;
 
 	@Test
 	public void findAll_savedCategories_areReturned() {
-		Category savedCategory1 = categoryRepository
-				.save(new Category("Business & Money"));
-		Category savedCategory2 = categoryRepository
-				.save(new Category("Mystery, Thriller & Suspense"));
+		Category savedCategory1 = categoryRepository.save(new Category("Business & Money"));
+		Category savedCategory2 = categoryRepository.save(new Category("Mystery, Thriller & Suspense"));
 
 		List<Category> categories = categoryService.findAll();
 
@@ -43,8 +42,7 @@ public class CategoryServiceTest {
 
 	@Test
 	public void findById_forSavedCategory_isReturned() {
-		Category savedCategory = categoryRepository
-				.save(new Category("Nonfiction"));
+		Category savedCategory = categoryRepository.save(new Category("Nonfiction"));
 
 		Category category = categoryService.findById(savedCategory.getId());
 
@@ -54,11 +52,9 @@ public class CategoryServiceTest {
 
 	@Test
 	public void existsByName_savedCategory_isTrue() {
-		Category category = categoryRepository
-				.save(new Category("Literature & Fiction"));
+		Category category = categoryRepository.save(new Category("Literature & Fiction"));
 
-		boolean doesCategoryExist = categoryService
-				.existsByName(category.getName());
+		boolean doesCategoryExist = categoryService.existsByName(category.getName());
 
 		then(doesCategoryExist).isTrue();
 	}
@@ -67,10 +63,10 @@ public class CategoryServiceTest {
 	void save_savedCategory_isReturned() {
 		categoryService.save(new Category("Biographies & Memoirs"));
 
-		Category category = categoryRepository
-				.findByName("Biographies & Memoirs");
+		Category category = categoryRepository.findByName("Biographies & Memoirs");
 
 		then(category.getName()).isEqualTo("Biographies & Memoirs");
 		then(category.getId()).isNotEqualTo(0);
 	}
+
 }

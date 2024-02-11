@@ -11,17 +11,17 @@ import lt.techin.bookreservationapp.repositories.UserRepository;
 public class DatabaseInitializer implements CommandLineRunner {
 
 	private final UserRepository userRepository;
+
 	private final PasswordEncoder passwordEncoder;
 
-	public DatabaseInitializer(UserRepository userRepository,
-			PasswordEncoder passwordEncoder) {
+	public DatabaseInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-//		Create admin
+		// Create admin
 		User admin = new User();
 		admin.setUsername("tony");
 		admin.setPassword(passwordEncoder.encode("soprano"));
@@ -31,7 +31,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 			userRepository.save(admin);
 		}
 
-//		Create regular user
+		// Create regular user
 		User regularUser = new User();
 		regularUser.setUsername("jeff");
 		regularUser.setPassword(passwordEncoder.encode("goldblum"));

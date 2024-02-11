@@ -7,8 +7,7 @@ import org.springframework.validation.FieldError;
 
 public class ValidationService {
 
-	public static String processFieldErrors(
-			BindingResult bindingResult) {
+	public static String processFieldErrors(BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			StringBuilder errorMessageBuilder = new StringBuilder();
 			List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -27,4 +26,5 @@ public class ValidationService {
 
 		return null;
 	}
+
 }

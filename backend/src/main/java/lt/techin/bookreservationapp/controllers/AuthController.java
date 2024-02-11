@@ -15,11 +15,11 @@ import lt.techin.bookreservationapp.repositories.UserRepository;
 public class AuthController {
 
 	private final UserRepository userRepository;
+
 	private final PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public AuthController(UserRepository userRepository,
-			PasswordEncoder passwordEncoder) {
+	public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
@@ -34,12 +34,11 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public User login(@RequestBody User user) {
-		User userDb = userRepository
-				.findUserByUsername(user.getUsername())
-				.filter(uDb -> passwordEncoder.matches(user.getPassword(),
-						uDb.getPassword()))
-				.get();
+		User userDb = userRepository.findUserByUsername(user.getUsername())
+			.filter(uDb -> passwordEncoder.matches(user.getPassword(), uDb.getPassword()))
+			.get();
 
 		return userDb;
 	}
+
 }

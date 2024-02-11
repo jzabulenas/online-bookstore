@@ -13,6 +13,7 @@ import jakarta.validation.constraints.Pattern;
 @Entity
 @Table(name = "Categories")
 public class Category {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -20,21 +21,14 @@ public class Category {
 	@NotNull(message = "The field must not be null")
 	@NotEmpty(message = "The field must not be empty")
 	@Pattern(regexp = "^(?!.*([A-Za-z])\\1\\1)[A-Z][A-Za-z\\s\\W]{2,49}$",
-			message = "Category name must start with an uppercase " +
-					"letter, followed by lowercase letters, without numbers, consecutive repeated characters, "
-					+
-					"and a length between 3 and 50 characters")
-
+			message = "Category name must start with an uppercase letter, followed by lowercase letters, without numbers, consecutive repeated characters, and a length between 3 and 50 characters")
 	@Column(unique = true)
 	private String name;
 
 	public Category(@NotNull(message = "The field must not be null") @NotEmpty(
 			message = "The field must not be empty") @Pattern(
 					regexp = "^(?!.*([A-Za-z])\\1\\1)[A-Z][A-Za-z\\s\\W]{2,49}$",
-					message = "Category name must start with an uppercase letter, "
-							+ "followed by lowercase letters, without numbers, "
-							+ "consecutive repeated characters, and a length "
-							+ "between 3 and 50 characters") String name) {
+					message = "Category name must start with an uppercase letter, followed by lowercase letters, without numbers, consecutive repeated characters, and a length between 3 and 50 characters") String name) {
 		this.name = name;
 	}
 
@@ -55,9 +49,7 @@ public class Category {
 
 	@Override
 	public String toString() {
-		return "Category{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				'}';
+		return "Category{" + "id=" + id + ", name='" + name + '\'' + '}';
 	}
+
 }
