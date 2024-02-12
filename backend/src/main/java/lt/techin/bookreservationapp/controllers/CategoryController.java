@@ -48,6 +48,10 @@ public class CategoryController {
 
 	@GetMapping("/categories/{id}")
 	public ResponseEntity<Category> getCategory(@PathVariable int id) {
+		if (!categoryService.existsCategoryById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+
 		return ResponseEntity.ok(categoryService.findById(id));
 	}
 
