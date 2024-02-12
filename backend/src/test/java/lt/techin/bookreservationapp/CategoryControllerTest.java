@@ -1,12 +1,14 @@
 package lt.techin.bookreservationapp;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -71,6 +73,17 @@ public class CategoryControllerTest {
 			.andExpect(jsonPath("$").isEmpty());
 
 		then(categoryService).should().findAll();
+	}
+
+	@Test
+	@WithMockUser
+	void getCategory_whenAuthenticatedAndCategoryDoesNotExist_thenReturn404() throws Exception {
+		given(categoryService.existsCategoryById(anyInt())).willReturn(false);
+
+		mockMvc.perform(get("/categories/{id}", 1)).andExpect(status().isNotFound()).andExpect(content().string(""));
+
+		then(categoryService).should().existsCategoryById(anyInt());
+		then(categoryService).should(never()).findById(anyInt());
 	}
 
 	@Test
