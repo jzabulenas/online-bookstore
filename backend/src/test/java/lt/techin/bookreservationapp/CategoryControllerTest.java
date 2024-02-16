@@ -87,6 +87,20 @@ public class CategoryControllerTest {
 	}
 
 	@Test
+	@WithMockUser
+	void getCategory_whenAuthenticatedCategoryExists_thenReturn200() throws Exception {
+		given(categoryService.existsCategoryById(anyInt())).willReturn(true);
+		given(categoryService.findById(anyInt())).willReturn(new Category("Sports & Outdoors"));
+
+		mockMvc.perform(get("/categories/{id}", 6))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("name").value("Sports & Outdoors"));
+
+		then(categoryService).should().existsCategoryById(anyInt());
+		then(categoryService).should().findById(anyInt());
+	}
+
+	@Test
 	@WithMockUser(roles = { "ADMIN" })
 	void addCategory_whenAdminSavesCategory_then201() throws Exception {
 		// given
