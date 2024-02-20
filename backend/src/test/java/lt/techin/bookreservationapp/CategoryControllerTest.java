@@ -8,6 +8,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -169,6 +170,23 @@ public class CategoryControllerTest {
 			.andExpect(status().isForbidden());
 
 		then(categoryService).should(never()).existsByName(anyString());
+		then(categoryService).should(never()).save(any(Category.class));
+	}
+
+	@Test
+	@WithMockUser(roles = { "ADMIN" })
+	void updateCategory_whenAdminProvidesAlreadyExistingCategory_thenReturn400() throws Exception {
+		given(categoryService.existsByName(anyString())).willReturn(true);
+
+		mockMvc.perform(put("/categories/{id}", 370).contentType(MediaType.APPLICATION_JSON).content("""
+				{
+					"name": "Crafts, Hobbies & Home"
+				}
+				""").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("name").value("Category already exists"));
+
+		then(categoryService).should().existsByName(anyString());
 		then(categoryService).should(never()).save(any(Category.class));
 	}
 
