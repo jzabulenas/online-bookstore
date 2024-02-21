@@ -24,7 +24,7 @@ public class SecurityConfig {
 			.permitAll()
 			.requestMatchers(HttpMethod.POST, "/categories")
 			.hasRole("ADMIN")
-			.requestMatchers(HttpMethod.PUT, "/categories")
+			.requestMatchers(HttpMethod.PUT, "/categories/**")
 			.hasRole("ADMIN")
 			.anyRequest()
 			.authenticated())
