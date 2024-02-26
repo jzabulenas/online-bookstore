@@ -52,4 +52,8 @@ public class Category {
 		return "Category{" + "id=" + id + ", name='" + name + '\'' + '}';
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
 }
