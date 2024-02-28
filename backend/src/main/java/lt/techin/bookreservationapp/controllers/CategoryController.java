@@ -79,9 +79,8 @@ public class CategoryController {
 
 		if (currentCategory != null) {
 			currentCategory.setName(category.getName());
-			categoryService.save(currentCategory);
 
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok(categoryService.save(currentCategory));
 		}
 
 		categoryService.save(category);

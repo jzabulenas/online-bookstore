@@ -1,5 +1,6 @@
 package lt.techin.bookreservationapp;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -188,6 +189,36 @@ public class CategoryControllerTest {
 
 		then(categoryService).should().existsByName(anyString());
 		then(categoryService).should(never()).save(any(Category.class));
+	}
+
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	void updateCategory_whenAdminFindsCategory_thenReturnUpdatedCategory() throws Exception {
+		// Given
+		int categoryId = 1;
+		Category existingCategory = new Category("Crafts, Hobbies & Home");
+
+		String newCategoryName = "Engineering & Transportation";
+		existingCategory.setId(categoryId);
+
+		given(categoryService.findById(categoryId)).willReturn(existingCategory);
+		given(categoryService.existsByName(newCategoryName)).willReturn(false);
+		given(categoryService.save(any(Category.class))).willReturn(existingCategory);
+
+		// When
+		mockMvc
+			.perform(put("/categories/{id}", categoryId).contentType(MediaType.APPLICATION_JSON)
+				.content("{\"name\": \"" + newCategoryName + "\"}")
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.id").value(categoryId))
+			.andExpect(jsonPath("$.name").value(newCategoryName));
+
+		// Then
+		then(categoryService).should().findById(categoryId);
+		then(categoryService).should().existsByName(newCategoryName);
+		then(categoryService).should().save(existingCategory);
+		assertThat(newCategoryName).isEqualTo(existingCategory.getName());
 	}
 
 	@Test
