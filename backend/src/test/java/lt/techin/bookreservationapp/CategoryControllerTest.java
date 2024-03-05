@@ -123,6 +123,23 @@ public class CategoryControllerTest {
 	}
 
 	@Test
+	@WithMockUser(roles = { "ADMIN" })
+	void addCategory_whenAdminSavesAlreadyExistingCategory_thenReturn400() throws Exception {
+		Category category = new Category("Crafts, Hobbies & Home");
+		given(categoryService.existsByName(anyString())).willReturn(true);
+
+		mockMvc
+			.perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(category))
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("name").value("Category already exists"));
+
+		then(categoryService).should().existsByName(anyString());
+		then(categoryService).should(never()).save(any(Category.class));
+	}
+
+	@Test
 	@WithMockUser
 	void addCategory_whenAuthenticatedSavesCategory_then403() throws Exception {
 		// given
@@ -138,23 +155,6 @@ public class CategoryControllerTest {
 			.andExpect(status().isForbidden());
 
 		// then
-		then(categoryService).should(never()).save(any(Category.class));
-	}
-
-	@Test
-	@WithMockUser(roles = { "ADMIN" })
-	void addCategory_whenAdminSavesAlreadyExistingCategory_thenReturn400() throws Exception {
-		Category category = new Category("Crafts, Hobbies & Home");
-		given(categoryService.existsByName(anyString())).willReturn(true);
-
-		mockMvc
-			.perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(category))
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("name").value("Category already exists"));
-
-		then(categoryService).should().existsByName(anyString());
 		then(categoryService).should(never()).save(any(Category.class));
 	}
 
