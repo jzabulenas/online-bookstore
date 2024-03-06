@@ -83,8 +83,7 @@ public class CategoryController {
 			return ResponseEntity.ok(categoryService.save(currentCategory));
 		}
 
-		categoryService.save(category);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(category));
 	}
 
 	@DeleteMapping("/categories/{id}")
