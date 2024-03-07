@@ -222,6 +222,30 @@ public class CategoryControllerTest {
 	}
 
 	@Test
+	@WithMockUser(roles = "ADMIN")
+	void updateCategory_whenAdminPutsNonExistentId_then201AndReturnBody() throws Exception {
+		String categoryName = "Engineering & Transportation";
+
+		// I do not need to stub other statements, as the default are null and false
+		// already
+		// I also used specific id and name for then, as may be better?
+		given(categoryService.save(any(Category.class))).willReturn(new Category(categoryName));
+
+		mockMvc.perform(put("/categories/{id}", 45).contentType(MediaType.APPLICATION_JSON).content("""
+					{
+						"name": "%s"
+					}
+				""".formatted(categoryName)).accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("id").value(0))
+			.andExpect(jsonPath("name").value(categoryName));
+
+		then(categoryService).should().findById(45);
+		then(categoryService).should().existsByName(categoryName);
+		then(categoryService).should().save(any(Category.class));
+	}
+
+	@Test
 	@WithMockUser
 	void updateCategory_whenAuthenticatedTriesPut_thenReturn403() throws Exception {
 		mockMvc.perform(put("/categories/{id}", 413).contentType(MediaType.APPLICATION_JSON).content("""
