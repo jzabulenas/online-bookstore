@@ -27,3 +27,6 @@ updateCategory
 	whenAdminPutsNonExistentId_then201AndReturnBody()
 	whenAuthenticatedTriesPut_thenReturn403
 	
+deleteCategory
+	
+	

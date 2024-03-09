@@ -26,6 +26,8 @@ public class SecurityConfig {
 			.hasRole("ADMIN")
 			.requestMatchers(HttpMethod.PUT, "/categories/**")
 			.hasRole("ADMIN")
+			.requestMatchers(HttpMethod.DELETE, "/categories/**")
+			.hasRole("ADMIN")
 			.anyRequest()
 			.authenticated())
 			.headers(headers -> headers.frameOptions(f -> f.disable()))
