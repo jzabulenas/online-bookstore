@@ -5,7 +5,7 @@ given(ValidationService.processFieldErrors(bindingResult))
  .willReturn(false);
 given(bindingResult.hasErrors()).willReturn(false);
 
-Tests
+	Tests
 
 getCategories
 	whenAuthenticatedCalls_thenReturnList
@@ -24,5 +24,6 @@ addCategory
 updateCategory
 	whenAdminProvidesAlreadyExistingCategory_thenReturn400
 	whenAdminFindsCategory_thenReturnUpdatedCategory
+	whenAdminPutsNonExistentId_then201AndReturnBody()
 	whenAuthenticatedTriesPut_thenReturn403
 	
