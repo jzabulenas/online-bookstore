@@ -4,3 +4,29 @@ BindingResult bindingResult = mock(BindingResult.class);
 given(ValidationService.processFieldErrors(bindingResult))
  .willReturn(false);
 given(bindingResult.hasErrors()).willReturn(false);
+
+	Tests
+
+getCategories
+	whenAuthenticatedCalls_thenReturnList
+	whenAuthenticatedCallsEmptyList_thenReturn404
+	
+getCategory
+	whenAuthenticatedAndCategoryDoesNotExist_thenReturn404(
+	whenAuthenticatedCategoryExists_thenReturn200
+	
+addCategory
+	whenAdminSavesCategory_then201
+	whenAdminSavesAlreadyExistingCategory_thenReturn400
+	whenAuthenticatedSavesCategory_then403
+	whenAuthenticatedSavesAlreadyExistingCategory_thenReturn403
+
+updateCategory
+	whenAdminProvidesAlreadyExistingCategory_thenReturn400
+	whenAdminFindsCategory_thenReturnUpdatedCategory
+	whenAdminPutsNonExistentId_then201AndReturnBody()
+	whenAuthenticatedTriesPut_thenReturn403
+	
+deleteCategory
+	
+	

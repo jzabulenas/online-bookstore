@@ -79,18 +79,22 @@ public class CategoryController {
 
 		if (currentCategory != null) {
 			currentCategory.setName(category.getName());
-			categoryService.save(currentCategory);
+
+			return ResponseEntity.ok(categoryService.save(currentCategory));
+		}
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(category));
+	}
+
+	@DeleteMapping("/categories/{id}")
+	public ResponseEntity<Void> deleteCategory(@PathVariable int id) {
+		if (categoryService.existsCategoryById(id)) {
+			categoryRepository.deleteById(id);
 
 			return ResponseEntity.ok().build();
 		}
 
-		categoryService.save(category);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
-
-	@DeleteMapping("/categories/{id}")
-	public void deleteCategory(@PathVariable int id) {
-		categoryRepository.deleteById(id);
+		return ResponseEntity.notFound().build();
 	}
 
 }
