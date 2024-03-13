@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -257,6 +258,22 @@ public class CategoryControllerTest {
 		then(categoryService).should(never()).findById(anyInt());
 		then(categoryService).should(never()).existsByName(anyString());
 		then(categoryService).should(never()).save(any(Category.class));
+	}
+
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	void deleteCategory_whenAdminDeletesCategory_thenReturn200() throws Exception {
+		int id = 50;
+		given(categoryService.existsCategoryById(id)).willReturn(true);
+
+		mockMvc
+			.perform(delete("/categories/{id}", id).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string(""));
+
+		then(categoryService).should().existsCategoryById(id);
+		then(categoryService).should().deleteCategoryById(id);
 	}
 
 }
