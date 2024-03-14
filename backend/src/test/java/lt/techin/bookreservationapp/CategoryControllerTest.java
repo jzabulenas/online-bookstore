@@ -316,4 +316,18 @@ public class CategoryControllerTest {
 		then(categoryService).should(never()).deleteCategoryById(anyInt());
 	}
 
+	@Test
+	void deleteCategory_whenUnauthenticatedTriesDeleteCategory_thenReturn401() throws Exception {
+		// I don't think I actually need to provide given, as it will b?
+		given(categoryService.existsCategoryById(anyInt())).willReturn(true);
+
+		mockMvc
+			.perform(delete("/categories/{id}", 93).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isUnauthorized());
+
+		then(categoryService).should(never()).existsCategoryById(anyInt());
+		then(categoryService).should(never()).deleteCategoryById(anyInt());
+	}
+
 }
