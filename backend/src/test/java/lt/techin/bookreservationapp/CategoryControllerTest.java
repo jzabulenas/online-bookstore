@@ -302,4 +302,18 @@ public class CategoryControllerTest {
 		then(categoryService).should(never()).deleteCategoryById(id);
 	}
 
+	@Test
+	@WithMockUser
+	void deleteCategory_whenAuthenticatedTriesDeleteCategory_thenReturn403() throws Exception {
+		given(categoryService.existsCategoryById(anyInt())).willReturn(true);
+
+		mockMvc
+			.perform(delete("/categories/{id}", 93).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isForbidden());
+
+		then(categoryService).should(never()).existsCategoryById(anyInt());
+		then(categoryService).should(never()).deleteCategoryById(anyInt());
+	}
+
 }
