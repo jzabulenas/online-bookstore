@@ -165,6 +165,7 @@ public class CategoryControllerTest {
 		then(categoryService).should(never()).save(any(Category.class));
 	}
 
+	// Do I need to do this? The test earlier might suffice.
 	@Test
 	@WithMockUser
 	void addCategory_whenAuthenticatedSavesAlreadyExistingCategory_thenReturn403() throws Exception {
@@ -177,6 +178,25 @@ public class CategoryControllerTest {
 				.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isForbidden());
 
+		then(categoryService).should(never()).existsByName(anyString());
+		then(categoryService).should(never()).save(any(Category.class));
+	}
+
+	@Test
+	void addCategory_whenUnauthenticatedSavesCategory_then401() throws Exception {
+		// given
+		Category category = new Category("Health, Fitness & Dieting");
+		given(categoryService.existsByName(category.getName())).willReturn(false);
+		given(categoryService.save(any(Category.class))).willReturn(category);
+
+		// when
+		mockMvc
+			.perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(category))
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isUnauthorized());
+
+		// then
 		then(categoryService).should(never()).existsByName(anyString());
 		then(categoryService).should(never()).save(any(Category.class));
 	}
