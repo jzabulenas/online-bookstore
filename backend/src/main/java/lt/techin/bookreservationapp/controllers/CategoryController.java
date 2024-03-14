@@ -91,7 +91,7 @@ public class CategoryController {
 		if (categoryService.existsCategoryById(id)) {
 			categoryService.deleteCategoryById(id);
 
-			return ResponseEntity.ok().build();
+			return ResponseEntity.noContent().build();
 		}
 
 		return ResponseEntity.notFound().build();
