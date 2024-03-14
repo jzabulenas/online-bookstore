@@ -276,4 +276,20 @@ public class CategoryControllerTest {
 		then(categoryService).should().deleteCategoryById(id);
 	}
 
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	void deleteCategory_whenAdminDeletesNonExistentCategory_thenReturn404() throws Exception {
+		int id = 50;
+		given(categoryService.existsCategoryById(id)).willReturn(false);
+
+		mockMvc
+			.perform(delete("/categories/{id}", id).contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound())
+			.andExpect(content().string(""));
+
+		then(categoryService).should().existsCategoryById(id);
+		then(categoryService).should(never()).deleteCategoryById(id);
+	}
+
 }
