@@ -48,6 +48,8 @@ public class CategoryControllerTest {
 	@MockBean
 	private CategoryRepository categoryRepository;
 
+	// getCategories
+
 	@Test
 	@WithMockUser
 	void getCategories_whenAuthenticatedCalls_thenReturnList() throws Exception {
@@ -78,6 +80,8 @@ public class CategoryControllerTest {
 		then(categoryService).should().findAll();
 	}
 
+	// getCategory
+
 	@Test
 	@WithMockUser
 	void getCategory_whenAuthenticatedAndCategoryDoesNotExist_thenReturn404() throws Exception {
@@ -102,6 +106,8 @@ public class CategoryControllerTest {
 		then(categoryService).should().existsCategoryById(anyInt());
 		then(categoryService).should().findById(anyInt());
 	}
+
+	// addCategory
 
 	@Test
 	@WithMockUser(roles = { "ADMIN" })
@@ -174,6 +180,8 @@ public class CategoryControllerTest {
 		then(categoryService).should(never()).existsByName(anyString());
 		then(categoryService).should(never()).save(any(Category.class));
 	}
+
+	// updateCategory
 
 	@Test
 	@WithMockUser(roles = { "ADMIN" })
@@ -259,6 +267,8 @@ public class CategoryControllerTest {
 		then(categoryService).should(never()).existsByName(anyString());
 		then(categoryService).should(never()).save(any(Category.class));
 	}
+
+	// deleteCategory
 
 	@Test
 	@WithMockUser(roles = "ADMIN")
