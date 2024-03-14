@@ -268,6 +268,19 @@ public class CategoryControllerTest {
 		then(categoryService).should(never()).save(any(Category.class));
 	}
 
+	@Test
+	void updateCategory_whenUnauthenticatedTriesPut_thenReturn401() throws Exception {
+		mockMvc.perform(put("/categories/{id}", 413).contentType(MediaType.APPLICATION_JSON).content("""
+				{
+				"name": "Crafts, Hobbies & Home"
+				}
+				""").accept(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized());
+
+		then(categoryService).should(never()).findById(anyInt());
+		then(categoryService).should(never()).existsByName(anyString());
+		then(categoryService).should(never()).save(any(Category.class));
+	}
+
 	// deleteCategory
 
 	@Test
