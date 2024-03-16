@@ -21,52 +21,49 @@ import lt.techin.bookreservationapp.services.CategoryService;
 @ActiveProfiles("test")
 public class CategoryServiceTest {
 
-	@Autowired
-	private CategoryRepository categoryRepository;
+  @Autowired private CategoryRepository categoryRepository;
 
-	@Autowired
-	private CategoryService categoryService;
+  @Autowired private CategoryService categoryService;
 
-	@Test
-	public void findAll_savedCategories_areReturned() {
-		Category savedCategory1 = categoryRepository.save(new Category("Business & Money"));
-		Category savedCategory2 = categoryRepository.save(new Category("Mystery, Thriller & Suspense"));
+  @Test
+  public void findAll_savedCategories_areReturned() {
+    Category savedCategory1 = categoryRepository.save(new Category("Business & Money"));
+    Category savedCategory2 = categoryRepository.save(new Category("Mystery, Thriller & Suspense"));
 
-		List<Category> categories = categoryService.findAll();
+    List<Category> categories = categoryService.findAll();
 
-		then(categories.get(0).getName()).isEqualTo(savedCategory1.getName());
-		then(categories.get(0).getId()).isNotEqualTo(0);
-		then(categories.get(1).getName()).isEqualTo(savedCategory2.getName());
-		then(categories.get(1).getId()).isNotEqualTo(0);
-	}
+    then(categories.get(0).getName()).isEqualTo(savedCategory1.getName());
+    then(categories.get(0).getId()).isNotEqualTo(0);
+    then(categories.get(1).getName()).isEqualTo(savedCategory2.getName());
+    then(categories.get(1).getId()).isNotEqualTo(0);
+  }
 
-	@Test
-	public void findById_forSavedCategory_isReturned() {
-		Category savedCategory = categoryRepository.save(new Category("Nonfiction"));
+  @Test
+  public void findById_forSavedCategory_isReturned() {
+    Category savedCategory = categoryRepository.save(new Category("Nonfiction"));
 
-		Category category = categoryService.findById(savedCategory.getId());
+    Category category = categoryService.findById(savedCategory.getId());
 
-		then(category.getName()).isEqualTo("Nonfiction");
-		then(category.getId()).isNotEqualTo(0);
-	}
+    then(category.getName()).isEqualTo("Nonfiction");
+    then(category.getId()).isNotEqualTo(0);
+  }
 
-	@Test
-	public void existsByName_savedCategory_isTrue() {
-		Category category = categoryRepository.save(new Category("Literature & Fiction"));
+  @Test
+  public void existsByName_savedCategory_isTrue() {
+    Category category = categoryRepository.save(new Category("Literature & Fiction"));
 
-		boolean doesCategoryExist = categoryService.existsByName(category.getName());
+    boolean doesCategoryExist = categoryService.existsByName(category.getName());
 
-		then(doesCategoryExist).isTrue();
-	}
+    then(doesCategoryExist).isTrue();
+  }
 
-	@Test
-	void save_savedCategory_isReturned() {
-		categoryService.save(new Category("Biographies & Memoirs"));
+  @Test
+  void save_savedCategory_isReturned() {
+    categoryService.save(new Category("Biographies & Memoirs"));
 
-		Category category = categoryRepository.findByName("Biographies & Memoirs");
+    Category category = categoryRepository.findByName("Biographies & Memoirs");
 
-		then(category.getName()).isEqualTo("Biographies & Memoirs");
-		then(category.getId()).isNotEqualTo(0);
-	}
-
+    then(category.getName()).isEqualTo("Biographies & Memoirs");
+    then(category.getId()).isNotEqualTo(0);
+  }
 }

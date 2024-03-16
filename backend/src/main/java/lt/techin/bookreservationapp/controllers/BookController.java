@@ -28,85 +28,84 @@ import lt.techin.bookreservationapp.repositories.CategoryRepository;
 @RestController
 public class BookController {
 
-	private final BookRepository bookRepository;
+  private final BookRepository bookRepository;
 
-	private final CategoryRepository categoryRepository;
+  private final CategoryRepository categoryRepository;
 
-	@Autowired
-	public BookController(BookRepository bookRepository, CategoryRepository categoryRepository) {
-		this.bookRepository = bookRepository;
-		this.categoryRepository = categoryRepository;
-	}
+  @Autowired
+  public BookController(BookRepository bookRepository, CategoryRepository categoryRepository) {
+    this.bookRepository = bookRepository;
+    this.categoryRepository = categoryRepository;
+  }
 
-	@GetMapping("/books")
-	public ResponseEntity<?> getBooks() {
-		List<Book> books = bookRepository.findAll();
+  @GetMapping("/books")
+  public ResponseEntity<?> getBooks() {
+    List<Book> books = bookRepository.findAll();
 
-		if (!books.isEmpty()) {
-			return ResponseEntity.ok(books);
-		}
-		else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No books found");
-		}
-	}
+    if (!books.isEmpty()) {
+      return ResponseEntity.ok(books);
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No books found");
+    }
+  }
 
-	@GetMapping("/books/{id}")
-	public ResponseEntity<Book> getBook(@PathVariable int id) {
+  @GetMapping("/books/{id}")
+  public ResponseEntity<Book> getBook(@PathVariable int id) {
 
-		Optional<Book> book = bookRepository.findById(id);
-		if (book.isPresent()) {
-			return ResponseEntity.ok(book.get());
-		}
+    Optional<Book> book = bookRepository.findById(id);
+    if (book.isPresent()) {
+      return ResponseEntity.ok(book.get());
+    }
 
-		return ResponseEntity.notFound().build();
-	}
+    return ResponseEntity.notFound().build();
+  }
 
-	@PostMapping("/books")
-	public ResponseEntity<String> addBook(@Valid @RequestBody Book book, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			StringBuilder errorMessageBuilder = new StringBuilder();
-			List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+  @PostMapping("/books")
+  public ResponseEntity<String> addBook(
+      @Valid @RequestBody Book book, BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      StringBuilder errorMessageBuilder = new StringBuilder();
+      List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
-			for (int i = 0; i < fieldErrors.size(); i++) {
-				FieldError fieldError = fieldErrors.get(i);
-				errorMessageBuilder.append(fieldError.getDefaultMessage());
+      for (int i = 0; i < fieldErrors.size(); i++) {
+        FieldError fieldError = fieldErrors.get(i);
+        errorMessageBuilder.append(fieldError.getDefaultMessage());
 
-				if (i < fieldErrors.size() - 1) {
-					errorMessageBuilder.append(" | ");
-				}
-			}
+        if (i < fieldErrors.size() - 1) {
+          errorMessageBuilder.append(" | ");
+        }
+      }
 
-			String errorMessage = errorMessageBuilder.toString();
-			return ResponseEntity.badRequest().body(errorMessage);
-		}
+      String errorMessage = errorMessageBuilder.toString();
+      return ResponseEntity.badRequest().body(errorMessage);
+    }
 
-		if (bookRepository.existsByTitle(book.getTitle())) {
-			return ResponseEntity.badRequest().body("Title already exists");
-		}
+    if (bookRepository.existsByTitle(book.getTitle())) {
+      return ResponseEntity.badRequest().body("Title already exists");
+    }
 
-		if (bookRepository.existsByIsbn(book.getIsbn())) {
-			return ResponseEntity.badRequest().body("ISBN already exists");
-		}
+    if (bookRepository.existsByIsbn(book.getIsbn())) {
+      return ResponseEntity.badRequest().body("ISBN already exists");
+    }
 
-		List<Category> categories = new ArrayList<>();
-		Set<String> uniqueCategoryNames = new HashSet<>();
+    List<Category> categories = new ArrayList<>();
+    Set<String> uniqueCategoryNames = new HashSet<>();
 
-		for (Category category : book.getCategories()) {
-			if (!uniqueCategoryNames.add(category.getName())) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categories cannot be duplicated!");
-			}
+    for (Category category : book.getCategories()) {
+      if (!uniqueCategoryNames.add(category.getName())) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categories cannot be duplicated!");
+      }
 
-			Category existingCategory = categoryRepository.findByName(category.getName());
-			categories.add(existingCategory);
-		}
+      Category existingCategory = categoryRepository.findByName(category.getName());
+      categories.add(existingCategory);
+    }
 
-		if (categories.contains(null)) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No such categories exist!");
-		}
+    if (categories.contains(null)) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No such categories exist!");
+    }
 
-		book.setCategories(categories);
-		bookRepository.save(book);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
-
+    book.setCategories(categories);
+    bookRepository.save(book);
+    return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
 }

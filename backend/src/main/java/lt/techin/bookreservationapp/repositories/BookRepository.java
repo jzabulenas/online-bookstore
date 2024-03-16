@@ -6,8 +6,7 @@ import lt.techin.bookreservationapp.entities.Book;
 
 public interface BookRepository extends JpaRepository<Book, Integer> {
 
-	Boolean existsByIsbn(String name);
+  Boolean existsByIsbn(String name);
 
-	Boolean existsByTitle(String name);
-
+  Boolean existsByTitle(String name);
 }

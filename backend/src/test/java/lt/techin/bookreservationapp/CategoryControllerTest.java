@@ -39,328 +39,378 @@ import lt.techin.bookreservationapp.services.CategoryService;
 @Import(SecurityConfig.class)
 public class CategoryControllerTest {
 
-	@Autowired
-	private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
-	@MockBean
-	private CategoryService categoryService;
+  @MockBean private CategoryService categoryService;
 
-	@MockBean
-	private CategoryRepository categoryRepository;
+  @MockBean private CategoryRepository categoryRepository;
 
-	// getCategories
+  // getCategories
 
-	@Test
-	@WithMockUser
-	void getCategories_whenAuthenticatedCalls_thenReturnList() throws Exception {
-		// given
-		given(categoryService.findAll())
-			.willReturn(List.of(new Category("Reference"), new Category("Engineering & Transportation")));
+  @Test
+  @WithMockUser
+  void getCategories_whenAuthenticatedCalls_thenReturnList() throws Exception {
+    // given
+    given(categoryService.findAll())
+        .willReturn(
+            List.of(new Category("Reference"), new Category("Engineering & Transportation")));
 
-		// when
-		mockMvc.perform(get("/categories"))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$[0].name").value("Reference"))
-			.andExpect(jsonPath("$[1].name").value("Engineering & Transportation"));
+    // when
+    mockMvc
+        .perform(get("/categories"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].name").value("Reference"))
+        .andExpect(jsonPath("$[1].name").value("Engineering & Transportation"));
 
-		// then
-		then(categoryService).should().findAll();
-	}
+    // then
+    then(categoryService).should().findAll();
+  }
 
-	@Test
-	@WithMockUser
-	void getCategories_whenAuthenticatedCallsEmptyList_thenReturn404() throws Exception {
-		given(categoryService.findAll()).willReturn(Collections.emptyList());
+  @Test
+  @WithMockUser
+  void getCategories_whenAuthenticatedCallsEmptyList_thenReturn404() throws Exception {
+    given(categoryService.findAll()).willReturn(Collections.emptyList());
 
-		mockMvc.perform(get("/categories"))
-			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$").isArray())
-			.andExpect(jsonPath("$").isEmpty());
+    mockMvc
+        .perform(get("/categories"))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$").isEmpty());
 
-		then(categoryService).should().findAll();
-	}
+    then(categoryService).should().findAll();
+  }
 
-	// getCategory
+  // getCategory
 
-	@Test
-	@WithMockUser
-	void getCategory_whenAuthenticatedAndCategoryDoesNotExist_thenReturn404() throws Exception {
-		given(categoryService.existsCategoryById(anyInt())).willReturn(false);
+  @Test
+  @WithMockUser
+  void getCategory_whenAuthenticatedAndCategoryDoesNotExist_thenReturn404() throws Exception {
+    given(categoryService.existsCategoryById(anyInt())).willReturn(false);
 
-		mockMvc.perform(get("/categories/{id}", 1)).andExpect(status().isNotFound()).andExpect(content().string(""));
+    mockMvc
+        .perform(get("/categories/{id}", 1))
+        .andExpect(status().isNotFound())
+        .andExpect(content().string(""));
 
-		then(categoryService).should().existsCategoryById(anyInt());
-		then(categoryService).should(never()).findById(anyInt());
-	}
+    then(categoryService).should().existsCategoryById(anyInt());
+    then(categoryService).should(never()).findById(anyInt());
+  }
 
-	@Test
-	@WithMockUser
-	void getCategory_whenAuthenticatedCategoryExists_thenReturn200() throws Exception {
-		given(categoryService.existsCategoryById(anyInt())).willReturn(true);
-		given(categoryService.findById(anyInt())).willReturn(new Category("Sports & Outdoors"));
+  @Test
+  @WithMockUser
+  void getCategory_whenAuthenticatedCategoryExists_thenReturn200() throws Exception {
+    given(categoryService.existsCategoryById(anyInt())).willReturn(true);
+    given(categoryService.findById(anyInt())).willReturn(new Category("Sports & Outdoors"));
 
-		mockMvc.perform(get("/categories/{id}", 6))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("name").value("Sports & Outdoors"));
+    mockMvc
+        .perform(get("/categories/{id}", 6))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("name").value("Sports & Outdoors"));
 
-		then(categoryService).should().existsCategoryById(anyInt());
-		then(categoryService).should().findById(anyInt());
-	}
+    then(categoryService).should().existsCategoryById(anyInt());
+    then(categoryService).should().findById(anyInt());
+  }
 
-	// addCategory
+  // addCategory
 
-	@Test
-	@WithMockUser(roles = { "ADMIN" })
-	void addCategory_whenAdminSavesCategory_then201() throws Exception {
-		// given
-		Category category = new Category("Health, Fitness & Dieting");
-		given(categoryService.existsByName(category.getName())).willReturn(false);
-		given(categoryService.save(any(Category.class))).willReturn(category);
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void addCategory_whenAdminSavesCategory_then201() throws Exception {
+    // given
+    Category category = new Category("Health, Fitness & Dieting");
+    given(categoryService.existsByName(category.getName())).willReturn(false);
+    given(categoryService.save(any(Category.class))).willReturn(category);
 
-		// when
-		mockMvc
-			.perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(category))
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isCreated())
-			.andExpect(jsonPath("name").value("Health, Fitness & Dieting"));
+    // when
+    mockMvc
+        .perform(
+            post("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(category))
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("name").value("Health, Fitness & Dieting"));
 
-		// then
-		then(categoryService).should().save(any(Category.class));
-	}
+    // then
+    then(categoryService).should().save(any(Category.class));
+  }
 
-	@Test
-	@WithMockUser(roles = { "ADMIN" })
-	void addCategory_whenAdminSavesAlreadyExistingCategory_thenReturn400() throws Exception {
-		Category category = new Category("Crafts, Hobbies & Home");
-		given(categoryService.existsByName(anyString())).willReturn(true);
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void addCategory_whenAdminSavesAlreadyExistingCategory_thenReturn400() throws Exception {
+    Category category = new Category("Crafts, Hobbies & Home");
+    given(categoryService.existsByName(anyString())).willReturn(true);
 
-		mockMvc
-			.perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(category))
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("name").value("Category already exists"));
+    mockMvc
+        .perform(
+            post("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(category))
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("Category already exists"));
 
-		then(categoryService).should().existsByName(anyString());
-		then(categoryService).should(never()).save(any(Category.class));
-	}
+    then(categoryService).should().existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
 
-	@Test
-	@WithMockUser
-	void addCategory_whenAuthenticatedSavesCategory_then403() throws Exception {
-		// given
-		Category category = new Category("Health, Fitness & Dieting");
-		given(categoryService.existsByName(category.getName())).willReturn(false);
-		given(categoryService.save(any(Category.class))).willReturn(category);
+  @Test
+  @WithMockUser
+  void addCategory_whenAuthenticatedSavesCategory_then403() throws Exception {
+    // given
+    Category category = new Category("Health, Fitness & Dieting");
+    given(categoryService.existsByName(category.getName())).willReturn(false);
+    given(categoryService.save(any(Category.class))).willReturn(category);
 
-		// when
-		mockMvc
-			.perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(category))
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isForbidden());
+    // when
+    mockMvc
+        .perform(
+            post("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(category))
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden());
 
-		// then
-		then(categoryService).should(never()).save(any(Category.class));
-	}
+    // then
+    then(categoryService).should(never()).save(any(Category.class));
+  }
 
-	// Do I need to do this? The test earlier might suffice.
-	@Test
-	@WithMockUser
-	void addCategory_whenAuthenticatedSavesAlreadyExistingCategory_thenReturn403() throws Exception {
-		Category category = new Category("Crafts, Hobbies & Home");
-		given(categoryService.existsByName(anyString())).willReturn(true);
+  // Do I need to do this? The test earlier might suffice.
+  @Test
+  @WithMockUser
+  void addCategory_whenAuthenticatedSavesAlreadyExistingCategory_thenReturn403() throws Exception {
+    Category category = new Category("Crafts, Hobbies & Home");
+    given(categoryService.existsByName(anyString())).willReturn(true);
 
-		mockMvc
-			.perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(category))
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isForbidden());
+    mockMvc
+        .perform(
+            post("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(category))
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden());
 
-		then(categoryService).should(never()).existsByName(anyString());
-		then(categoryService).should(never()).save(any(Category.class));
-	}
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
 
-	@Test
-	void addCategory_whenUnauthenticatedSavesCategory_then401() throws Exception {
-		// given
-		Category category = new Category("Health, Fitness & Dieting");
-		given(categoryService.existsByName(category.getName())).willReturn(false);
-		given(categoryService.save(any(Category.class))).willReturn(category);
+  @Test
+  void addCategory_whenUnauthenticatedSavesCategory_then401() throws Exception {
+    // given
+    Category category = new Category("Health, Fitness & Dieting");
+    given(categoryService.existsByName(category.getName())).willReturn(false);
+    given(categoryService.save(any(Category.class))).willReturn(category);
 
-		// when
-		mockMvc
-			.perform(post("/categories").contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(category))
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isUnauthorized());
+    // when
+    mockMvc
+        .perform(
+            post("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(category))
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isUnauthorized());
 
-		// then
-		then(categoryService).should(never()).existsByName(anyString());
-		then(categoryService).should(never()).save(any(Category.class));
-	}
+    // then
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
 
-	// updateCategory
+  // updateCategory
 
-	@Test
-	@WithMockUser(roles = { "ADMIN" })
-	void updateCategory_whenAdminProvidesAlreadyExistingCategory_thenReturn400() throws Exception {
-		given(categoryService.existsByName(anyString())).willReturn(true);
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void updateCategory_whenAdminProvidesAlreadyExistingCategory_thenReturn400() throws Exception {
+    given(categoryService.existsByName(anyString())).willReturn(true);
 
-		mockMvc.perform(put("/categories/{id}", 370).contentType(MediaType.APPLICATION_JSON).content("""
-				{
-					"name": "Crafts, Hobbies & Home"
-				}
-				""").accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("name").value("Category already exists"));
+    mockMvc
+        .perform(
+            put("/categories/{id}", 370)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                {
+                	"name": "Crafts, Hobbies & Home"
+                }
+                """)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("Category already exists"));
 
-		then(categoryService).should().existsByName(anyString());
-		then(categoryService).should(never()).save(any(Category.class));
-	}
+    then(categoryService).should().existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
 
-	@Test
-	@WithMockUser(roles = "ADMIN")
-	void updateCategory_whenAdminFindsCategory_thenReturnUpdatedCategory() throws Exception {
-		// Given
-		int categoryId = 1;
-		Category existingCategory = new Category("Crafts, Hobbies & Home");
+  @Test
+  @WithMockUser(roles = "ADMIN")
+  void updateCategory_whenAdminFindsCategory_thenReturnUpdatedCategory() throws Exception {
+    // Given
+    int categoryId = 1;
+    Category existingCategory = new Category("Crafts, Hobbies & Home");
 
-		String newCategoryName = "Engineering & Transportation";
-		existingCategory.setId(categoryId);
+    String newCategoryName = "Engineering & Transportation";
+    existingCategory.setId(categoryId);
 
-		given(categoryService.findById(categoryId)).willReturn(existingCategory);
-		given(categoryService.existsByName(newCategoryName)).willReturn(false);
-		given(categoryService.save(any(Category.class))).willReturn(existingCategory);
+    given(categoryService.findById(categoryId)).willReturn(existingCategory);
+    given(categoryService.existsByName(newCategoryName)).willReturn(false);
+    given(categoryService.save(any(Category.class))).willReturn(existingCategory);
 
-		// When
-		mockMvc
-			.perform(put("/categories/{id}", categoryId).contentType(MediaType.APPLICATION_JSON)
-				.content("{\"name\": \"" + newCategoryName + "\"}")
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.id").value(categoryId))
-			.andExpect(jsonPath("$.name").value(newCategoryName));
+    // When
+    mockMvc
+        .perform(
+            put("/categories/{id}", categoryId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\": \"" + newCategoryName + "\"}")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value(categoryId))
+        .andExpect(jsonPath("$.name").value(newCategoryName));
 
-		// Then
-		then(categoryService).should().findById(categoryId);
-		then(categoryService).should().existsByName(newCategoryName);
-		then(categoryService).should().save(existingCategory);
-		assertThat(newCategoryName).isEqualTo(existingCategory.getName());
-	}
+    // Then
+    then(categoryService).should().findById(categoryId);
+    then(categoryService).should().existsByName(newCategoryName);
+    then(categoryService).should().save(existingCategory);
+    assertThat(newCategoryName).isEqualTo(existingCategory.getName());
+  }
 
-	@Test
-	@WithMockUser(roles = "ADMIN")
-	void updateCategory_whenAdminPutsNonExistentId_then201AndReturnBody() throws Exception {
-		String categoryName = "Engineering & Transportation";
+  @Test
+  @WithMockUser(roles = "ADMIN")
+  void updateCategory_whenAdminPutsNonExistentId_then201AndReturnBody() throws Exception {
+    String categoryName = "Engineering & Transportation";
 
-		// I do not need to stub other statements, as the default are null and false
-		// already
-		// I also used specific id and name for then, as may be better?
-		given(categoryService.save(any(Category.class))).willReturn(new Category(categoryName));
+    // I do not need to stub other statements, as the default are null and false
+    // already
+    // I also used specific id and name for then, as may be better?
+    given(categoryService.save(any(Category.class))).willReturn(new Category(categoryName));
 
-		mockMvc.perform(put("/categories/{id}", 45).contentType(MediaType.APPLICATION_JSON).content("""
-					{
-						"name": "%s"
-					}
-				""".formatted(categoryName)).accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isCreated())
-			.andExpect(jsonPath("id").value(0))
-			.andExpect(jsonPath("name").value(categoryName));
+    mockMvc
+        .perform(
+            put("/categories/{id}", 45)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                	{
+                		"name": "%s"
+                	}
+                    """
+                        .formatted(categoryName))
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("id").value(0))
+        .andExpect(jsonPath("name").value(categoryName));
 
-		then(categoryService).should().findById(45);
-		then(categoryService).should().existsByName(categoryName);
-		then(categoryService).should().save(any(Category.class));
-	}
+    then(categoryService).should().findById(45);
+    then(categoryService).should().existsByName(categoryName);
+    then(categoryService).should().save(any(Category.class));
+  }
 
-	@Test
-	@WithMockUser
-	void updateCategory_whenAuthenticatedTriesPut_thenReturn403() throws Exception {
-		mockMvc.perform(put("/categories/{id}", 413).contentType(MediaType.APPLICATION_JSON).content("""
-				{
-				"name": "Crafts, Hobbies & Home"
-				}
-				""").accept(MediaType.APPLICATION_JSON)).andExpect(status().isForbidden());
+  @Test
+  @WithMockUser
+  void updateCategory_whenAuthenticatedTriesPut_thenReturn403() throws Exception {
+    mockMvc
+        .perform(
+            put("/categories/{id}", 413)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                {
+                	"name": "Crafts, Hobbies & Home"
+                }
+                """)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden());
 
-		then(categoryService).should(never()).findById(anyInt());
-		then(categoryService).should(never()).existsByName(anyString());
-		then(categoryService).should(never()).save(any(Category.class));
-	}
+    then(categoryService).should(never()).findById(anyInt());
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
 
-	@Test
-	void updateCategory_whenUnauthenticatedTriesPut_thenReturn401() throws Exception {
-		mockMvc.perform(put("/categories/{id}", 413).contentType(MediaType.APPLICATION_JSON).content("""
-				{
-				"name": "Crafts, Hobbies & Home"
-				}
-				""").accept(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized());
+  @Test
+  void updateCategory_whenUnauthenticatedTriesPut_thenReturn401() throws Exception {
+    mockMvc
+        .perform(
+            put("/categories/{id}", 413)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                {
+                	"name": "Crafts, Hobbies & Home"
+                }
+                """)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isUnauthorized());
 
-		then(categoryService).should(never()).findById(anyInt());
-		then(categoryService).should(never()).existsByName(anyString());
-		then(categoryService).should(never()).save(any(Category.class));
-	}
+    then(categoryService).should(never()).findById(anyInt());
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
 
-	// deleteCategory
+  // deleteCategory
 
-	@Test
-	@WithMockUser(roles = "ADMIN")
-	void deleteCategory_whenAdminDeletesCategory_thenReturn200() throws Exception {
-		int id = 50;
-		given(categoryService.existsCategoryById(id)).willReturn(true);
+  @Test
+  @WithMockUser(roles = "ADMIN")
+  void deleteCategory_whenAdminDeletesCategory_thenReturn200() throws Exception {
+    int id = 50;
+    given(categoryService.existsCategoryById(id)).willReturn(true);
 
-		mockMvc
-			.perform(delete("/categories/{id}", id).contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNoContent())
-			.andExpect(content().string(""));
+    mockMvc
+        .perform(
+            delete("/categories/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNoContent())
+        .andExpect(content().string(""));
 
-		then(categoryService).should().existsCategoryById(id);
-		then(categoryService).should().deleteCategoryById(id);
-	}
+    then(categoryService).should().existsCategoryById(id);
+    then(categoryService).should().deleteCategoryById(id);
+  }
 
-	@Test
-	@WithMockUser(roles = "ADMIN")
-	void deleteCategory_whenAdminDeletesNonExistentCategory_thenReturn404() throws Exception {
-		int id = 50;
-		given(categoryService.existsCategoryById(id)).willReturn(false);
+  @Test
+  @WithMockUser(roles = "ADMIN")
+  void deleteCategory_whenAdminDeletesNonExistentCategory_thenReturn404() throws Exception {
+    int id = 50;
+    given(categoryService.existsCategoryById(id)).willReturn(false);
 
-		mockMvc
-			.perform(delete("/categories/{id}", id).contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNotFound())
-			.andExpect(content().string(""));
+    mockMvc
+        .perform(
+            delete("/categories/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound())
+        .andExpect(content().string(""));
 
-		then(categoryService).should().existsCategoryById(id);
-		then(categoryService).should(never()).deleteCategoryById(id);
-	}
+    then(categoryService).should().existsCategoryById(id);
+    then(categoryService).should(never()).deleteCategoryById(id);
+  }
 
-	@Test
-	@WithMockUser
-	void deleteCategory_whenAuthenticatedTriesDeleteCategory_thenReturn403() throws Exception {
-		given(categoryService.existsCategoryById(anyInt())).willReturn(true);
+  @Test
+  @WithMockUser
+  void deleteCategory_whenAuthenticatedTriesDeleteCategory_thenReturn403() throws Exception {
+    given(categoryService.existsCategoryById(anyInt())).willReturn(true);
 
-		mockMvc
-			.perform(delete("/categories/{id}", 93).contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isForbidden());
+    mockMvc
+        .perform(
+            delete("/categories/{id}", 93)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isForbidden());
 
-		then(categoryService).should(never()).existsCategoryById(anyInt());
-		then(categoryService).should(never()).deleteCategoryById(anyInt());
-	}
+    then(categoryService).should(never()).existsCategoryById(anyInt());
+    then(categoryService).should(never()).deleteCategoryById(anyInt());
+  }
 
-	@Test
-	void deleteCategory_whenUnauthenticatedTriesDeleteCategory_thenReturn401() throws Exception {
-		// I don't think I actually need to provide given, as it will b?
-		given(categoryService.existsCategoryById(anyInt())).willReturn(true);
+  @Test
+  void deleteCategory_whenUnauthenticatedTriesDeleteCategory_thenReturn401() throws Exception {
+    // I don't think I actually need to provide given, as it will b?
+    given(categoryService.existsCategoryById(anyInt())).willReturn(true);
 
-		mockMvc
-			.perform(delete("/categories/{id}", 93).contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isUnauthorized());
+    mockMvc
+        .perform(
+            delete("/categories/{id}", 93)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isUnauthorized());
 
-		then(categoryService).should(never()).existsCategoryById(anyInt());
-		then(categoryService).should(never()).deleteCategoryById(anyInt());
-	}
-
+    then(categoryService).should(never()).existsCategoryById(anyInt());
+    then(categoryService).should(never()).deleteCategoryById(anyInt());
+  }
 }
