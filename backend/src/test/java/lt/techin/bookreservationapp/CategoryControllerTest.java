@@ -111,6 +111,17 @@ public class CategoryControllerTest {
     then(categoryService).should().findById(anyInt());
   }
 
+  @Test
+  void getCategory_whenUnauthenticatedCalls_thenReturn401() throws Exception {
+    given(categoryService.existsCategoryById(anyInt())).willReturn(true);
+    given(categoryService.findById(anyInt())).willReturn(new Category("Sports & Outdoors"));
+
+    mockMvc.perform(get("/categories/{id}", 6)).andExpect(status().isUnauthorized());
+
+    then(categoryService).should(never()).existsCategoryById(anyInt());
+    then(categoryService).should(never()).findById(anyInt());
+  }
+
   // addCategory
 
   @Test
