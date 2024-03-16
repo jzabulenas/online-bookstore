@@ -19,21 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.entities.Category;
-import lt.techin.bookreservationapp.repositories.CategoryRepository;
 import lt.techin.bookreservationapp.services.CategoryService;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
 public class CategoryController {
 
-  private final CategoryRepository categoryRepository;
-
   private final CategoryService categoryService;
 
   @Autowired
-  public CategoryController(
-      CategoryRepository categoryRepository, CategoryService categoryService) {
-    this.categoryRepository = categoryRepository;
+  public CategoryController(CategoryService categoryService) {
     this.categoryService = categoryService;
   }
 
