@@ -253,10 +253,10 @@ public class CategoryControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                {
-                	"name": "Crafts, Hobbies & Home"
-                }
-                """)
+                      {
+                        "name": "Crafts, Hobbies & Home"
+                      }
+                    """)
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("name").value("Category already exists"));
@@ -313,9 +313,9 @@ public class CategoryControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                	{
-                		"name": "%s"
-                	}
+                      {
+                        "name": "%s"
+                      }
                     """
                         .formatted(categoryName))
                 .accept(MediaType.APPLICATION_JSON))
@@ -337,10 +337,10 @@ public class CategoryControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                {
-                	"name": "Crafts, Hobbies & Home"
-                }
-                """)
+                      {
+                        "name": "Crafts, Hobbies & Home"
+                      }
+                    """)
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isForbidden());
 
@@ -357,10 +357,10 @@ public class CategoryControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     """
-                {
-                	"name": "Crafts, Hobbies & Home"
-                }
-                """)
+                      {
+                        "name": "Crafts, Hobbies & Home"
+                      }
+                    """)
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isUnauthorized());
 
