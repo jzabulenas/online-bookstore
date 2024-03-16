@@ -80,6 +80,20 @@ public class CategoryControllerTest {
     then(categoryService).should().findAll();
   }
 
+  @Test
+  void getCategories_whenUnauthenticatedCalls_thenReturn401() throws Exception {
+    // given
+    given(categoryService.findAll())
+        .willReturn(
+            List.of(new Category("Reference"), new Category("Engineering & Transportation")));
+
+    // when
+    mockMvc.perform(get("/categories")).andExpect(status().isUnauthorized());
+
+    // then
+    then(categoryService).should(never()).findAll();
+  }
+
   // getCategory
 
   @Test
