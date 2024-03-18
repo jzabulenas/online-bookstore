@@ -8,8 +8,7 @@ import lt.techin.bookreservationapp.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-	Optional<User> findUserByUsername(String username);
+  Optional<User> findUserByUsername(String username);
 
-	boolean existsByUsername(String username);
-
+  boolean existsByUsername(String username);
 }

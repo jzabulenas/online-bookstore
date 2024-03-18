@@ -28,5 +28,9 @@ updateCategory
 	whenAuthenticatedTriesPut_thenReturn403
 	
 deleteCategory
+	whenAdminDeletesCategory_thenReturn200
+	whenAdminDeletesNonExistentCategory_thenReturn404
+	whenAuthenticatedTriesDeleteCategory_thenReturn403
+	whenUnauthenticatedTriesDeleteCategory_thenReturn401
 	
 	
