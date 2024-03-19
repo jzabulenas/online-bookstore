@@ -18,23 +18,19 @@ public class Category {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  @NotNull(message = "The field must not be null")
-  @NotEmpty(message = "The field must not be empty")
-  @Pattern(
-      regexp = "^(?!.*([A-Za-z])\\1\\1)[A-Z][A-Za-z\\s\\W]{2,49}$",
-      message =
-          "Category name must start with an uppercase letter, followed by lowercase letters, without numbers, consecutive repeated characters, and a length between 3 and 50 characters")
+  @NotEmpty(message = "Cannot be empty")
+  @NotNull(message = "Cannot be null")
   @Column(unique = true)
+  @Pattern(
+      regexp = "^[A-Z][a-z]+$",
+      message = "Must start with uppercase letter, all else lowercase")
+  @Pattern(
+      regexp = "^(?!.*([a-zA-Z])\\1\\1)[a-zA-Z]+$",
+      message = "Same letter cannot repeat more than two times")
+  @Pattern(regexp = "^[A-Z][a-z]{2,50}$", message = "Length must be between 3 and 50 characters")
   private String name;
 
-  public Category(
-      @NotNull(message = "The field must not be null")
-          @NotEmpty(message = "The field must not be empty")
-          @Pattern(
-              regexp = "^(?!.*([A-Za-z])\\1\\1)[A-Z][A-Za-z\\s\\W]{2,49}$",
-              message =
-                  "Category name must start with an uppercase letter, followed by lowercase letters, without numbers, consecutive repeated characters, and a length between 3 and 50 characters")
-          String name) {
+  public Category(String name) {
     this.name = name;
   }
 
