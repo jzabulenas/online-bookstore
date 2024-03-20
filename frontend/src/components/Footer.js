@@ -4,24 +4,22 @@ export default function Footer() {
   return (
     <footer className="container-fluid text-font-size">
       <div className="row">
-        <div className="col-12 col-lg-3 d-flex justify-content-center">
-          <p>Tel. 00370 223322223</p>
+        <div className="col-12 col-sm-6 d-flex justify-content-center">
+          <ul>
+            <li>Phone: +370 600 60060</li>
+            <li>
+              <a
+                href="https://www.vtmc.lt/kontaktai/"
+                className=""
+              >
+                info@bookreservation.com
+              </a>
+            </li>
+            <li>&copy; Copyright 2023</li>
+          </ul>
         </div>
 
-        <div className="col-12 col-lg-3 d-flex justify-content-center">
-          <a
-            href="https://www.vtmc.lt/kontaktai/"
-            className=""
-          >
-            info@bookreservation.com
-          </a>
-        </div>
-
-        <div className="col-12 col-lg-3 d-flex justify-content-center">
-          <p>&copy; Copyright 2023</p>
-        </div>
-
-        <div className="col-12 col-lg-3 d-flex justify-content-center">
+        <div className="col-12 col-sm-6 d-flex justify-content-center">
           <ul className="list-unstyled">
             <li className="p-1">
               <a href="https://techin.lt/">Address</a>
