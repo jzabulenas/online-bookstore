@@ -46,6 +46,7 @@ export default function Navbar() {
             className="logo"
           />
         </Link>
+
         <button
           className="navbar-toggler"
           type="button"
@@ -61,7 +62,7 @@ export default function Navbar() {
           className="collapse navbar-collapse"
           id="navbarSupportedContent"
         >
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0 w-100 justify-content-between">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0 w-100 justify-content-end">
             {role === "ADMIN" && (
               <li className="nav-item">
                 <Link
