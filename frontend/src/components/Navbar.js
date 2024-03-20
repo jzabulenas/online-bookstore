@@ -2,6 +2,7 @@ import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import "./Navbar.css";
 
 export default function Navbar() {
   const location = useLocation();
@@ -42,7 +43,7 @@ export default function Navbar() {
           <img
             src={logo}
             alt="Book Reservation App Logo"
-            style={{ width: "40px" }}
+            className="logo"
           />
         </Link>
         <button
