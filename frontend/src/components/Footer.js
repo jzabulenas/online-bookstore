@@ -23,25 +23,25 @@ export default function Footer() {
 
         <div className="col-12 col-lg-3 d-flex justify-content-center">
           <ul className="list-unstyled">
-            <li>
+            <li className="p-1">
               <a href="https://techin.lt/">Address</a>
             </li>
 
-            <li>
+            <li className="p-1">
               <a href="http://localhost:3000/about">About us</a>
             </li>
 
-            <li>
+            <li className="p-1">
               <a href="https://www.facebook.com/ateitiesprofesija/">
                 Follow us on Facebook
               </a>
             </li>
 
-            <li>
+            <li className="p-1">
               <a href="https://twitter.com/github">Follow us on Twitter</a>
             </li>
 
-            <li>
+            <li className="p-1">
               <a href="https://www.vtmc.lt/naujienos/">
                 Sign up for our newsletter
               </a>
