@@ -280,6 +280,27 @@ public class CategoryControllerTest {
     then(categoryService).should(never()).save(any(Category.class));
   }
 
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void addCategory_whenAdminSavesShortCategory_then400AndMessage() throws Exception {
+    mockMvc
+        .perform(
+            post("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                		{
+                		  "name": "Ab"
+                		}
+                		""")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
+
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
+
   // updateCategory
 
   @Test
