@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "Categories")
@@ -18,16 +18,10 @@ public class Category {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  @NotEmpty(message = "Cannot be empty")
-  @NotNull(message = "Cannot be null")
+  @NotNull
+  @NotEmpty
   @Column(unique = true)
-  @Pattern(
-      regexp = "^[A-Z][a-z]+$",
-      message = "Must start with uppercase letter, all else lowercase")
-  @Pattern(
-      regexp = "^(?!.*([a-zA-Z])\\1\\1)[a-zA-Z]+$",
-      message = "Same letter cannot repeat more than two times")
-  @Pattern(regexp = "^[A-Z][a-z]{2,50}$", message = "Length must be between 3 and 50 characters")
+  @Size(min = 3, max = 50, message = "Length must be between 3 and 50 characters")
   private String name;
 
   public Category(String name) {
@@ -44,8 +38,12 @@ public class Category {
     return name;
   }
 
+  //  public void setName(String name) {
+  //    this.name = (name == null) ? null : name.stripTrailing();
+  //  }
+
   public void setName(String name) {
-    this.name = (name == null) ? null : name.stripTrailing();
+    this.name = name;
   }
 
   @Override
