@@ -451,6 +451,26 @@ public class CategoryControllerTest {
     then(categoryService).should(never()).save(any(Category.class));
   }
 
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void updateCategory_whenAdminCallsWithNull_then400AndMessage() throws Exception {
+    mockMvc
+        .perform(
+            put("/categories/{id}", 3)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                		{
+                		}
+                		""")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("must not be null"));
+
+    then(categoryService).should(never()).findById(anyInt());
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
+
   // deleteCategory
 
   @Test
