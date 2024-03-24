@@ -515,6 +515,28 @@ public class CategoryControllerTest {
     then(categoryService).should(never()).save(any(Category.class));
   }
 
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void updateCategory_whenAdminSavesTooLongCategory_then400AndMessage() throws Exception {
+    mockMvc
+        .perform(
+            put("/categories/{id}", 87)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                		{
+                		  "name": "Qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbc"
+                		}
+                		""")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
+
+    then(categoryService).should(never()).findById(anyInt());
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
+
   // deleteCategory
 
   @Test
