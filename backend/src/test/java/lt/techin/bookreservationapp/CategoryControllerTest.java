@@ -98,7 +98,7 @@ public class CategoryControllerTest {
   // getCategory
 
   @Test
-  @WithMockUser
+  @WithUserDetails
   void getCategory_whenAuthenticatedAndCategoryDoesNotExist_thenReturn404() throws Exception {
     given(categoryService.existsCategoryById(anyInt())).willReturn(false);
 
@@ -112,7 +112,7 @@ public class CategoryControllerTest {
   }
 
   @Test
-  @WithMockUser
+  @WithUserDetails
   void getCategory_whenAuthenticatedCategoryExists_thenReturn200() throws Exception {
     given(categoryService.existsCategoryById(anyInt())).willReturn(true);
     given(categoryService.findById(anyInt())).willReturn(new Category("Sports & Outdoors"));
