@@ -240,6 +240,88 @@ public class CategoryControllerTest {
     then(categoryService).should(never()).save(any(Category.class));
   }
 
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void addCategory_whenAdminSavesNullCategoryName_then400AndMessage() throws Exception {
+    mockMvc
+        .perform(
+            post("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                		{
+                		}
+                		""")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("must not be null"));
+
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
+
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void addCategory_whenAdminSavesEmptyCategory_then400AndMessage() throws Exception {
+    mockMvc
+        .perform(
+            post("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                		{
+                		  "name": ""
+                		}
+                		""")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
+
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
+
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void addCategory_whenAdminSavesShortCategory_then400AndMessage() throws Exception {
+    mockMvc
+        .perform(
+            post("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                		{
+                		  "name": "Ab"
+                		}
+                		""")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
+
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
+
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void addCategory_whenAdminSavesTooLongCategory_then400AndMessage() throws Exception {
+    mockMvc
+        .perform(
+            post("/categories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                		{
+                		  "name": "Qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbc"
+                		}
+                		""")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
+
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
+
   // updateCategory
 
   @Test
@@ -363,6 +445,70 @@ public class CategoryControllerTest {
                     """)
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isUnauthorized());
+
+    then(categoryService).should(never()).findById(anyInt());
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
+
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void updateCategory_whenAdminCallsWithNull_then400AndMessage() throws Exception {
+    mockMvc
+        .perform(
+            put("/categories/{id}", 3)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                		{
+                		}
+                		""")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("must not be null"));
+
+    then(categoryService).should(never()).findById(anyInt());
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
+
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void updateCategory_whenAdminCallsWithEmptyName_then400AndMessage() throws Exception {
+    mockMvc
+        .perform(
+            put("/categories/{id}", 85)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                		{
+                		  "name": ""
+                		}
+                		""")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
+
+    then(categoryService).should(never()).findById(anyInt());
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
+
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void updateCategory_whenAdminCallsWithShortName_then400AndMessage() throws Exception {
+    mockMvc
+        .perform(
+            put("/categories/{id}", 50)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                		{
+                		  "name": "Ab"
+                		}
+                		""")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
 
     then(categoryService).should(never()).findById(anyInt());
     then(categoryService).should(never()).existsByName(anyString());

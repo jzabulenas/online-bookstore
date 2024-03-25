@@ -2,6 +2,7 @@ import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import "./Navbar.css";
 
 export default function Navbar() {
   const location = useLocation();
@@ -42,9 +43,10 @@ export default function Navbar() {
           <img
             src={logo}
             alt="Book Reservation App Logo"
-            style={{ width: "40px" }}
+            className="logo"
           />
         </Link>
+
         <button
           className="navbar-toggler"
           type="button"
@@ -60,7 +62,7 @@ export default function Navbar() {
           className="collapse navbar-collapse"
           id="navbarSupportedContent"
         >
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0 w-100 justify-content-between">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0 w-100 justify-content-end">
             {role === "ADMIN" && (
               <li className="nav-item">
                 <Link
