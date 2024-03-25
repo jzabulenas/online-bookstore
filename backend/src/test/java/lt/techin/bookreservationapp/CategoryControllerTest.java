@@ -25,6 +25,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,7 +49,7 @@ public class CategoryControllerTest {
   // getCategories
 
   @Test
-  @WithMockUser
+  @WithUserDetails
   void getCategories_whenAuthenticatedCalls_thenReturnList() throws Exception {
     // given
     given(categoryService.findAll())
@@ -67,7 +68,7 @@ public class CategoryControllerTest {
   }
 
   @Test
-  @WithMockUser
+  @WithUserDetails
   void getCategories_whenAuthenticatedCallsEmptyList_thenReturn404() throws Exception {
     given(categoryService.findAll()).willReturn(Collections.emptyList());
 
