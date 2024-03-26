@@ -1,36 +1,43 @@
-Maybe will need this?
-
-BindingResult bindingResult = mock(BindingResult.class);
-given(ValidationService.processFieldErrors(bindingResult))
- .willReturn(false);
-given(bindingResult.hasErrors()).willReturn(false);
-
 	Tests
 
 getCategories
 	whenAuthenticatedCalls_thenReturnList
 	whenAuthenticatedCallsEmptyList_thenReturn404
+	whenUnauthenticatedCalls_thenReturn401
 	
 getCategory
-	whenAuthenticatedAndCategoryDoesNotExist_thenReturn404(
 	whenAuthenticatedCategoryExists_thenReturn200
+	whenAuthenticatedAndCategoryDoesNotExist_thenReturn404
+	whenUnauthenticatedCalls_thenReturn401
 	
 addCategory
 	whenAdminSavesCategory_then201
 	whenAdminSavesAlreadyExistingCategory_thenReturn400
-	whenAuthenticatedSavesCategory_then403
-	whenAuthenticatedSavesAlreadyExistingCategory_thenReturn403
+	whenUserSavesCategory_then403
+	whenUserSavesAlreadyExistingCategory_thenReturn403 // don't think I need this
+	whenUnauthenticatedSavesCategory_then401
+	
+	whenAdminSavesNullCategoryName_then400AndMessage
+	whenAdminSavesEmptyCategory_then400AndMessage
+	whenAdminSavesShortCategory_then400AndMessage
+	whenAdminSavesTooLongCategory_then400AndMessage
 
 updateCategory
-	whenAdminProvidesAlreadyExistingCategory_thenReturn400
 	whenAdminFindsCategory_thenReturnUpdatedCategory
+	whenAdminProvidesAlreadyExistingCategory_thenReturn400
 	whenAdminPutsNonExistentId_then201AndReturnBody()
-	whenAuthenticatedTriesPut_thenReturn403
+	whenUserTriesPut_thenReturn403
+	whenUnauthenticatedTriesPut_thenReturn401
+	
+	whenAdminCallsWithNull_then400AndMessage
+	whenAdminCallsWithEmptyName_then400AndMessage
+	whenAdminCallsWithShortName_then400AndMessage
+	whenAdminSavesTooLongCategory_then400AndMessage
 	
 deleteCategory
 	whenAdminDeletesCategory_thenReturn200
 	whenAdminDeletesNonExistentCategory_thenReturn404
-	whenAuthenticatedTriesDeleteCategory_thenReturn403
+	whenUserTriesDeleteCategory_thenReturn403
 	whenUnauthenticatedTriesDeleteCategory_thenReturn401
 	
 	
