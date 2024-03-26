@@ -182,7 +182,7 @@ public class CategoryControllerTest {
 
   @Test
   @WithMockUser
-  void addCategory_whenAuthenticatedSavesCategory_then403() throws Exception {
+  void addCategory_whenUserSavesCategory_then403() throws Exception {
     // given
     Category category = new Category("Health, Fitness & Dieting");
     given(categoryService.existsByName(category.getName())).willReturn(false);
@@ -204,7 +204,7 @@ public class CategoryControllerTest {
   // Do I need to do this? The test earlier might suffice.
   @Test
   @WithMockUser
-  void addCategory_whenAuthenticatedSavesAlreadyExistingCategory_thenReturn403() throws Exception {
+  void addCategory_whenUserSavesAlreadyExistingCategory_thenReturn403() throws Exception {
     Category category = new Category("Crafts, Hobbies & Home");
     given(categoryService.existsByName(anyString())).willReturn(true);
 
@@ -413,7 +413,7 @@ public class CategoryControllerTest {
 
   @Test
   @WithMockUser
-  void updateCategory_whenAuthenticatedTriesPut_thenReturn403() throws Exception {
+  void updateCategory_whenUserTriesPut_thenReturn403() throws Exception {
     mockMvc
         .perform(
             put("/categories/{id}", 413)
@@ -578,7 +578,7 @@ public class CategoryControllerTest {
 
   @Test
   @WithMockUser
-  void deleteCategory_whenAuthenticatedTriesDeleteCategory_thenReturn403() throws Exception {
+  void deleteCategory_whenUserTriesDeleteCategory_thenReturn403() throws Exception {
     given(categoryService.existsCategoryById(anyInt())).willReturn(true);
 
     mockMvc
