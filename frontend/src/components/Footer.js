@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="container text-font-size">
       <div className="row">
         <div className="col-12 col-sm-6 d-flex justify-content-center justify-content-sm-start">
-          <ul>
+          <ul className="list-unstyled">
             <li>Phone: +370 600 60060</li>
             <li>
               <a
