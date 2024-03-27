@@ -13,7 +13,7 @@ import Signup from "./components/Signup";
 
 function App() {
   return (
-    <>
+    <div className="d-flex flex-column min-vh-100">
       <Navbar />
       <main>
         <Routes>
@@ -56,7 +56,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

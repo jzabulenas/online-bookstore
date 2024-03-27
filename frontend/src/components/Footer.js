@@ -2,7 +2,7 @@ import "./Footer.css";
 
 export default function Footer() {
   return (
-    <footer className="container text-font-size">
+    <footer className="container text-font-size mt-auto">
       <div className="row">
         <div className="col-12 col-sm-6 d-flex justify-content-center justify-content-sm-start">
           <ul className="list-unstyled">
