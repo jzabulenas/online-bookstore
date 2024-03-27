@@ -15,7 +15,7 @@ export default function Footer() {
                 info@bookreservation.com
               </a>
             </li>
-            <li>&copy; Copyright 2023</li>
+            <li>&copy; Copyright 2024</li>
           </ul>
         </div>
 
