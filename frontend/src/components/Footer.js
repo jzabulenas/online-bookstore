@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="container text-font-size">
       <div className="row">
-        <div className="col-12 col-sm-6 d-flex justify-content-center">
+        <div className="col-12 col-sm-6 d-flex justify-content-center justify-content-sm-start">
           <ul>
             <li>Phone: +370 600 60060</li>
             <li>
@@ -19,7 +19,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        <div className="col-12 col-sm-6 d-flex justify-content-center">
+        <div className="col-12 col-sm-6 d-flex justify-content-center justify-content-sm-end">
           <ul className="list-unstyled">
             <li className="p-1">
               <a href="https://techin.lt/">Address</a>
