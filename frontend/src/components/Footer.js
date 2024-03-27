@@ -6,8 +6,8 @@ export default function Footer() {
       <div className="row">
         <div className="col-12 col-sm-6 d-flex justify-content-center justify-content-sm-start">
           <ul className="list-unstyled">
-            <li>Phone: +370 600 60060</li>
-            <li>
+            <li className="p-1">Phone: +370 600 60060</li>
+            <li className="p-1">
               <a
                 href="https://www.vtmc.lt/kontaktai/"
                 className=""
@@ -15,7 +15,7 @@ export default function Footer() {
                 info@bookreservation.com
               </a>
             </li>
-            <li>&copy; Copyright 2024</li>
+            <li className="p-1">&copy; Copyright 2024</li>
           </ul>
         </div>
 
