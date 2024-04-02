@@ -1,4 +1,4 @@
-package lt.techin.bookreservationapp.exceptions;
+package lt.techin.bookreservationapp.validation;
 
 import java.util.HashMap;
 import java.util.Map;

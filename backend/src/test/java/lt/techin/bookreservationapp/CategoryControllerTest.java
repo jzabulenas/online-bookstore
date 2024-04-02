@@ -25,6 +25,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,7 +49,7 @@ public class CategoryControllerTest {
   // getCategories
 
   @Test
-  @WithMockUser
+  @WithUserDetails
   void getCategories_whenAuthenticatedCalls_thenReturnList() throws Exception {
     // given
     given(categoryService.findAll())
@@ -67,7 +68,7 @@ public class CategoryControllerTest {
   }
 
   @Test
-  @WithMockUser
+  @WithUserDetails
   void getCategories_whenAuthenticatedCallsEmptyList_thenReturn404() throws Exception {
     given(categoryService.findAll()).willReturn(Collections.emptyList());
 
@@ -97,21 +98,7 @@ public class CategoryControllerTest {
   // getCategory
 
   @Test
-  @WithMockUser
-  void getCategory_whenAuthenticatedAndCategoryDoesNotExist_thenReturn404() throws Exception {
-    given(categoryService.existsCategoryById(anyInt())).willReturn(false);
-
-    mockMvc
-        .perform(get("/categories/{id}", 1))
-        .andExpect(status().isNotFound())
-        .andExpect(content().string(""));
-
-    then(categoryService).should().existsCategoryById(anyInt());
-    then(categoryService).should(never()).findById(anyInt());
-  }
-
-  @Test
-  @WithMockUser
+  @WithUserDetails
   void getCategory_whenAuthenticatedCategoryExists_thenReturn200() throws Exception {
     given(categoryService.existsCategoryById(anyInt())).willReturn(true);
     given(categoryService.findById(anyInt())).willReturn(new Category("Sports & Outdoors"));
@@ -123,6 +110,20 @@ public class CategoryControllerTest {
 
     then(categoryService).should().existsCategoryById(anyInt());
     then(categoryService).should().findById(anyInt());
+  }
+
+  @Test
+  @WithUserDetails
+  void getCategory_whenAuthenticatedAndCategoryDoesNotExist_thenReturn404() throws Exception {
+    given(categoryService.existsCategoryById(anyInt())).willReturn(false);
+
+    mockMvc
+        .perform(get("/categories/{id}", 1))
+        .andExpect(status().isNotFound())
+        .andExpect(content().string(""));
+
+    then(categoryService).should().existsCategoryById(anyInt());
+    then(categoryService).should(never()).findById(anyInt());
   }
 
   @Test
@@ -181,7 +182,7 @@ public class CategoryControllerTest {
 
   @Test
   @WithMockUser
-  void addCategory_whenAuthenticatedSavesCategory_then403() throws Exception {
+  void addCategory_whenUserSavesCategory_then403() throws Exception {
     // given
     Category category = new Category("Health, Fitness & Dieting");
     given(categoryService.existsByName(category.getName())).willReturn(false);
@@ -203,7 +204,7 @@ public class CategoryControllerTest {
   // Do I need to do this? The test earlier might suffice.
   @Test
   @WithMockUser
-  void addCategory_whenAuthenticatedSavesAlreadyExistingCategory_thenReturn403() throws Exception {
+  void addCategory_whenUserSavesAlreadyExistingCategory_thenReturn403() throws Exception {
     Category category = new Category("Crafts, Hobbies & Home");
     given(categoryService.existsByName(anyString())).willReturn(true);
 
@@ -325,29 +326,6 @@ public class CategoryControllerTest {
   // updateCategory
 
   @Test
-  @WithMockUser(roles = {"ADMIN"})
-  void updateCategory_whenAdminProvidesAlreadyExistingCategory_thenReturn400() throws Exception {
-    given(categoryService.existsByName(anyString())).willReturn(true);
-
-    mockMvc
-        .perform(
-            put("/categories/{id}", 370)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    """
-                      {
-                        "name": "Crafts, Hobbies & Home"
-                      }
-                    """)
-                .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("name").value("Category already exists"));
-
-    then(categoryService).should().existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
-  }
-
-  @Test
   @WithMockUser(roles = "ADMIN")
   void updateCategory_whenAdminFindsCategory_thenReturnUpdatedCategory() throws Exception {
     // Given
@@ -377,6 +355,29 @@ public class CategoryControllerTest {
     then(categoryService).should().existsByName(newCategoryName);
     then(categoryService).should().save(existingCategory);
     assertThat(newCategoryName).isEqualTo(existingCategory.getName());
+  }
+
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void updateCategory_whenAdminProvidesAlreadyExistingCategory_thenReturn400() throws Exception {
+    given(categoryService.existsByName(anyString())).willReturn(true);
+
+    mockMvc
+        .perform(
+            put("/categories/{id}", 370)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                      {
+                        "name": "Crafts, Hobbies & Home"
+                      }
+                    """)
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("Category already exists"));
+
+    then(categoryService).should().existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
   }
 
   @Test
@@ -412,7 +413,7 @@ public class CategoryControllerTest {
 
   @Test
   @WithMockUser
-  void updateCategory_whenAuthenticatedTriesPut_thenReturn403() throws Exception {
+  void updateCategory_whenUserTriesPut_thenReturn403() throws Exception {
     mockMvc
         .perform(
             put("/categories/{id}", 413)
@@ -515,6 +516,28 @@ public class CategoryControllerTest {
     then(categoryService).should(never()).save(any(Category.class));
   }
 
+  @Test
+  @WithMockUser(roles = {"ADMIN"})
+  void updateCategory_whenAdminSavesTooLongCategory_then400AndMessage() throws Exception {
+    mockMvc
+        .perform(
+            put("/categories/{id}", 87)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+                		{
+                		  "name": "Qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjklzxcvbc"
+                		}
+                		""")
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
+
+    then(categoryService).should(never()).findById(anyInt());
+    then(categoryService).should(never()).existsByName(anyString());
+    then(categoryService).should(never()).save(any(Category.class));
+  }
+
   // deleteCategory
 
   @Test
@@ -555,7 +578,7 @@ public class CategoryControllerTest {
 
   @Test
   @WithMockUser
-  void deleteCategory_whenAuthenticatedTriesDeleteCategory_thenReturn403() throws Exception {
+  void deleteCategory_whenUserTriesDeleteCategory_thenReturn403() throws Exception {
     given(categoryService.existsCategoryById(anyInt())).willReturn(true);
 
     mockMvc

@@ -28,8 +28,7 @@ public class Book {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  @NotNull(message = "The title field must not be null")
-  @NotEmpty(message = "The title field must not be empty")
+  @NotEmpty
   @Pattern(
       regexp = "^[A-Z0-9][a-zA-Z0-9 .,:'\"!?&()-]+$",
       message =
@@ -37,8 +36,7 @@ public class Book {
   @Column(unique = true)
   private String title;
 
-  @NotNull(message = "The author field must not be null")
-  @NotEmpty(message = "The author field must not be empty")
+  @NotEmpty
   @Pattern(
       regexp = "^[A-Z][a-z]+ [A-Z][a-z]+$",
       message =
@@ -54,8 +52,7 @@ public class Book {
   @NotNull(message = "The categories field must not be null")
   private List<Category> categories;
 
-  @NotNull(message = "The description field must not be null")
-  @NotEmpty(message = "The description field must not be empty")
+  @NotEmpty
   @Column(columnDefinition = "CLOB")
   @Pattern(
       regexp = "^[A-Z].{0,299}$",
@@ -63,8 +60,7 @@ public class Book {
           "Description should start with a capital letter and is limited to a maximum of 300 characters")
   private String description;
 
-  @NotNull(message = "The picture url field must not be null")
-  @NotEmpty(message = "The picture url field must not be empty")
+  @NotEmpty
   @Pattern(
       regexp = "^(https?)://[^\\s$]+\\.(jpg|png)$",
       message =
@@ -74,8 +70,7 @@ public class Book {
   @Min(value = 1, message = "Pages field must have a value greater than 0")
   private int pages;
 
-  @NotNull(message = "The ISBN field must not be null")
-  @NotEmpty(message = "The ISBN field must not be empty")
+  @NotEmpty
   @Pattern(
       regexp = "((978[\\--– ])?[0-9][0-9\\--– ]{10}[\\--– ][0-9xX])|((978)?[0-9]{9}[0-9Xx])",
       message = "ISBN is incorrect")
@@ -86,8 +81,7 @@ public class Book {
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate publicationDate;
 
-  @NotNull(message = "The language field must not be null")
-  @NotEmpty(message = "The language field must not be empty")
+  @NotEmpty
   @Pattern(
       regexp = "^[A-Z][a-z]+$",
       message =

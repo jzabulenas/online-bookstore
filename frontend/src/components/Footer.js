@@ -2,12 +2,12 @@ import "./Footer.css";
 
 export default function Footer() {
   return (
-    <footer className="container-fluid text-font-size">
+    <footer className="container text-font-size mt-auto">
       <div className="row">
-        <div className="col-12 col-sm-6 d-flex justify-content-center">
-          <ul>
-            <li>Phone: +370 600 60060</li>
-            <li>
+        <div className="col-12 col-sm-6 d-flex justify-content-center justify-content-sm-start">
+          <ul className="list-unstyled">
+            <li className="p-1">Phone: +370 600 60060</li>
+            <li className="p-1">
               <a
                 href="https://www.vtmc.lt/kontaktai/"
                 className=""
@@ -15,11 +15,11 @@ export default function Footer() {
                 info@bookreservation.com
               </a>
             </li>
-            <li>&copy; Copyright 2023</li>
+            <li className="p-1">&copy; Copyright 2024</li>
           </ul>
         </div>
 
-        <div className="col-12 col-sm-6 d-flex justify-content-center">
+        <div className="col-12 col-sm-6 d-flex justify-content-center justify-content-sm-end">
           <ul className="list-unstyled">
             <li className="p-1">
               <a href="https://techin.lt/">Address</a>
