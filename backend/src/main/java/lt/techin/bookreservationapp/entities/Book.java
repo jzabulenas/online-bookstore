@@ -29,10 +29,12 @@ public class Book {
   private int id;
 
   @NotEmpty
-  @Pattern(
-      regexp = "^[A-Z0-9][a-zA-Z0-9 .,:'\"!?&()-]+$",
-      message =
-          "Book title must start with an uppercase letter, that can be followed by a mix of alphanumeric characters, spaces, and certain punctuation marks")
+  //  @Pattern(
+  //      regexp = "^[A-Z0-9][a-zA-Z0-9 .,:'\"!?&()-]+$",
+  //      message =
+  //          "Book title must start with an uppercase letter, that can be followed by a mix of
+  // alphanumeric characters, spaces, and certain punctuation marks")
+  @Pattern(regexp = "^((?!\\s{2}).)*$", message = "Cannot have more than one consecutive space")
   @Column(unique = true)
   private String title;
 
