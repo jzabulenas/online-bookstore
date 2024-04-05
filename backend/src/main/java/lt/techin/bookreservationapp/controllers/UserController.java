@@ -12,14 +12,14 @@ import lt.techin.bookreservationapp.repositories.UserRepository;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
-public class AuthController {
+public class UserController {
 
   private final UserRepository userRepository;
 
   private final PasswordEncoder passwordEncoder;
 
   @Autowired
-  public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+  public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
   }
