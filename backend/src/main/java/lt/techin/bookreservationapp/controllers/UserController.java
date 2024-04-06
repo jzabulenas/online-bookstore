@@ -29,7 +29,7 @@ public class UserController {
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     user.setRole("USER");
 
-    userRepository.save(user);
+    userService.saveUser(user);
   }
 
   @PostMapping("/login")
