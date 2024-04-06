@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lt.techin.bookreservationapp.entities.User;
-import lt.techin.bookreservationapp.repositories.UserRepository;
+import lt.techin.bookreservationapp.services.UserService;
 
 @RestController
 @CrossOrigin("http://localhost:3000")
 public class UserController {
 
-  private final UserRepository userRepository;
+  private final UserService userService;
 
   private final PasswordEncoder passwordEncoder;
 
   @Autowired
-  public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-    this.userRepository = userRepository;
+  public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    this.userService = userService;
     this.passwordEncoder = passwordEncoder;
   }
 
