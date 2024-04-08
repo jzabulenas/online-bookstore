@@ -1,8 +1,10 @@
 package lt.techin.bookreservationapp.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -45,7 +47,9 @@ public class BookController {
     if (!books.isEmpty()) {
       return ResponseEntity.ok(books);
     } else {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No books found");
+      Map<String, String> response = new HashMap<>();
+      response.put("message", "No books found");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
   }
 
