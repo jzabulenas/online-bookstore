@@ -27,4 +27,8 @@ public class UserService {
         .filter(u -> passwordEncoder.matches(password, u.getPassword()))
         .orElseThrow();
   }
+
+  public boolean existsUserByUsername(String username) {
+    return userRepository.existsByUsername(username);
+  }
 }
