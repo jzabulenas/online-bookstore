@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import lt.techin.bookreservationapp.entities.Category;
 import lt.techin.bookreservationapp.entities.User;
+import lt.techin.bookreservationapp.services.CategoryService;
 import lt.techin.bookreservationapp.services.UserService;
 
 @Component
@@ -15,9 +16,13 @@ public class DatabaseInitializer implements CommandLineRunner {
 
   private final PasswordEncoder passwordEncoder;
 
-  public DatabaseInitializer(UserService userService, PasswordEncoder passwordEncoder) {
+  private final CategoryService categoryService;
+
+  public DatabaseInitializer(
+      UserService userService, PasswordEncoder passwordEncoder, CategoryService categoryService) {
     this.userService = userService;
     this.passwordEncoder = passwordEncoder;
+    this.categoryService = categoryService;
   }
 
   @Override
@@ -42,7 +47,14 @@ public class DatabaseInitializer implements CommandLineRunner {
       userService.saveUser(regularUser);
     }
 
-    Category category = new Category("History");
-    //    if (userservice)
+    Category category1 = new Category("History");
+    if (!categoryService.existsCategoryByName(category1.getName())) {
+      categoryService.saveCategory(category1);
+    }
+
+    Category category2 = new Category("Self-Help");
+    if (!categoryService.existsCategoryByName(category2.getName())) {
+      categoryService.saveCategory(category2);
+    }
   }
 }
