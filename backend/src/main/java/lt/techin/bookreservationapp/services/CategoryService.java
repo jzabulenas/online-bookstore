@@ -16,19 +16,19 @@ public class CategoryService {
     this.categoryRepository = categoryRepository;
   }
 
-  public List<Category> findAll() {
+  public List<Category> findAllCategories() {
     return categoryRepository.findAll();
   }
 
-  public Category findById(int id) {
+  public Category findCategoryById(int id) {
     return categoryRepository.findById(id).orElse(null);
   }
 
-  public boolean existsByName(String category) {
+  public boolean existsCategoryByName(String category) {
     return categoryRepository.existsByName(category);
   }
 
-  public Category save(Category category) {
+  public Category saveCategory(Category category) {
     return categoryRepository.save(category);
   }
 

@@ -34,7 +34,7 @@ public class CategoryController {
 
   @GetMapping("/categories")
   public ResponseEntity<List<Category>> getCategories() {
-    List<Category> allCategories = categoryService.findAll();
+    List<Category> allCategories = categoryService.findAllCategories();
 
     if (!allCategories.isEmpty()) {
       return ResponseEntity.ok(allCategories);
@@ -49,26 +49,26 @@ public class CategoryController {
       return ResponseEntity.notFound().build();
     }
 
-    return ResponseEntity.ok(categoryService.findById(id));
+    return ResponseEntity.ok(categoryService.findCategoryById(id));
   }
 
   @PostMapping("/categories")
   public ResponseEntity<?> addCategory(@Valid @RequestBody Category category) {
-    if (categoryService.existsByName(category.getName())) {
+    if (categoryService.existsCategoryByName(category.getName())) {
       Map<String, String> categoryMap = new HashMap<String, String>();
       categoryMap.put("name", "Category already exists");
       return ResponseEntity.badRequest().body(categoryMap);
     }
 
-    Category savedCategory = categoryService.save(category);
-    return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
+    Category saveCategory = categoryService.saveCategory(category);
+    return ResponseEntity.status(HttpStatus.CREATED).body(saveCategory);
   }
 
   @PutMapping("/categories/{id}")
   public ResponseEntity<?> updateCategory(
       @PathVariable int id, @Valid @RequestBody Category category) {
-    Category currentCategory = categoryService.findById(id);
-    if (categoryService.existsByName(category.getName())) {
+    Category currentCategory = categoryService.findCategoryById(id);
+    if (categoryService.existsCategoryByName(category.getName())) {
       Map<String, String> categoryMap = new HashMap<String, String>();
       categoryMap.put("name", "Category already exists");
       return ResponseEntity.badRequest().body(categoryMap);
@@ -77,10 +77,10 @@ public class CategoryController {
     if (currentCategory != null) {
       currentCategory.setName(category.getName());
 
-      return ResponseEntity.ok(categoryService.save(currentCategory));
+      return ResponseEntity.ok(categoryService.saveCategory(currentCategory));
     }
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.save(category));
+    return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.saveCategory(category));
   }
 
   @DeleteMapping("/categories/{id}")

@@ -26,11 +26,12 @@ public class CategoryServiceTest {
   @Autowired private CategoryService categoryService;
 
   @Test
-  public void findAll_savedCategories_areReturned() {
-    Category savedCategory1 = categoryRepository.save(new Category("Business & Money"));
-    Category savedCategory2 = categoryRepository.save(new Category("Mystery, Thriller & Suspense"));
+  public void findAllCategories_savedCategories_areReturned() {
+    Category savedCategory1 = categoryService.saveCategory(new Category("Business & Money"));
+    Category savedCategory2 =
+        categoryService.saveCategory(new Category("Mystery, Thriller & Suspense"));
 
-    List<Category> categories = categoryService.findAll();
+    List<Category> categories = categoryService.findAllCategories();
 
     then(categories.get(0).getName()).isEqualTo(savedCategory1.getName());
     then(categories.get(0).getId()).isNotEqualTo(0);
@@ -39,27 +40,27 @@ public class CategoryServiceTest {
   }
 
   @Test
-  public void findById_forSavedCategory_isReturned() {
-    Category savedCategory = categoryRepository.save(new Category("Nonfiction"));
+  public void findCategoryById_forSavedCategory_isReturned() {
+    Category savedCategory = categoryService.saveCategory(new Category("Nonfiction"));
 
-    Category category = categoryService.findById(savedCategory.getId());
+    Category category = categoryService.findCategoryById(savedCategory.getId());
 
     then(category.getName()).isEqualTo("Nonfiction");
     then(category.getId()).isNotEqualTo(0);
   }
 
   @Test
-  public void existsByName_savedCategory_isTrue() {
-    Category category = categoryRepository.save(new Category("Literature & Fiction"));
+  public void existsCategoryByName_savedCategory_isTrue() {
+    Category category = categoryService.saveCategory(new Category("Literature & Fiction"));
 
-    boolean doesCategoryExist = categoryService.existsByName(category.getName());
+    boolean doesCategoryExist = categoryService.existsCategoryByName(category.getName());
 
     then(doesCategoryExist).isTrue();
   }
 
   @Test
-  void save_savedCategory_isReturned() {
-    categoryService.save(new Category("Biographies & Memoirs"));
+  void saveCategory_savedCategory_isReturned() {
+    categoryService.saveCategory(new Category("Biographies & Memoirs"));
 
     Category category = categoryRepository.findByName("Biographies & Memoirs");
 

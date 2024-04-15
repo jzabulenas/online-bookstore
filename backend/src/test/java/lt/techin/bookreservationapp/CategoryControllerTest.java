@@ -52,7 +52,7 @@ public class CategoryControllerTest {
   @WithUserDetails
   void getCategories_whenAuthenticatedCalls_thenReturnList() throws Exception {
     // given
-    given(categoryService.findAll())
+    given(categoryService.findAllCategories())
         .willReturn(
             List.of(new Category("Reference"), new Category("Engineering & Transportation")));
 
@@ -64,13 +64,13 @@ public class CategoryControllerTest {
         .andExpect(jsonPath("$[1].name").value("Engineering & Transportation"));
 
     // then
-    then(categoryService).should().findAll();
+    then(categoryService).should().findAllCategories();
   }
 
   @Test
   @WithUserDetails
   void getCategories_whenAuthenticatedCallsEmptyList_thenReturn404() throws Exception {
-    given(categoryService.findAll()).willReturn(Collections.emptyList());
+    given(categoryService.findAllCategories()).willReturn(Collections.emptyList());
 
     mockMvc
         .perform(get("/categories"))
@@ -78,13 +78,13 @@ public class CategoryControllerTest {
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$").isEmpty());
 
-    then(categoryService).should().findAll();
+    then(categoryService).should().findAllCategories();
   }
 
   @Test
   void getCategories_whenUnauthenticatedCalls_thenReturn401() throws Exception {
     // given
-    given(categoryService.findAll())
+    given(categoryService.findAllCategories())
         .willReturn(
             List.of(new Category("Reference"), new Category("Engineering & Transportation")));
 
@@ -92,7 +92,7 @@ public class CategoryControllerTest {
     mockMvc.perform(get("/categories")).andExpect(status().isUnauthorized());
 
     // then
-    then(categoryService).should(never()).findAll();
+    then(categoryService).should(never()).findAllCategories();
   }
 
   // getCategory
@@ -101,7 +101,7 @@ public class CategoryControllerTest {
   @WithUserDetails
   void getCategory_whenAuthenticatedCategoryExists_thenReturn200() throws Exception {
     given(categoryService.existsCategoryById(anyInt())).willReturn(true);
-    given(categoryService.findById(anyInt())).willReturn(new Category("Sports & Outdoors"));
+    given(categoryService.findCategoryById(anyInt())).willReturn(new Category("Sports & Outdoors"));
 
     mockMvc
         .perform(get("/categories/{id}", 6))
@@ -109,7 +109,7 @@ public class CategoryControllerTest {
         .andExpect(jsonPath("name").value("Sports & Outdoors"));
 
     then(categoryService).should().existsCategoryById(anyInt());
-    then(categoryService).should().findById(anyInt());
+    then(categoryService).should().findCategoryById(anyInt());
   }
 
   @Test
@@ -123,18 +123,18 @@ public class CategoryControllerTest {
         .andExpect(content().string(""));
 
     then(categoryService).should().existsCategoryById(anyInt());
-    then(categoryService).should(never()).findById(anyInt());
+    then(categoryService).should(never()).findCategoryById(anyInt());
   }
 
   @Test
   void getCategory_whenUnauthenticatedCalls_thenReturn401() throws Exception {
     given(categoryService.existsCategoryById(anyInt())).willReturn(true);
-    given(categoryService.findById(anyInt())).willReturn(new Category("Sports & Outdoors"));
+    given(categoryService.findCategoryById(anyInt())).willReturn(new Category("Sports & Outdoors"));
 
     mockMvc.perform(get("/categories/{id}", 6)).andExpect(status().isUnauthorized());
 
     then(categoryService).should(never()).existsCategoryById(anyInt());
-    then(categoryService).should(never()).findById(anyInt());
+    then(categoryService).should(never()).findCategoryById(anyInt());
   }
 
   // addCategory
@@ -144,8 +144,8 @@ public class CategoryControllerTest {
   void addCategory_whenAdminSavesCategory_then201() throws Exception {
     // given
     Category category = new Category("Health, Fitness & Dieting");
-    given(categoryService.existsByName(category.getName())).willReturn(false);
-    given(categoryService.save(any(Category.class))).willReturn(category);
+    given(categoryService.existsCategoryByName(category.getName())).willReturn(false);
+    given(categoryService.saveCategory(any(Category.class))).willReturn(category);
 
     // when
     mockMvc
@@ -158,14 +158,14 @@ public class CategoryControllerTest {
         .andExpect(jsonPath("name").value("Health, Fitness & Dieting"));
 
     // then
-    then(categoryService).should().save(any(Category.class));
+    then(categoryService).should().saveCategory(any(Category.class));
   }
 
   @Test
   @WithMockUser(roles = {"ADMIN"})
   void addCategory_whenAdminSavesAlreadyExistingCategory_thenReturn400() throws Exception {
     Category category = new Category("Crafts, Hobbies & Home");
-    given(categoryService.existsByName(anyString())).willReturn(true);
+    given(categoryService.existsCategoryByName(anyString())).willReturn(true);
 
     mockMvc
         .perform(
@@ -176,8 +176,8 @@ public class CategoryControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("name").value("Category already exists"));
 
-    then(categoryService).should().existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should().existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   @Test
@@ -185,8 +185,8 @@ public class CategoryControllerTest {
   void addCategory_whenUserSavesCategory_then403() throws Exception {
     // given
     Category category = new Category("Health, Fitness & Dieting");
-    given(categoryService.existsByName(category.getName())).willReturn(false);
-    given(categoryService.save(any(Category.class))).willReturn(category);
+    given(categoryService.existsCategoryByName(category.getName())).willReturn(false);
+    given(categoryService.saveCategory(any(Category.class))).willReturn(category);
 
     // when
     mockMvc
@@ -198,7 +198,7 @@ public class CategoryControllerTest {
         .andExpect(status().isForbidden());
 
     // then
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   // Do I need to do this? The test earlier might suffice.
@@ -206,7 +206,7 @@ public class CategoryControllerTest {
   @WithMockUser
   void addCategory_whenUserSavesAlreadyExistingCategory_thenReturn403() throws Exception {
     Category category = new Category("Crafts, Hobbies & Home");
-    given(categoryService.existsByName(anyString())).willReturn(true);
+    given(categoryService.existsCategoryByName(anyString())).willReturn(true);
 
     mockMvc
         .perform(
@@ -216,16 +216,16 @@ public class CategoryControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isForbidden());
 
-    then(categoryService).should(never()).existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   @Test
   void addCategory_whenUnauthenticatedSavesCategory_then401() throws Exception {
     // given
     Category category = new Category("Health, Fitness & Dieting");
-    given(categoryService.existsByName(category.getName())).willReturn(false);
-    given(categoryService.save(any(Category.class))).willReturn(category);
+    given(categoryService.existsCategoryByName(category.getName())).willReturn(false);
+    given(categoryService.saveCategory(any(Category.class))).willReturn(category);
 
     // when
     mockMvc
@@ -237,8 +237,8 @@ public class CategoryControllerTest {
         .andExpect(status().isUnauthorized());
 
     // then
-    then(categoryService).should(never()).existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   @Test
@@ -256,8 +256,8 @@ public class CategoryControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("name").value("must not be null"));
 
-    then(categoryService).should(never()).existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   @Test
@@ -277,8 +277,8 @@ public class CategoryControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
 
-    then(categoryService).should(never()).existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   @Test
@@ -298,8 +298,8 @@ public class CategoryControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
 
-    then(categoryService).should(never()).existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   @Test
@@ -319,8 +319,8 @@ public class CategoryControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
 
-    then(categoryService).should(never()).existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   // updateCategory
@@ -335,9 +335,9 @@ public class CategoryControllerTest {
     String newCategoryName = "Engineering & Transportation";
     existingCategory.setId(categoryId);
 
-    given(categoryService.findById(categoryId)).willReturn(existingCategory);
-    given(categoryService.existsByName(newCategoryName)).willReturn(false);
-    given(categoryService.save(any(Category.class))).willReturn(existingCategory);
+    given(categoryService.findCategoryById(categoryId)).willReturn(existingCategory);
+    given(categoryService.existsCategoryByName(newCategoryName)).willReturn(false);
+    given(categoryService.saveCategory(any(Category.class))).willReturn(existingCategory);
 
     // When
     mockMvc
@@ -351,16 +351,16 @@ public class CategoryControllerTest {
         .andExpect(jsonPath("$.name").value(newCategoryName));
 
     // Then
-    then(categoryService).should().findById(categoryId);
-    then(categoryService).should().existsByName(newCategoryName);
-    then(categoryService).should().save(existingCategory);
+    then(categoryService).should().findCategoryById(categoryId);
+    then(categoryService).should().existsCategoryByName(newCategoryName);
+    then(categoryService).should().saveCategory(existingCategory);
     assertThat(newCategoryName).isEqualTo(existingCategory.getName());
   }
 
   @Test
   @WithMockUser(roles = {"ADMIN"})
   void updateCategory_whenAdminProvidesAlreadyExistingCategory_thenReturn400() throws Exception {
-    given(categoryService.existsByName(anyString())).willReturn(true);
+    given(categoryService.existsCategoryByName(anyString())).willReturn(true);
 
     mockMvc
         .perform(
@@ -376,8 +376,8 @@ public class CategoryControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("name").value("Category already exists"));
 
-    then(categoryService).should().existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should().existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   @Test
@@ -388,7 +388,7 @@ public class CategoryControllerTest {
     // I do not need to stub other statements, as the default are null and false
     // already
     // I also used specific id and name for then, as may be better?
-    given(categoryService.save(any(Category.class))).willReturn(new Category(categoryName));
+    given(categoryService.saveCategory(any(Category.class))).willReturn(new Category(categoryName));
 
     mockMvc
         .perform(
@@ -406,9 +406,9 @@ public class CategoryControllerTest {
         .andExpect(jsonPath("id").value(0))
         .andExpect(jsonPath("name").value(categoryName));
 
-    then(categoryService).should().findById(45);
-    then(categoryService).should().existsByName(categoryName);
-    then(categoryService).should().save(any(Category.class));
+    then(categoryService).should().findCategoryById(45);
+    then(categoryService).should().existsCategoryByName(categoryName);
+    then(categoryService).should().saveCategory(any(Category.class));
   }
 
   @Test
@@ -427,9 +427,9 @@ public class CategoryControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isForbidden());
 
-    then(categoryService).should(never()).findById(anyInt());
-    then(categoryService).should(never()).existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).findCategoryById(anyInt());
+    then(categoryService).should(never()).existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   @Test
@@ -447,9 +447,9 @@ public class CategoryControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isUnauthorized());
 
-    then(categoryService).should(never()).findById(anyInt());
-    then(categoryService).should(never()).existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).findCategoryById(anyInt());
+    then(categoryService).should(never()).existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   @Test
@@ -467,9 +467,9 @@ public class CategoryControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("name").value("must not be null"));
 
-    then(categoryService).should(never()).findById(anyInt());
-    then(categoryService).should(never()).existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).findCategoryById(anyInt());
+    then(categoryService).should(never()).existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   @Test
@@ -489,9 +489,9 @@ public class CategoryControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
 
-    then(categoryService).should(never()).findById(anyInt());
-    then(categoryService).should(never()).existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).findCategoryById(anyInt());
+    then(categoryService).should(never()).existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   @Test
@@ -511,9 +511,9 @@ public class CategoryControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
 
-    then(categoryService).should(never()).findById(anyInt());
-    then(categoryService).should(never()).existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).findCategoryById(anyInt());
+    then(categoryService).should(never()).existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   @Test
@@ -533,9 +533,9 @@ public class CategoryControllerTest {
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("name").value("Length must be between 3 and 50 characters"));
 
-    then(categoryService).should(never()).findById(anyInt());
-    then(categoryService).should(never()).existsByName(anyString());
-    then(categoryService).should(never()).save(any(Category.class));
+    then(categoryService).should(never()).findCategoryById(anyInt());
+    then(categoryService).should(never()).existsCategoryByName(anyString());
+    then(categoryService).should(never()).saveCategory(any(Category.class));
   }
 
   // deleteCategory
