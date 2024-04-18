@@ -74,14 +74,14 @@ public class BookController {
     }
 
     List<Category> categories = new ArrayList<>();
-    Set<String> uniqueCategoryNames = new HashSet<>();
+    Set<Integer> uniqueIds = new HashSet<>();
 
     for (Category category : book.getCategories()) {
-      if (!uniqueCategoryNames.add(category.getName())) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categories cannot be duplicated!");
+      if (!uniqueIds.add(category.getId())) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categories cannot be duplicate");
       }
 
-      Category existingCategory = categoryRepository.findByName(category.getName());
+      Category existingCategory = categoryRepository.findById(category.getId()).get();
       categories.add(existingCategory);
     }
 
