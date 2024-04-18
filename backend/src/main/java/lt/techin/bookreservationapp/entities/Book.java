@@ -55,8 +55,8 @@ public class Book {
       inverseJoinColumns = @JoinColumn(name = "Category_id"))
   @NotEmpty(message = "The categories field must not be empty")
   @NotNull(message = "The categories field must not be null")
-  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-  @JsonIdentityReference(alwaysAsId = true)
+  //  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+  //  @JsonIdentityReference(alwaysAsId = true)
   private List<Category> categories;
 
   @NotEmpty
