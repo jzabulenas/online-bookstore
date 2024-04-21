@@ -66,10 +66,11 @@ public class BookController {
 
   @PostMapping("/books")
   public ResponseEntity<String> addBook(@Valid @RequestBody Book book) {
+    if (bookService.existsBookByTitle(book.getTitle())) {
       return ResponseEntity.badRequest().body("Title already exists");
     }
 
-    if (bookRepository.existsByIsbn(book.getIsbn())) {
+    if (bookService.existsBookByIsbn(book.getIsbn())) {
       return ResponseEntity.badRequest().body("ISBN already exists");
     }
 
