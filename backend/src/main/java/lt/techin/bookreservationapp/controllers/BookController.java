@@ -78,7 +78,7 @@ public class BookController {
 
     for (Category category : book.getCategories()) {
       if (!uniqueIds.add(category.getId())) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categories cannot be duplicate");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Categories cannot be duplicate");
       }
 
       Category existingCategory = categoryRepository.findById(category.getId()).get();
