@@ -24,7 +24,8 @@ import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.entities.Book;
 import lt.techin.bookreservationapp.entities.Category;
 import lt.techin.bookreservationapp.repositories.BookRepository;
-import lt.techin.bookreservationapp.repositories.CategoryRepository;
+import lt.techin.bookreservationapp.services.BookService;
+import lt.techin.bookreservationapp.services.CategoryService;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -32,12 +33,16 @@ public class BookController {
 
   private final BookRepository bookRepository;
 
-  private final CategoryRepository categoryRepository;
+  private final CategoryService categoryService;
+
+  private final BookService bookService;
 
   @Autowired
-  public BookController(BookRepository bookRepository, CategoryRepository categoryRepository) {
+  public BookController(
+      BookRepository bookRepository, CategoryService categoryService, BookService bookService) {
     this.bookRepository = bookRepository;
-    this.categoryRepository = categoryRepository;
+    this.categoryService = categoryService;
+    this.bookService = bookService;
   }
 
   @GetMapping("/books")
