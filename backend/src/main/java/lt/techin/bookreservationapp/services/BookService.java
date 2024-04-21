@@ -2,9 +2,12 @@ package lt.techin.bookreservationapp.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import lt.techin.bookreservationapp.entities.Book;
 import lt.techin.bookreservationapp.repositories.BookRepository;
 
+@Service
 public class BookService {
 
   private final BookRepository bookRepository;

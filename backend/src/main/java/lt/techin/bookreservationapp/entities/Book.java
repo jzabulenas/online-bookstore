@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -52,6 +55,8 @@ public class Book {
       inverseJoinColumns = @JoinColumn(name = "Category_id"))
   @NotEmpty(message = "The categories field must not be empty")
   @NotNull(message = "The categories field must not be null")
+  //  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+  //  @JsonIdentityReference(alwaysAsId = true)
   private List<Category> categories;
 
   @NotEmpty

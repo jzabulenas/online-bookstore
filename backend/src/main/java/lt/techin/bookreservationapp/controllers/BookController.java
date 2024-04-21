@@ -65,26 +65,7 @@ public class BookController {
   }
 
   @PostMapping("/books")
-  public ResponseEntity<String> addBook(
-      @Valid @RequestBody Book book, BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
-      StringBuilder errorMessageBuilder = new StringBuilder();
-      List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-
-      for (int i = 0; i < fieldErrors.size(); i++) {
-        FieldError fieldError = fieldErrors.get(i);
-        errorMessageBuilder.append(fieldError.getDefaultMessage());
-
-        if (i < fieldErrors.size() - 1) {
-          errorMessageBuilder.append(" | ");
-        }
-      }
-
-      String errorMessage = errorMessageBuilder.toString();
-      return ResponseEntity.badRequest().body(errorMessage);
-    }
-
-    if (bookRepository.existsByTitle(book.getTitle())) {
+  public ResponseEntity<String> addBook(@Valid @RequestBody Book book) {
       return ResponseEntity.badRequest().body("Title already exists");
     }
 
@@ -93,14 +74,14 @@ public class BookController {
     }
 
     List<Category> categories = new ArrayList<>();
-    Set<String> uniqueCategoryNames = new HashSet<>();
+    Set<Integer> uniqueIds = new HashSet<>();
 
     for (Category category : book.getCategories()) {
-      if (!uniqueCategoryNames.add(category.getName())) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categories cannot be duplicated!");
+      if (!uniqueIds.add(category.getId())) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Categories cannot be duplicate");
       }
 
-      Category existingCategory = categoryRepository.findByName(category.getName());
+      Category existingCategory = categoryRepository.findById(category.getId()).get();
       categories.add(existingCategory);
     }
 
