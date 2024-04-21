@@ -100,7 +100,6 @@ public class BookController {
     }
 
     book.setCategories(categories);
-    bookRepository.save(book);
-    return ResponseEntity.status(HttpStatus.CREATED).build();
+    return ResponseEntity.status(HttpStatus.CREATED).body(bookRepository.save(book));
   }
 }
