@@ -95,6 +95,27 @@ public class Book {
           "Language must start with an uppercase letter, that can be followed by one or more lowercase letters")
   private String language;
 
+  public Book(
+      String title,
+      String author,
+      List<Category> categories,
+      String description,
+      String pictureUrl,
+      int pages,
+      String isbn,
+      LocalDate publicationDate,
+      String language) {
+    this.title = title;
+    this.author = author;
+    this.categories = categories;
+    this.description = description;
+    this.pictureUrl = pictureUrl;
+    this.pages = pages;
+    this.isbn = isbn;
+    this.publicationDate = publicationDate;
+    this.language = language;
+  }
+
   public int getId() {
     return id;
   }
