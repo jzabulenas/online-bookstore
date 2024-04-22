@@ -1,6 +1,7 @@
 package lt.techin.bookreservationapp.runner;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,8 @@ import lt.techin.bookreservationapp.services.CategoryService;
 import lt.techin.bookreservationapp.services.UserService;
 
 @Component
+// It will always match default application.properties, as it does not match any else
+@Profile("default")
 public class DatabaseInitializer implements CommandLineRunner {
 
   private final UserService userService;
