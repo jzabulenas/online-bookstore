@@ -35,4 +35,8 @@ public class BookService {
   public Book saveBook(Book book) {
     return bookRepository.save(book);
   }
+
+  public boolean existsBookById(int id) {
+    return bookRepository.existsById(id);
+  }
 }
