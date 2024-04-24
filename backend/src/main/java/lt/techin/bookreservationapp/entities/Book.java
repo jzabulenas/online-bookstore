@@ -48,7 +48,7 @@ public class Book {
           "Author's first and last name must start with an uppercase letter, that can be followed by one or more lowercase letters")
   private String author;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany
   @JoinTable(
       name = "Books_categories",
       joinColumns = @JoinColumn(name = "Book_id"),
