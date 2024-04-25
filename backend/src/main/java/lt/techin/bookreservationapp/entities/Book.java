@@ -116,6 +116,8 @@ public class Book {
     this.language = language;
   }
 
+  public Book() {}
+
   public int getId() {
     return id;
   }
