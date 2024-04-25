@@ -62,9 +62,9 @@ public class Book {
   @NotEmpty
   @Column(columnDefinition = "CLOB")
   @Pattern(
-      regexp = "^[A-Z].{0,299}$",
+      regexp = "^[A-Z].{0,399}$",
       message =
-          "Description should start with a capital letter and is limited to a maximum of 300 characters")
+          "Description should start with a capital letter and is limited to a maximum of 400 characters")
   private String description;
 
   @NotEmpty
