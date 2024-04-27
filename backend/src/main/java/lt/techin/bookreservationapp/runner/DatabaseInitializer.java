@@ -1,12 +1,17 @@
 package lt.techin.bookreservationapp.runner;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import lt.techin.bookreservationapp.entities.Book;
 import lt.techin.bookreservationapp.entities.Category;
 import lt.techin.bookreservationapp.entities.User;
+import lt.techin.bookreservationapp.services.BookService;
 import lt.techin.bookreservationapp.services.CategoryService;
 import lt.techin.bookreservationapp.services.UserService;
 
@@ -21,11 +26,17 @@ public class DatabaseInitializer implements CommandLineRunner {
 
   private final CategoryService categoryService;
 
+  private final BookService bookService;
+
   public DatabaseInitializer(
-      UserService userService, PasswordEncoder passwordEncoder, CategoryService categoryService) {
+      UserService userService,
+      PasswordEncoder passwordEncoder,
+      CategoryService categoryService,
+      BookService bookService) {
     this.userService = userService;
     this.passwordEncoder = passwordEncoder;
     this.categoryService = categoryService;
+    this.bookService = bookService;
   }
 
   @Override
@@ -50,6 +61,7 @@ public class DatabaseInitializer implements CommandLineRunner {
       userService.saveUser(regularUser);
     }
 
+    // Categories
     Category category1 = new Category("History");
     if (!categoryService.existsCategoryByName(category1.getName())) {
       categoryService.saveCategory(category1);
