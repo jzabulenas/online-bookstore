@@ -3,6 +3,7 @@ package lt.techin.bookreservationapp.entities;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -37,7 +38,10 @@ public class Book {
   //      message =
   //          "Book title must start with an uppercase letter, that can be followed by a mix of
   // alphanumeric characters, spaces, and certain punctuation marks")
-  @Pattern(regexp = "^((?!\\s{2}).)*$", message = "Cannot have more than one consecutive space")
+  // @Pattern(regexp = "^((?!\\s{2}).)*$", message = "Cannot contain more than one consecutive
+  // space")
+  @Pattern(regexp = "^(?!.*\\s{2}).*$", message = "Cannot contain more than one consecutive space")
+  @Length(min = 3, max = 150, message = "Must be between 3 and 150 characters long")
   @Column(unique = true)
   private String title;
 
