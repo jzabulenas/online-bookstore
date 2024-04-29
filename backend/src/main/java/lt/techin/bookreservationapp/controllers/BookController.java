@@ -11,8 +11,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +22,8 @@ import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.entities.Book;
 import lt.techin.bookreservationapp.entities.Category;
 import lt.techin.bookreservationapp.repositories.BookRepository;
-import lt.techin.bookreservationapp.repositories.CategoryRepository;
+import lt.techin.bookreservationapp.services.BookService;
+import lt.techin.bookreservationapp.services.CategoryService;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -32,12 +31,16 @@ public class BookController {
 
   private final BookRepository bookRepository;
 
-  private final CategoryRepository categoryRepository;
+  private final CategoryService categoryService;
+
+  private final BookService bookService;
 
   @Autowired
-  public BookController(BookRepository bookRepository, CategoryRepository categoryRepository) {
+  public BookController(
+      BookRepository bookRepository, CategoryService categoryService, BookService bookService) {
     this.bookRepository = bookRepository;
-    this.categoryRepository = categoryRepository;
+    this.categoryService = categoryService;
+    this.bookService = bookService;
   }
 
   @GetMapping("/books")
@@ -65,12 +68,17 @@ public class BookController {
   }
 
   @PostMapping("/books")
-  public ResponseEntity<String> addBook(@Valid @RequestBody Book book) {
-      return ResponseEntity.badRequest().body("Title already exists");
+  public ResponseEntity<?> addBook(@Valid @RequestBody Book book) {
+    Map<String, String> responseJson = new HashMap<String, String>();
+
+    if (bookService.existsBookByTitle(book.getTitle())) {
+      responseJson.put("title", "Already exists");
+      return ResponseEntity.badRequest().body(responseJson);
     }
 
-    if (bookRepository.existsByIsbn(book.getIsbn())) {
-      return ResponseEntity.badRequest().body("ISBN already exists");
+    if (bookService.existsBookByIsbn(book.getIsbn())) {
+      responseJson.put("isbn", "Already exists");
+      return ResponseEntity.badRequest().body(responseJson);
     }
 
     List<Category> categories = new ArrayList<>();
@@ -78,19 +86,20 @@ public class BookController {
 
     for (Category category : book.getCategories()) {
       if (!uniqueIds.add(category.getId())) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Categories cannot be duplicate");
+        responseJson.put("categories", "Cannot be duplicate");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseJson);
       }
 
-      Category existingCategory = categoryRepository.findById(category.getId()).get();
+      Category existingCategory = categoryService.findCategoryById(category.getId());
       categories.add(existingCategory);
     }
 
     if (categories.contains(null)) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No such categories exist!");
+      responseJson.put("categories", "Does not exist");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseJson);
     }
 
     book.setCategories(categories);
-    bookRepository.save(book);
-    return ResponseEntity.status(HttpStatus.CREATED).build();
+    return ResponseEntity.status(HttpStatus.CREATED).body(bookService.saveBook(book));
   }
 }

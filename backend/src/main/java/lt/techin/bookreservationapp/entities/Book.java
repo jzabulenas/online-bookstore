@@ -48,7 +48,7 @@ public class Book {
           "Author's first and last name must start with an uppercase letter, that can be followed by one or more lowercase letters")
   private String author;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany
   @JoinTable(
       name = "Books_categories",
       joinColumns = @JoinColumn(name = "Book_id"),
@@ -62,9 +62,9 @@ public class Book {
   @NotEmpty
   @Column(columnDefinition = "CLOB")
   @Pattern(
-      regexp = "^[A-Z].{0,299}$",
+      regexp = "^[A-Z].{0,399}$",
       message =
-          "Description should start with a capital letter and is limited to a maximum of 300 characters")
+          "Description should start with a capital letter and is limited to a maximum of 400 characters")
   private String description;
 
   @NotEmpty
@@ -94,6 +94,29 @@ public class Book {
       message =
           "Language must start with an uppercase letter, that can be followed by one or more lowercase letters")
   private String language;
+
+  public Book(
+      String title,
+      String author,
+      List<Category> categories,
+      String description,
+      String pictureUrl,
+      int pages,
+      String isbn,
+      LocalDate publicationDate,
+      String language) {
+    this.title = title;
+    this.author = author;
+    this.categories = categories;
+    this.description = description;
+    this.pictureUrl = pictureUrl;
+    this.pages = pages;
+    this.isbn = isbn;
+    this.publicationDate = publicationDate;
+    this.language = language;
+  }
+
+  public Book() {}
 
   public int getId() {
     return id;
