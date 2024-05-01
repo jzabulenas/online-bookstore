@@ -5,11 +5,7 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,13 +29,6 @@ public class Book {
   private int id;
 
   @NotEmpty
-  //  @Pattern(
-  //      regexp = "^[A-Z0-9][a-zA-Z0-9 .,:'\"!?&()-]+$",
-  //      message =
-  //          "Book title must start with an uppercase letter, that can be followed by a mix of
-  // alphanumeric characters, spaces, and certain punctuation marks")
-  // @Pattern(regexp = "^((?!\\s{2}).)*$", message = "Cannot contain more than one consecutive
-  // space")
   @Pattern(regexp = "^(?!.*\\s{2}).*$", message = "Cannot contain more than one consecutive space")
   @Length(min = 3, max = 150, message = "Must be between 3 and 150 characters long")
   @Column(unique = true)
@@ -81,11 +70,11 @@ public class Book {
   @Min(value = 1, message = "Pages field must have a value greater than 0")
   private int pages;
 
-  @NotEmpty
-  @Pattern(
-      regexp = "((978[\\--– ])?[0-9][0-9\\--– ]{10}[\\--– ][0-9xX])|((978)?[0-9]{9}[0-9Xx])",
-      message = "ISBN is incorrect")
-  @Column(unique = true)
+  //  @NotEmpty
+  //  @Pattern(
+  //      regexp = "((978[\\--– ])?[0-9][0-9\\--– ]{10}[\\--– ][0-9xX])|((978)?[0-9]{9}[0-9Xx])",
+  //      message = "ISBN is incorrect")
+  //  @Column(unique = true)
   private String isbn;
 
   @NotNull(message = "Publication date field cannot be null")
