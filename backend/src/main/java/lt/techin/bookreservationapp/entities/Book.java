@@ -30,7 +30,7 @@ public class Book {
 
   @NotEmpty
   @Pattern(regexp = "^(?!.*\\s{2}).*$", message = "Cannot contain more than one consecutive space")
-  @Length(min = 3, max = 150, message = "Must be between 3 and 150 characters long")
+  @Length(min = 1, max = 255, message = "Must be between 1 and 255 characters long")
   @Column(unique = true)
   private String title;
 
@@ -39,6 +39,7 @@ public class Book {
       regexp = "^[A-Z][a-z]+ [A-Z][a-z]+$",
       message =
           "Author's first and last name must start with an uppercase letter, that can be followed by one or more lowercase letters")
+  @Length(min = 5, max = 255, message = "Must be between 5 and 255 characters long")
   private String author;
 
   @ManyToMany
