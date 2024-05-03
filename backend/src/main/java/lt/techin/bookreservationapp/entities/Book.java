@@ -52,12 +52,11 @@ public class Book {
   //  @JsonIdentityReference(alwaysAsId = true)
   private List<Category> categories;
 
-  @NotEmpty
-  @Column(columnDefinition = "CLOB")
-  @Pattern(
-      regexp = "^[A-Z].{0,399}$",
-      message =
-          "Description should start with a capital letter and is limited to a maximum of 400 characters")
+  @NotEmpty(message = "Cannot be null or empty")
+  @Column(length = 500)
+  @Length(min = 1, max = 500, message = "Must be between 1 and 500 characters long")
+  @Pattern(regexp = "^[A-Z].*$", message = "Must start with capital letter")
+  @Pattern(regexp = "^(?!.*\\s{2}).*$", message = "Cannot contain more than one consecutive space")
   private String description;
 
   @NotEmpty
