@@ -32,7 +32,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lt.techin.bookreservationapp.controllers.CategoryController;
 import lt.techin.bookreservationapp.entities.Category;
-import lt.techin.bookreservationapp.repositories.CategoryRepository;
 import lt.techin.bookreservationapp.security.SecurityConfig;
 import lt.techin.bookreservationapp.services.CategoryService;
 
@@ -43,8 +42,6 @@ public class CategoryControllerTest {
   @Autowired private MockMvc mockMvc;
 
   @MockBean private CategoryService categoryService;
-
-  @MockBean private CategoryRepository categoryRepository;
 
   // getCategories
 
@@ -248,7 +245,8 @@ public class CategoryControllerTest {
         .perform(
             post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""
+                .content(
+                    """
                 		{
                 		}
                 		""")
@@ -459,7 +457,8 @@ public class CategoryControllerTest {
         .perform(
             put("/categories/{id}", 3)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""
+                .content(
+                    """
                 		{
                 		}
                 		""")

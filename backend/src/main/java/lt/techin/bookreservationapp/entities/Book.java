@@ -3,12 +3,9 @@ package lt.techin.bookreservationapp.entities;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,12 +29,8 @@ public class Book {
   private int id;
 
   @NotEmpty
-  //  @Pattern(
-  //      regexp = "^[A-Z0-9][a-zA-Z0-9 .,:'\"!?&()-]+$",
-  //      message =
-  //          "Book title must start with an uppercase letter, that can be followed by a mix of
-  // alphanumeric characters, spaces, and certain punctuation marks")
-  @Pattern(regexp = "^((?!\\s{2}).)*$", message = "Cannot have more than one consecutive space")
+  @Pattern(regexp = "^(?!.*\\s{2}).*$", message = "Cannot contain more than one consecutive space")
+  @Length(min = 1, max = 255, message = "Must be between 1 and 255 characters long")
   @Column(unique = true)
   private String title;
 
@@ -46,6 +39,7 @@ public class Book {
       regexp = "^[A-Z][a-z]+ [A-Z][a-z]+$",
       message =
           "Author's first and last name must start with an uppercase letter, that can be followed by one or more lowercase letters")
+  @Length(min = 5, max = 255, message = "Must be between 5 and 255 characters long")
   private String author;
 
   @ManyToMany
@@ -53,18 +47,16 @@ public class Book {
       name = "Books_categories",
       joinColumns = @JoinColumn(name = "Book_id"),
       inverseJoinColumns = @JoinColumn(name = "Category_id"))
-  @NotEmpty(message = "The categories field must not be empty")
-  @NotNull(message = "The categories field must not be null")
+  @NotEmpty(message = "Must not be null or empty")
   //  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
   //  @JsonIdentityReference(alwaysAsId = true)
   private List<Category> categories;
 
-  @NotEmpty
-  @Column(columnDefinition = "CLOB")
-  @Pattern(
-      regexp = "^[A-Z].{0,399}$",
-      message =
-          "Description should start with a capital letter and is limited to a maximum of 400 characters")
+  @NotEmpty(message = "Cannot be null or empty")
+  @Column(length = 500)
+  @Length(min = 1, max = 500, message = "Must be between 1 and 500 characters long")
+  @Pattern(regexp = "^[A-Z].*$", message = "Must start with capital letter")
+  @Pattern(regexp = "^(?!.*\\s{2}).*$", message = "Cannot contain more than one consecutive space")
   private String description;
 
   @NotEmpty
@@ -77,11 +69,11 @@ public class Book {
   @Min(value = 1, message = "Pages field must have a value greater than 0")
   private int pages;
 
-  @NotEmpty
-  @Pattern(
-      regexp = "((978[\\--– ])?[0-9][0-9\\--– ]{10}[\\--– ][0-9xX])|((978)?[0-9]{9}[0-9Xx])",
-      message = "ISBN is incorrect")
-  @Column(unique = true)
+  //  @NotEmpty
+  //  @Pattern(
+  //      regexp = "((978[\\--– ])?[0-9][0-9\\--– ]{10}[\\--– ][0-9xX])|((978)?[0-9]{9}[0-9Xx])",
+  //      message = "ISBN is incorrect")
+  //  @Column(unique = true)
   private String isbn;
 
   @NotNull(message = "Publication date field cannot be null")
