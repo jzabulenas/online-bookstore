@@ -1,6 +1,8 @@
 package lt.techin.bookreservationapp;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,8 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import lt.techin.bookreservationapp.controllers.BookController;
 import lt.techin.bookreservationapp.entities.Book;
@@ -38,13 +38,17 @@ public class BookControllerTest {
   @Test
   @WithUserDetails
   void getBooks_whenAuthenticatedCalls_thenReturnBooksAnd200() throws Exception {
-    Category educationTeaching = new Category("Education & Teaching");
-    Category businessMoney = new Category("Business & Money");
-    Category scienceMath = new Category("Science & Math");
+    Book book = createTestBook1();
 
+    given(bookService.findAllBooks()).willReturn(List.of(book));
+
+    mockMvc.perform(get("/books")).andExpect(status().isOk());
+  }
+
+  Book createTestBook1() {
     Book book = new Book();
     book.setAuthor("Patrick King");
-    book.setCategories(List.of(educationTeaching, businessMoney, scienceMath));
+    book.setCategories(createTestCategories1());
     book.setDescription(
         " Speed read people, decipher body language, detect lies, and understand human nature.\n"
             + "Is it possible to analyze people without them saying a word? Yes, it is. Learn how to become a “mind reader” and forge deep connections.\n"
@@ -62,11 +66,13 @@ public class BookControllerTest {
     book.setTitle(
         "Read People Like a Book: How to Analyze, Understand, and Predict People’s Emotions, Thoughts, Intentions, and Behaviors");
 
-    // Change to service
-    given(bookRepository.findAll()).willReturn(List.of(book));
+    return book;
+  }
 
-    mockMvc
-        .perform(MockMvcRequestBuilders.get("/books"))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+  List<Category> createTestCategories1() {
+    Category educationTeaching = new Category("Education & Teaching");
+    Category businessMoney = new Category("Business & Money");
+    Category scienceMath = new Category("Science & Math");
+    return List.of(educationTeaching, businessMoney, scienceMath);
   }
 }
