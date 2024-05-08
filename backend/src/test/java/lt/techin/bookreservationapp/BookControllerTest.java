@@ -69,6 +69,22 @@ public class BookControllerTest {
     return book;
   }
 
+  Book createTestBook2() {
+    Book book = new Book();
+    book.setAuthor("Emily Henry");
+    book.setCategories(createTestCategories2());
+    book.setDescription(
+        "Daphne always loved the way her fiancé Peter told their story. How they met (on a blustery day), fell in love (over an errant hat), and moved back to his lakeside hometown to begin their life together. He really was good at telling it…right up until the moment he realized he was actually in love with his childhood best friend Petra.\n"
+            + "Which is how Daphne begins her new story: Stranded in beautiful Waning Bay, Michigan, without friends or family but with a dream job as a children’s librarian (that barely pays the bills), and proposing to be roommates with the only person who could possibly understand her predicament: Petra’s ex, Miles Nowak.\n"
+            + "Scruffy and chaotic—with a penchant for taking solace in the sounds of heart break love ballads—Miles is exactly the opposite of practical, buttoned up Daphne, whose coworkers know so little about her they have a running bet that she’s either FBI or in witness protection. The roommates mainly avoid one another, until one day, while drowning their sorrows, they form a tenuous friendship and a plan. If said plan also involves posting deliberately misleading photos of their summer adventures together, well, who could blame them?\n"
+            + "But it’s all just for show, of course, because there’s no way Daphne would actually start her new chapter by falling in love with her ex-fiancé’s new fiancée’s ex…right?");
+    book.setIsbn("9780593441282");
+    book.setPublicationDate(LocalDate.of(2024, 04, 23));
+    book.setTitle("Funny Story");
+
+    return book;
+  }
+
   List<Category> createTestCategories1() {
     Category educationTeaching = new Category("Education & Teaching");
     Category businessMoney = new Category("Business & Money");
