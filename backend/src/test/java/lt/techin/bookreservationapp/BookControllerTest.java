@@ -1,7 +1,9 @@
 package lt.techin.bookreservationapp;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
@@ -38,11 +40,37 @@ public class BookControllerTest {
   @Test
   @WithUserDetails
   void getBooks_whenAuthenticatedCalls_thenReturnBooksAnd200() throws Exception {
-    Book book = createTestBook1();
+    Book book1 = createTestBook1();
+    Book book2 = createTestBook2();
 
-    given(bookService.findAllBooks()).willReturn(List.of(book));
+    given(bookService.findAllBooks()).willReturn(List.of(book1, book2));
 
-    mockMvc.perform(get("/books")).andExpect(status().isOk());
+    mockMvc
+        .perform(get("/books"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(2)))
+        .andExpect(jsonPath("[0].author").value(book1.getAuthor()))
+        .andExpect(jsonPath("[0].categories[0].name").value(book1.getCategories().get(0).getName()))
+        .andExpect(jsonPath("[0].categories[1].name").value(book1.getCategories().get(1).getName()))
+        .andExpect(jsonPath("[0].categories[2].name").value(book1.getCategories().get(2).getName()))
+        .andExpect(jsonPath("[0].description").value(book1.getDescription()))
+        .andExpect(jsonPath("[0].isbn").value(book1.getIsbn()))
+        .andExpect(jsonPath("[0].publicationDate").value(book1.getPublicationDate() + ""))
+        .andExpect(jsonPath("[0].title").value(book1.getTitle()))
+        .andExpect(jsonPath("[0].pictureUrl").value(book1.getPictureUrl()))
+        .andExpect(jsonPath("[0].pages").value(book1.getPages()))
+        .andExpect(jsonPath("[0].language").value(book1.getLanguage()))
+        // Second book
+        .andExpect(jsonPath("[1].author").value(book2.getAuthor()))
+        .andExpect(jsonPath("[1].categories[0].name").value(book2.getCategories().get(0).getName()))
+        .andExpect(jsonPath("[1].categories[1].name").value(book2.getCategories().get(1).getName()))
+        .andExpect(jsonPath("[1].description").value(book2.getDescription()))
+        .andExpect(jsonPath("[1].isbn").value(book2.getIsbn()))
+        .andExpect(jsonPath("[1].publicationDate").value(book2.getPublicationDate() + ""))
+        .andExpect(jsonPath("[1].title").value(book2.getTitle()))
+        .andExpect(jsonPath("[1].pictureUrl").value(book2.getPictureUrl()))
+        .andExpect(jsonPath("[1].pages").value(book2.getPages()))
+        .andExpect(jsonPath("[1].language").value(book2.getLanguage()));
   }
 
   Book createTestBook1() {
