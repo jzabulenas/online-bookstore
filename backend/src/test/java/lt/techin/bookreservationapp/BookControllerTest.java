@@ -65,6 +65,9 @@ public class BookControllerTest {
     book.setPublicationDate(LocalDate.of(2020, 12, 7));
     book.setTitle(
         "Read People Like a Book: How to Analyze, Understand, and Predict People’s Emotions, Thoughts, Intentions, and Behaviors");
+    book.setPictureUrl("https://m.media-amazon.com/images/I/61BqxChoN2L._SL1500_.jpg");
+    book.setPages(278);
+    book.setLanguage("English");
 
     return book;
   }
@@ -81,6 +84,9 @@ public class BookControllerTest {
     book.setIsbn("9780593441282");
     book.setPublicationDate(LocalDate.of(2024, 04, 23));
     book.setTitle("Funny Story");
+    book.setPictureUrl("https://m.media-amazon.com/images/I/71ajiVevZgL._SL1500_.jpg");
+    book.setPages(395);
+    book.setLanguage("English");
 
     return book;
   }
@@ -90,5 +96,11 @@ public class BookControllerTest {
     Category businessMoney = new Category("Business & Money");
     Category scienceMath = new Category("Science & Math");
     return List.of(educationTeaching, businessMoney, scienceMath);
+  }
+
+  List<Category> createTestCategories2() {
+    Category literatureFiction = new Category("Literature & Fiction");
+    Category romanticComedy = new Category("Romantic Comedy");
+    return List.of(literatureFiction, romanticComedy);
   }
 }
