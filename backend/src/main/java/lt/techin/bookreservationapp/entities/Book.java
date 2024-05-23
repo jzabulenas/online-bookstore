@@ -48,6 +48,7 @@ public class Book {
       joinColumns = @JoinColumn(name = "Book_id"),
       inverseJoinColumns = @JoinColumn(name = "Category_id"))
   @NotEmpty(message = "Must not be null or empty")
+  //  Used for serializing only as an id
   //  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
   //  @JsonIdentityReference(alwaysAsId = true)
   private List<Category> categories;
