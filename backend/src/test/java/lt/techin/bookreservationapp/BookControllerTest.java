@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import lt.techin.bookreservationapp.controllers.BookController;
 import lt.techin.bookreservationapp.entities.Book;
 import lt.techin.bookreservationapp.entities.Category;
-import lt.techin.bookreservationapp.repositories.BookRepository;
 import lt.techin.bookreservationapp.security.SecurityConfig;
 import lt.techin.bookreservationapp.services.BookService;
 import lt.techin.bookreservationapp.services.CategoryService;
@@ -33,8 +32,6 @@ public class BookControllerTest {
   @Autowired private MockMvc mockMvc;
 
   @MockBean private BookService bookService;
-
-  @MockBean private BookRepository bookRepository;
 
   @MockBean private CategoryService categoryService;
 
