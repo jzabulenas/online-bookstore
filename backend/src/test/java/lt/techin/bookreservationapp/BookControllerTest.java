@@ -2,6 +2,7 @@ package lt.techin.bookreservationapp;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -71,8 +72,11 @@ public class BookControllerTest {
         .andExpect(jsonPath("[1].pictureUrl").value(book2.getPictureUrl()))
         .andExpect(jsonPath("[1].pages").value(book2.getPages()))
         .andExpect(jsonPath("[1].language").value(book2.getLanguage()));
+
+    then(bookService).should().findAllBooks();
   }
 
+  // Precreate some books and categories
   Book createTestBook1() {
     Book book = new Book();
     book.setAuthor("Patrick King");
