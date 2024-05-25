@@ -3,6 +3,7 @@ package lt.techin.bookreservationapp;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.never;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -71,6 +72,13 @@ public class BookControllerTest {
         .andExpect(jsonPath("[1].language").value(book2.getLanguage()));
 
     then(bookService).should().findAllBooks();
+  }
+
+  @Test
+  void getBooks_whenUnauthenitcatedCalls_thenReturn401() throws Exception {
+    mockMvc.perform(get("/books")).andExpect(status().isUnauthorized());
+
+    then(bookService).should(never()).findAllBooks();
   }
 
   // Precreate some books and categories
