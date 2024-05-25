@@ -75,6 +75,19 @@ public class BookControllerTest {
   }
 
   @Test
+  @WithUserDetails
+  void getBooks_whenAuthenticatedCallsAndListEmpty_thenReturnResponseAnd404() throws Exception {
+    given(bookService.findAllBooks()).willReturn(List.of());
+
+    mockMvc
+        .perform(get("/books"))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("message").value("No books found"));
+
+    then(bookService).should().findAllBooks();
+  }
+
+  @Test
   void getBooks_whenUnauthenitcatedCalls_thenReturn401() throws Exception {
     mockMvc.perform(get("/books")).andExpect(status().isUnauthorized());
 
