@@ -1,4 +1,6 @@
-	Tests
+Tests
+
+Categories
 
 getCategories
 	whenAuthenticatedCalls_thenReturnList
@@ -40,4 +42,11 @@ deleteCategory
 	whenUserTriesDeleteCategory_thenReturn403
 	whenUnauthenticatedTriesDeleteCategory_thenReturn401
 	
-	
+------------------------------------------------------------------
+
+Books
+
+getBooks
+	whenAuthenticatedCalls_thenReturnBooksAnd200
+	whenAuthenticatedCallsAndListEmpty_thenReturnResponseAnd404
+	getBooks_whenUnauthenitcatedCalls_thenReturn401

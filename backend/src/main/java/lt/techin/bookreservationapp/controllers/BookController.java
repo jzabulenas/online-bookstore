@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.entities.Book;
 import lt.techin.bookreservationapp.entities.Category;
-import lt.techin.bookreservationapp.repositories.BookRepository;
 import lt.techin.bookreservationapp.services.BookService;
 import lt.techin.bookreservationapp.services.CategoryService;
 
@@ -29,23 +27,19 @@ import lt.techin.bookreservationapp.services.CategoryService;
 @RestController
 public class BookController {
 
-  private final BookRepository bookRepository;
-
   private final CategoryService categoryService;
 
   private final BookService bookService;
 
   @Autowired
-  public BookController(
-      BookRepository bookRepository, CategoryService categoryService, BookService bookService) {
-    this.bookRepository = bookRepository;
+  public BookController(CategoryService categoryService, BookService bookService) {
     this.categoryService = categoryService;
     this.bookService = bookService;
   }
 
   @GetMapping("/books")
   public ResponseEntity<?> getBooks() {
-    List<Book> books = bookRepository.findAll();
+    List<Book> books = bookService.findAllBooks();
 
     if (!books.isEmpty()) {
       return ResponseEntity.ok(books);
@@ -58,13 +52,13 @@ public class BookController {
 
   @GetMapping("/books/{id}")
   public ResponseEntity<Book> getBook(@PathVariable int id) {
+    Book book = bookService.findBookById(id);
 
-    Optional<Book> book = bookRepository.findById(id);
-    if (book.isPresent()) {
-      return ResponseEntity.ok(book.get());
+    if (book == null) {
+      return ResponseEntity.notFound().build();
     }
 
-    return ResponseEntity.notFound().build();
+    return ResponseEntity.ok(book);
   }
 
   @PostMapping("/books")
