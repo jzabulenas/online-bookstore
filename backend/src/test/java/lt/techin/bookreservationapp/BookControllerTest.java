@@ -1,10 +1,12 @@
 package lt.techin.bookreservationapp;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -92,6 +95,35 @@ public class BookControllerTest {
     mockMvc.perform(get("/books")).andExpect(status().isUnauthorized());
 
     then(bookService).should(never()).findAllBooks();
+  }
+
+  // getBook
+
+  @Test
+  @WithUserDetails
+  void getBook_whenAuthenticatedCalls_thenReturnBookAnd200() throws Exception {
+    Book book1 = createTestBook1();
+    int id = 16;
+
+    given(bookService.findBookById(id)).willReturn(book1);
+
+    mockMvc
+        .perform(get("/books/{id}", id))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("author", is(book1.getAuthor())))
+        .andExpect(jsonPath("categories[0].name", is(book1.getCategories().get(0).getName())))
+        .andExpect(jsonPath("categories[1].name", is(book1.getCategories().get(1).getName())))
+        .andExpect(jsonPath("categories[2].name", is(book1.getCategories().get(2).getName())))
+        .andExpect(jsonPath("description", is(book1.getDescription())))
+        .andExpect(jsonPath("isbn", is(book1.getIsbn())))
+        .andExpect(jsonPath("publicationDate", is(book1.getPublicationDate().toString())))
+        .andExpect(jsonPath("title", is(book1.getTitle())))
+        .andExpect(jsonPath("pictureUrl", is(book1.getPictureUrl())))
+        .andExpect(jsonPath("pages", is(book1.getPages())))
+        .andExpect(jsonPath("language", is(book1.getLanguage())));
+
+    then(bookService).should().findBookById(id);
   }
 
   // Precreate some books and categories
