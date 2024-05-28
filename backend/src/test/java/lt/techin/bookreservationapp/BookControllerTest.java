@@ -126,6 +126,15 @@ public class BookControllerTest {
     then(bookService).should().findBookById(id);
   }
 
+  @Test
+  void getBook_whenUnauthenticatedCalls_thenReturn401() throws Exception {
+    int id = 78;
+
+    mockMvc.perform(get("/books/{id}", id)).andExpect(status().isUnauthorized());
+
+    then(bookService).should(never()).findBookById(id);
+  }
+
   // Precreate some books and categories
   Book createTestBook1() {
     Book book = new Book();

@@ -49,4 +49,9 @@ Books
 getBooks
 	whenAuthenticatedCalls_thenReturnBooksAnd200
 	whenAuthenticatedCallsAndListEmpty_thenReturnResponseAnd404
-	getBooks_whenUnauthenitcatedCalls_thenReturn401
+	whenUnauthenitcatedCalls_thenReturn401
+	
+getBook
+	whenAuthenticatedCalls_thenReturnBookAnd200
+	whenUnauthenticatedCalls_thenReturn401
+	
