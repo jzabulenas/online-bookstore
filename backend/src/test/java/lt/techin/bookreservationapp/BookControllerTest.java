@@ -127,6 +127,18 @@ public class BookControllerTest {
   }
 
   @Test
+  @WithUserDetails
+  void getBook_whenBookIsNonExistent_thenReturn404() throws Exception {
+    int id = 81;
+
+    given(bookService.findBookById(id)).willReturn(null);
+
+    mockMvc.perform(get("/books/{id}", id)).andExpect(status().isNotFound());
+
+    then(bookService).should().findBookById(id);
+  }
+
+  @Test
   void getBook_whenUnauthenticatedCalls_thenReturn401() throws Exception {
     int id = 78;
 
