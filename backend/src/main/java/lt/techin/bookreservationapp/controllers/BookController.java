@@ -51,11 +51,13 @@ public class BookController {
   }
 
   @GetMapping("/books/{id}")
-  public ResponseEntity<Book> getBook(@PathVariable int id) {
+  public ResponseEntity<?> getBook(@PathVariable int id) {
     Book book = bookService.findBookById(id);
 
     if (book == null) {
-      return ResponseEntity.notFound().build();
+      Map<String, String> response = new HashMap<>();
+      response.put("message", "Book with Id " + id + " not found");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     return ResponseEntity.ok(book);
