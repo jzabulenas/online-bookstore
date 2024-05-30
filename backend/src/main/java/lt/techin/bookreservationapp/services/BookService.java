@@ -21,7 +21,7 @@ public class BookService {
   }
 
   public Book findBookById(int id) {
-    return bookRepository.findById(id).orElseThrow();
+    return bookRepository.findById(id).orElse(null);
   }
 
   public boolean existsBookByTitle(String title) {
