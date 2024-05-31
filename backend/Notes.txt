@@ -53,5 +53,6 @@ getBooks
 	
 getBook
 	whenAuthenticatedCalls_thenReturnBookAnd200
+	whenBookIsNonExistent_thenReturn404
 	whenUnauthenticatedCalls_thenReturn401
 	
