@@ -133,7 +133,10 @@ public class BookControllerTest {
 
     given(bookService.findBookById(id)).willReturn(null);
 
-    mockMvc.perform(get("/books/{id}", id)).andExpect(status().isNotFound());
+    mockMvc
+        .perform(get("/books/{id}", id))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("message", is("Book with Id " + id + " not found")));
 
     then(bookService).should().findBookById(id);
   }
