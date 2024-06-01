@@ -54,8 +54,8 @@ public class Book {
   private List<Category> categories;
 
   @NotEmpty(message = "Cannot be null or empty")
-  @Column(length = 500)
-  @Length(min = 1, max = 500, message = "Must be between 1 and 500 characters long")
+  @Column(length = 2000)
+  @Length(min = 1, max = 2000, message = "Must be between 1 and 500 characters long")
   @Pattern(regexp = "^[A-Z].*$", message = "Must start with capital letter")
   @Pattern(regexp = "^(?!.*\\s{2}).*$", message = "Cannot contain more than one consecutive space")
   private String description;
