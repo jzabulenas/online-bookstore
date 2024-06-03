@@ -284,6 +284,7 @@ public class BookControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("length()", is(1)))
         .andExpect(jsonPath("title", is("Already exists")));
 
     then(bookService).should().existsBookByTitle(book1.getTitle());
