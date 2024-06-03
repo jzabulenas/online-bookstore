@@ -3,6 +3,8 @@ package lt.techin.bookreservationapp;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
@@ -228,6 +230,68 @@ public class BookControllerTest {
     then(categoryService).should().findCategoryById(categoryId2);
     then(categoryService).should().findCategoryById(categoryId3);
     then(bookService).should().saveBook(any(Book.class));
+  }
+
+  @Test
+  @WithUserDetails
+  void addBook_whenBookExistsByTitle_thenReturnResponseBodyAnd400() throws Exception {
+    Book book1 = createTestBook1();
+    int categoryId1 = 89;
+    int categoryId2 = 20;
+    int categoryId3 = 46;
+    given(bookService.existsBookByTitle(book1.getTitle())).willReturn(true);
+
+    mockMvc
+        .perform(
+            post("/books")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+	        		{
+	        		  "author": "%s",
+	        		  "categories": [
+	        		    {
+	        		      "id": "%s"
+	        		    },
+	        		    {
+	        		      "id" : "%s"
+	        		    },
+	        		    {
+	        		      "id": "%s"
+	        		    }
+	        		  ],
+	        		  "description": "%s",
+	        		  "isbn": "%s",
+	        		  "publicationDate": "%s",
+	        		  "title": "%s",
+	        		  "pictureUrl": "%s",
+	        		  "pages": "%s",
+	        		  "language": "%s"
+	        		}
+	        		"""
+                        .formatted(
+                            book1.getAuthor(),
+                            categoryId1,
+                            categoryId2,
+                            categoryId3,
+                            book1.getDescription(),
+                            book1.getIsbn(),
+                            book1.getPublicationDate(),
+                            book1.getTitle(),
+                            book1.getPictureUrl(),
+                            book1.getPages(),
+                            book1.getLanguage()))
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("title", is("Already exists")));
+
+    then(bookService).should().existsBookByTitle(book1.getTitle());
+    then(bookService).should(never()).existsBookByIsbn(anyString());
+    then(categoryService).should(never()).findCategoryById(anyInt());
+    then(categoryService).should(never()).findCategoryById(anyInt());
+    then(categoryService).should(never()).findCategoryById(anyInt());
+    then(bookService).should(never()).saveBook(any(Book.class));
   }
 
   // Precreate some books and categories
