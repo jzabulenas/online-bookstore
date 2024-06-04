@@ -56,3 +56,8 @@ getBook
 	whenBookIsNonExistent_thenReturn404
 	whenUnauthenticatedCalls_thenReturn401
 	
+addBook
+	whenAddBook_thenReturnBodyAnd201
+	whenBookExistsByTitle_thenReturnResponseBodyAnd400
+	whenBookExistsByIsbn_returnResponseBodyAnd400
+	
