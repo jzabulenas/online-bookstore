@@ -359,6 +359,68 @@ public class BookControllerTest {
     then(bookService).should(never()).saveBook(any(Book.class));
   }
 
+  @Test
+  @WithUserDetails
+  void addBook_whenBookCategoriesAreDuplicate_thenReturnBodyAnd400() throws Exception {
+    Book book1 = createTestBook1();
+    int categoryId1 = 89;
+    int categoryId2 = 46;
+    given(bookService.existsBookByTitle(book1.getTitle())).willReturn(false);
+    given(bookService.existsBookByIsbn(book1.getIsbn())).willReturn(false);
+
+    mockMvc
+        .perform(
+            post("/books")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+			        		{
+			        		  "author": "%s",
+			        		  "categories": [
+			        		    {
+			        		      "id": "%s"
+			        		    },
+			        		    {
+			        		      "id" : "%s"
+			        		    },
+			        		    {
+			        		      "id": "%s"
+			        		    }
+			        		  ],
+			        		  "description": "%s",
+			        		  "isbn": "%s",
+			        		  "publicationDate": "%s",
+			        		  "title": "%s",
+			        		  "pictureUrl": "%s",
+			        		  "pages": "%s",
+			        		  "language": "%s"
+			        		}
+			        		"""
+                        .formatted(
+                            book1.getAuthor(),
+                            categoryId1,
+                            categoryId1,
+                            categoryId2,
+                            book1.getDescription(),
+                            book1.getIsbn(),
+                            book1.getPublicationDate(),
+                            book1.getTitle(),
+                            book1.getPictureUrl(),
+                            book1.getPages(),
+                            book1.getLanguage()))
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("length()", is(1)))
+        .andExpect(jsonPath("categories", is("Cannot be duplicate")));
+
+    then(bookService).should().existsBookByTitle(book1.getTitle());
+    then(bookService).should().existsBookByIsbn(book1.getIsbn());
+    then(categoryService).should().findCategoryById(categoryId1);
+    then(categoryService).should(never()).findCategoryById(categoryId2);
+    then(bookService).should(never()).saveBook(any(Book.class));
+  }
+
   // Precreate some books and categories
 
   Book createTestBook1() {

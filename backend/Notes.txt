@@ -60,4 +60,5 @@ addBook
 	whenAddBook_thenReturnBodyAnd201
 	whenBookExistsByTitle_thenReturnResponseBodyAnd400
 	whenBookExistsByIsbn_returnResponseBodyAnd400
+	whenBookCategoriesAreDuplicate_thenReturnBodyAnd400
 	
