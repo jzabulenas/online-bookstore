@@ -421,6 +421,53 @@ public class BookControllerTest {
     then(bookService).should(never()).saveBook(any(Book.class));
   }
 
+  @Test
+  @WithUserDetails
+  void addBook_whenCategoriesIsNull_thenReturnBodyAnd400() throws Exception {
+    Book book1 = createTestBook1();
+    given(bookService.existsBookByTitle(book1.getTitle())).willReturn(false);
+    given(bookService.existsBookByIsbn(book1.getIsbn())).willReturn(false);
+
+    mockMvc
+        .perform(
+            post("/books")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    """
+				        		{
+				        		  "author": "%s",
+				        		  "description": "%s",
+				        		  "isbn": "%s",
+				        		  "publicationDate": "%s",
+				        		  "title": "%s",
+				        		  "pictureUrl": "%s",
+				        		  "pages": "%s",
+				        		  "language": "%s"
+				        		}
+				        		"""
+                        .formatted(
+                            book1.getAuthor(),
+                            book1.getDescription(),
+                            book1.getIsbn(),
+                            book1.getPublicationDate(),
+                            book1.getTitle(),
+                            book1.getPictureUrl(),
+                            book1.getPages(),
+                            book1.getLanguage()))
+                .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("length()", is(1)))
+        .andExpect(jsonPath("categories", is("Must not be null or empty")));
+
+    // The reason why these two are not called, is because annotations intercept
+    // the validation before it even gets to this
+    then(bookService).should(never()).existsBookByTitle(book1.getTitle());
+    then(bookService).should(never()).existsBookByIsbn(book1.getIsbn());
+    then(categoryService).should(never()).findCategoryById(anyInt());
+    then(bookService).should(never()).saveBook(any(Book.class));
+  }
+
   // Precreate some books and categories
 
   Book createTestBook1() {
