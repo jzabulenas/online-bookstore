@@ -91,7 +91,7 @@ public class BookController {
     }
 
     if (categories.contains(null)) {
-      responseJson.put("categories", "Does not exist");
+      responseJson.put("categories", "One or more categories does not exist");
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseJson);
     }
 
