@@ -334,5 +334,6 @@ sketch
 ### H2 database ###
 *.mv.db
 *.trace.db
+*.lock.db
 
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij,maven,node,react,visualstudiocode
