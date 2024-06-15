@@ -73,4 +73,8 @@ public class CategoryControllerTest {
         .body("size()", equalTo(0));
   }
 
+  @Test
+  void getCategories_whenUnauthenticatedCalls_thenReturn401() {
+    given().contentType(ContentType.JSON).when().get("/categories").then().statusCode(401);
+  }
 }
