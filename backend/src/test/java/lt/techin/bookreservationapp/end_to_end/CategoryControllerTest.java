@@ -32,6 +32,8 @@ public class CategoryControllerTest {
     categoryService.deleteAllCategories();
   }
 
+  // getCategories
+
   @Test
   void getCategories_whenCall_thenReturnListAnd200() {
     Category category1 = new Category("Engineering & Transportation");
@@ -56,4 +58,19 @@ public class CategoryControllerTest {
         .body("[1].id", equalTo(category2.getId()))
         .body("[1].name", equalTo(category2.getName()));
   }
+
+  @Test
+  void getCategories_whenCallAndEmptyList_thenReturnEmptyListAnd200() {
+    given()
+        .contentType(ContentType.JSON)
+        .header(
+            "Authorization",
+            "Basic " + Base64.getEncoder().encodeToString("tony:soprano".getBytes()))
+        .when()
+        .get("/categories")
+        .then()
+        .statusCode(200)
+        .body("size()", equalTo(0));
+  }
+
 }
