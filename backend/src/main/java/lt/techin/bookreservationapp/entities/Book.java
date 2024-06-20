@@ -26,7 +26,7 @@ public class Book {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Long id;
 
   @NotEmpty
   @Pattern(regexp = "^(?!.*\\s{2}).*$", message = "Cannot contain more than one consecutive space")
@@ -111,7 +111,7 @@ public class Book {
 
   public Book() {}
 
-  public int getId() {
+  public Long getId() {
     return id;
   }
 

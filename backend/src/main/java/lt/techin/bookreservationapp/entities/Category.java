@@ -15,7 +15,7 @@ public class Category {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Long id;
 
   @NotNull
   @Size(min = 3, max = 50, message = "Length must be between 3 and 50 characters")
@@ -28,7 +28,7 @@ public class Category {
 
   public Category() {}
 
-  public int getId() {
+  public Long getId() {
     return id;
   }
 
