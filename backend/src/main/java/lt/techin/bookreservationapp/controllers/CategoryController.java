@@ -1,6 +1,5 @@
 package lt.techin.bookreservationapp.controllers;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,13 +33,7 @@ public class CategoryController {
 
   @GetMapping("/categories")
   public ResponseEntity<List<Category>> getCategories() {
-    List<Category> allCategories = categoryService.findAllCategories();
-
-    if (!allCategories.isEmpty()) {
-      return ResponseEntity.ok(allCategories);
-    }
-
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
+    return ResponseEntity.ok(categoryService.findAllCategories());
   }
 
   @GetMapping("/categories/{id}")
