@@ -53,9 +53,9 @@ public class CategoryControllerTest {
         .body("size()", equalTo(2))
         .body("[0].size()", equalTo(2))
         .body("[1].size()", equalTo(2))
-        .body("[0].id", equalTo(category1.getId()))
+        .body("[0].id", equalTo(category1.getId().intValue()))
         .body("[0].name", equalTo(category1.getName()))
-        .body("[1].id", equalTo(category2.getId()))
+        .body("[1].id", equalTo(category2.getId().intValue()))
         .body("[1].name", equalTo(category2.getName()));
   }
 
