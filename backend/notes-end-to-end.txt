@@ -1,4 +1,0 @@
-getCategories
-    whenCall_thenReturnListAnd200
-    whenCallAndEmptyList_thenReturnEmptyListAnd200
-    whenUnauthenticatedCalls_thenReturn401
