@@ -3,6 +3,7 @@ package lt.techin.bookreservationapp;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -97,16 +98,17 @@ public class CategoryControllerTest {
   @Test
   @WithUserDetails
   void getCategory_whenAuthenticatedCategoryExists_thenReturn200() throws Exception {
-    given(categoryService.existsCategoryById(anyInt())).willReturn(true);
-    given(categoryService.findCategoryById(anyInt())).willReturn(new Category("Sports & Outdoors"));
+    given(categoryService.existsCategoryById(anyLong())).willReturn(true);
+    given(categoryService.findCategoryById(anyLong()))
+        .willReturn(new Category("Sports & Outdoors"));
 
     mockMvc
-        .perform(get("/categories/{id}", 6))
+        .perform(get("/categories/{id}", 6L))
         .andExpect(status().isOk())
         .andExpect(jsonPath("name").value("Sports & Outdoors"));
 
-    then(categoryService).should().existsCategoryById(anyInt());
-    then(categoryService).should().findCategoryById(anyInt());
+    then(categoryService).should().existsCategoryById(anyLong());
+    then(categoryService).should().findCategoryById(anyLong());
   }
 
   @Test
@@ -119,7 +121,7 @@ public class CategoryControllerTest {
         .andExpect(status().isNotFound())
         .andExpect(content().string(""));
 
-    then(categoryService).should().existsCategoryById(anyInt());
+    then(categoryService).should().existsCategoryById(anyLong());
     then(categoryService).should(never()).findCategoryById(anyInt());
   }
 
