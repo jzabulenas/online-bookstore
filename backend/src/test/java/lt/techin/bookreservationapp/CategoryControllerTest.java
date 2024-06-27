@@ -1,6 +1,7 @@
 package lt.techin.bookreservationapp;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -347,7 +348,7 @@ public class CategoryControllerTest {
                 .content("{\"name\": \"" + newCategoryName + "\"}")
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(categoryId))
+        .andExpect(jsonPath("$.id").value(nullValue()))
         .andExpect(jsonPath("$.name").value(newCategoryName));
 
     // Then
@@ -403,7 +404,7 @@ public class CategoryControllerTest {
                         .formatted(categoryName))
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())
-        .andExpect(jsonPath("id").value(0))
+        .andExpect(jsonPath("id").value(nullValue()))
         .andExpect(jsonPath("name").value(categoryName));
 
     then(categoryService).should().findCategoryById(45);
