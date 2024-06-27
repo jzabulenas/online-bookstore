@@ -330,7 +330,7 @@ public class CategoryControllerTest {
   @WithMockUser(roles = "ADMIN")
   void updateCategory_whenAdminFindsCategory_thenReturnUpdatedCategory() throws Exception {
     // Given
-    int categoryId = 1;
+    long categoryId = 1L;
     Category existingCategory = new Category("Crafts, Hobbies & Home");
 
     String newCategoryName = "Engineering & Transportation";
@@ -348,7 +348,7 @@ public class CategoryControllerTest {
                 .content("{\"name\": \"" + newCategoryName + "\"}")
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(nullValue()))
+        .andExpect(jsonPath("$.id").value(existingCategory.getId()))
         .andExpect(jsonPath("$.name").value(newCategoryName));
 
     // Then
