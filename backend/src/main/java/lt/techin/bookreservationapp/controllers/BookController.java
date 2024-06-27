@@ -1,11 +1,8 @@
 package lt.techin.bookreservationapp.controllers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,25 +74,13 @@ public class BookController {
       return ResponseEntity.badRequest().body(responseJson);
     }
 
-    List<Category> categories = new ArrayList<>();
-    Set<Integer> uniqueIds = new HashSet<>();
-
     for (Category category : book.getCategories()) {
-      if (!uniqueIds.add(category.getId())) {
-        responseJson.put("categories", "Cannot be duplicate");
+      if (!categoryService.existsCategoryById(category.getId())) {
+        responseJson.put("message", "Category with id of " + category.getId() + " does not exist");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseJson);
       }
-
-      Category existingCategory = categoryService.findCategoryById(category.getId());
-      categories.add(existingCategory);
     }
 
-    if (categories.contains(null)) {
-      responseJson.put("categories", "One or more categories does not exist");
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseJson);
-    }
-
-    book.setCategories(categories);
     return ResponseEntity.status(HttpStatus.CREATED).body(bookService.saveBook(book));
   }
 }
