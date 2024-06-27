@@ -66,12 +66,12 @@ public class CategoryControllerTest {
 
   @Test
   @WithUserDetails
-  void getCategories_whenAuthenticatedCallsEmptyList_thenReturn404() throws Exception {
+  void getCategories_whenAuthenticatedCallsEmptyList_thenReturn200() throws Exception {
     given(categoryService.findAllCategories()).willReturn(Collections.emptyList());
 
     mockMvc
         .perform(get("/categories"))
-        .andExpect(status().isNotFound())
+        .andExpect(status().isOk())
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$").isEmpty());
 
