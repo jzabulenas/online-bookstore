@@ -1,7 +1,7 @@
 package lt.techin.bookreservationapp.entities;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,7 +26,7 @@ public class Book {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Long id;
 
   @NotEmpty
   @Pattern(regexp = "^(?!.*\\s{2}).*$", message = "Cannot contain more than one consecutive space")
@@ -51,7 +51,7 @@ public class Book {
   //  Used for serializing only as an id
   //  @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
   //  @JsonIdentityReference(alwaysAsId = true)
-  private List<Category> categories;
+  private Set<Category> categories;
 
   @NotEmpty(message = "Cannot be null or empty")
   @Column(length = 2000)
@@ -91,7 +91,7 @@ public class Book {
   public Book(
       String title,
       String author,
-      List<Category> categories,
+      Set<Category> categories,
       String description,
       String pictureUrl,
       int pages,
@@ -111,7 +111,7 @@ public class Book {
 
   public Book() {}
 
-  public int getId() {
+  public Long getId() {
     return id;
   }
 
@@ -123,7 +123,7 @@ public class Book {
     return author;
   }
 
-  public List<Category> getCategories() {
+  public Set<Category> getCategories() {
     return categories;
   }
 
@@ -159,7 +159,7 @@ public class Book {
     this.author = author;
   }
 
-  public void setCategories(List<Category> categories) {
+  public void setCategories(Set<Category> categories) {
     this.categories = categories;
   }
 

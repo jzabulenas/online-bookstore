@@ -1,5 +1,7 @@
 package lt.techin.bookreservationapp.entities;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +17,7 @@ public class Category {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Long id;
 
   @NotNull
   @Size(min = 3, max = 50, message = "Length must be between 3 and 50 characters")
@@ -28,7 +30,7 @@ public class Category {
 
   public Category() {}
 
-  public int getId() {
+  public Long getId() {
     return id;
   }
 
@@ -44,12 +46,26 @@ public class Category {
     this.name = name;
   }
 
+  public void setId(Long id) {
+    this.id = id;
+  }
+
   @Override
   public String toString() {
     return "Category{" + "id=" + id + ", name='" + name + '\'' + '}';
   }
 
-  public void setId(int id) {
-    this.id = id;
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    Category other = (Category) obj;
+    return Objects.equals(id, other.id) && Objects.equals(name, other.name);
   }
 }

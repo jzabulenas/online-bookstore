@@ -1,8 +1,10 @@
 package lt.techin.bookreservationapp;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -66,12 +68,12 @@ public class CategoryControllerTest {
 
   @Test
   @WithUserDetails
-  void getCategories_whenAuthenticatedCallsEmptyList_thenReturn404() throws Exception {
+  void getCategories_whenAuthenticatedCallsEmptyList_thenReturn200() throws Exception {
     given(categoryService.findAllCategories()).willReturn(Collections.emptyList());
 
     mockMvc
         .perform(get("/categories"))
-        .andExpect(status().isNotFound())
+        .andExpect(status().isOk())
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$").isEmpty());
 
@@ -97,16 +99,17 @@ public class CategoryControllerTest {
   @Test
   @WithUserDetails
   void getCategory_whenAuthenticatedCategoryExists_thenReturn200() throws Exception {
-    given(categoryService.existsCategoryById(anyInt())).willReturn(true);
-    given(categoryService.findCategoryById(anyInt())).willReturn(new Category("Sports & Outdoors"));
+    given(categoryService.existsCategoryById(anyLong())).willReturn(true);
+    given(categoryService.findCategoryById(anyLong()))
+        .willReturn(new Category("Sports & Outdoors"));
 
     mockMvc
-        .perform(get("/categories/{id}", 6))
+        .perform(get("/categories/{id}", 6L))
         .andExpect(status().isOk())
         .andExpect(jsonPath("name").value("Sports & Outdoors"));
 
-    then(categoryService).should().existsCategoryById(anyInt());
-    then(categoryService).should().findCategoryById(anyInt());
+    then(categoryService).should().existsCategoryById(anyLong());
+    then(categoryService).should().findCategoryById(anyLong());
   }
 
   @Test
@@ -119,7 +122,7 @@ public class CategoryControllerTest {
         .andExpect(status().isNotFound())
         .andExpect(content().string(""));
 
-    then(categoryService).should().existsCategoryById(anyInt());
+    then(categoryService).should().existsCategoryById(anyLong());
     then(categoryService).should(never()).findCategoryById(anyInt());
   }
 
@@ -327,7 +330,7 @@ public class CategoryControllerTest {
   @WithMockUser(roles = "ADMIN")
   void updateCategory_whenAdminFindsCategory_thenReturnUpdatedCategory() throws Exception {
     // Given
-    int categoryId = 1;
+    long categoryId = 1L;
     Category existingCategory = new Category("Crafts, Hobbies & Home");
 
     String newCategoryName = "Engineering & Transportation";
@@ -345,7 +348,7 @@ public class CategoryControllerTest {
                 .content("{\"name\": \"" + newCategoryName + "\"}")
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(categoryId))
+        .andExpect(jsonPath("$.id").value(existingCategory.getId()))
         .andExpect(jsonPath("$.name").value(newCategoryName));
 
     // Then
@@ -401,7 +404,7 @@ public class CategoryControllerTest {
                         .formatted(categoryName))
                 .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())
-        .andExpect(jsonPath("id").value(0))
+        .andExpect(jsonPath("id").value(nullValue()))
         .andExpect(jsonPath("name").value(categoryName));
 
     then(categoryService).should().findCategoryById(45);
