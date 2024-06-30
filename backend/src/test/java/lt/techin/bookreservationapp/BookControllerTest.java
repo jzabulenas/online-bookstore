@@ -1,5 +1,6 @@
 package lt.techin.bookreservationapp;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -16,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +58,12 @@ public class BookControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(2)))
         .andExpect(jsonPath("[0].author").value(book1.getAuthor()))
-        .andExpect(jsonPath("[0].categories[0].name").value(book1.getCategories().get(0).getName()))
-        .andExpect(jsonPath("[0].categories[1].name").value(book1.getCategories().get(1).getName()))
-        .andExpect(jsonPath("[0].categories[2].name").value(book1.getCategories().get(2).getName()))
+        .andExpect(
+            jsonPath("[0].categories[0].name").value(containsInAnyOrder(book1.getCategories())))
+        .andExpect(
+            jsonPath("[0].categories[1].name").value(containsInAnyOrder(book1.getCategories())))
+        .andExpect(
+            jsonPath("[0].categories[2].name").value(containsInAnyOrder(book1.getCategories())))
         .andExpect(jsonPath("[0].description").value(book1.getDescription()))
         .andExpect(jsonPath("[0].isbn").value(book1.getIsbn()))
         .andExpect(jsonPath("[0].publicationDate").value(book1.getPublicationDate() + ""))
@@ -68,8 +73,10 @@ public class BookControllerTest {
         .andExpect(jsonPath("[0].language").value(book1.getLanguage()))
         // Second book
         .andExpect(jsonPath("[1].author").value(book2.getAuthor()))
-        .andExpect(jsonPath("[1].categories[0].name").value(book2.getCategories().get(0).getName()))
-        .andExpect(jsonPath("[1].categories[1].name").value(book2.getCategories().get(1).getName()))
+        .andExpect(
+            jsonPath("[1].categories[0].name").value(containsInAnyOrder(book1.getCategories())))
+        .andExpect(
+            jsonPath("[1].categories[1].name").value(containsInAnyOrder(book1.getCategories())))
         .andExpect(jsonPath("[1].description").value(book2.getDescription()))
         .andExpect(jsonPath("[1].isbn").value(book2.getIsbn()))
         .andExpect(jsonPath("[1].publicationDate").value(book2.getPublicationDate() + ""))
@@ -116,9 +123,9 @@ public class BookControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("author", is(book1.getAuthor())))
-        .andExpect(jsonPath("categories[0].name", is(book1.getCategories().get(0).getName())))
-        .andExpect(jsonPath("categories[1].name", is(book1.getCategories().get(1).getName())))
-        .andExpect(jsonPath("categories[2].name", is(book1.getCategories().get(2).getName())))
+        .andExpect(jsonPath("categories[0].name", is("jurgis")))
+        .andExpect(jsonPath("categories[1].name", is("antanas")))
+        .andExpect(jsonPath("categories[2].name", is("aloyzas")))
         .andExpect(jsonPath("description", is(book1.getDescription())))
         .andExpect(jsonPath("isbn", is(book1.getIsbn())))
         .andExpect(jsonPath("publicationDate", is(book1.getPublicationDate().toString())))
@@ -164,9 +171,9 @@ public class BookControllerTest {
     int categoryId3 = 46;
     given(bookService.existsBookByTitle(book1.getTitle())).willReturn(false);
     given(bookService.existsBookByIsbn(book1.getIsbn())).willReturn(false);
-    given(categoryService.findCategoryById(categoryId1)).willReturn(book1.getCategories().get(0));
-    given(categoryService.findCategoryById(categoryId2)).willReturn(book1.getCategories().get(1));
-    given(categoryService.findCategoryById(categoryId3)).willReturn(book1.getCategories().get(2));
+    given(categoryService.findCategoryById(categoryId1)).willReturn(null);
+    given(categoryService.findCategoryById(categoryId2)).willReturn(null);
+    given(categoryService.findCategoryById(categoryId3)).willReturn(null);
     given(bookService.saveBook(any(Book.class))).willReturn(book1);
 
     mockMvc
@@ -213,9 +220,9 @@ public class BookControllerTest {
         .andExpect(status().isCreated())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("author", is(book1.getAuthor())))
-        .andExpect(jsonPath("categories[0].name", is(book1.getCategories().get(0).getName())))
-        .andExpect(jsonPath("categories[1].name", is(book1.getCategories().get(1).getName())))
-        .andExpect(jsonPath("categories[2].name", is(book1.getCategories().get(2).getName())))
+        .andExpect(jsonPath("categories[0].name", is(null)))
+        .andExpect(jsonPath("categories[1].name", is(null)))
+        .andExpect(jsonPath("categories[2].name", is(null)))
         .andExpect(jsonPath("description", is(book1.getDescription())))
         .andExpect(jsonPath("isbn", is(book1.getIsbn())))
         .andExpect(jsonPath("publicationDate", is(book1.getPublicationDate().toString())))
@@ -565,16 +572,16 @@ public class BookControllerTest {
     return book;
   }
 
-  List<Category> createTestCategories1() {
+  Set<Category> createTestCategories1() {
     Category educationTeaching = new Category("Education & Teaching");
     Category businessMoney = new Category("Business & Money");
     Category scienceMath = new Category("Science & Math");
-    return List.of(educationTeaching, businessMoney, scienceMath);
+    return Set.of(educationTeaching, businessMoney, scienceMath);
   }
 
-  List<Category> createTestCategories2() {
+  Set<Category> createTestCategories2() {
     Category literatureFiction = new Category("Literature & Fiction");
     Category romanticComedy = new Category("Romantic Comedy");
-    return List.of(literatureFiction, romanticComedy);
+    return Set.of(literatureFiction, romanticComedy);
   }
 }
