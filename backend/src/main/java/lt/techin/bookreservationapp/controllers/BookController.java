@@ -20,7 +20,7 @@ import lt.techin.bookreservationapp.entities.Category;
 import lt.techin.bookreservationapp.services.BookService;
 import lt.techin.bookreservationapp.services.CategoryService;
 
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("http://localhost:5173")
 @RestController
 public class BookController {
 
