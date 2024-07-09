@@ -111,16 +111,6 @@ export default function Navbar() {
               </>
             )}
 
-            <li className="nav-item">
-              <Link
-                className="nav-link"
-                to={"/about"}
-                onClick={handleLinkClick}
-              >
-                About
-              </Link>
-            </li>
-
             {role === "USER" && (
               <form
                 className="d-flex"
@@ -161,6 +151,16 @@ export default function Navbar() {
                     onClick={handleLinkClick}
                   >
                     Sign up
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to={"/about"}
+                    onClick={handleLinkClick}
+                  >
+                    About
                   </Link>
                 </li>
               </>
