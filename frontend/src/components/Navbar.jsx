@@ -58,11 +58,12 @@ export default function Navbar() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+
         <div
           className="collapse navbar-collapse"
           id="navbarSupportedContent"
         >
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0 w-100 justify-content-end">
+          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             {role === "ADMIN" && (
               <li className="nav-item">
                 <Link
@@ -108,28 +109,26 @@ export default function Navbar() {
                     Reserved Books
                   </Link>
                 </li>
-              </>
-            )}
 
-            {role === "USER" && (
-              <form
-                className="d-flex"
-                role="search"
-              >
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  name="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-                <button
-                  className="btn btn-outline-success"
-                  type="submit"
+                <form
+                  className="d-flex"
+                  role="search"
                 >
-                  Search
-                </button>
-              </form>
+                  <input
+                    className="form-control me-2"
+                    type="search"
+                    name="search"
+                    placeholder="Search"
+                    aria-label="Search"
+                  />
+                  <button
+                    className="btn btn-outline-success"
+                    type="submit"
+                  >
+                    Search
+                  </button>
+                </form>
+              </>
             )}
 
             {role !== "USER" && role !== "ADMIN" && (
