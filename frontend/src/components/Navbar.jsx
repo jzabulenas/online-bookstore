@@ -75,48 +75,48 @@ export default function Navbar() {
 
             {role === "ADMIN" && (
               <li className="nav-item">
-                <Link
+                <NavLink
                   className="nav-link"
                   to={"/categories"}
                   onClick={handleLinkClick}
                 >
                   Categories
-                </Link>
+                </NavLink>
               </li>
             )}
 
             {(role === "ADMIN" || role === "USER") && (
               <li className="nav-item">
-                <Link
+                <NavLink
                   className="nav-link"
                   to={"/books"}
                   onClick={handleLinkClick}
                 >
                   Books
-                </Link>
+                </NavLink>
               </li>
             )}
 
             {role === "USER" && (
               <>
                 <li className="nav-item">
-                  <Link
+                  <NavLink
                     className="nav-link"
                     to={"/favorite"}
                     onClick={handleLinkClick}
                   >
                     Favorite Books
-                  </Link>
+                  </NavLink>
                 </li>
 
                 <li className="nav-item">
-                  <Link
+                  <NavLink
                     className="nav-link"
                     to={"/reserved"}
                     onClick={handleLinkClick}
                   >
                     Reserved Books
-                  </Link>
+                  </NavLink>
                 </li>
 
                 <form
@@ -143,33 +143,33 @@ export default function Navbar() {
             {role !== "USER" && role !== "ADMIN" && (
               <>
                 <li className="nav-item">
-                  <Link
+                  <NavLink
                     className="nav-link"
                     to={"/login"}
                     onClick={handleLinkClick}
                   >
                     Log in
-                  </Link>
+                  </NavLink>
                 </li>
 
                 <li className="nav-item">
-                  <Link
+                  <NavLink
                     className="nav-link"
                     to={"/signup"}
                     onClick={handleLinkClick}
                   >
                     Sign up
-                  </Link>
+                  </NavLink>
                 </li>
 
                 <li className="nav-item">
-                  <Link
+                  <NavLink
                     className="nav-link"
                     to={"/about"}
                     onClick={handleLinkClick}
                   >
                     About
-                  </Link>
+                  </NavLink>
                 </li>
               </>
             )}
