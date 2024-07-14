@@ -42,7 +42,7 @@ export default function Navbar() {
         >
           <img
             src={logo}
-            alt="Book Reservation App Logo"
+            alt="Book recommendation app logo"
             className="logo"
           />
         </Link>
