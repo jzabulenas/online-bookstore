@@ -1,5 +1,5 @@
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
@@ -64,6 +64,15 @@ export default function Navbar() {
           id="navbarSupportedContent"
         >
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <NavLink
+                className="nav-link"
+                to="/"
+              >
+                Home
+              </NavLink>
+            </li>
+
             {role === "ADMIN" && (
               <li className="nav-item">
                 <Link
