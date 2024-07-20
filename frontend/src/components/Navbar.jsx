@@ -68,6 +68,7 @@ export default function Navbar() {
               <NavLink
                 className="nav-link"
                 to="/"
+                onClick={handleLinkClick}
               >
                 Home
               </NavLink>
