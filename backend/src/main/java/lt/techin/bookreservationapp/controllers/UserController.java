@@ -11,7 +11,7 @@ import lt.techin.bookreservationapp.entities.User;
 import lt.techin.bookreservationapp.services.UserService;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("http://localhost:5173")
 public class UserController {
 
   private final UserService userService;

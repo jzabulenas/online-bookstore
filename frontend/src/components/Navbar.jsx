@@ -1,5 +1,5 @@
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
@@ -34,7 +34,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav className="navbar navbar-expand-md bg-body-tertiary mb-3">
       <div className="container">
         <Link
           className="navbar-brand"
@@ -42,7 +42,7 @@ export default function Navbar() {
         >
           <img
             src={logo}
-            alt="Book Reservation App Logo"
+            alt="Book recommendation app logo"
             className="logo"
           />
         </Link>
@@ -58,110 +58,119 @@ export default function Navbar() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+
         <div
           className="collapse navbar-collapse"
           id="navbarSupportedContent"
         >
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0 w-100 justify-content-end">
+          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <NavLink
+                className="nav-link"
+                to="/"
+                onClick={handleLinkClick}
+              >
+                Home
+              </NavLink>
+            </li>
+
             {role === "ADMIN" && (
               <li className="nav-item">
-                <Link
+                <NavLink
                   className="nav-link"
                   to={"/categories"}
                   onClick={handleLinkClick}
                 >
                   Categories
-                </Link>
+                </NavLink>
               </li>
             )}
 
             {(role === "ADMIN" || role === "USER") && (
               <li className="nav-item">
-                <Link
+                <NavLink
                   className="nav-link"
                   to={"/books"}
                   onClick={handleLinkClick}
                 >
                   Books
-                </Link>
+                </NavLink>
               </li>
             )}
 
             {role === "USER" && (
               <>
                 <li className="nav-item">
-                  <Link
+                  <NavLink
                     className="nav-link"
                     to={"/favorite"}
                     onClick={handleLinkClick}
                   >
                     Favorite Books
-                  </Link>
+                  </NavLink>
                 </li>
 
                 <li className="nav-item">
-                  <Link
+                  <NavLink
                     className="nav-link"
                     to={"/reserved"}
                     onClick={handleLinkClick}
                   >
                     Reserved Books
-                  </Link>
+                  </NavLink>
                 </li>
-              </>
-            )}
 
-            <li className="nav-item">
-              <Link
-                className="nav-link"
-                to={"/about"}
-                onClick={handleLinkClick}
-              >
-                About
-              </Link>
-            </li>
-
-            {role === "USER" && (
-              <form
-                className="d-flex"
-                role="search"
-              >
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  name="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-                <button
-                  className="btn btn-outline-success"
-                  type="submit"
+                <form
+                  className="d-flex"
+                  role="search"
                 >
-                  Search
-                </button>
-              </form>
+                  <input
+                    className="form-control me-2"
+                    type="search"
+                    name="search"
+                    placeholder="Search"
+                    aria-label="Search"
+                  />
+                  <button
+                    className="btn btn-outline-success"
+                    type="submit"
+                  >
+                    Search
+                  </button>
+                </form>
+              </>
             )}
 
             {role !== "USER" && role !== "ADMIN" && (
               <>
                 <li className="nav-item">
-                  <Link
+                  <NavLink
                     className="nav-link"
                     to={"/login"}
                     onClick={handleLinkClick}
                   >
                     Log in
-                  </Link>
+                  </NavLink>
                 </li>
 
                 <li className="nav-item">
-                  <Link
+                  <NavLink
                     className="nav-link"
                     to={"/signup"}
                     onClick={handleLinkClick}
                   >
                     Sign up
-                  </Link>
+                  </NavLink>
+                </li>
+
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    to={"/about"}
+                    onClick={handleLinkClick}
+                  >
+                    About
+                  </NavLink>
                 </li>
               </>
             )}
