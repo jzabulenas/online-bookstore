@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import lt.techin.bookreservationapp.entities.Book;
@@ -21,19 +20,13 @@ public class DatabaseInitializer implements CommandLineRunner {
 
   private final UserService userService;
 
-  private final PasswordEncoder passwordEncoder;
-
   private final CategoryService categoryService;
 
   private final BookService bookService;
 
   public DatabaseInitializer(
-      UserService userService,
-      PasswordEncoder passwordEncoder,
-      CategoryService categoryService,
-      BookService bookService) {
+      UserService userService, CategoryService categoryService, BookService bookService) {
     this.userService = userService;
-    this.passwordEncoder = passwordEncoder;
     this.categoryService = categoryService;
     this.bookService = bookService;
   }
