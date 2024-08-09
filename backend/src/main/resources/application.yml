@@ -11,3 +11,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+      
+frontend:
+  url: http://localhost:5173
