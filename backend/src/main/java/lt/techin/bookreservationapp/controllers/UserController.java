@@ -1,13 +1,12 @@
 package lt.techin.bookreservationapp.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import lt.techin.bookreservationapp.services.UserService;
 
+// @CrossOrigin("http://localhost:5173")
 @RestController
-@CrossOrigin("http://localhost:5173")
 public class UserController {
 
   private final UserService userService;
