@@ -28,6 +28,10 @@ public class User implements OAuth2User {
 
   @Transient private Map<String, Object> attributes;
 
+  public Long getId() {
+    return id;
+  }
+
   public String getEmail() {
     return email;
   }
@@ -44,18 +48,18 @@ public class User implements OAuth2User {
     this.role = role;
   }
 
-  public Long getId() {
-    return id;
+  @Override
+  public Map<String, Object> getAttributes() {
+    return this.attributes;
+  }
+
+  public void setAttributes(Map<String, Object> attributes) {
+    this.attributes = attributes;
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(() -> role);
-  }
-
-  @Override
-  public Map<String, Object> getAttributes() {
-    return this.attributes;
   }
 
   @Override
