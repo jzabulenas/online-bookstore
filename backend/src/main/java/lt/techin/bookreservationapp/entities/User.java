@@ -2,48 +2,50 @@ package lt.techin.bookreservationapp.entities;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "Users")
-public class User implements UserDetails {
+public class User implements OAuth2User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String username;
-
-  private String password;
+  private String email;
 
   private String role;
 
-  public String getUsername() {
-    return username;
+  @Transient private Map<String, Object> attributes;
+
+  public String getEmail() {
+    return email;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setEmail(String email) {
+    this.email = email;
   }
 
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
+  public String getRole() {
+    return role;
   }
 
   public void setRole(String role) {
     this.role = role;
+  }
+
+  public Long getId() {
+    return id;
   }
 
   @Override
@@ -52,22 +54,12 @@ public class User implements UserDetails {
   }
 
   @Override
-  public boolean isAccountNonExpired() {
-    return true;
+  public Map<String, Object> getAttributes() {
+    return this.attributes;
   }
 
   @Override
-  public boolean isAccountNonLocked() {
-    return true;
-  }
-
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return true;
-  }
-
-  @Override
-  public boolean isEnabled() {
-    return true;
+  public String getName() {
+    return this.email;
   }
 }
