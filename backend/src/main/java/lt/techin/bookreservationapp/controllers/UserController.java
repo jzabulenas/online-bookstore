@@ -1,6 +1,8 @@
 package lt.techin.bookreservationapp.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lt.techin.bookreservationapp.services.UserService;
@@ -31,4 +33,9 @@ public class UserController {
   //
   //    return userDb;
   //  }
+
+  @GetMapping("/user")
+  public String getUser(Authentication authentication) {
+    return authentication.getName();
+  }
 }
