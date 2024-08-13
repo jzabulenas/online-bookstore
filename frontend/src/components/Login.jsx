@@ -56,6 +56,10 @@ export default function Login() {
             />
             <button type="submit">Login</button>
           </form>
+
+          <a href="http://localhost:8080/oauth2/authorization/google">
+            Log in with Google
+          </a>
         </div>
       </div>
     </div>
