@@ -1,23 +1,7 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Home() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("http://localhost:8080/user", {
-        method: "GET",
-        credentials: "include",
-      });
-
-      const result = await response.text();
-
-      setUser(result);
-    };
-
-    fetchData();
-  }, []);
+  const user = sessionStorage.getItem("user");
 
   return (
     <>
