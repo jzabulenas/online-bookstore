@@ -12,8 +12,9 @@ export default function OAuth2RedirectHandler() {
       });
 
       if (response.ok) {
-        const result = await response.text();
-        sessionStorage.setItem("user", result);
+        const result = await response.json();
+        sessionStorage.setItem("email", result.name);
+        sessionStorage.setItem("roles", JSON.stringify(result.authorities));
         navigate("/"); // Redirect to home
       } else {
         console.error("Failed to fetch user data");
