@@ -1,21 +1,19 @@
-import logo from "../assets/logo.png";
 import { Link, NavLink } from "react-router-dom";
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
 import "./Navbar.css";
 
 export default function Navbar() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const role = localStorage.getItem("role");
+  // const location = useLocation();
+  // const navigate = useNavigate();
+  const roles = JSON.parse(sessionStorage.getItem("roles"));
 
-  useEffect(() => {
-    const cleanedPathname = location.pathname.replace(/\/\/+/g, "/");
+  // useEffect(() => {
+  //   const cleanedPathname = location.pathname.replace(/\/\/+/g, "/");
 
-    if (location.pathname !== cleanedPathname) {
-      navigate(cleanedPathname, { replace: true });
-    }
-  }, [location.pathname, navigate]);
+  //   if (location.pathname !== cleanedPathname) {
+  //     navigate(cleanedPathname, { replace: true });
+  //   }
+  // }, [location.pathname, navigate]);
 
   const logout = () => {
     localStorage.removeItem("role");
