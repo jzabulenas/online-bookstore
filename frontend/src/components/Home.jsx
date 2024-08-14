@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 
 export default function Home() {
-  const user = sessionStorage.getItem("user");
+  const email = sessionStorage.getItem("email");
 
   return (
     <>
-      {user ? (
-        <p>Welcome {user}</p>
+      {email ? (
+        <p>Welcome {email}</p>
       ) : (
         <div className="text-center p-5">
           <h1 className="fw-bold text-break">Book recommendation app</h1>
