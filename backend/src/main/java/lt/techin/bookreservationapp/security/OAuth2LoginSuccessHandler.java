@@ -24,7 +24,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
   public void onAuthenticationSuccess(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication)
       throws IOException, ServletException {
-    response.sendRedirect(this.frontendUrl);
+    response.sendRedirect(this.frontendUrl + "/oauth2/redirect");
 
     super.onAuthenticationSuccess(request, response, authentication);
   }
