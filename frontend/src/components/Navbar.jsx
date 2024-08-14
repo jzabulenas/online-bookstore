@@ -72,7 +72,7 @@ export default function Navbar() {
               </NavLink>
             </li>
 
-            {role === "ADMIN" && (
+            {roles.some((role) => role.authority === "ROLE_ADMIN") && (
               <li className="nav-item">
                 <NavLink
                   className="nav-link"
@@ -84,7 +84,8 @@ export default function Navbar() {
               </li>
             )}
 
-            {(role === "ADMIN" || role === "USER") && (
+            {(roles.some((role) => role.authority === "ROLE_ADMIN") ||
+              roles.some((role) => role.authority === "ROLE_USER")) && (
               <li className="nav-item">
                 <NavLink
                   className="nav-link"
@@ -96,7 +97,7 @@ export default function Navbar() {
               </li>
             )}
 
-            {role === "USER" && (
+            {roles.some((role) => role.authority === "ROLE_USER") && (
               <>
                 <li className="nav-item">
                   <NavLink
@@ -139,41 +140,43 @@ export default function Navbar() {
               </>
             )}
 
-            {role !== "USER" && role !== "ADMIN" && (
-              <>
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to={"/login"}
-                    onClick={handleLinkClick}
-                  >
-                    Log in
-                  </NavLink>
-                </li>
+            {roles.some((role) => role.authority !== "ROLE_USER") &&
+              roles.some((role) => role.authority !== "ROLE_ADMIN") && (
+                <>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to={"/login"}
+                      onClick={handleLinkClick}
+                    >
+                      Log in
+                    </NavLink>
+                  </li>
 
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to={"/signup"}
-                    onClick={handleLinkClick}
-                  >
-                    Sign up
-                  </NavLink>
-                </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to={"/signup"}
+                      onClick={handleLinkClick}
+                    >
+                      Sign up
+                    </NavLink>
+                  </li>
 
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to={"/about"}
-                    onClick={handleLinkClick}
-                  >
-                    About
-                  </NavLink>
-                </li>
-              </>
-            )}
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to={"/about"}
+                      onClick={handleLinkClick}
+                    >
+                      About
+                    </NavLink>
+                  </li>
+                </>
+              )}
 
-            {(role === "ADMIN" || role === "USER") && (
+            {(roles.some((role) => role.authority === "ROLE_ADMIN") ||
+              roles.some((role) => role.authority === "ROLE_USER")) && (
               <li className="nav-item">
                 <button
                   className="nav-link"
