@@ -148,48 +148,48 @@ export default function Navbar() {
             )}
 
             {roles === null && (
-                <>
-                  <li className="nav-item">
-                    <NavLink
-                      className="nav-link"
-                      to={"/login"}
-                      onClick={handleLinkClick}
-                    >
-                      Log in
-                    </NavLink>
-                  </li>
+              <>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    to={"/login"}
+                    onClick={handleLinkClick}
+                  >
+                    Log in
+                  </NavLink>
+                </li>
 
-                  <li className="nav-item">
-                    <NavLink
-                      className="nav-link"
-                      to={"/signup"}
-                      onClick={handleLinkClick}
-                    >
-                      Sign up
-                    </NavLink>
-                  </li>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    to={"/signup"}
+                    onClick={handleLinkClick}
+                  >
+                    Sign up
+                  </NavLink>
+                </li>
 
-                  <li className="nav-item">
-                    <NavLink
-                      className="nav-link"
-                      to={"/about"}
-                      onClick={handleLinkClick}
-                    >
-                      About
-                    </NavLink>
-                  </li>
-                </>
-              )}
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    to={"/about"}
+                    onClick={handleLinkClick}
+                  >
+                    About
+                  </NavLink>
+                </li>
+              </>
+            )}
 
             {(roles?.some((role) => role.authority === "ROLE_ADMIN") ||
               roles?.some((role) => role.authority === "ROLE_USER")) && (
               <li className="nav-item">
-                <button
+                <Link
                   className="nav-link"
                   onClick={logout}
                 >
                   Log out
-                </button>
+                </Link>
               </li>
             )}
           </ul>
