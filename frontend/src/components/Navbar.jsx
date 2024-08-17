@@ -16,10 +16,25 @@ export default function Navbar() {
   // }, [location.pathname, navigate]);
 
   const logout = () => {
-    localStorage.removeItem("role");
-    localStorage.removeItem("username");
-    localStorage.removeItem("password");
-    navigate("/");
+    sessionStorage.removeItem("email");
+    sessionStorage.removeItem("roles");
+
+    const csrfToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("XSRF-TOKEN="))
+      ?.split("=")[1];
+
+    const callLogoutEndpoint = async () => {
+      const response = await fetch("http://localhost:8080/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "X-XSRF-TOKEN": csrfToken,
+        },
+      });
+    };
+
+    callLogoutEndpoint();
     handleLinkClick();
   };
 
