@@ -72,7 +72,7 @@ export default function Navbar() {
               </NavLink>
             </li>
 
-            {roles.some((role) => role.authority === "ROLE_ADMIN") && (
+            {roles?.some((role) => role.authority === "ROLE_ADMIN") && (
               <li className="nav-item">
                 <NavLink
                   className="nav-link"
@@ -84,8 +84,8 @@ export default function Navbar() {
               </li>
             )}
 
-            {(roles.some((role) => role.authority === "ROLE_ADMIN") ||
-              roles.some((role) => role.authority === "ROLE_USER")) && (
+            {(roles?.some((role) => role.authority === "ROLE_ADMIN") ||
+              roles?.some((role) => role.authority === "ROLE_USER")) && (
               <li className="nav-item">
                 <NavLink
                   className="nav-link"
@@ -97,7 +97,7 @@ export default function Navbar() {
               </li>
             )}
 
-            {roles.some((role) => role.authority === "ROLE_USER") && (
+            {roles?.some((role) => role.authority === "ROLE_USER") && (
               <>
                 <li className="nav-item">
                   <NavLink
@@ -175,8 +175,8 @@ export default function Navbar() {
                 </>
               )}
 
-            {(roles.some((role) => role.authority === "ROLE_ADMIN") ||
-              roles.some((role) => role.authority === "ROLE_USER")) && (
+            {(roles?.some((role) => role.authority === "ROLE_ADMIN") ||
+              roles?.some((role) => role.authority === "ROLE_USER")) && (
               <li className="nav-item">
                 <button
                   className="nav-link"
