@@ -36,6 +36,7 @@ export default function Navbar() {
 
     callLogoutEndpoint();
     handleLinkClick();
+    window.dispatchEvent(new Event("storage")); // Trigger a storage event manually
   };
 
   const handleLinkClick = () => {
