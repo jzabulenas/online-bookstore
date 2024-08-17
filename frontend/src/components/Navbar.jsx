@@ -1,19 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
 import logo from "../assets/logo.png";
+import useSessionStorage from "../hooks/useSessionStorage";
 import "./Navbar.css";
 
 export default function Navbar() {
-  // const location = useLocation();
-  // const navigate = useNavigate();
-  const roles = JSON.parse(sessionStorage.getItem("roles"));
-
-  // useEffect(() => {
-  //   const cleanedPathname = location.pathname.replace(/\/\/+/g, "/");
-
-  //   if (location.pathname !== cleanedPathname) {
-  //     navigate(cleanedPathname, { replace: true });
-  //   }
-  // }, [location.pathname, navigate]);
+  const roles = useSessionStorage("roles");
 
   const logout = () => {
     sessionStorage.removeItem("email");
