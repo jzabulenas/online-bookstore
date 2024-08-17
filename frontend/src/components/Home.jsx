@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
+import useSessionStorage from "../hooks/useSessionStorage";
 
 export default function Home() {
   const email = sessionStorage.getItem("email");
+  // I do this so a render would happen when roles
+  // are removed from session storage.
+  const roles = useSessionStorage("roles");
 
   return (
     <>
