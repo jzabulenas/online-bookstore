@@ -155,8 +155,7 @@ export default function Navbar() {
               </>
             )}
 
-            {roles.some((role) => role.authority !== "ROLE_USER") &&
-              roles.some((role) => role.authority !== "ROLE_ADMIN") && (
+            {roles === null && (
                 <>
                   <li className="nav-item">
                     <NavLink
