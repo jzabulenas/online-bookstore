@@ -10,7 +10,6 @@ import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
 import ReservedBooks from "./components/ReservedBooks";
-import Signup from "./components/Signup";
 
 function App() {
   return (
@@ -49,10 +48,6 @@ function App() {
           <Route
             path="/login"
             element={<Login />}
-          />
-          <Route
-            path="/signup"
-            element={<Signup />}
           />
           <Route
             path="/oauth2/redirect"
