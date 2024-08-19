@@ -1,10 +1,11 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import useSessionStorage from "../hooks/useSessionStorage";
 import "./Navbar.css";
 
 export default function Navbar() {
   const roles = useSessionStorage("roles");
+  const navigate = useNavigate();
 
   const logout = () => {
     sessionStorage.removeItem("email");
@@ -28,6 +29,12 @@ export default function Navbar() {
     callLogoutEndpoint();
     handleLinkClick();
     window.dispatchEvent(new Event("storage")); // Trigger a storage event manually
+
+    // This is done so the call becomes asynchronous,
+    // because otherwise it does not navigate me
+    setTimeout(() => {
+      navigate("/");
+    }, 0);
   };
 
   const handleLinkClick = () => {
