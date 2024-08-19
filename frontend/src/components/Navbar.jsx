@@ -1,28 +1,33 @@
-import logo from "../assets/logo.png";
 import { Link, NavLink } from "react-router-dom";
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
+import useSessionStorage from "../hooks/useSessionStorage";
 import "./Navbar.css";
 
 export default function Navbar() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const role = localStorage.getItem("role");
-
-  useEffect(() => {
-    const cleanedPathname = location.pathname.replace(/\/\/+/g, "/");
-
-    if (location.pathname !== cleanedPathname) {
-      navigate(cleanedPathname, { replace: true });
-    }
-  }, [location.pathname, navigate]);
+  const roles = useSessionStorage("roles");
 
   const logout = () => {
-    localStorage.removeItem("role");
-    localStorage.removeItem("username");
-    localStorage.removeItem("password");
-    navigate("/");
+    sessionStorage.removeItem("email");
+    sessionStorage.removeItem("roles");
+
+    const csrfToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("XSRF-TOKEN="))
+      ?.split("=")[1];
+
+    const callLogoutEndpoint = async () => {
+      const response = await fetch("http://localhost:8080/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "X-XSRF-TOKEN": csrfToken,
+        },
+      });
+    };
+
+    callLogoutEndpoint();
     handleLinkClick();
+    window.dispatchEvent(new Event("storage")); // Trigger a storage event manually
   };
 
   const handleLinkClick = () => {
@@ -74,7 +79,7 @@ export default function Navbar() {
               </NavLink>
             </li>
 
-            {role === "ADMIN" && (
+            {roles?.some((role) => role.authority === "ROLE_ADMIN") && (
               <li className="nav-item">
                 <NavLink
                   className="nav-link"
@@ -86,7 +91,8 @@ export default function Navbar() {
               </li>
             )}
 
-            {(role === "ADMIN" || role === "USER") && (
+            {(roles?.some((role) => role.authority === "ROLE_ADMIN") ||
+              roles?.some((role) => role.authority === "ROLE_USER")) && (
               <li className="nav-item">
                 <NavLink
                   className="nav-link"
@@ -98,7 +104,7 @@ export default function Navbar() {
               </li>
             )}
 
-            {role === "USER" && (
+            {roles?.some((role) => role.authority === "ROLE_USER") && (
               <>
                 <li className="nav-item">
                   <NavLink
@@ -141,7 +147,7 @@ export default function Navbar() {
               </>
             )}
 
-            {role !== "USER" && role !== "ADMIN" && (
+            {roles === null && (
               <>
                 <li className="nav-item">
                   <NavLink
@@ -150,16 +156,6 @@ export default function Navbar() {
                     onClick={handleLinkClick}
                   >
                     Log in
-                  </NavLink>
-                </li>
-
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to={"/signup"}
-                    onClick={handleLinkClick}
-                  >
-                    Sign up
                   </NavLink>
                 </li>
 
@@ -175,14 +171,15 @@ export default function Navbar() {
               </>
             )}
 
-            {(role === "ADMIN" || role === "USER") && (
+            {(roles?.some((role) => role.authority === "ROLE_ADMIN") ||
+              roles?.some((role) => role.authority === "ROLE_USER")) && (
               <li className="nav-item">
-                <button
+                <Link
                   className="nav-link"
                   onClick={logout}
                 >
                   Log out
-                </button>
+                </Link>
               </li>
             )}
           </ul>

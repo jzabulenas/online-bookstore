@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -58,27 +60,37 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    return http.csrf(Customizer.withDefaults())
+    return http.csrf(
+            (csrf) ->
+                csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                    .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()))
+        .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests(
-            auth -> {
-              auth.anyRequest().authenticated();
+            authorize -> {
+              authorize.anyRequest().authenticated();
             })
         .oauth2Login(
-            oath2 -> {
-              // oath2.loginPage("http://localhost:5173/login").permitAll();
-              oath2.userInfoEndpoint(c -> c.userService(customOAuth2UserService));
-              oath2.successHandler(oAuth2LoginSuccessHandler);
+            oauth2 -> {
+              oauth2.loginPage("http://localhost:5173/login").permitAll();
+              oauth2.userInfoEndpoint(c -> c.userService(customOAuth2UserService));
+              oauth2.successHandler(oAuth2LoginSuccessHandler);
             })
+        .logout(
+            (logout) -> logout.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()))
         .build();
   }
 
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(List.of(frontendUrl));
-    configuration.addAllowedHeader("*");
-    configuration.addAllowedMethod("*");
+    // configuration.setAllowedOrigins(List.of(frontendUrl));
+    // configuration.addAllowedHeader("*");
+    // configuration.addAllowedMethod("*");
+
+    configuration.addAllowedOrigin(frontendUrl);
+    configuration.setAllowedHeaders(List.of("Content-Type", "X-XSRF-TOKEN"));
+    configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
     configuration.setAllowCredentials(true);
 
     UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource =
