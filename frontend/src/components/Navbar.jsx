@@ -1,10 +1,11 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import useSessionStorage from "../hooks/useSessionStorage";
 import "./Navbar.css";
 
 export default function Navbar() {
   const roles = useSessionStorage("roles");
+  const navigate = useNavigate();
 
   const logout = () => {
     sessionStorage.removeItem("email");
@@ -28,6 +29,12 @@ export default function Navbar() {
     callLogoutEndpoint();
     handleLinkClick();
     window.dispatchEvent(new Event("storage")); // Trigger a storage event manually
+
+    // This is done so the call becomes asynchronous,
+    // because otherwise it does not navigate me
+    setTimeout(() => {
+      navigate("/");
+    }, 0);
   };
 
   const handleLinkClick = () => {
@@ -78,74 +85,6 @@ export default function Navbar() {
                 Home
               </NavLink>
             </li>
-
-            {roles?.some((role) => role.authority === "ROLE_ADMIN") && (
-              <li className="nav-item">
-                <NavLink
-                  className="nav-link"
-                  to={"/categories"}
-                  onClick={handleLinkClick}
-                >
-                  Categories
-                </NavLink>
-              </li>
-            )}
-
-            {(roles?.some((role) => role.authority === "ROLE_ADMIN") ||
-              roles?.some((role) => role.authority === "ROLE_USER")) && (
-              <li className="nav-item">
-                <NavLink
-                  className="nav-link"
-                  to={"/books"}
-                  onClick={handleLinkClick}
-                >
-                  Books
-                </NavLink>
-              </li>
-            )}
-
-            {roles?.some((role) => role.authority === "ROLE_USER") && (
-              <>
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to={"/favorite"}
-                    onClick={handleLinkClick}
-                  >
-                    Favorite Books
-                  </NavLink>
-                </li>
-
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to={"/reserved"}
-                    onClick={handleLinkClick}
-                  >
-                    Reserved Books
-                  </NavLink>
-                </li>
-
-                <form
-                  className="d-flex"
-                  role="search"
-                >
-                  <input
-                    className="form-control me-2"
-                    type="search"
-                    name="search"
-                    placeholder="Search"
-                    aria-label="Search"
-                  />
-                  <button
-                    className="btn btn-outline-success"
-                    type="submit"
-                  >
-                    Search
-                  </button>
-                </form>
-              </>
-            )}
 
             {roles === null && (
               <>
