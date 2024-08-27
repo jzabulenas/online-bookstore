@@ -1,6 +1,7 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import useSessionStorage from "../hooks/useSessionStorage";
+import csrfToken from "../util/getCsrfToken";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -11,17 +12,12 @@ export default function Navbar() {
     sessionStorage.removeItem("email");
     sessionStorage.removeItem("roles");
 
-    const csrfToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("XSRF-TOKEN="))
-      ?.split("=")[1];
-
     const callLogoutEndpoint = async () => {
       const response = await fetch("http://localhost:8080/logout", {
         method: "POST",
         credentials: "include",
         headers: {
-          "X-XSRF-TOKEN": csrfToken,
+          "X-XSRF-TOKEN": csrfToken(),
         },
       });
     };
