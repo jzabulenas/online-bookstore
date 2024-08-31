@@ -16,6 +16,13 @@ public class BookController {
 
   @PostMapping("/generate-books")
   public String generateBooks(@RequestBody String message) {
-    return chatClient.prompt().user(message).call().content();
+    return chatClient
+        .prompt()
+        .user(
+            "I have read "
+                + message
+                + " and liked it. Suggest me 3 new books to read. Only provide title, and author. It should adhere this format: \"Book name by Author\". The result should be stored in a JavaScript array. Do not provide any introduction, like \"Here are three...\"")
+        .call()
+        .content();
   }
 }
