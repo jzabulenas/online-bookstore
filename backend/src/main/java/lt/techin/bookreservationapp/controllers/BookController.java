@@ -18,6 +18,6 @@ public class BookController {
 
   @PostMapping("/generate-books")
   public Map<String, String> generateBooks(@RequestBody String message) {
-    return Map.of("result", chatClient.prompt().user(message).call().content());
+    return Map.of("books", chatClient.prompt().user(message).call().content());
   }
 }
