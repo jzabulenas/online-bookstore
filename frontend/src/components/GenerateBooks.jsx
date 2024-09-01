@@ -36,7 +36,10 @@ export default function GenerateBooks() {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="mb-3"
+      >
         <label htmlFor="book">Input your book:</label>
         <input
           type="text"
