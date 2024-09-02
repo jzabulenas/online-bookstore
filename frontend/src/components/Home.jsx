@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import useSessionStorage from "../hooks/useSessionStorage";
+import GenerateBooks from "./GenerateBooks";
 
 export default function Home() {
   const email = sessionStorage.getItem("email");
@@ -10,7 +11,11 @@ export default function Home() {
   return (
     <>
       {email ? (
-        <p>Welcome {email}</p>
+        <>
+          <p>Welcome {email}</p>
+
+          <GenerateBooks />
+        </>
       ) : (
         <div className="text-center p-5">
           <h1 className="fw-bold text-break">Book recommendation app</h1>
