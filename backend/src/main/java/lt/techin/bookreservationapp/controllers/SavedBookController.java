@@ -1,11 +1,13 @@
 package lt.techin.bookreservationapp.controllers;
 
 import java.security.Principal;
-import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import lt.techin.bookreservationapp.DTOs.SavedBookDTO;
 import lt.techin.bookreservationapp.entities.SavedBook;
@@ -25,18 +27,32 @@ public class SavedBookController {
     this.userRepository = userRepository;
   }
 
+  //  @PostMapping("/save-book")
+  //  public SavedBook saveBook(@RequestBody SavedBookDTO savedBookDTO, Principal principal) {
+  //    Optional<User> user = this.userRepository.findByEmail(principal.getName());
+  //
+  //    if (user.isPresent()) {
+  //      SavedBook savedBook = new SavedBook();
+  //      savedBook.setTitle(savedBookDTO.title());
+  //      savedBook.setUser(user.get());
+  //
+  //      this.savedBookRepository.save(savedBook);
+  //    }
+  //
+  //    return null;
+  //  }
+
   @PostMapping("/save-book")
-  public SavedBook saveBook(@RequestBody SavedBookDTO savedBookDTO, Principal principal) {
-    Optional<User> user = this.userRepository.findByEmail(principal.getName());
+  public ResponseEntity<SavedBook> saveBook(
+      @RequestBody SavedBookDTO savedBookDTO, Principal principal) {
+    User user =
+        this.userRepository
+            .findByEmail(principal.getName())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-    if (user.isPresent()) {
-      SavedBook savedBook = new SavedBook();
-      savedBook.setTitle(savedBookDTO.title());
-      savedBook.setUser(user.get());
+    SavedBook savedBook = new SavedBook(savedBookDTO.title(), user);
+    this.savedBookRepository.save(savedBook);
 
-      this.savedBookRepository.save(savedBook);
-    }
-
-    return null;
+    return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
   }
 }
