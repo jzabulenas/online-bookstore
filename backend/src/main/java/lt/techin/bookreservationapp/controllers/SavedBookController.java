@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.DTOs.SavedBookDTO;
 import lt.techin.bookreservationapp.entities.SavedBook;
 import lt.techin.bookreservationapp.entities.User;
@@ -44,7 +45,7 @@ public class SavedBookController {
 
   @PostMapping("/save-book")
   public ResponseEntity<SavedBook> saveBook(
-      @RequestBody SavedBookDTO savedBookDTO, Principal principal) {
+      @Valid @RequestBody SavedBookDTO savedBookDTO, Principal principal) {
     User user =
         this.userRepository
             .findByEmail(principal.getName())

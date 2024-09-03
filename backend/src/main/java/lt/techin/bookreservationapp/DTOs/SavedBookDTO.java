@@ -1,3 +1,5 @@
 package lt.techin.bookreservationapp.DTOs;
 
-public record SavedBookDTO(String title) {}
+import jakarta.validation.constraints.NotNull;
+
+public record SavedBookDTO(@NotNull String title) {}
