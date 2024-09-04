@@ -6,10 +6,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "Saved_books")
+@Table(
+    name = "Saved_books",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"title", "user_id"})})
 public class SavedBook {
 
   @Id
