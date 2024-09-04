@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { AiOutlineLike } from "react-icons/ai";
 import csrfToken from "../util/getCsrfToken";
 
 export default function GenerateBooks() {
@@ -34,6 +35,28 @@ export default function GenerateBooks() {
     postData();
   };
 
+  const clickThumbsUp = async (bookTitle) => {
+    const url = "http://localhost:8080/save-book";
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "X-XSRF-TOKEN": csrfToken(),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title: bookTitle }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   return (
     <>
       <form
@@ -50,7 +73,12 @@ export default function GenerateBooks() {
         <button>Submit</button>
       </form>
 
-      <p>{result?.result}</p>
+      {result &&
+        result.map((book, index) => (
+          <p key={index}>
+            {book} <AiOutlineLike onClick={() => clickThumbsUp(book)} />
+          </p>
+        ))}
     </>
   );
 }
