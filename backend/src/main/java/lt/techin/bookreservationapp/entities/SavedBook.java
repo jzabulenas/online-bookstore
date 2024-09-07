@@ -28,6 +28,8 @@ public class SavedBook {
     this.user = user;
   }
 
+  public SavedBook() {}
+
   public String getTitle() {
     return title;
   }
