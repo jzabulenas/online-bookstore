@@ -24,15 +24,20 @@ public class BookController {
   public String generateBooks(@RequestBody String message) {
     List<String> titles = this.savedBookRepository.findAllTitles();
 
-    return chatClient
-        .prompt()
-        .user(
-            "I have read "
-                + message
-                + " and liked it. Suggest me 3 new books to read. Only provide title, and author. It should adhere this format: \"Book name by Author\". The result should be stored in a JavaScript array. Do not provide any introduction, like \"Here are three...\""
-                + " Also make sure to not include these books in the result: "
-                + titles)
-        .call()
-        .content();
+    String result =
+        chatClient
+            .prompt()
+            .user(
+                "I have read "
+                    + message
+                    + " and liked it. Suggest me 3 new books to read. Only provide title, and author. It should adhere this format: \"Book name by Author\". The result should be stored in a JavaScript array. Do not provide any introduction, like \"Here are three...\""
+                    + " Also make sure to not include these books in the result: "
+                    + titles)
+            .call()
+            .content();
+
+    System.out.println(result);
+
+    return result;
   }
 }
