@@ -68,14 +68,22 @@ export default function GenerateBooks() {
         onSubmit={handleSubmit(onSubmit)}
         className="mb-3"
       >
-        <label htmlFor="book">Input your book:</label>
-        <input
-          type="text"
-          id="book"
-          {...register("book")}
-        />
+        <div className="mb-3">
+          <label
+            htmlFor="book"
+            className="form-label"
+          >
+            Input your book:
+          </label>
+          <input
+            type="text"
+            id="book"
+            {...register("book")}
+            className="form-control"
+          />
+        </div>
 
-        <button>Submit</button>
+        <button className="btn btn-primary">Submit</button>
       </form>
 
       {result &&
