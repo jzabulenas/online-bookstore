@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { BsHandThumbsUp } from "react-icons/bs";
+import { BsHandThumbsUp, BsHandThumbsUpFill } from "react-icons/bs";
 import csrfToken from "../util/getCsrfToken";
 
 export default function GenerateBooks() {
   const { register, handleSubmit } = useForm();
   const [result, setResult] = useState(null);
+  const [likedBooks, setLikedBooks] = useState([]); // Track liked books
 
   const onSubmit = (data) => {
     async function postData() {
@@ -53,6 +54,9 @@ export default function GenerateBooks() {
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
+
+      // On successful save, update the liked state
+      setLikedBooks((prev) => [...prev, bookTitle]);
     } catch (error) {
       console.error(error.message);
     }
@@ -77,7 +81,12 @@ export default function GenerateBooks() {
       {result &&
         result.map((book, index) => (
           <p key={index}>
-            {book} <BsHandThumbsUp onClick={() => clickThumbsUp(book)} />
+            {book}
+            {likedBooks.includes(book) ? (
+              <BsHandThumbsUpFill />
+            ) : (
+              <BsHandThumbsUp onClick={() => clickThumbsUp(book)} />
+            )}
           </p>
         ))}
     </>
