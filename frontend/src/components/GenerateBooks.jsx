@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { AiOutlineLike } from "react-icons/ai";
+import { BsHandThumbsUp } from "react-icons/bs";
 import csrfToken from "../util/getCsrfToken";
 
 export default function GenerateBooks() {
@@ -76,7 +76,7 @@ export default function GenerateBooks() {
       {result &&
         result.map((book, index) => (
           <p key={index}>
-            {book} <AiOutlineLike onClick={() => clickThumbsUp(book)} />
+            {book} <BsHandThumbsUp onClick={() => clickThumbsUp(book)} />
           </p>
         ))}
     </>
