@@ -27,6 +27,7 @@ export default function GenerateBooks() {
 
         const json = await response.json();
         setResult(json);
+        console.log(json);
       } catch (error) {
         console.error(error.message);
       }
