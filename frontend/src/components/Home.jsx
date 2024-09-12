@@ -12,7 +12,7 @@ export default function Home() {
     <>
       {email ? (
         <>
-          <p>Welcome {email}</p>
+          <h1>Welcome, {email}</h1>
 
           <GenerateBooks />
         </>

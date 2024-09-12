@@ -1,17 +1,13 @@
 spring:
-  h2:
-    console:
-      enabled: true
-      
   datasource:
-    url: jdbc:h2:file:./online-bookstore;AUTO_SERVER=TRUE
-    username: test
-    password: labas123
-    
+    url: jdbc:mariadb://localhost:3306/exmple-database
+    username: root
+    password: my-secret-pw
+
   jpa:
     hibernate:
       ddl-auto: update
-      
+
   security:
     oauth2:
       client:
@@ -20,12 +16,12 @@ spring:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
             scope: email
-            
+
   ai:
     anthropic:
       chat:
         options:
           model: claude-3-haiku-20240307
-      
+
 frontend:
   url: http://localhost:5173

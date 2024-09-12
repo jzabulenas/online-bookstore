@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
+import SavedBooks from "./components/SavedBooks";
 
 function App() {
   return (
@@ -32,6 +33,10 @@ function App() {
           <Route
             path="/oauth2/redirect"
             element={<OAuth2RedirectHandler />}
+          />
+          <Route
+            path="/saved-books"
+            element={<SavedBooks />}
           />
         </Routes>
       </main>

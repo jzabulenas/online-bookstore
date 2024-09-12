@@ -108,14 +108,24 @@ export default function Navbar() {
 
             {(roles?.some((role) => role.authority === "ROLE_ADMIN") ||
               roles?.some((role) => role.authority === "ROLE_USER")) && (
-              <li className="nav-item">
-                <Link
+              <>
+                <NavLink
                   className="nav-link"
-                  onClick={logout}
+                  to={"/saved-books"}
+                  onClick={handleLinkClick}
                 >
-                  Log out
-                </Link>
-              </li>
+                  Saved books
+                </NavLink>
+
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    onClick={logout}
+                  >
+                    Log out
+                  </Link>
+                </li>
+              </>
             )}
           </ul>
         </div>
