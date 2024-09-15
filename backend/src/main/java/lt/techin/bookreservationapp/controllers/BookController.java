@@ -30,13 +30,16 @@ public class BookController {
             .user(
                 "I have read "
                     + message
-                    + " and liked it. Suggest me 3 new books to read. Only provide title, and author. It should adhere this format: \"Book name by Author\". The result should be stored in a JavaScript array. Do not provide any introduction, like \"Here are three...\""
+                    + " and liked it. Suggest me 3 new books to read. Only provide title, and author. It should adhere this format: \"Book name by Author\". The result should be stored in a JavaScript array. Do not provide any introduction, like \"Here are three...\". "
+                    + "Return only the array with values"
                     + " Also make sure to not include these books in the result: "
                     + titles)
             .call()
             .content();
 
     System.out.println(result);
+    System.out.println("---");
+    System.out.println();
 
     return result;
   }
