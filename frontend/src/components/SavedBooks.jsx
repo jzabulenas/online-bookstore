@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function SavedBooks() {
   const [books, setBooks] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getBooks() {
@@ -21,7 +23,9 @@ export default function SavedBooks() {
         setBooks(json);
         console.log(json);
       } catch (error) {
-        console.error(error.message);
+        // console.error(error.message);
+        sessionStorage.clear();
+        navigate("/login");
       }
     }
 
