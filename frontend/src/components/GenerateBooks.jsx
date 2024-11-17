@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsHandThumbsUp, BsHandThumbsUpFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import csrfToken from "../util/getCsrfToken";
 
 export default function GenerateBooks() {
   const { register, handleSubmit } = useForm();
   const [result, setResult] = useState(null);
   const [likedBooks, setLikedBooks] = useState([]); // Track liked books
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     async function postData() {
@@ -30,7 +32,9 @@ export default function GenerateBooks() {
         setResult(json);
         console.log(json);
       } catch (error) {
-        console.error(error.message);
+        // console.error(error.message);
+        sessionStorage.clear();
+        navigate("/login");
       }
     }
 

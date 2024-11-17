@@ -337,4 +337,5 @@ sketch
 *.lock.db
 
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij,maven,node,react,visualstudiocode
-*.txt
+*.txt*
+*.odt*

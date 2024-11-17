@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/exmple-database
+    url: jdbc:mariadb://localhost:3306/online_bookstore
     username: root
     password: my-secret-pw
 
@@ -18,10 +18,10 @@ spring:
             scope: email
 
   ai:
-    anthropic:
+    openai:
       chat:
         options:
-          model: claude-3-haiku-20240307
+          model: gpt-4o-mini
 
 frontend:
   url: http://localhost:5173
