@@ -42,94 +42,96 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar navbar-expand-md bg-body-tertiary mb-3">
-      <div className="container">
-        <Link
-          className="navbar-brand"
-          to={"/"}
-        >
-          <img
-            src={logo}
-            alt="Book recommendation app logo"
-            className="logo"
-          />
-        </Link>
+    <header>
+      <nav className="navbar navbar-expand-md bg-body-tertiary mb-3">
+        <div className="container">
+          <Link
+            className="navbar-brand"
+            to={"/"}
+          >
+            <img
+              src={logo}
+              alt="Book recommendation app logo"
+              className="logo"
+            />
+          </Link>
 
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
 
-        <div
-          className="collapse navbar-collapse"
-          id="navbarSupportedContent"
-        >
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <NavLink
-                className="nav-link"
-                to="/"
-                onClick={handleLinkClick}
-              >
-                Home
-              </NavLink>
-            </li>
-
-            {roles === null && (
-              <>
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to={"/login"}
-                    onClick={handleLinkClick}
-                  >
-                    Log in
-                  </NavLink>
-                </li>
-
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to={"/about"}
-                    onClick={handleLinkClick}
-                  >
-                    About
-                  </NavLink>
-                </li>
-              </>
-            )}
-
-            {(roles?.some((role) => role.authority === "ROLE_ADMIN") ||
-              roles?.some((role) => role.authority === "ROLE_USER")) && (
-              <>
+          <div
+            className="collapse navbar-collapse"
+            id="navbarSupportedContent"
+          >
+            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li className="nav-item">
                 <NavLink
                   className="nav-link"
-                  to={"/saved-books"}
+                  to="/"
                   onClick={handleLinkClick}
                 >
-                  Saved books
+                  Home
                 </NavLink>
+              </li>
 
-                <li className="nav-item">
-                  <Link
+              {roles === null && (
+                <>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to={"/login"}
+                      onClick={handleLinkClick}
+                    >
+                      Log in
+                    </NavLink>
+                  </li>
+
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      to={"/about"}
+                      onClick={handleLinkClick}
+                    >
+                      About
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {(roles?.some((role) => role.authority === "ROLE_ADMIN") ||
+                roles?.some((role) => role.authority === "ROLE_USER")) && (
+                <>
+                  <NavLink
                     className="nav-link"
-                    onClick={logout}
+                    to={"/saved-books"}
+                    onClick={handleLinkClick}
                   >
-                    Log out
-                  </Link>
-                </li>
-              </>
-            )}
-          </ul>
+                    Saved books
+                  </NavLink>
+
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link"
+                      onClick={logout}
+                    >
+                      Log out
+                    </Link>
+                  </li>
+                </>
+              )}
+            </ul>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 }
