@@ -2,21 +2,19 @@ package lt.techin.bookreservationapp.entities;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "Users")
-public class User implements OAuth2User {
+public class User implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +24,7 @@ public class User implements OAuth2User {
 
   private String role;
 
-  @Transient private Map<String, Object> attributes;
+  // @Transient private Map<String, Object> attributes;
 
   public Long getId() {
     return id;
@@ -48,22 +46,34 @@ public class User implements OAuth2User {
     this.role = role;
   }
 
-  @Override
-  public Map<String, Object> getAttributes() {
-    return this.attributes;
-  }
+  // @Override
+  // public Map<String, Object> getAttributes() {
+  // return this.attributes;
+  // }
 
-  public void setAttributes(Map<String, Object> attributes) {
-    this.attributes = attributes;
-  }
+  // public void setAttributes(Map<String, Object> attributes) {
+  // this.attributes = attributes;
+  // }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(() -> role);
+    return List.of(() -> this.role);
+  }
+
+  // @Override
+  // public String getName() {
+  // return this.email;
+  // }
+
+  // Can this be null?
+  @Override
+  public String getPassword() {
+    // TODO Auto-generated method stub
+    return null;
   }
 
   @Override
-  public String getName() {
+  public String getUsername() {
     return this.email;
   }
 }
