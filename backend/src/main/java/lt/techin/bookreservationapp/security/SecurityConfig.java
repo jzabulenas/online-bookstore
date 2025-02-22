@@ -23,16 +23,18 @@ import lt.techin.bookreservationapp.repositories.UserRepository;
 @EnableWebSecurity
 public class SecurityConfig {
 
-  private final CustomOAuth2UserService customOAuth2UserService;
-  private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+  // private final CustomOAuth2UserService customOAuth2UserService;
+  // private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
   private final String frontendUrl;
   private final UserRepository userRepository;
 
-  public SecurityConfig(CustomOAuth2UserService customOAuth2UserService,
-      OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler, @Value("${frontend.url}") String frontendUrl,
-      UserRepository userRepository) {
-    this.customOAuth2UserService = customOAuth2UserService;
-    this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
+  public SecurityConfig(
+      // CustomOAuth2UserService customOAuth2UserService,
+      // OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler,
+      @Value("${frontend.url}") String frontendUrl, UserRepository userRepository) {
+
+    // this.customOAuth2UserService = customOAuth2UserService;
+    // this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
     this.frontendUrl = frontendUrl;
     this.userRepository = userRepository;
   }
