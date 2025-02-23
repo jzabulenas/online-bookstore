@@ -68,52 +68,61 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    return http
-        .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()))
+
+    return http.csrf(
+            (csrf) ->
+                csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                    .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()))
         .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-        .cors(cors -> cors.configurationSource(corsConfigurationSource())).authorizeHttpRequests(authorize -> {
-          authorize.anyRequest().authenticated();
-        }).formLogin(Customizer.withDefaults()).oneTimeTokenLogin(configurer -> {
-          configurer.tokenGenerationSuccessHandler((request, response, oneTimeToken) -> {
-            System.out.println(oneTimeToken.getUsername());
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .authorizeHttpRequests(
+            authorize -> {
+              authorize.anyRequest().authenticated();
+            })
+        .formLogin(Customizer.withDefaults())
+        .oneTimeTokenLogin(
+            configurer -> {
+              configurer.tokenGenerationSuccessHandler(
+                  (request, response, oneTimeToken) -> {
+                    System.out.println(oneTimeToken.getUsername());
 
-            var token = oneTimeToken.getTokenValue();
+                    var token = oneTimeToken.getTokenValue();
 
-            var msg = "Please go to http://localhost:8080/login/ott?token=" + token;
-            System.out.println(msg);
+                    var msg = "Please go to http://localhost:8080/login/ott?token=" + token;
+                    System.out.println(msg);
 
-            response.setContentType(MediaType.TEXT_HTML_VALUE);
-            response.getWriter().write("You've got console mail!");
+                    response.setContentType(MediaType.TEXT_HTML_VALUE);
+                    response.getWriter().write("You've got console mail!");
 
-            if (!this.userRepository.existsByEmail(oneTimeToken.getUsername())) {
-              User user = new User();
-              user.setEmail(oneTimeToken.getUsername());
-              user.setRole("ROLE_USER");
-              this.userRepository.save(user);
-            }
-          });
-          // configurer.tokenService(
-          // new OneTimeTokenService() {
-          //
-          // @Override
-          // public OneTimeToken generate(GenerateOneTimeTokenRequest
-          // request) {
-          // // TODO Auto-generated method stub
-          // return null;
-          // }
-          //
-          // @Override
-          // public OneTimeToken consume(
-          // OneTimeTokenAuthenticationToken authenticationToken) {
-          // // TODO Auto-generated method stub
-          // return null;
-          // }
-          // });
-          configurer.authenticationSuccessHandler((request, response, authentication) -> {
-            response.sendRedirect(this.frontendUrl + "/oauth2/redirect");
-          });
-        })
+                    if (!this.userRepository.existsByEmail(oneTimeToken.getUsername())) {
+                      User user = new User();
+                      user.setEmail(oneTimeToken.getUsername());
+                      user.setRole("ROLE_USER");
+                      this.userRepository.save(user);
+                    }
+                  });
+              // configurer.tokenService(
+              // new OneTimeTokenService() {
+              //
+              // @Override
+              // public OneTimeToken generate(GenerateOneTimeTokenRequest
+              // request) {
+              // // TODO Auto-generated method stub
+              // return null;
+              // }
+              //
+              // @Override
+              // public OneTimeToken consume(
+              // OneTimeTokenAuthenticationToken authenticationToken) {
+              // // TODO Auto-generated method stub
+              // return null;
+              // }
+              // });
+              configurer.authenticationSuccessHandler(
+                  (request, response, authentication) -> {
+                    response.sendRedirect(this.frontendUrl + "/oauth2/redirect");
+                  });
+            })
 
         // .oauth2Login(
         // oauth2 -> {
@@ -139,7 +148,8 @@ public class SecurityConfig {
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
     configuration.setAllowCredentials(true);
 
-    UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+    UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource =
+        new UrlBasedCorsConfigurationSource();
     urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
 
     return urlBasedCorsConfigurationSource;
