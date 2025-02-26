@@ -1,31 +1,40 @@
 package lt.techin.bookreservationapp.end_to_end;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+import lt.techin.bookreservationapp.entities.SavedBook;
+import lt.techin.bookreservationapp.entities.User;
 import lt.techin.bookreservationapp.repositories.SavedBookRepository;
+import lt.techin.bookreservationapp.security.SecurityConfig;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@Import(SecurityConfig.class)
+// @ActiveProfiles("test")
+@AutoConfigureMockMvc
 class SavedBookControllerTest {
 
   @LocalServerPort private Integer port;
+
+  @Autowired private MockMvc mockMvc;
 
   static MariaDBContainer<?> mariaDBContainer =
       new MariaDBContainer<>(DockerImageName.parse("mariadb:10.11"));
@@ -58,14 +67,21 @@ class SavedBookControllerTest {
 
   @Test
   @WithMockUser
-  void shouldGetAllCustomers() {
+  void shouldGetAllCustomers() throws Exception {
 
-    given()
-        .contentType(ContentType.JSON)
-        .when()
-        .get("/api/customers")
-        .then()
-        .statusCode(200)
-        .body(".", hasSize(2));
+    this.savedBookRepository.save(new SavedBook("hello", new User()));
+
+    //    given()
+    //        .contentType(ContentType.JSON)
+    //        .when()
+    //        .get("/api/customers")
+    //        .then()
+    //        .statusCode(200)
+    //        .body(".", hasSize(2));
+
+    this.mockMvc
+        .perform(get("/saved-books"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("length()").value(2));
   }
 }

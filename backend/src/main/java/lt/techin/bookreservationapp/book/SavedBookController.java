@@ -1,4 +1,4 @@
-package lt.techin.bookreservationapp.controllers;
+package lt.techin.bookreservationapp.book;
 
 import java.security.Principal;
 import java.util.List;
@@ -19,13 +19,12 @@ import lt.techin.bookreservationapp.repositories.SavedBookRepository;
 import lt.techin.bookreservationapp.repositories.UserRepository;
 
 @RestController
-public class SavedBookController {
+class SavedBookController {
 
   private final SavedBookRepository savedBookRepository;
   private final UserRepository userRepository;
 
-  public SavedBookController(
-      SavedBookRepository savedBookRepository, UserRepository userRepository) {
+  SavedBookController(SavedBookRepository savedBookRepository, UserRepository userRepository) {
     this.savedBookRepository = savedBookRepository;
     this.userRepository = userRepository;
   }
@@ -46,7 +45,7 @@ public class SavedBookController {
   //  }
 
   @PostMapping("/save-book")
-  public ResponseEntity<SavedBook> saveBook(
+  ResponseEntity<SavedBook> saveBook(
       @Valid @RequestBody SavedBookDTO savedBookDTO, Principal principal) {
     User user =
         this.userRepository
@@ -60,7 +59,7 @@ public class SavedBookController {
   }
 
   @GetMapping("/saved-books")
-  public ResponseEntity<List<String>> getBooks() {
+  ResponseEntity<List<String>> getBooks() {
     return ResponseEntity.status(HttpStatus.OK).body(this.savedBookRepository.findAllTitles());
   }
 }

@@ -1,4 +1,4 @@
-package lt.techin.bookreservationapp.controllers;
+package lt.techin.bookreservationapp.book;
 
 import java.util.List;
 
@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 import lt.techin.bookreservationapp.repositories.SavedBookRepository;
 
 @RestController
-public class BookController {
+class BookController {
 
   private final ChatClient chatClient;
   private final SavedBookRepository savedBookRepository;
 
-  public BookController(ChatClient chatClient, SavedBookRepository savedBookRepository) {
+  BookController(ChatClient chatClient, SavedBookRepository savedBookRepository) {
     this.chatClient = chatClient;
     this.savedBookRepository = savedBookRepository;
   }
 
   @PostMapping("/generate-books")
-  public String generateBooks(@RequestBody String message) {
+  String generateBooks(@RequestBody String message) {
     List<String> titles = this.savedBookRepository.findAllTitles();
 
     String result =
