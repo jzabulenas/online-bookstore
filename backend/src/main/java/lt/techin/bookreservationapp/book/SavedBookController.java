@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
-import lt.techin.bookreservationapp.DTOs.SavedBookDTO;
 import lt.techin.bookreservationapp.entities.SavedBook;
 import lt.techin.bookreservationapp.entities.User;
 import lt.techin.bookreservationapp.repositories.SavedBookRepository;
