@@ -8,7 +8,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
-import lt.techin.bookreservationapp.entities.User;
+import lt.techin.bookreservationapp.user.User;
 
 @Entity
 @Table(

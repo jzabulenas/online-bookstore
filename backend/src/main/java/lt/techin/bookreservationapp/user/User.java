@@ -1,4 +1,4 @@
-package lt.techin.bookreservationapp.entities;
+package lt.techin.bookreservationapp.user;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,11 +26,11 @@ public class User implements UserDetails {
 
   // @Transient private Map<String, Object> attributes;
 
-  public Long getId() {
+  Long getId() {
     return id;
   }
 
-  public String getEmail() {
+  String getEmail() {
     return email;
   }
 
@@ -38,7 +38,7 @@ public class User implements UserDetails {
     this.email = email;
   }
 
-  public String getRole() {
+  String getRole() {
     return role;
   }
 

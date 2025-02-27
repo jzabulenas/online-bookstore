@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import lt.techin.bookreservationapp.entities.User;
+import lt.techin.bookreservationapp.user.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
