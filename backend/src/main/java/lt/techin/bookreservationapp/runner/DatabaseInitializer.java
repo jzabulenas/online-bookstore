@@ -4,7 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import lt.techin.bookreservationapp.services.UserService;
+import lt.techin.bookreservationapp.user.UserService;
 
 @Component
 // It will always match default application.properties, as it does not match any else
