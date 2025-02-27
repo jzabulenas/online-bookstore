@@ -1,10 +1,8 @@
-package lt.techin.bookreservationapp.repositories;
+package lt.techin.bookreservationapp.user;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import lt.techin.bookreservationapp.user.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 

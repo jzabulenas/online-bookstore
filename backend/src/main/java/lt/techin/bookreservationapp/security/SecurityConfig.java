@@ -16,8 +16,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import lt.techin.bookreservationapp.repositories.UserRepository;
 import lt.techin.bookreservationapp.user.User;
+import lt.techin.bookreservationapp.user.UserRepository;
 
 @Configuration
 @EnableWebSecurity

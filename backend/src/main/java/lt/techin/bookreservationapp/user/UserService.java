@@ -2,8 +2,6 @@ package lt.techin.bookreservationapp.user;
 
 import org.springframework.stereotype.Service;
 
-import lt.techin.bookreservationapp.repositories.UserRepository;
-
 @Service
 public class UserService {
 
