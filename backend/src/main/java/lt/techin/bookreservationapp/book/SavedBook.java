@@ -1,4 +1,4 @@
-package lt.techin.bookreservationapp.entities;
+package lt.techin.bookreservationapp.book;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,12 +8,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
+import lt.techin.bookreservationapp.entities.User;
 
 @Entity
 @Table(
     name = "Saved_books",
     uniqueConstraints = {@UniqueConstraint(columnNames = {"title", "user_id"})})
-public class SavedBook {
+class SavedBook {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,18 +24,18 @@ public class SavedBook {
 
   @NotNull @ManyToOne private User user;
 
-  public SavedBook(String title, User user) {
+  SavedBook(String title, User user) {
     this.title = title;
     this.user = user;
   }
 
-  public SavedBook() {}
+  SavedBook() {}
 
-  public String getTitle() {
+  String getTitle() {
     return title;
   }
 
-  public User getUser() {
+  User getUser() {
     return user;
   }
 }
