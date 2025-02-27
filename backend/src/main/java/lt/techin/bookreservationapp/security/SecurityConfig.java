@@ -21,14 +21,14 @@ import lt.techin.bookreservationapp.user.UserRepository;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+class SecurityConfig {
 
   // private final CustomOAuth2UserService customOAuth2UserService;
   // private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
   private final String frontendUrl;
   private final UserRepository userRepository;
 
-  public SecurityConfig(
+  SecurityConfig(
       // CustomOAuth2UserService customOAuth2UserService,
       // OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler,
       @Value("${frontend.url}") String frontendUrl, UserRepository userRepository) {
@@ -67,7 +67,7 @@ public class SecurityConfig {
   // }
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
     return http.csrf(
             (csrf) ->
@@ -137,7 +137,7 @@ public class SecurityConfig {
   }
 
   @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
+  CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     // configuration.setAllowedOrigins(List.of(frontendUrl));
     // configuration.addAllowedHeader("*");

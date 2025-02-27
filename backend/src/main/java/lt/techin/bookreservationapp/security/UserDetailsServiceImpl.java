@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 import lt.techin.bookreservationapp.user.UserRepository;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+class UserDetailsServiceImpl implements UserDetailsService {
 
   private final UserRepository userRepository;
 
-  public UserDetailsServiceImpl(UserRepository userRepository) {
+  UserDetailsServiceImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
