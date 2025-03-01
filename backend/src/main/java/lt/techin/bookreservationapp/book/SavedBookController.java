@@ -42,14 +42,14 @@ class SavedBookController {
   //  }
 
   @PostMapping("/save-book")
-  ResponseEntity<SavedBook> saveBook(
+  ResponseEntity<Book> saveBook(
       @Valid @RequestBody SavedBookDTO savedBookDTO, Principal principal) {
     User user =
         this.userRepository
             .findByEmail(principal.getName())
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-    SavedBook savedBook = new SavedBook(savedBookDTO.title(), user);
+    Book savedBook = new Book(savedBookDTO.title(), user);
     this.bookRepository.save(savedBook);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);

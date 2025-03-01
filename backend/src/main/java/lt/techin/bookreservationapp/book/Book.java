@@ -12,9 +12,9 @@ import lt.techin.bookreservationapp.user.User;
 
 @Entity
 @Table(
-    name = "Saved_books",
+    name = "books",
     uniqueConstraints = {@UniqueConstraint(columnNames = {"title", "user_id"})})
-class SavedBook {
+class Book {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +24,12 @@ class SavedBook {
 
   @NotNull @ManyToOne private User user;
 
-  SavedBook(String title, User user) {
+  Book(String title, User user) {
     this.title = title;
     this.user = user;
   }
 
-  SavedBook() {}
+  Book() {}
 
   String getTitle() {
     return title;
