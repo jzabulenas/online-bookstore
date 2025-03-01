@@ -18,11 +18,11 @@ import lt.techin.bookreservationapp.user.UserRepository;
 @RestController
 class SavedBookController {
 
-  private final SavedBookRepository savedBookRepository;
+  private final BookRepository bookRepository;
   private final UserRepository userRepository;
 
-  SavedBookController(SavedBookRepository savedBookRepository, UserRepository userRepository) {
-    this.savedBookRepository = savedBookRepository;
+  SavedBookController(BookRepository bookRepository, UserRepository userRepository) {
+    this.bookRepository = bookRepository;
     this.userRepository = userRepository;
   }
 
@@ -50,13 +50,13 @@ class SavedBookController {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
     SavedBook savedBook = new SavedBook(savedBookDTO.title(), user);
-    this.savedBookRepository.save(savedBook);
+    this.bookRepository.save(savedBook);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
   }
 
   @GetMapping("/saved-books")
   ResponseEntity<List<String>> getBooks() {
-    return ResponseEntity.status(HttpStatus.OK).body(this.savedBookRepository.findAllTitles());
+    return ResponseEntity.status(HttpStatus.OK).body(this.bookRepository.findAllTitles());
   }
 }

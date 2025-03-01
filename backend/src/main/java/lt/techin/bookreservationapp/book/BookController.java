@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 class BookController {
 
   private final ChatClient chatClient;
-  private final SavedBookRepository savedBookRepository;
+  private final BookRepository bookRepository;
 
-  BookController(ChatClient chatClient, SavedBookRepository savedBookRepository) {
+  BookController(ChatClient chatClient, BookRepository bookRepository) {
     this.chatClient = chatClient;
-    this.savedBookRepository = savedBookRepository;
+    this.bookRepository = bookRepository;
   }
 
   @PostMapping("/generate-books")
   String generateBooks(@RequestBody String message) {
-    List<String> titles = this.savedBookRepository.findAllTitles();
+    List<String> titles = this.bookRepository.findAllTitles();
 
     String result =
         chatClient
