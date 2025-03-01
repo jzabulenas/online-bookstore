@@ -1,6 +1,7 @@
 package lt.techin.bookreservationapp.security;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import lt.techin.bookreservationapp.role.Role;
+import lt.techin.bookreservationapp.role.RoleRepository;
 import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
 
@@ -27,16 +30,20 @@ class SecurityConfig {
   // private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
   private final String frontendUrl;
   private final UserRepository userRepository;
+  private final RoleRepository roleRepository;
 
   SecurityConfig(
       // CustomOAuth2UserService customOAuth2UserService,
       // OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler,
-      @Value("${frontend.url}") String frontendUrl, UserRepository userRepository) {
+      @Value("${frontend.url}") String frontendUrl,
+      UserRepository userRepository,
+      RoleRepository roleRepository) {
 
     // this.customOAuth2UserService = customOAuth2UserService;
     // this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
     this.frontendUrl = frontendUrl;
     this.userRepository = userRepository;
+    this.roleRepository = roleRepository;
   }
 
   // @Bean
@@ -95,9 +102,11 @@ class SecurityConfig {
                     response.getWriter().write("You've got console mail!");
 
                     if (!this.userRepository.existsByEmail(oneTimeToken.getUsername())) {
+                      Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+
                       User user = new User();
                       user.setEmail(oneTimeToken.getUsername());
-                      user.setRole("ROLE_USER");
+                      user.setRoles(List.of(role.get()));
                       this.userRepository.save(user);
                     }
                   });
