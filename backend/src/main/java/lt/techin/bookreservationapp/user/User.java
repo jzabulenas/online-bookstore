@@ -36,6 +36,13 @@ public class User implements UserDetails {
 
   // @Transient private Map<String, Object> attributes;
 
+  public User(String email, List<Role> roles) {
+    this.email = email;
+    this.roles = roles;
+  }
+
+  public User() {}
+
   public Long getId() {
     return id;
   }
