@@ -24,7 +24,7 @@ import lt.techin.bookreservationapp.user.UserRepository;
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig {
+public class SecurityConfig {
 
   // private final CustomOAuth2UserService customOAuth2UserService;
   // private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;

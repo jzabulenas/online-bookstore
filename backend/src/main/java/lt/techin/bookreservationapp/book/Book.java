@@ -14,7 +14,7 @@ import lt.techin.bookreservationapp.user.User;
 @Table(
     name = "books",
     uniqueConstraints = {@UniqueConstraint(columnNames = {"title", "user_id"})})
-class Book {
+public class Book {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ class Book {
 
   @NotNull @ManyToOne private User user;
 
-  Book(String title, User user) {
+  public Book(String title, User user) {
     this.title = title;
     this.user = user;
   }
