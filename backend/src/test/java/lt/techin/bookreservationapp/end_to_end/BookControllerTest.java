@@ -4,6 +4,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,12 +25,23 @@ import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import io.restassured.RestAssured;
+import lt.techin.bookreservationapp.book.Book;
+import lt.techin.bookreservationapp.book.BookRepository;
+import lt.techin.bookreservationapp.role.Role;
+import lt.techin.bookreservationapp.role.RoleRepository;
+import lt.techin.bookreservationapp.security.SecurityConfig;
+import lt.techin.bookreservationapp.user.User;
+import lt.techin.bookreservationapp.user.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(SecurityConfig.class)
-// @ActiveProfiles("test")
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 class BookControllerTest {
+
+  @Autowired BookRepository bookRepository;
+  @Autowired UserRepository userRepository;
+  @Autowired RoleRepository roleRepository;
 
   @LocalServerPort private Integer port;
 
@@ -53,19 +68,25 @@ class BookControllerTest {
     registry.add("spring.datasource.password", mariaDBContainer::getPassword);
   }
 
-  @Autowired SavedBookRepository savedBookRepository;
-
   @BeforeEach
   void setUp() {
     RestAssured.baseURI = "http://localhost:" + port;
-    savedBookRepository.deleteAll();
+    this.bookRepository.deleteAll();
   }
 
   @Test
-  @WithMockUser
+  @WithMockUser(username = "jurgis@gmail.com")
   void shouldGetAllCustomers() throws Exception {
 
-    this.savedBookRepository.save(new SavedBook("hello", new User()));
+    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+
+    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.get())));
+
+    this.bookRepository.save(new Book("Edward III: The Perfect King", user));
+    this.bookRepository.save(
+        new Book(
+            "The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330",
+            user));
 
     //    given()
     //        .contentType(ContentType.JSON)
