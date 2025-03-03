@@ -1,6 +1,8 @@
 package lt.techin.bookreservationapp.end_to_end;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -16,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -74,19 +77,39 @@ class BookControllerTest {
     this.bookRepository.deleteAll();
   }
 
+  // TODO: throws vs. try catch block here
   @Test
   @WithMockUser(username = "jurgis@gmail.com")
-  void shouldGetAllCustomers() throws Exception {
+  void generateBooks_whenBookIsGenerated_return200AndListOfBooks() throws Exception {
+
+    this.mockMvc
+        .perform(
+            post("/generate-books")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("Gabagol")
+                .with(csrf()))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("length()").value(3));
+  }
+
+  @Test
+  @WithMockUser(username = "jurgis@gmail.com")
+  void saveBook_whenBookIsSaved_returnBookAnd201() throws Exception {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.get())));
+    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book("Edward III: The Perfect King", user));
     this.bookRepository.save(
         new Book(
             "The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330",
             user));
+
+    this.mockMvc
+        .perform(get("/saved-books"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("length()").value(2));
 
     //    given()
     //        .contentType(ContentType.JSON)
@@ -95,10 +118,5 @@ class BookControllerTest {
     //        .then()
     //        .statusCode(200)
     //        .body(".", hasSize(2));
-
-    this.mockMvc
-        .perform(get("/saved-books"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("length()").value(2));
   }
 }
