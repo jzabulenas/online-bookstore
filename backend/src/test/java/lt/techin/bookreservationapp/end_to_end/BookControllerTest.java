@@ -77,6 +77,10 @@ class BookControllerTest {
     this.bookRepository.deleteAll();
   }
 
+  //
+  // generateBooks
+  //
+
   // TODO: throws vs. try catch block here
   @Test
   @WithMockUser(username = "jurgis@gmail.com")
@@ -103,6 +107,10 @@ class BookControllerTest {
                 .with(csrf()))
         .andExpect(status().isFound());
   }
+
+  //
+  // getBooks
+  //
 
   @Test
   @WithMockUser(username = "jurgis@gmail.com")
