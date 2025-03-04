@@ -114,7 +114,7 @@ class BookControllerTest {
 
   @Test
   @WithMockUser(username = "jurgis@gmail.com")
-  void saveBook_whenBookIsSaved_returnBookAnd201() throws Exception {
+  void getBooks_whenCalled_returnBooksAnd200() throws Exception {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
