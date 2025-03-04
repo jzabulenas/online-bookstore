@@ -93,6 +93,18 @@ class BookControllerTest {
   }
 
   @Test
+  void generateBooks_whenUnauthenticated_thenReturn302() throws Exception {
+
+    this.mockMvc
+        .perform(
+            post("/generate-books")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("Gabagol")
+                .with(csrf()))
+        .andExpect(status().isFound());
+  }
+
+  @Test
   @WithMockUser(username = "jurgis@gmail.com")
   void saveBook_whenBookIsSaved_returnBookAnd201() throws Exception {
 
