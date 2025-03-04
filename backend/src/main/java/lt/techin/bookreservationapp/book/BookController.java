@@ -70,7 +70,7 @@ class BookController {
     return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
   }
 
-  @GetMapping("/saved-books")
+  @GetMapping("/books")
   ResponseEntity<List<String>> getBooks() {
     return ResponseEntity.ok(this.bookRepository.findAllTitles());
   }

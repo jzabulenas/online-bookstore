@@ -127,7 +127,7 @@ class BookControllerTest {
             user));
 
     this.mockMvc
-        .perform(get("/saved-books"))
+        .perform(get("/books"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("length()").value(2));
 
