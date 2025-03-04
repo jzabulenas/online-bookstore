@@ -72,6 +72,6 @@ class BookController {
 
   @GetMapping("/saved-books")
   ResponseEntity<List<String>> getBooks() {
-    return ResponseEntity.status(HttpStatus.OK).body(this.bookRepository.findAllTitles());
+    return ResponseEntity.ok(this.bookRepository.findAllTitles());
   }
 }
