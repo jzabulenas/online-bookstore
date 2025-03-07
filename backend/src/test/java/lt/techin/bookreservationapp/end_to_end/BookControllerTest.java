@@ -102,6 +102,61 @@ class BookControllerTest {
   }
 
   @Test
+  @WithMockUser(username = "jurgis@gmail.com")
+  void generateBooks_whenMessageIsNull_return400AndMessage() throws Exception {
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    this.mockMvc
+        .perform(
+            post("/generate-books")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new MessageRequestDTO(null)))
+                .with(csrf()))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("message").value("must not be null"))
+        .andExpect(jsonPath("length()").value(1));
+  }
+
+  @Test
+  @WithMockUser(username = "jurgis@gmail.com")
+  void generateBooks_whenMessageIsTooShort_return400AndMessage() throws Exception {
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    this.mockMvc
+        .perform(
+            post("/generate-books")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new MessageRequestDTO("Fe")))
+                .with(csrf()))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("message").value("size must be between 5 and 100"))
+        .andExpect(jsonPath("length()").value(1));
+  }
+
+  @Test
+  @WithMockUser(username = "jurgis@gmail.com")
+  void generateBooks_whenMessageIsTooLong_return400AndMessage() throws Exception {
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    this.mockMvc
+        .perform(
+            post("/generate-books")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    objectMapper.writeValueAsString(
+                        new MessageRequestDTO(
+                            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor."
+                                + " Aenean mj")))
+                .with(csrf()))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("message").value("size must be between 5 and 100"))
+        .andExpect(jsonPath("length()").value(1));
+  }
+
+  @Test
   void generateBooks_whenUnauthenticated_thenReturn302() throws Exception {
 
     this.mockMvc
