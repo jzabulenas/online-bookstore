@@ -27,9 +27,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.utility.DockerImageName;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.restassured.RestAssured;
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.book.BookRepository;
+import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.role.RoleRepository;
 import lt.techin.bookreservationapp.security.SecurityConfig;
@@ -86,11 +89,13 @@ class BookControllerTest {
   @WithMockUser(username = "jurgis@gmail.com")
   void generateBooks_whenBookIsGenerated_return200AndListOfBooks() throws Exception {
 
+    ObjectMapper objectMapper = new ObjectMapper();
+
     this.mockMvc
         .perform(
             post("/generate-books")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("Gabagol")
+                .content(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
                 .with(csrf()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("length()").value(3));

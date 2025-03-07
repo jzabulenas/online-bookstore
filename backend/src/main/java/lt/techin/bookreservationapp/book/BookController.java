@@ -36,8 +36,8 @@ public class BookController {
   }
 
   @PostMapping("/generate-books")
-  ResponseEntity<String> generateBooks(@RequestBody String message) {
-    return ResponseEntity.ok(this.bookService.generateBooks(message));
+  ResponseEntity<String> generateBooks(@RequestBody @Valid MessageRequestDTO messageRequestDTO) {
+    return ResponseEntity.ok(this.bookService.generateBooks(messageRequestDTO));
   }
 
   @PostMapping("/save-book")

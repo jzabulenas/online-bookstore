@@ -23,7 +23,7 @@ public class BookService {
     this.userRepository = userRepository;
   }
 
-  String generateBooks(String message) {
+  String generateBooks(MessageRequestDTO messageRequestDTO) {
     List<String> titles = this.bookRepository.findAllTitles();
 
     String result =
@@ -31,7 +31,7 @@ public class BookService {
             .prompt()
             .user(
                 "I have read "
-                    + message
+                    + messageRequestDTO.message()
                     + " and liked it. Suggest me 3 new books to read. Only provide title, and author. It should adhere this format: \"Book name by Author\". The result should be stored in a JavaScript array. Do not provide any introduction, like \"Here are three...\". "
                     + "Return only the array with values. "
                     + "For example, the result should be like this: [\"Lorem Ipsum by Lorem Ipsum\", \"Lorem Ipsum by Lorem Ipsum\", \"Lorem Ipsum by Lorem Ipsum\"]. "
