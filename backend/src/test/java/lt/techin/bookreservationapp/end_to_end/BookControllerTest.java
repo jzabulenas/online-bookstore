@@ -81,8 +81,15 @@ class BookControllerTest {
     this.bookRepository.deleteAll();
   }
 
-  //
   // generateBooks
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
   //
 
   // TODO: throws vs. try catch block here
@@ -170,8 +177,15 @@ class BookControllerTest {
         .andExpect(status().isFound());
   }
 
-  //
   // getBooks
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
   //
 
   @Test
