@@ -23,7 +23,7 @@ public class BookService {
     this.userRepository = userRepository;
   }
 
-  String generateBooks(MessageRequestDTO messageRequestDTO) {
+  MessageResponseDTO generateBooks(MessageRequestDTO messageRequestDTO) {
     List<String> titles = this.bookRepository.findAllTitles();
 
     String result =
@@ -32,15 +32,17 @@ public class BookService {
             .user(
                 "I have read "
                     + messageRequestDTO.message()
-                    + " and liked it. Suggest me 3 new books to read. Only provide title, and author. It should adhere this format: \"Book name by Author\". The result should be stored in a JavaScript array. Do not provide any introduction, like \"Here are three...\". "
-                    + "Return only the array with values. "
-                    + "For example, the result should be like this: [\"Lorem Ipsum by Lorem Ipsum\", \"Lorem Ipsum by Lorem Ipsum\", \"Lorem Ipsum by Lorem Ipsum\"]. "
-                    + "Do not include any backticks in the result. Do not use any let keywords, just the array with data. "
+                    + " and liked it. Suggest me 3 new books to read. Only provide title, and author. It should adhere this format: Book name by Author. The result should be comma separated. Do not provide any introduction, like \"Here are three...\". "
+                    + "Return only the comma separated values. "
+                    + "For example, the result should be like this: Lorem Ipsum by Lorem Ipsum,Lorem Ipsum by Lorem Ipsum,Lorem Ipsum by Lorem Ipsum"
+                    + "Do not include any backticks in the result. Do not use any let keywords, just the comma separated values. "
                     + "Also make sure to not include these books in the result: "
                     + titles)
             .call()
             .content();
 
-    return result;
+    String[] books = result.split(",");
+
+    return new MessageResponseDTO(books);
   }
 }

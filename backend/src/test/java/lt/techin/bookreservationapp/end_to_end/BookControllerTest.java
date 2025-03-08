@@ -1,5 +1,6 @@
 package lt.techin.bookreservationapp.end_to_end;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -98,7 +99,8 @@ class BookControllerTest {
                 .content(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
                 .with(csrf()))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("length()").value(3));
+        .andExpect(jsonPath("length()").value(1))
+        .andExpect(jsonPath("result", hasSize(3)));
   }
 
   @Test
