@@ -31,11 +31,11 @@ public class Book {
 
   Book() {}
 
-  String getTitle() {
+  public String getTitle() {
     return title;
   }
 
-  User getUser() {
+  public User getUser() {
     return user;
   }
 }
