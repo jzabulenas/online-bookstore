@@ -1,9 +1,11 @@
 package lt.techin.bookreservationapp.end_to_end;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -210,7 +212,8 @@ class BookControllerTest {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("length()").value(2))
         .andExpect(jsonPath("title").value("Edward III: The Perfect King"))
-        .andExpect(jsonPath("userId").value(1));
+        .andExpect(jsonPath("userId").value(1))
+        .andExpect(header().string("Location", containsString("/save-book/1")));
   }
 
   // getBooks
