@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.book.BookRepository;
+import lt.techin.bookreservationapp.book.BookRequestDTO;
 import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.role.RoleRepository;
@@ -175,6 +176,41 @@ class BookControllerTest {
                 .content("Gabagol")
                 .with(csrf()))
         .andExpect(status().isFound());
+  }
+
+  // saveBook
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+
+  @Test
+  @WithMockUser(username = "jurgis@gmail.com")
+  void saveBook_whenBookIsSaved_return201() throws Exception {
+
+    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+
+    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    this.mockMvc
+        .perform(
+            post("/save-book")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    objectMapper.writeValueAsString(
+                        new BookRequestDTO("Edward III: The Perfect King")))
+                .with(csrf()))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("length()").value(2))
+        .andExpect(jsonPath("title").value("Edward III: The Perfect King"))
+        .andExpect(jsonPath("user.id").value(1));
   }
 
   // getBooks
