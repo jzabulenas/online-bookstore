@@ -1,11 +1,15 @@
 package lt.techin.bookreservationapp.book;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
 
 @Service
@@ -44,5 +48,16 @@ public class BookService {
     String[] books = result.split(",");
 
     return new MessageResponseDTO(books);
+  }
+
+  BookResponseDTO saveBook(BookRequestDTO bookRequestDTO, Principal principal) {
+    User user =
+        this.userRepository
+            .findByEmail(principal.getName())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+    Book savedBook = this.bookRepository.save(new Book(bookRequestDTO.title(), user));
+
+    return new BookResponseDTO(savedBook.getTitle(), savedBook.getUser().getId());
   }
 }

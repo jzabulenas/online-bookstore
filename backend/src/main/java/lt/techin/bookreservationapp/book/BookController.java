@@ -4,17 +4,14 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
-import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
 
 @RestController
@@ -45,19 +42,15 @@ public class BookController {
   @PostMapping("/books")
   ResponseEntity<BookResponseDTO> saveBook(
       @Valid @RequestBody BookRequestDTO bookRequestDTO, Principal principal) {
-    User user =
-        this.userRepository
-            .findByEmail(principal.getName())
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-    Book savedBook = this.bookRepository.save(new Book(bookRequestDTO.title(), user));
+    BookResponseDTO bookResponseDTO = this.bookService.saveBook(bookRequestDTO, principal);
 
     return ResponseEntity.created(
             ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(savedBook.getId())
+                .buildAndExpand(bookResponseDTO.userId())
                 .toUri())
-        .body(new BookResponseDTO(savedBook.getTitle(), savedBook.getUser().getId()));
+        .body(bookResponseDTO);
   }
 
   @GetMapping("/books")
