@@ -42,7 +42,7 @@ public class BookController {
     return ResponseEntity.ok(this.bookService.generateBooks(messageRequestDTO));
   }
 
-  @PostMapping("/save-book")
+  @PostMapping("/books")
   ResponseEntity<BookResponseDTO> saveBook(
       @Valid @RequestBody BookRequestDTO bookRequestDTO, Principal principal) {
     User user =

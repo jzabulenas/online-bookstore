@@ -203,7 +203,7 @@ class BookControllerTest {
 
     this.mockMvc
         .perform(
-            post("/save-book")
+            post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     objectMapper.writeValueAsString(
@@ -213,7 +213,7 @@ class BookControllerTest {
         .andExpect(jsonPath("length()").value(2))
         .andExpect(jsonPath("title").value("Edward III: The Perfect King"))
         .andExpect(jsonPath("userId").value(1))
-        .andExpect(header().string("Location", containsString("/save-book/1")));
+        .andExpect(header().string("Location", containsString("/books/1")));
   }
 
   // getBooks
