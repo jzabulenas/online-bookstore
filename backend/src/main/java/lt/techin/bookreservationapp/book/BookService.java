@@ -51,10 +51,15 @@ public class BookService {
   }
 
   BookResponseDTO saveBook(BookRequestDTO bookRequestDTO, Principal principal) {
+    
     User user =
         this.userRepository
             .findByEmail(principal.getName())
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+    if (this.bookRepository.existsByTitleAndUser(bookRequestDTO.title(), user)) {
+      throw new BookTitleAlreadyExistsException();
+    }
 
     Book savedBook = this.bookRepository.save(new Book(bookRequestDTO.title(), user));
 
