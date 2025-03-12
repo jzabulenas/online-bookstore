@@ -168,6 +168,8 @@ class BookControllerTest {
         .andExpect(jsonPath("length()").value(1));
   }
 
+  // TODO: gal reikes padaryti, kad vis delto grazintu programa 401 kai unauthenticated, be redirect
+  // Tai galioja ir kitiems testams
   @Test
   void generateBooks_whenUnauthenticated_thenReturn302() throws Exception {
 
@@ -215,6 +217,23 @@ class BookControllerTest {
         .andExpect(jsonPath("userId").value(1))
         .andExpect(header().string("Location", containsString("/books/1")));
   }
+
+  @Test
+  void saveBook_whenUnauthenticatedCalls_thenReturn302() throws Exception {
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    this.mockMvc
+        .perform(
+            post("/books")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    objectMapper.writeValueAsString(
+                        new BookRequestDTO("Edward III: The Perfect King")))
+                .with(csrf()))
+        .andExpect(status().isFound());
+  }
+
 
   // getBooks
   //
