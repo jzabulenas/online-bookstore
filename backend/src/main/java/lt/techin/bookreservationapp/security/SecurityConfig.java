@@ -116,14 +116,14 @@ public class SecurityConfig {
               // @Override
               // public OneTimeToken generate(GenerateOneTimeTokenRequest
               // request) {
-              // // TODO Auto-generated method stub
+              //
               // return null;
               // }
               //
               // @Override
               // public OneTimeToken consume(
               // OneTimeTokenAuthenticationToken authenticationToken) {
-              // // TODO Auto-generated method stub
+              //
               // return null;
               // }
               // });

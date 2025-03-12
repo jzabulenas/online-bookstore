@@ -62,7 +62,6 @@ class BookControllerTest {
 
   @BeforeAll
   static void beforeAll() {
-    // TODO: Why can't I call this with this?
     mariaDBContainer.start();
   }
 
