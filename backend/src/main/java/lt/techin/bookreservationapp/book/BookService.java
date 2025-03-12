@@ -51,7 +51,8 @@ public class BookService {
   }
 
   BookResponseDTO saveBook(BookRequestDTO bookRequestDTO, Principal principal) {
-    
+
+    // TODO: validate this?
     User user =
         this.userRepository
             .findByEmail(principal.getName())
