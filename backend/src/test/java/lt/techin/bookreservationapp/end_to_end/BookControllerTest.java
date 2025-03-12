@@ -110,8 +110,12 @@ class BookControllerTest {
                 .with(csrf()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("length()").value(1))
+        // TODO: yra bugas, kadangi matau kad generuoja kartais ir 5
         .andExpect(jsonPath("result", hasSize(3)));
   }
+
+  // TODO: o kaip del csrf? Gal parasyti testa, kuris tiktrintu, kas atsitinka, jei csrf
+  // nepaduodamas.
 
   @Test
   @WithMockUser(username = "jurgis@gmail.com")
@@ -170,16 +174,34 @@ class BookControllerTest {
 
   // TODO: gal reikes padaryti, kad vis delto grazintu programa 401 kai unauthenticated, be redirect
   // Tai galioja ir kitiems testams
+  // Be csrf() meta 403, nors turetu buti 302. Su RestAssured veikia tinkamai,
+  // su MockMVC ne. Cia tikriausiai del to, kad MockMVC
   @Test
   void generateBooks_whenUnauthenticated_thenReturn302() throws Exception {
+
+    ObjectMapper objectMapper = new ObjectMapper();
 
     this.mockMvc
         .perform(
             post("/generate-books")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("Gabagol")
+                .content(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
                 .with(csrf()))
         .andExpect(status().isFound());
+
+    // Ask LLM why without I get 403?
+    // .with(csrf))
+
+    // RestAssured equivalent
+    //    given()
+    //        .contentType(ContentType.JSON)
+    //        .body(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
+    //        .redirects()
+    //        .follow(true)
+    //        .when()
+    //        .post("/generate-books")
+    //        .then()
+    //        .statusCode(302);
   }
 
   // saveBook
@@ -234,6 +256,8 @@ class BookControllerTest {
         .andExpect(status().isFound());
   }
 
+  // TODO: Add test for title uniqueness, also a test where one is logged in
+  // and tries to add title which exists at other user
 
   // getBooks
   //
@@ -264,6 +288,7 @@ class BookControllerTest {
         .perform(get("/books"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("length()").value(2));
+    // TODO: Validate actual body yo
 
     //    given()
     //        .contentType(ContentType.JSON)
