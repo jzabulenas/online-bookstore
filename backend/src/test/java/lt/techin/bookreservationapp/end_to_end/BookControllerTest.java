@@ -256,6 +256,31 @@ class BookControllerTest {
         .andExpect(status().isFound());
   }
 
+  @Test
+  @WithMockUser(username = "jurgis@gmail.com")
+  void saveBook_whenTitleAlreadyExists_thenReturn400AndMessage() throws Exception {
+
+    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+
+    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+
+    this.bookRepository.save(new Book("Edward III: The Perfect King", user));
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    this.mockMvc
+        .perform(
+            post("/books")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    objectMapper.writeValueAsString(
+                        new BookRequestDTO("Edward III: The Perfect King")))
+                .with(csrf()))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("length()").value(1))
+        .andExpect(jsonPath("title").value("Already exists"));
+  }
+
   // TODO: Add test for title uniqueness, also a test where one is logged in
   // and tries to add title which exists at other user
 
