@@ -349,5 +349,22 @@ class BookControllerTest {
         .andExpect(jsonPath("[1].length()").value(1));
   }
 
+  @Test
+  void getBooks_whenCalledUnauthenticated_thenReturn302() throws Exception {
+
+    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+
+    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+
+    this.bookRepository.save(new Book("Edward III: The Perfect King", user));
+    this.bookRepository.save(
+        new Book(
+            "The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330",
+            user));
+
+    this.mockMvc
+        .perform(get("/books"))
+        .andExpect(status().isFound())
+        .andExpect(content().string(""));
   }
 }
