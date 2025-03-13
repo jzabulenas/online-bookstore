@@ -236,8 +236,8 @@ class BookControllerTest {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("length()").value(2))
         .andExpect(jsonPath("title").value("Edward III: The Perfect King"))
-        .andExpect(jsonPath("userId").value(1))
-        .andExpect(header().string("Location", containsString("/books/1")));
+        .andExpect(jsonPath("userId").value(user.getId()))
+        .andExpect(header().string("Location", containsString("/books/" + user.getId())));
   }
 
   @Test
