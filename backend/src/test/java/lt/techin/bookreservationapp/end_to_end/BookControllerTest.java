@@ -258,7 +258,7 @@ class BookControllerTest {
 
   @Test
   @WithMockUser(username = "jurgis@gmail.com")
-  void saveBook_whenTitleAlreadyExists_thenReturn400AndMessage() throws Exception {
+  void saveBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage() throws Exception {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
