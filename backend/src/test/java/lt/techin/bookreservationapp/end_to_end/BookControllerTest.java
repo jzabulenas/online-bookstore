@@ -311,9 +311,6 @@ class BookControllerTest {
         .andExpect(header().string("Location", containsString("/books/" + user.getId())));
   }
 
-  // TODO: Add test for title uniqueness, also a test where one is logged in
-  // and tries to add title which exists at other user
-
   // getBooks
   //
   //
@@ -342,15 +339,15 @@ class BookControllerTest {
     this.mockMvc
         .perform(get("/books"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("length()").value(2));
-    // TODO: Validate actual body yo
+        .andExpect(jsonPath("length()").value(2))
+        .andExpect(jsonPath("[0].title").value("Edward III: The Perfect King"))
+        .andExpect(jsonPath("[0].length()").value(1))
+        .andExpect(
+            jsonPath("[1].title")
+                .value(
+                    "The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330"))
+        .andExpect(jsonPath("[1].length()").value(1));
+  }
 
-    //    given()
-    //        .contentType(ContentType.JSON)
-    //        .when()
-    //        .get("/api/customers")
-    //        .then()
-    //        .statusCode(200)
-    //        .body(".", hasSize(2));
   }
 }

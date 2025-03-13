@@ -54,7 +54,7 @@ public class BookController {
   }
 
   @GetMapping("/books")
-  ResponseEntity<List<String>> getBooks() {
-    return ResponseEntity.ok(this.bookRepository.findAllTitles());
+  ResponseEntity<List<BookTitleResponseDTO>> getBooks() {
+    return ResponseEntity.ok(this.bookService.findAllBooks());
   }
 }

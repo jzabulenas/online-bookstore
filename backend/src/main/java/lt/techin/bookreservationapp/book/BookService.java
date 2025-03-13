@@ -66,4 +66,14 @@ public class BookService {
 
     return new BookResponseDTO(savedBook.getTitle(), savedBook.getUser().getId());
   }
+
+  List<BookTitleResponseDTO> findAllBooks() {
+
+    List<String> titles = this.bookRepository.findAllTitles();
+
+    List<BookTitleResponseDTO> books =
+        titles.stream().map(title -> new BookTitleResponseDTO(title)).toList();
+
+    return books;
+  }
 }
