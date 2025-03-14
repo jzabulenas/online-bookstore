@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -114,7 +115,8 @@ class BookControllerTest {
         .andExpect(jsonPath("result", hasSize(3)));
   }
 
-  // TODO: o kaip del csrf? Gal parasyti testa, kuris tiktrintu, kas atsitinka, jei csrf
+  // TODO: o kaip del csrf? Gal parasyti testa, kuris tiktrintu, kas atsitinka,
+  // jei csrf
   // nepaduodamas.
 
   @Test
@@ -172,7 +174,8 @@ class BookControllerTest {
         .andExpect(jsonPath("length()").value(1));
   }
 
-  // TODO: gal reikes padaryti, kad vis delto grazintu programa 401 kai unauthenticated, be redirect
+  // TODO: gal reikes padaryti, kad vis delto grazintu programa 401 kai
+  // unauthenticated, be redirect
   // Tai galioja ir kitiems testams
   // Be csrf() meta 403, nors turetu buti 302. Su RestAssured veikia tinkamai,
   // su MockMVC ne. Cia tikriausiai del to, kad MockMVC
@@ -193,15 +196,15 @@ class BookControllerTest {
     // .with(csrf))
 
     // RestAssured equivalent
-    //    given()
-    //        .contentType(ContentType.JSON)
-    //        .body(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
-    //        .redirects()
-    //        .follow(true)
-    //        .when()
-    //        .post("/generate-books")
-    //        .then()
-    //        .statusCode(302);
+    // given()
+    // .contentType(ContentType.JSON)
+    // .body(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
+    // .redirects()
+    // .follow(true)
+    // .when()
+    // .post("/generate-books")
+    // .then()
+    // .statusCode(302);
   }
 
   // saveBook
@@ -366,5 +369,20 @@ class BookControllerTest {
         .perform(get("/books"))
         .andExpect(status().isFound())
         .andExpect(content().string(""));
+  }
+
+  @Test
+  @WithMockUser(username = "jurgis@gmail.com")
+  void getBooks_whenCalledAndListEmpty_returnEmptyListAnd200() throws Exception {
+
+    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+
+    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+
+    this.mockMvc
+        .perform(get("/books"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$").isEmpty());
   }
 }
