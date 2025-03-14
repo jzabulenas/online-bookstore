@@ -96,7 +96,6 @@ class BookControllerTest {
   //
   //
 
-  // TODO: throws vs. try catch block here
   @Test
   @WithMockUser(username = "jurgis@gmail.com")
   void generateBooks_whenBookIsGenerated_return200AndListOfBooks() throws Exception {
@@ -111,7 +110,8 @@ class BookControllerTest {
                 .with(csrf()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("length()").value(1))
-        // TODO: yra bugas, kadangi matau kad generuoja kartais ir 5
+        // TODO: yra bugas, kadangi matau kad generuoja kartais ir 5. Pakeiciau kiek business logic,
+        // tai gal bus geriau dabar
         .andExpect(jsonPath("result", hasSize(3)));
   }
 

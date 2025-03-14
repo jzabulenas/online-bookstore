@@ -40,7 +40,7 @@
 //  // generateBooks
 //  //
 //
-//  // TODO: throws vs. try catch block here
+//
 //  @Test
 //  @WithMockUser(username = "jurgis@gmail.com")
 //  void generateBooks_whenBookIsGenerated_return200AndListOfBooks() throws Exception {
