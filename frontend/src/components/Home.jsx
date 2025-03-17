@@ -13,6 +13,8 @@ export default function Home() {
       {email ? (
         <>
           <h1>Welcome, {email}</h1>
+          <h2>How to use</h2>
+          <p>For best results, try inputting the whole book title.</p>
 
           <GenerateBooks />
         </>

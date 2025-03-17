@@ -7,7 +7,7 @@ export default function SavedBooks() {
 
   useEffect(() => {
     async function getBooks() {
-      const url = "http://localhost:8080/saved-books";
+      const url = "http://localhost:8080/books";
 
       try {
         const response = await fetch(url, {
@@ -40,7 +40,7 @@ export default function SavedBooks() {
         <p>You do not have any saved books.</p>
       ) : (
         books.map((book, index) => {
-          return <p key={index}>{book}</p>;
+          return <p key={index}>{book.title}</p>;
         })
       )}
     </>

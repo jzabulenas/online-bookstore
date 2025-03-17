@@ -1,20 +1,18 @@
-package lt.techin.bookreservationapp.controllers;
+package lt.techin.bookreservationapp.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lt.techin.bookreservationapp.services.UserService;
-
 // @CrossOrigin("http://localhost:5173")
 @RestController
-public class UserController {
+class UserController {
 
   private final UserService userService;
 
   @Autowired
-  public UserController(UserService userService) {
+  UserController(UserService userService) {
     this.userService = userService;
   }
 
@@ -35,7 +33,7 @@ public class UserController {
   //  }
 
   @GetMapping("/user")
-  public Authentication getUser(Authentication authentication) {
+  Authentication getUser(Authentication authentication) {
     return authentication;
   }
 }

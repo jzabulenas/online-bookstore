@@ -4,12 +4,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import lt.techin.bookreservationapp.services.UserService;
+import lt.techin.bookreservationapp.user.UserService;
 
 @Component
 // It will always match default application.properties, as it does not match any else
 @Profile("default")
-public class DatabaseInitializer implements CommandLineRunner {
+class DatabaseInitializer implements CommandLineRunner {
 
   private final UserService userService;
 
@@ -17,7 +17,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 
   // private final BookService bookService;
 
-  public DatabaseInitializer(UserService userService) {
+  DatabaseInitializer(UserService userService) {
     this.userService = userService;
     // this.categoryService = categoryService;
     // this.bookService = bookService;

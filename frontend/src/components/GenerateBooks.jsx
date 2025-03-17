@@ -6,7 +6,7 @@ import csrfToken from "../util/getCsrfToken";
 
 export default function GenerateBooks() {
   const { register, handleSubmit } = useForm();
-  const [result, setResult] = useState(null);
+  const [books, setBooks] = useState(null);
   const [likedBooks, setLikedBooks] = useState([]); // Track liked books
   const navigate = useNavigate();
 
@@ -19,9 +19,12 @@ export default function GenerateBooks() {
           method: "POST",
           credentials: "include",
           headers: {
+            "Content-Type": "application/json",
             "X-XSRF-TOKEN": csrfToken(),
           },
-          body: data.book,
+          body: JSON.stringify({
+            message: data.book,
+          }),
         });
 
         if (!response.ok) {
@@ -29,7 +32,7 @@ export default function GenerateBooks() {
         }
 
         const json = await response.json();
-        setResult(json);
+        setBooks(json);
         console.log(json);
       } catch (error) {
         // console.error(error.message);
@@ -42,7 +45,7 @@ export default function GenerateBooks() {
   };
 
   const clickThumbsUp = async (bookTitle) => {
-    const url = "http://localhost:8080/save-book";
+    const url = "http://localhost:8080/books";
 
     try {
       const response = await fetch(url, {
@@ -90,8 +93,8 @@ export default function GenerateBooks() {
         <button className="btn btn-primary">Submit</button>
       </form>
 
-      {result &&
-        result.map((book, index) => (
+      {books &&
+        books.result.map((book, index) => (
           <p key={index}>
             {book}
             {likedBooks.includes(book) ? (

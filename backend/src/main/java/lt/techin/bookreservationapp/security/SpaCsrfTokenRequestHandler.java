@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class SpaCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHandler {
+class SpaCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHandler {
 
   private final CsrfTokenRequestHandler delegate = new XorCsrfTokenRequestAttributeHandler();
 
