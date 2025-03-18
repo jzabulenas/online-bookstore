@@ -33,19 +33,31 @@ public class BookService {
     String result =
         chatClient
             .prompt()
+            //            .user(
+            //                "I have read "
+            //                    + messageRequestDTO.message()
+            //                    + " and liked it. Suggest me 3 new books to read. Only provide
+            // title, and author. It should adhere this format: 'Lorem, ipsum by Dolor Sit'. The
+            // result should be comma separated. Do not provide any introduction, like \"Here are
+            // three...\". "
+            //                    + "Return only the three comma separated values. "
+            //                    + "For example, the result should be like this: 'Amet Consectetur
+            // by Adipisicing Elit,Necessitatibus Eum by Numquam Architecto,Eem Illum by Dolorem
+            // Error'"
+            //                    + "Do not include any backticks in the result. Do not use any let
+            // keywords, just the three comma separated books. "
+            //                    + "Also make sure to not include these books in the result: "
+            //                    + titles)
             .user(
                 "I have read "
                     + messageRequestDTO.message()
-                    + " and liked it. Suggest me 3 new books to read. Only provide title, and author. It should adhere this format: Book name by Author. The result should be comma separated. Do not provide any introduction, like \"Here are three...\". "
-                    + "Return only the comma separated values. "
-                    + "For example, the result should be like this: Lorem Ipsum by Lorem Ipsum,Lorem Ipsum by Lorem Ipsum,Lorem Ipsum by Lorem Ipsum"
-                    + "Do not include any backticks in the result. Do not use any let keywords, just the comma separated values. "
-                    + "Also make sure to not include these books in the result: "
+                    + " and liked it. Suggest me 3 new books to read. They must adhere this format: 'Amet Consectetur by Adipisicing Elit|Necessitatibus Eum by Numquam Architecto|Eem Illum by Dolorem Error'."
+                    + "Return only the three comma separated values. Also make sure to not include these books in the result: "
                     + titles)
             .call()
             .content();
 
-    String[] books = result.split(",");
+    String[] books = result.split("\\|");
 
     return new MessageResponseDTO(books);
   }
