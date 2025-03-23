@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
+import lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection;
 import lt.techin.bookreservationapp.user.UserRepository;
 
 @RestController
@@ -34,6 +35,7 @@ public class BookController {
   }
 
   @PostMapping("/generate-books")
+  @WithRateLimitProtection
   ResponseEntity<MessageResponseDTO> generateBooks(
       @RequestBody @Valid MessageRequestDTO messageRequestDTO) {
     return ResponseEntity.ok(this.bookService.generateBooks(messageRequestDTO));
