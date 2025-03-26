@@ -23,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -53,6 +54,7 @@ class BookControllerTest {
   @Autowired BookRepository bookRepository;
   @Autowired UserRepository userRepository;
   @Autowired RoleRepository roleRepository;
+  @Autowired PasswordEncoder passwordEncoder;
 
   @LocalServerPort private Integer port;
 
@@ -224,7 +226,12 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@gmail.com",
+                passwordEncoder.encode("WKXu63PxD3bHYB"),
+                List.of(role.orElseThrow())));
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -265,7 +272,12 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@gmail.com",
+                passwordEncoder.encode("WKXu63PxD3bHYB"),
+                List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book("Edward III: The Perfect King", user));
 
@@ -291,11 +303,20 @@ class BookControllerTest {
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
     User otherUser =
-        this.userRepository.save(new User("antanas@gmail.com", List.of(role.orElseThrow())));
+        this.userRepository.save(
+            new User(
+                "antanas@gmail.com",
+                passwordEncoder.encode("6BRMrh85uPWdMj"),
+                List.of(role.orElseThrow())));
 
     String bookName = "Edward III: The Perfect King";
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@gmail.com",
+                passwordEncoder.encode("WKXu63PxD3bHYB"),
+                List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book(bookName, otherUser));
 
@@ -331,7 +352,12 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@gmail.com",
+                passwordEncoder.encode("WKXu63PxD3bHYB"),
+                List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book("Edward III: The Perfect King", user));
     this.bookRepository.save(
@@ -357,7 +383,12 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@gmail.com",
+                passwordEncoder.encode("WKXu63PxD3bHYB"),
+                List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book("Edward III: The Perfect King", user));
     this.bookRepository.save(
@@ -377,7 +408,12 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@gmail.com",
+                passwordEncoder.encode("WKXu63PxD3bHYB"),
+                List.of(role.orElseThrow())));
 
     this.mockMvc
         .perform(get("/books"))
