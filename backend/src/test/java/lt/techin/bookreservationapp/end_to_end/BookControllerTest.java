@@ -182,7 +182,7 @@ class BookControllerTest {
   // Be csrf() meta 403, nors turetu buti 302. Su RestAssured veikia tinkamai,
   // su MockMVC ne. Cia tikriausiai del to, kad MockMVC
   @Test
-  void generateBooks_whenUnauthenticated_thenReturn302() throws Exception {
+  void generateBooks_whenUnauthenticated_thenReturn401() throws Exception {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -192,7 +192,7 @@ class BookControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
                 .with(csrf()))
-        .andExpect(status().isFound());
+        .andExpect(status().isUnauthorized());
 
     // Ask LLM why without I get 403?
     // .with(csrf))
@@ -251,7 +251,7 @@ class BookControllerTest {
   }
 
   @Test
-  void saveBook_whenUnauthenticatedCalls_thenReturn302() throws Exception {
+  void saveBook_whenUnauthenticatedCalls_thenReturn401() throws Exception {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -263,7 +263,7 @@ class BookControllerTest {
                     objectMapper.writeValueAsString(
                         new BookRequestDTO("Edward III: The Perfect King")))
                 .with(csrf()))
-        .andExpect(status().isFound());
+        .andExpect(status().isUnauthorized());
   }
 
   @Test
@@ -379,7 +379,7 @@ class BookControllerTest {
   }
 
   @Test
-  void getBooks_whenCalledUnauthenticated_thenReturn302() throws Exception {
+  void getBooks_whenCalledUnauthenticated_thenReturn401() throws Exception {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
@@ -398,7 +398,7 @@ class BookControllerTest {
 
     this.mockMvc
         .perform(get("/books"))
-        .andExpect(status().isFound())
+        .andExpect(status().isUnauthorized())
         .andExpect(content().string(""));
   }
 
