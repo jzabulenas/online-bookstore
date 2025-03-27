@@ -40,7 +40,9 @@ public class SecurityConfig {
 
     http.csrf(Customizer.withDefaults())
         .httpBasic(Customizer.withDefaults())
-        .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
+        .authorizeHttpRequests(
+            authorize ->
+                authorize.requestMatchers("/signup").permitAll().anyRequest().authenticated());
 
     return http.build();
 

@@ -1,18 +1,49 @@
 package lt.techin.bookreservationapp.user;
 
+import java.util.List;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import lt.techin.bookreservationapp.role.Role;
+import lt.techin.bookreservationapp.role.RoleRepository;
 
 @Service
 public class UserService {
 
   private final UserRepository userRepository;
+  private final RoleRepository roleRepository;
+  private final PasswordEncoder passwordEncoder;
 
-  UserService(UserRepository userRepository) {
+  UserService(
+      UserRepository userRepository,
+      RoleRepository roleRepository,
+      PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
+    this.roleRepository = roleRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
-  User saveUser(User user) {
-    return userRepository.save(user);
+  UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
+    List<Role> toRoles =
+        userRequestDTO.roles().stream()
+            .map(r -> this.roleRepository.findById(r).orElseThrow())
+            .toList();
+
+    User toUser =
+        new User(
+            userRequestDTO.email(),
+            this.passwordEncoder.encode(userRequestDTO.password()),
+            toRoles);
+
+    User savedUser = this.userRepository.save(toUser);
+
+    List<Long> toRolesIds = savedUser.getRoles().stream().map(r -> r.getId()).toList();
+
+    UserResponseDTO toDTO =
+        new UserResponseDTO(savedUser.getId(), savedUser.getEmail(), toRolesIds);
+
+    return toDTO;
   }
 
   //  public User findUserByUsernameAndPassword(String username, String password) {
