@@ -23,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -53,6 +54,7 @@ class BookControllerTest {
   @Autowired BookRepository bookRepository;
   @Autowired UserRepository userRepository;
   @Autowired RoleRepository roleRepository;
+  @Autowired PasswordEncoder passwordEncoder;
 
   @LocalServerPort private Integer port;
 
@@ -180,7 +182,7 @@ class BookControllerTest {
   // Be csrf() meta 403, nors turetu buti 302. Su RestAssured veikia tinkamai,
   // su MockMVC ne. Cia tikriausiai del to, kad MockMVC
   @Test
-  void generateBooks_whenUnauthenticated_thenReturn302() throws Exception {
+  void generateBooks_whenUnauthenticated_thenReturn401() throws Exception {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -190,7 +192,7 @@ class BookControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
                 .with(csrf()))
-        .andExpect(status().isFound());
+        .andExpect(status().isUnauthorized());
 
     // Ask LLM why without I get 403?
     // .with(csrf))
@@ -224,7 +226,12 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@gmail.com",
+                passwordEncoder.encode("WKXu63PxD3bHYB"),
+                List.of(role.orElseThrow())));
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -244,7 +251,7 @@ class BookControllerTest {
   }
 
   @Test
-  void saveBook_whenUnauthenticatedCalls_thenReturn302() throws Exception {
+  void saveBook_whenUnauthenticatedCalls_thenReturn401() throws Exception {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -256,7 +263,7 @@ class BookControllerTest {
                     objectMapper.writeValueAsString(
                         new BookRequestDTO("Edward III: The Perfect King")))
                 .with(csrf()))
-        .andExpect(status().isFound());
+        .andExpect(status().isUnauthorized());
   }
 
   @Test
@@ -265,7 +272,12 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@gmail.com",
+                passwordEncoder.encode("WKXu63PxD3bHYB"),
+                List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book("Edward III: The Perfect King", user));
 
@@ -291,11 +303,20 @@ class BookControllerTest {
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
     User otherUser =
-        this.userRepository.save(new User("antanas@gmail.com", List.of(role.orElseThrow())));
+        this.userRepository.save(
+            new User(
+                "antanas@gmail.com",
+                passwordEncoder.encode("6BRMrh85uPWdMj"),
+                List.of(role.orElseThrow())));
 
     String bookName = "Edward III: The Perfect King";
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@gmail.com",
+                passwordEncoder.encode("WKXu63PxD3bHYB"),
+                List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book(bookName, otherUser));
 
@@ -331,7 +352,12 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@gmail.com",
+                passwordEncoder.encode("WKXu63PxD3bHYB"),
+                List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book("Edward III: The Perfect King", user));
     this.bookRepository.save(
@@ -353,11 +379,16 @@ class BookControllerTest {
   }
 
   @Test
-  void getBooks_whenCalledUnauthenticated_thenReturn302() throws Exception {
+  void getBooks_whenCalledUnauthenticated_thenReturn401() throws Exception {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@gmail.com",
+                passwordEncoder.encode("WKXu63PxD3bHYB"),
+                List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book("Edward III: The Perfect King", user));
     this.bookRepository.save(
@@ -367,7 +398,7 @@ class BookControllerTest {
 
     this.mockMvc
         .perform(get("/books"))
-        .andExpect(status().isFound())
+        .andExpect(status().isUnauthorized())
         .andExpect(content().string(""));
   }
 
@@ -377,7 +408,12 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user = this.userRepository.save(new User("jurgis@gmail.com", List.of(role.orElseThrow())));
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@gmail.com",
+                passwordEncoder.encode("WKXu63PxD3bHYB"),
+                List.of(role.orElseThrow())));
 
     this.mockMvc
         .perform(get("/books"))

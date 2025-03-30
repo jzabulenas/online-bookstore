@@ -26,6 +26,7 @@ public class User implements UserDetails {
   private Long id;
 
   private String email;
+  private String password;
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
@@ -34,10 +35,9 @@ public class User implements UserDetails {
       inverseJoinColumns = @JoinColumn(name = "role_id"))
   private List<Role> roles;
 
-  // @Transient private Map<String, Object> attributes;
-
-  public User(String email, List<Role> roles) {
+  public User(String email, String password, List<Role> roles) {
     this.email = email;
+    this.password = password;
     this.roles = roles;
   }
 
@@ -55,6 +55,15 @@ public class User implements UserDetails {
     this.email = email;
   }
 
+  @Override
+  public String getPassword() {
+    return this.password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
   public List<Role> getRoles() {
     return roles;
   }
@@ -63,29 +72,9 @@ public class User implements UserDetails {
     this.roles = roles;
   }
 
-  // @Override
-  // public Map<String, Object> getAttributes() {
-  // return this.attributes;
-  // }
-
-  // public void setAttributes(Map<String, Object> attributes) {
-  // this.attributes = attributes;
-  // }
-
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return this.roles;
-  }
-
-  // @Override
-  // public String getName() {
-  // return this.email;
-  // }
-
-  // Can this be null?
-  @Override
-  public String getPassword() {
-    return null;
   }
 
   @Override
