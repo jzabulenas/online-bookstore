@@ -57,7 +57,7 @@ export default function Login() {
       </div> */}
 
       <div className="row">
-        <div className="col-4 mx-auto">
+        <div className="col">
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
               <label
