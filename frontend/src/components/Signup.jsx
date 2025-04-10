@@ -29,15 +29,9 @@ export default function Signup() {
           throw new Error(`Response status: ${response.status}`);
         }
 
-        // const json = await response.json();
-        // setBooks(json);
-        // console.log(json);
-        console.log(response);
         navigate("/");
       } catch (error) {
         console.error(error.message);
-        // sessionStorage.clear();
-        // navigate("/login");
       }
     }
 
