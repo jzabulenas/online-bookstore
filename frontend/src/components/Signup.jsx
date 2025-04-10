@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
 import csrfToken from "../util/getCsrfToken";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     async function postData() {
@@ -30,8 +32,8 @@ export default function Signup() {
         // const json = await response.json();
         // setBooks(json);
         // console.log(json);
-
         console.log(response);
+        navigate("/");
       } catch (error) {
         console.error(error.message);
         // sessionStorage.clear();
