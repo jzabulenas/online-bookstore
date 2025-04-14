@@ -88,6 +88,16 @@ export default function Navbar() {
                   <li className="nav-item">
                     <NavLink
                       className="nav-link"
+                      to={"/signup"}
+                      onClick={handleLinkClick}
+                    >
+                      Sign up
+                    </NavLink>
+                  </li>
+
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
                       to={"/login"}
                       onClick={handleLinkClick}
                     >

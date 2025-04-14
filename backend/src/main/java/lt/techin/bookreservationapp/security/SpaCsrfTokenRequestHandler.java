@@ -11,9 +11,10 @@ import org.springframework.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-class SpaCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHandler {
+final class SpaCsrfTokenRequestHandler implements CsrfTokenRequestHandler {
 
-  private final CsrfTokenRequestHandler delegate = new XorCsrfTokenRequestAttributeHandler();
+  private final CsrfTokenRequestHandler plain = new CsrfTokenRequestAttributeHandler();
+  private final CsrfTokenRequestHandler xor = new XorCsrfTokenRequestAttributeHandler();
 
   @Override
   public void handle(
@@ -22,26 +23,28 @@ class SpaCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHandler {
      * Always use XorCsrfTokenRequestAttributeHandler to provide BREACH protection of
      * the CsrfToken when it is rendered in the response body.
      */
-    this.delegate.handle(request, response, csrfToken);
+    this.xor.handle(request, response, csrfToken);
+    /*
+     * Render the token value to a cookie by causing the deferred token to be loaded.
+     */
+    csrfToken.get();
   }
 
   @Override
   public String resolveCsrfTokenValue(HttpServletRequest request, CsrfToken csrfToken) {
+    String headerValue = request.getHeader(csrfToken.getHeaderName());
     /*
      * If the request contains a request header, use CsrfTokenRequestAttributeHandler
      * to resolve the CsrfToken. This applies when a single-page application includes
      * the header value automatically, which was obtained via a cookie containing the
      * raw CsrfToken.
-     */
-    if (StringUtils.hasText(request.getHeader(csrfToken.getHeaderName()))) {
-      return super.resolveCsrfTokenValue(request, csrfToken);
-    }
-    /*
+     *
      * In all other cases (e.g. if the request contains a request parameter), use
      * XorCsrfTokenRequestAttributeHandler to resolve the CsrfToken. This applies
      * when a server-side rendered form includes the _csrf request parameter as a
      * hidden input.
      */
-    return this.delegate.resolveCsrfTokenValue(request, csrfToken);
+    return (StringUtils.hasText(headerValue) ? this.plain : this.xor)
+        .resolveCsrfTokenValue(request, csrfToken);
   }
 }
