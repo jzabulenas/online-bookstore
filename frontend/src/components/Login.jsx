@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
 import csrfToken from "../util/getCsrfToken";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     async function postData() {
@@ -22,10 +24,15 @@ export default function Login() {
           }).toString(),
         });
 
-        if (!response.ok) {
-          throw new Error(`Response status: ${response.status}`);
+        // if (!response.ok) {
+        //   throw new Error(`Response status: ${response.status}`);
+        // }
+
+        if (response.status === 404) {
+          navigate("/");
         }
       } catch (error) {
+        console.log("This is caught");
         console.error(error.message);
       }
     }
