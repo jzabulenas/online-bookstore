@@ -29,7 +29,7 @@ export default function Login() {
         // }
 
         if (response.status === 404) {
-          navigate("/");
+          navigate("/oauth2/redirect");
         }
       } catch (error) {
         console.log("This is caught");
