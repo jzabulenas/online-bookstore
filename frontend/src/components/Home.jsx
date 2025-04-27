@@ -37,9 +37,12 @@ export default function Home() {
     <>
       {email ? (
         <>
-          <h1>Welcome, {email}</h1>
+          <h1 className="mb-3">Welcome, {email}</h1>
           <h2>How to use</h2>
-          <p>For best results, try inputting the whole book title.</p>
+          <p className="mb-4">
+            For best results, try inputting the whole book title, with author.
+            For example, Pride and Prejudice by Jane Austen.
+          </p>
 
           <GenerateBooks />
         </>
