@@ -1,0 +1,62 @@
+package lt.techin.bookreservationapp.security;
+
+import java.io.IOException;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+class HTTPStatusHandler
+    implements AuthenticationFailureHandler,
+        AuthenticationSuccessHandler,
+        LogoutSuccessHandler,
+        AuthenticationEntryPoint {
+
+  private HttpStatus status;
+
+  public HTTPStatusHandler(HttpStatus status) {
+    this.status = status;
+  }
+
+  @Override
+  public void onAuthenticationFailure(
+      HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
+      throws IOException, ServletException {
+
+    onAuthenticationSuccess(request, response, null);
+  }
+
+  @Override
+  public void onAuthenticationSuccess(
+      HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+      throws IOException, ServletException {
+
+    response.setStatus(status.value());
+  }
+
+  @Override
+  public void onLogoutSuccess(
+      HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+      throws IOException, ServletException {
+
+    onAuthenticationSuccess(request, response, null);
+  }
+
+  @Override
+  public void commence(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      AuthenticationException authException)
+      throws IOException, ServletException {
+
+    response.setStatus(this.status.value());
+  }
+}
