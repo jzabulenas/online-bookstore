@@ -14,7 +14,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-class HTTPStatusHandler
+class HttpStatusHandler
     implements AuthenticationFailureHandler,
         AuthenticationSuccessHandler,
         LogoutSuccessHandler,
@@ -22,7 +22,7 @@ class HTTPStatusHandler
 
   private HttpStatus status;
 
-  public HTTPStatusHandler(HttpStatus status) {
+  public HttpStatusHandler(HttpStatus status) {
     this.status = status;
   }
 

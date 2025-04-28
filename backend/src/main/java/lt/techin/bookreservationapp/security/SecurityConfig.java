@@ -50,12 +50,12 @@ public class SecurityConfig {
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         // .httpBasic(Customizer.withDefaults())
         .exceptionHandling(
-            e -> e.authenticationEntryPoint(new HTTPStatusHandler(HttpStatus.UNAUTHORIZED)))
+            e -> e.authenticationEntryPoint(new HttpStatusHandler(HttpStatus.UNAUTHORIZED)))
         .formLogin(
             f ->
-                f.failureHandler(new HTTPStatusHandler(HttpStatus.UNAUTHORIZED))
-                    .successHandler(new HTTPStatusHandler(HttpStatus.OK)))
-        .logout(l -> l.logoutSuccessHandler(new HTTPStatusHandler(HttpStatus.OK)))
+                f.failureHandler(new HttpStatusHandler(HttpStatus.UNAUTHORIZED))
+                    .successHandler(new HttpStatusHandler(HttpStatus.OK)))
+        .logout(l -> l.logoutSuccessHandler(new HttpStatusHandler(HttpStatus.OK)))
         .authorizeHttpRequests(
             authorize ->
                 authorize.requestMatchers("/signup").permitAll().anyRequest().authenticated());
