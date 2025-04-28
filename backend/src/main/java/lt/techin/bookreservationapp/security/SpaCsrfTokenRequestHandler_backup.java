@@ -46,5 +46,3 @@
 //  }
 // }
 package lt.techin.bookreservationapp.security;
-
-
