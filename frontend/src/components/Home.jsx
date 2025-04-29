@@ -12,12 +12,12 @@ export default function Home() {
   // Using this for receiving CSRF token
   useEffect(() => {
     async function getToken() {
-      const url = "http://localhost:8080";
+      const url = "http://localhost:8080/open";
 
       try {
         const response = await fetch(url, {
           method: "GET",
-          credentials: "include",
+          // credentials: "include",
         });
 
         if (!response.ok) {

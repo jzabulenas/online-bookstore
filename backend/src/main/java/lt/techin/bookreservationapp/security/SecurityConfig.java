@@ -58,7 +58,13 @@ public class SecurityConfig {
         .logout(l -> l.logoutSuccessHandler(new HttpStatusHandler(HttpStatus.OK)))
         .authorizeHttpRequests(
             authorize ->
-                authorize.requestMatchers("/signup").permitAll().anyRequest().authenticated());
+                authorize
+                    .requestMatchers("/signup")
+                    .permitAll()
+                    .requestMatchers("/open")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated());
 
     return http.build();
 
