@@ -24,11 +24,11 @@ export default function Login() {
           }).toString(),
         });
 
-        // if (!response.ok) {
-        //   throw new Error(`Response status: ${response.status}`);
-        // }
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
 
-        if (response.status === 404) {
+        if (response.status === 200) {
           navigate("/oauth2/redirect");
         }
       } catch (error) {
