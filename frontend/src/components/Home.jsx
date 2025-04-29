@@ -37,7 +37,7 @@ export default function Home() {
     <>
       {email ? (
         <>
-          <h1 className="mb-3">Welcome, {email}</h1>
+          <h1 className="mb-4">Welcome, {email}</h1>
           <h2>How to use</h2>
           <p className="mb-4">
             For best results, try inputting the whole book title, with author.
