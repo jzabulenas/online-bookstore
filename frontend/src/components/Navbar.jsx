@@ -9,8 +9,8 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const logout = () => {
-    sessionStorage.removeItem("email");
-    sessionStorage.removeItem("roles");
+    localStorage.removeItem("email");
+    localStorage.removeItem("roles");
 
     const callLogoutEndpoint = async () => {
       const response = await fetch("http://localhost:8080/logout", {

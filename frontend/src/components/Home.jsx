@@ -4,7 +4,8 @@ import GenerateBooks from "./GenerateBooks";
 import { useEffect } from "react";
 
 export default function Home() {
-  const email = sessionStorage.getItem("email");
+  const email = localStorage.getItem("email");
+
   // I do this so a render would happen when roles
   // are removed from session storage.
   const roles = useSessionStorage("roles");

@@ -13,8 +13,10 @@ export default function OAuth2RedirectHandler() {
 
       if (response.ok) {
         const result = await response.json();
-        sessionStorage.setItem("email", result.name);
-        sessionStorage.setItem("roles", JSON.stringify(result.authorities));
+
+        localStorage.setItem("email", result.name);
+        localStorage.setItem("roles", JSON.stringify(result.authorities));
+
         navigate("/"); // Redirect to home
         window.dispatchEvent(new Event("storage")); // Trigger a storage event manually
       } else {
