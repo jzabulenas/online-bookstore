@@ -1,11 +1,11 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
-import useSessionStorage from "../hooks/useSessionStorage";
+import useLocalStorage from "../hooks/useLocalStorage";
 import csrfToken from "../util/getCsrfToken";
 import "./Navbar.css";
 
 export default function Navbar() {
-  const roles = useSessionStorage("roles");
+  const roles = useLocalStorage("roles");
   const navigate = useNavigate();
 
   const logout = () => {

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import useSessionStorage from "../hooks/useSessionStorage";
+import useLocalStorage from "../hooks/useLocalStorage";
 import GenerateBooks from "./GenerateBooks";
 import { useEffect } from "react";
 
@@ -8,7 +8,7 @@ export default function Home() {
 
   // I do this so a render would happen when roles
   // are removed from session storage.
-  const roles = useSessionStorage("roles");
+  const roles = useLocalStorage("roles");
 
   // Using this for receiving CSRF token
   useEffect(() => {
