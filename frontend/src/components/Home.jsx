@@ -18,7 +18,7 @@ export default function Home() {
       try {
         const response = await fetch(url, {
           method: "GET",
-          // credentials: "include",
+          credentials: "include", // Apparently this is required here, even though I do not send any data
         });
 
         if (!response.ok) {
