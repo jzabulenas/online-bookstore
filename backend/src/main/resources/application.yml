@@ -25,3 +25,9 @@ spring:
 
 frontend:
   url: http://localhost:5173
+
+server:
+  servlet:
+    session:
+      cookie:
+        max-age: 30m
