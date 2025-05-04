@@ -3,7 +3,12 @@ import csrfToken from "../util/getCsrfToken";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
@@ -24,11 +29,17 @@ export default function Login() {
           }).toString(),
         });
 
+        if (response.status === 401) {
+          setError("root.serverError", {
+            type: response.status,
+          });
+        }
+
         // if (!response.ok) {
         //   throw new Error(`Response status: ${response.status}`);
         // }
 
-        if (response.status === 404) {
+        if (response.status === 200) {
           navigate("/oauth2/redirect");
         }
       } catch (error) {
@@ -76,6 +87,10 @@ export default function Login() {
                 {...register("password")}
               />
             </div>
+
+            {errors.root?.serverError?.type === 401 && (
+              <p className="text-danger">Username or password is incorrect.</p>
+            )}
 
             <button
               type="submit"

@@ -12,12 +12,12 @@ export default function Home() {
   // Using this for receiving CSRF token
   useEffect(() => {
     async function getToken() {
-      const url = "http://localhost:8080";
+      const url = "http://localhost:8080/open";
 
       try {
         const response = await fetch(url, {
           method: "GET",
-          credentials: "include",
+          // credentials: "include",
         });
 
         if (!response.ok) {
@@ -37,7 +37,7 @@ export default function Home() {
     <>
       {email ? (
         <>
-          <h1 className="mb-3">Welcome, {email}</h1>
+          <h1 className="mb-4">Welcome, {email}</h1>
           <h2>How to use</h2>
           <p className="mb-4">
             For best results, try inputting the whole book title, with author.

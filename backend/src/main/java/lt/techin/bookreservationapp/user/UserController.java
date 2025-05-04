@@ -36,4 +36,9 @@ class UserController {
   Authentication getUser(Authentication authentication) {
     return authentication;
   }
+
+  @GetMapping("/open")
+  public String openCall() {
+    return "This is an open endpoint";
+  }
 }

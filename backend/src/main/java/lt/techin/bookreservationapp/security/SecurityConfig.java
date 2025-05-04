@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,10 +49,22 @@ public class SecurityConfig {
         // .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         // .httpBasic(Customizer.withDefaults())
-        .formLogin(Customizer.withDefaults())
+        .exceptionHandling(
+            e -> e.authenticationEntryPoint(new HttpStatusHandler(HttpStatus.UNAUTHORIZED)))
+        .formLogin(
+            f ->
+                f.failureHandler(new HttpStatusHandler(HttpStatus.UNAUTHORIZED))
+                    .successHandler(new HttpStatusHandler(HttpStatus.OK)))
+        .logout(l -> l.logoutSuccessHandler(new HttpStatusHandler(HttpStatus.OK)))
         .authorizeHttpRequests(
             authorize ->
-                authorize.requestMatchers("/signup").permitAll().anyRequest().authenticated());
+                authorize
+                    .requestMatchers("/signup")
+                    .permitAll()
+                    .requestMatchers("/open")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated());
 
     return http.build();
 

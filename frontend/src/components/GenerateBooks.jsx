@@ -90,7 +90,7 @@ export default function GenerateBooks() {
           />
         </div>
 
-        <button className="btn btn-primary">Submit</button>
+        <button className="btn btn-primary mb-3">Submit</button>
       </form>
 
       {books &&
