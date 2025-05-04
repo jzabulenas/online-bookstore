@@ -27,6 +27,13 @@ export default function GenerateBooks() {
           }),
         });
 
+        // When session cookie expires and user gets logged out, remove local storage
+        if (response.status === 401) {
+          localStorage.removeItem("email");
+          localStorage.removeItem("roles");
+          window.dispatchEvent(new Event("storage")); // Trigger a storage event manually
+        }
+
         if (!response.ok) {
           throw new Error(`Response status: ${response.status}`);
         }
@@ -57,6 +64,13 @@ export default function GenerateBooks() {
         },
         body: JSON.stringify({ title: bookTitle }),
       });
+
+      // When session cookie expires and user gets logged out, remove local storage
+      if (response.status === 401) {
+        localStorage.removeItem("email");
+        localStorage.removeItem("roles");
+        window.dispatchEvent(new Event("storage")); // Trigger a storage event manually
+      }
 
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);

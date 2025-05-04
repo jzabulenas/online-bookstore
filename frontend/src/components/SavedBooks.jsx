@@ -15,6 +15,13 @@ export default function SavedBooks() {
           credentials: "include",
         });
 
+        // When session cookie expires and user gets logged out, remove local storage
+        if (response.status === 401) {
+          localStorage.removeItem("email");
+          localStorage.removeItem("roles");
+          window.dispatchEvent(new Event("storage")); // Trigger a storage event manually
+        }
+
         if (!response.ok) {
           throw new Error(`Response status: ${response.status}`);
         }
