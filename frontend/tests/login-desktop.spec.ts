@@ -7,7 +7,7 @@ test("should display error message, when log in credentials are incorrect", asyn
   await page.getByRole("link", { name: "Log in" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
   await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
-  await page.getByRole("textbox", { name: "Email:" }).press("Tab");
+  await page.getByRole("textbox", { name: "Password:" }).click();
   await page.getByRole("textbox", { name: "Password:" }).fill("12345");
   await page.getByRole("button", { name: "Submit" }).click();
   await expect(page.getByText("Username or password is")).toBeVisible();
