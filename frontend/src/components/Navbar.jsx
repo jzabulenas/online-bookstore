@@ -1,16 +1,16 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
-import useSessionStorage from "../hooks/useSessionStorage";
+import useLocalStorage from "../hooks/useLocalStorage";
 import csrfToken from "../util/getCsrfToken";
 import "./Navbar.css";
 
 export default function Navbar() {
-  const roles = useSessionStorage("roles");
+  const roles = useLocalStorage("roles");
   const navigate = useNavigate();
 
   const logout = () => {
-    sessionStorage.removeItem("email");
-    sessionStorage.removeItem("roles");
+    localStorage.removeItem("email");
+    localStorage.removeItem("roles");
 
     const callLogoutEndpoint = async () => {
       const response = await fetch("http://localhost:8080/logout", {

@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
-import useSessionStorage from "../hooks/useSessionStorage";
+import useLocalStorage from "../hooks/useLocalStorage";
 import GenerateBooks from "./GenerateBooks";
 import { useEffect } from "react";
 
 export default function Home() {
-  const email = sessionStorage.getItem("email");
+  const email = localStorage.getItem("email");
+
   // I do this so a render would happen when roles
   // are removed from session storage.
-  const roles = useSessionStorage("roles");
+  const roles = useLocalStorage("roles");
 
   // Using this for receiving CSRF token
   useEffect(() => {
@@ -17,7 +18,7 @@ export default function Home() {
       try {
         const response = await fetch(url, {
           method: "GET",
-          // credentials: "include",
+          credentials: "include", // Apparently this is required here, even though I do not send any data
         });
 
         if (!response.ok) {
