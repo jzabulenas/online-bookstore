@@ -61,7 +61,7 @@ export default function Signup({ setIsSignedUp }) {
 
           <div className="mb-3">
             <label
-              htmlFor="email"
+              htmlFor="password"
               className="form-label"
             >
               Password:
