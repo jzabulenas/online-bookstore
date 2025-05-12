@@ -46,6 +46,10 @@ public class UserService {
     return toDTO;
   }
 
+  boolean existsUserByEmail(String email) {
+    return this.userRepository.existsByEmail(email);
+  }
+
   //  public User findUserByUsernameAndPassword(String username, String password) {
   //    return userRepository
   //        .findUserByUsername(username)

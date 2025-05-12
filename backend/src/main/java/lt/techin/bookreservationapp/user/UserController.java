@@ -20,7 +20,14 @@ class UserController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<UserResponseDTO> signup(@RequestBody UserRequestDTO userRequestDTO) {
+  public ResponseEntity<Object> signup(@RequestBody UserRequestDTO userRequestDTO) {
+    if (this.userService.existsUserByEmail(userRequestDTO.email())) {
+      Map<String, String> response = new HashMap<>();
+      response.put("username", "Already exists");
+
+      return ResponseEntity.badRequest().body(response);
+    }
+
     return ResponseEntity.ok(this.userService.saveUser(userRequestDTO));
   }
 
