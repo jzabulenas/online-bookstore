@@ -46,6 +46,20 @@ export default defineConfig({
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
     },
+    {
+      name: "setup db",
+      testMatch: /global\.setup\.ts/,
+      teardown: "cleanup db",
+    },
+    {
+      name: "cleanup db",
+      testMatch: /global\.teardown\.ts/,
+    },
+    {
+      name: "chromium with db",
+      use: { ...devices["Desktop Chrome"] },
+      dependencies: ["setup db"],
+    },
     /* Test against mobile viewports. */
     // {
     //   name: "Mobile Chrome",
