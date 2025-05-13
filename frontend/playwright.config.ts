@@ -35,18 +35,6 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
-    },
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-    },
-    {
       name: "setup db",
       testMatch: /global\.setup\.ts/,
       teardown: "cleanup db",
@@ -56,8 +44,18 @@ export default defineConfig({
       testMatch: /global\.teardown\.ts/,
     },
     {
-      name: "chromium with db",
+      name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+      dependencies: ["setup db"],
+    },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+      dependencies: ["setup db"],
+    },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
       dependencies: ["setup db"],
     },
     /* Test against mobile viewports. */
