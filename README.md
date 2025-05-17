@@ -7,7 +7,7 @@ Generate new books to read using artificial intelligence.
 * Search for new books to read, based on a query
 * Save a book you find interesting for later reference
 * Dislike a book from being recommended again
-* Track how many books you have saved to your list for later reading
+* Track how many books you have saved to your list, for later reading
 
 ## Requirements
 
@@ -20,7 +20,9 @@ Generate new books to read using artificial intelligence.
 
 ### Backend
 
-Set `SPRING_AI_OPENAI_API_KEY` environment variable with your OpenAI API key.
+Set `SPRING_AI_OPENAI_API_KEY` environment variable as your OpenAI API key.
+
+Set `${MARIADB_USERNAME}` environment variable as your database username, and `${MARIADB_PASSWORD}` as password.
 
 You will need to create a new database in MariaDB, named `online_bookstore`. The database must be filled with this DDL:
 
@@ -58,9 +60,14 @@ INSERT INTO roles (name)
 VALUES ('ROLE_USER'), ('ROLE_ADMIN');
 ```
 
-Once the repository has been cloned, `cd` into `online-bookstore` folder, then into `backend`.
+Clone the the repository. `cd` into `online-bookstore` folder, then into `backend`.
 
 In the `backend` folder, open a terminal. Execute `./mvnw spring-boot:run` command to run the backend.
 
 ### Frontend
 
+`cd` into `frontend` folder, and open a terminal there. You must first install the dependencies - run `npm install`.
+
+Now run the frontend, using the command `npm run dev`.
+
+Open a browser and navigate to `http://localhost:5173`. Enjoy!
