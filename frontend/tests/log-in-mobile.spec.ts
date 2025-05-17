@@ -15,6 +15,7 @@ test("should log in, when correct credentials are provided", async ({
   await page.getByRole("textbox", { name: "Password:" }).tap();
   await page.getByRole("textbox", { name: "Password:" }).fill("123456");
   await page.getByRole("button", { name: "Submit" }).tap();
+  await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
     page.getByRole("heading", { name: "Welcome, jurgis@inbox.lt" })
   ).toBeVisible();
@@ -33,6 +34,7 @@ test("should display error message, when log in credentials are incorrect", asyn
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Password:" }).fill("12345");
   await page.getByRole("button", { name: "Submit" }).tap();
+  await expect(page).toHaveURL("http://localhost:5173/login");
   await expect(page.getByText("Username or password is")).toBeVisible();
   await expect(page.getByRole("paragraph")).toContainText(
     "Username or password is incorrect."
