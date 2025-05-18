@@ -3,7 +3,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import GenerateBooks from "./GenerateBooks";
 import { useEffect } from "react";
 
-export default function Home() {
+export default function Home({ isSignedUp, setIsSignedUp }) {
   const email = localStorage.getItem("email");
 
   // I do this so a render would happen when roles
@@ -48,13 +48,29 @@ export default function Home() {
           <GenerateBooks />
         </>
       ) : (
-        <div className="text-center p-5">
-          <h1 className="fw-bold text-break">Book recommendation app</h1>
-          <h2 className="fs-5 text-black text-opacity-75">
-            Easily find new books to read
-          </h2>
-          <Link to="/about">Learn more</Link>
-        </div>
+        <>
+          {isSignedUp && (
+            <div
+              className="alert alert-success alert-dismissible"
+              role="alert"
+            >
+              You have successfully signed up. You may now log in.
+              <button
+                type="button"
+                className="btn-close"
+                aria-label="Close"
+                onClick={() => setIsSignedUp(false)}
+              ></button>
+            </div>
+          )}
+          <div className="text-center p-5">
+            <h1 className="fw-bold text-break">Book recommendation app</h1>
+            <h2 className="fs-5 text-black text-opacity-75">
+              Easily find new books to read
+            </h2>
+            <Link to="/about">Learn more</Link>
+          </div>
+        </>
       )}
     </>
   );

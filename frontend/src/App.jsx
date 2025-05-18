@@ -8,8 +8,11 @@ import Navbar from "./components/Navbar";
 import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
 import SavedBooks from "./components/SavedBooks";
 import Signup from "./components/Signup";
+import { useState } from "react";
 
 function App() {
+  const [isSignedUp, setIsSignedUp] = useState(false);
+
   return (
     <>
       <Navbar />
@@ -17,7 +20,12 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Home />}
+            element={
+              <Home
+                isSignedUp={isSignedUp}
+                setIsSignedUp={setIsSignedUp}
+              />
+            }
           />
           <Route
             path="/about"
@@ -41,7 +49,7 @@ function App() {
           />
           <Route
             path="/signup"
-            element={<Signup />}
+            element={<Signup setIsSignedUp={setIsSignedUp} />}
           />
         </Routes>
       </main>

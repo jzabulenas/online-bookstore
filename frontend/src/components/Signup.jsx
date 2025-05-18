@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import csrfToken from "../util/getCsrfToken";
 import { useNavigate } from "react-router-dom";
 
-export default function Signup() {
+export default function Signup({ setIsSignedUp }) {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
 
@@ -29,6 +29,7 @@ export default function Signup() {
           throw new Error(`Response status: ${response.status}`);
         }
 
+        setIsSignedUp(true);
         navigate("/");
       } catch (error) {
         console.error(error.message);
@@ -60,7 +61,7 @@ export default function Signup() {
 
           <div className="mb-3">
             <label
-              htmlFor="email"
+              htmlFor="password"
               className="form-label"
             >
               Password:
