@@ -66,8 +66,10 @@ class BookControllerTestRestAssured {
   @BeforeEach
   void setUp() {
     RestAssured.baseURI = "http://localhost:" + port;
-    this.userRepository.deleteAll();
     this.bookRepository.deleteAll();
+    this.userRepository.deleteAll();
+  }
+
   }
 
   @Test
