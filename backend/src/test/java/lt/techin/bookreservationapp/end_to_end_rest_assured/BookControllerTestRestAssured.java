@@ -1,4 +1,4 @@
-package lt.techin.bookreservationapp.end_to_end;
+package lt.techin.bookreservationapp.end_to_end_rest_assured;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.aMapWithSize;
