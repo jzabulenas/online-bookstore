@@ -87,37 +87,16 @@ class BookControllerTestRestAssured {
 
   @Test
   void generateBooks_whenBookIsGenerated_return200AndListOfBooks() throws JsonProcessingException {
-    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
-
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@inbox.lt", passwordEncoder.encode("123456"), List.of(role.orElseThrow())));
-
-    Response csrfResponse = given().when().get("/open").then().extract().response();
-
-    String csrfToken = csrfResponse.cookie("XSRF-TOKEN");
-
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    Response response =
-        given()
-            .cookie("XSRF-TOKEN", csrfToken)
-            .header("X-XSRF-TOKEN", csrfToken)
-            .contentType(ContentType.URLENC)
-            .body("username=jurgis%40inbox.lt&password=123456")
-            .post("/login")
-            .then()
-            .statusCode(200)
-            .extract()
-            .response();
+    String csrfToken = createUserAndGetCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
 
     given()
-        .cookie("JSESSIONID", response.getSessionId())
+        .cookie("JSESSIONID", loginResponse.getSessionId())
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
-        .body(objectMapper.writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+        .body(
+            new ObjectMapper().writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
         .post("/generate-books")
         .then()
         .statusCode(200)
@@ -127,37 +106,15 @@ class BookControllerTestRestAssured {
 
   @Test
   void generateBooks_whenMessageIsNull_return400AndMessage() throws JsonProcessingException {
-    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
-
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@inbox.lt", passwordEncoder.encode("123456"), List.of(role.orElseThrow())));
-
-    Response csrfResponse = given().when().get("/open").then().extract().response();
-
-    String csrfToken = csrfResponse.cookie("XSRF-TOKEN");
-
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    Response response =
-        given()
-            .cookie("XSRF-TOKEN", csrfToken)
-            .header("X-XSRF-TOKEN", csrfToken)
-            .contentType(ContentType.URLENC)
-            .body("username=jurgis%40inbox.lt&password=123456")
-            .post("/login")
-            .then()
-            .statusCode(200)
-            .extract()
-            .response();
+    String csrfToken = createUserAndGetCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
 
     given()
-        .cookie("JSESSIONID", response.getSessionId())
+        .cookie("JSESSIONID", loginResponse.getSessionId())
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
-        .body(objectMapper.writeValueAsString(new MessageRequestDTO(null)))
+        .body(new ObjectMapper().writeValueAsString(new MessageRequestDTO(null)))
         .post("/generate-books")
         .then()
         .statusCode(400)
@@ -218,5 +175,40 @@ class BookControllerTestRestAssured {
         .body("[0]", aMapWithSize(1))
         .body("[1].title", equalTo(bookTwo.getTitle()))
         .body("[1]", aMapWithSize(1));
+  }
+
+  // Helper methods
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+
+  private String createUserAndGetCsrfToken() {
+    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+
+    this.userRepository.save(
+        new User("jurgis@inbox.lt", passwordEncoder.encode("123456"), List.of(role.orElseThrow())));
+
+    Response csrfResponse = given().when().get("/open").then().extract().response();
+
+    return csrfResponse.cookie("XSRF-TOKEN");
+  }
+
+  private Response loginAndGetSession(String csrfToken) {
+    return given()
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.URLENC)
+        .body("username=jurgis%40inbox.lt&password=123456")
+        .post("/login")
+        .then()
+        .statusCode(200)
+        .extract()
+        .response();
   }
 }
