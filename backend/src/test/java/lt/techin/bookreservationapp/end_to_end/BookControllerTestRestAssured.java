@@ -125,6 +125,46 @@ class BookControllerTestRestAssured {
         .body("result", hasSize(3));
   }
 
+  @Test
+  void generateBooks_whenMessageIsNull_return400AndMessage() throws JsonProcessingException {
+    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+
+    User user =
+        this.userRepository.save(
+            new User(
+                "jurgis@inbox.lt", passwordEncoder.encode("123456"), List.of(role.orElseThrow())));
+
+    Response csrfResponse = given().when().get("/open").then().extract().response();
+
+    String csrfToken = csrfResponse.cookie("XSRF-TOKEN");
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    Response response =
+        given()
+            .cookie("XSRF-TOKEN", csrfToken)
+            .header("X-XSRF-TOKEN", csrfToken)
+            .contentType(ContentType.URLENC)
+            .body("username=jurgis%40inbox.lt&password=123456")
+            .post("/login")
+            .then()
+            .statusCode(200)
+            .extract()
+            .response();
+
+    given()
+        .cookie("JSESSIONID", response.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(objectMapper.writeValueAsString(new MessageRequestDTO(null)))
+        .post("/generate-books")
+        .then()
+        .statusCode(400)
+        .body("message", equalTo("must not be null"))
+        .body(".", aMapWithSize(1));
+  }
+
   // TODO: test to check if same books are not generated as previously?
 
   // getBooks
