@@ -122,6 +122,24 @@ class BookControllerTestRestAssured {
         .body(".", aMapWithSize(1));
   }
 
+  @Test
+  void generateBooks_whenMessageIsTooShort_return400AndMessage() throws JsonProcessingException {
+    String csrfToken = createUserAndGetCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
+
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper().writeValueAsString(new MessageRequestDTO("Fe")))
+        .post("/generate-books")
+        .then()
+        .statusCode(400)
+        .body("message", equalTo("size must be between 5 and 100"))
+        .body(".", aMapWithSize(1));
+  }
+
   // TODO: test to check if same books are not generated as previously?
 
   // getBooks
