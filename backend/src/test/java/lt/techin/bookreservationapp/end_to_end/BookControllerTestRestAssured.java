@@ -3,6 +3,7 @@ package lt.techin.bookreservationapp.end_to_end;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.blankOrNullString;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -162,6 +163,7 @@ class BookControllerTestRestAssured {
         .body("message", equalTo("size must be between 5 and 100"))
         .body(".", aMapWithSize(1));
   }
+
   @Test
   void generateBooks_whenUnauthenticated_thenReturn401() throws JsonProcessingException {
     given()
@@ -172,6 +174,26 @@ class BookControllerTestRestAssured {
         .then()
         .statusCode(401)
         .body(blankOrNullString());
+  }
+
+  @Test
+  void generateBooks_whenAuthenticatedButNoCSRF_thenReturn403AndBody()
+      throws JsonProcessingException {
+    String csrfToken = createUserAndGetCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
+
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .contentType(ContentType.JSON)
+        .body(
+            new ObjectMapper().writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+        .post("/generate-books")
+        .then()
+        .statusCode(403)
+        .body("timestamp", containsString("2025"))
+        .body("status", equalTo(403))
+        .body("error", equalTo("Forbidden"))
+        .body("path", equalTo("/generate-books"));
   }
 
   // TODO: test to check if same books are not generated as previously?
