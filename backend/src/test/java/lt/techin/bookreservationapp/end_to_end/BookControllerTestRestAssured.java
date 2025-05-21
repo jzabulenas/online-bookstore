@@ -265,6 +265,19 @@ class BookControllerTestRestAssured {
   //
   //
 
+  private User createUser() {
+    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+
+    return this.userRepository.save(
+        new User("jurgis@inbox.lt", passwordEncoder.encode("123456"), List.of(role.orElseThrow())));
+  }
+
+  private String getCsrfToken() {
+    Response csrfResponse = given().when().get("/open").then().extract().response();
+
+    return csrfResponse.cookie("XSRF-TOKEN");
+  }
+
   private String createUserAndGetCsrfToken() {
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
