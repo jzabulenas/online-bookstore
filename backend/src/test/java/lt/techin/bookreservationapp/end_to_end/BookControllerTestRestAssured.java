@@ -87,6 +87,9 @@ class BookControllerTestRestAssured {
   //
   //
 
+  // TODO: o kaip del testu, tarkime, neautentifikuotas bet ir body null...
+  // Ar ne per daug?
+
   @Test
   void generateBooks_whenBookIsGenerated_return200AndListOfBooks() throws JsonProcessingException {
     String csrfToken = createUserAndGetCsrfToken();
@@ -102,7 +105,7 @@ class BookControllerTestRestAssured {
         .post("/generate-books")
         .then()
         .statusCode(200)
-        .body(".", aMapWithSize(1))
+        .body("$", aMapWithSize(1))
         .body("result", hasSize(3));
   }
 
@@ -121,7 +124,7 @@ class BookControllerTestRestAssured {
         .then()
         .statusCode(400)
         .body("message", equalTo("must not be null"))
-        .body(".", aMapWithSize(1));
+        .body("$", aMapWithSize(1));
   }
 
   @Test
@@ -139,7 +142,7 @@ class BookControllerTestRestAssured {
         .then()
         .statusCode(400)
         .body("message", equalTo("size must be between 5 and 100"))
-        .body(".", aMapWithSize(1));
+        .body("$", aMapWithSize(1));
   }
 
   @Test
@@ -161,7 +164,7 @@ class BookControllerTestRestAssured {
         .then()
         .statusCode(400)
         .body("message", equalTo("size must be between 5 and 100"))
-        .body(".", aMapWithSize(1));
+        .body("$", aMapWithSize(1));
   }
 
   @Test
