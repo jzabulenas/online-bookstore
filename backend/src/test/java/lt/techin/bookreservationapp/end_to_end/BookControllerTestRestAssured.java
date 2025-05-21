@@ -32,6 +32,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.book.BookRepository;
+import lt.techin.bookreservationapp.book.BookRequestDTO;
 import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.role.RoleRepository;
@@ -201,6 +202,38 @@ class BookControllerTestRestAssured {
 
   // TODO: test to check if same books are not generated as previously?
 
+  // saveBook
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+
+  @Test
+  void saveBook_whenBookIsSaved_return201AndBody() throws JsonProcessingException {
+    User user = createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
+
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .post("/books")
+        .then()
+        .statusCode(201)
+        .body("title", equalTo("Dracula by Bram Stoker"))
+        .body("userId", equalTo(user.getId().intValue()))
+        .body("$", aMapWithSize(2))
+        .header("Location", containsString("/books/" + user.getId()));
+  }
+
   // getBooks
   //
   //
@@ -264,6 +297,8 @@ class BookControllerTestRestAssured {
   //
   //
   //
+
+  // TODO: refactor all tests to use the separate createUser ad getCsrfToken methods?
 
   private User createUser() {
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
