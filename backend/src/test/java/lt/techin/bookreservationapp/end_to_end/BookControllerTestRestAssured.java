@@ -245,6 +245,28 @@ class BookControllerTestRestAssured {
         .header("Location", containsString("/books/" + user.getId()));
   }
 
+  @Test
+  void saveBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage()
+      throws JsonProcessingException {
+    User user = createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
+    this.bookRepository.save(new Book("Dracula by Bram Stoker", user));
+
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .when()
+        .post("/books")
+        .then()
+        .statusCode(400)
+        .body("title", equalTo("Already exists"))
+        .body("$", aMapWithSize(1));
+  }
+
   // getBooks
   //
   //
