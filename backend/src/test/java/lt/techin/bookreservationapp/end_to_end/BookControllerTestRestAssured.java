@@ -298,6 +298,18 @@ class BookControllerTestRestAssured {
         .header("Location", containsString("/books/" + user.getId()));
   }
 
+  @Test
+  void saveBook_whenUnauthenticatedCalls_thenReturn401() throws JsonProcessingException {
+    given()
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .when()
+        .post("/books")
+        .then()
+        .statusCode(401)
+        .body(blankOrNullString());
+  }
+
   // getBooks
   //
   //
