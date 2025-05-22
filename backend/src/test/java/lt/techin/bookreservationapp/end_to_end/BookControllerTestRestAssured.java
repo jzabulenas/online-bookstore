@@ -310,6 +310,26 @@ class BookControllerTestRestAssured {
         .body(blankOrNullString());
   }
 
+  @Test
+  void saveBook_whenAuthenticatedButNoCSRF_thenReturn403AndBody() throws JsonProcessingException {
+    String csrfToken = createUserAndGetCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
+
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper()
+            .writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .when()
+        .post("/books")
+        .then()
+        .statusCode(403)
+        .body("timestamp", containsString("2025"))
+        .body("status", equalTo(403))
+        .body("error", equalTo("Forbidden"))
+        .body("path", equalTo("/books"));
+  }
+
   // getBooks
   //
   //
