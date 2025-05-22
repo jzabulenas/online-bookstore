@@ -11,25 +11,28 @@ import jakarta.validation.constraints.NotNull;
 import lt.techin.bookreservationapp.user.User;
 
 @Entity
-@Table(
-    name = "books",
-    uniqueConstraints = {@UniqueConstraint(columnNames = {"title", "user_id"})})
+@Table(name = "books", uniqueConstraints = {
+    @UniqueConstraint(columnNames = { "title", "user_id" }) })
 public class Book {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotNull private String title;
+  @NotNull
+  private String title;
 
-  @NotNull @ManyToOne private User user;
+  @NotNull
+  @ManyToOne
+  private User user;
 
   public Book(String title, User user) {
     this.title = title;
     this.user = user;
   }
 
-  Book() {}
+  Book() {
+  }
 
   public Long getId() {
     return id;

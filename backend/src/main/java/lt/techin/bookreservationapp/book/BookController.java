@@ -47,11 +47,10 @@ public class BookController {
 
     BookResponseDTO bookResponseDTO = this.bookService.saveBook(bookRequestDTO, principal);
 
-    return ResponseEntity.created(
-            ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(bookResponseDTO.userId())
-                .toUri())
+    return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(bookResponseDTO.userId())
+        .toUri())
         .body(bookResponseDTO);
   }
 

@@ -16,9 +16,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 class HttpStatusHandler
     implements AuthenticationFailureHandler,
-        AuthenticationSuccessHandler,
-        LogoutSuccessHandler,
-        AuthenticationEntryPoint {
+    AuthenticationSuccessHandler,
+    LogoutSuccessHandler,
+    AuthenticationEntryPoint {
 
   private final HttpStatus status;
 

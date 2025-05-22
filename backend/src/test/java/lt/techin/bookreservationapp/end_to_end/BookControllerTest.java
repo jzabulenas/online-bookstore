@@ -51,17 +51,23 @@ import lt.techin.bookreservationapp.user.UserRepository;
 @AutoConfigureMockMvc
 class BookControllerTest {
 
-  @Autowired BookRepository bookRepository;
-  @Autowired UserRepository userRepository;
-  @Autowired RoleRepository roleRepository;
-  @Autowired PasswordEncoder passwordEncoder;
+  @Autowired
+  BookRepository bookRepository;
+  @Autowired
+  UserRepository userRepository;
+  @Autowired
+  RoleRepository roleRepository;
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
-  @LocalServerPort private Integer port;
+  @LocalServerPort
+  private Integer port;
 
-  @Autowired private MockMvc mockMvc;
+  @Autowired
+  private MockMvc mockMvc;
 
-  static MariaDBContainer<?> mariaDBContainer =
-      new MariaDBContainer<>(DockerImageName.parse("mariadb:10.11"));
+  static MariaDBContainer<?> mariaDBContainer = new MariaDBContainer<>(
+      DockerImageName.parse("mariadb:10.11"));
 
   @BeforeAll
   static void beforeAll() {
@@ -105,14 +111,14 @@ class BookControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
 
     this.mockMvc
-        .perform(
-            post("/generate-books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
-                .with(csrf()))
+        .perform(post("/generate-books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
+            .with(csrf()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("length()").value(1))
-        // TODO: yra bugas, kadangi matau kad generuoja kartais ir 5. Pakeiciau kiek business logic,
+        // TODO: yra bugas, kadangi matau kad generuoja kartais ir 5. Pakeiciau kiek
+        // business logic,
         // tai gal bus geriau dabar
         .andExpect(jsonPath("result", hasSize(3)));
   }
@@ -128,11 +134,10 @@ class BookControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
 
     this.mockMvc
-        .perform(
-            post("/generate-books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new MessageRequestDTO(null)))
-                .with(csrf()))
+        .perform(post("/generate-books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(new MessageRequestDTO(null)))
+            .with(csrf()))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("message").value("must not be null"))
         .andExpect(jsonPath("length()").value(1));
@@ -145,11 +150,10 @@ class BookControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
 
     this.mockMvc
-        .perform(
-            post("/generate-books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new MessageRequestDTO("Fe")))
-                .with(csrf()))
+        .perform(post("/generate-books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(new MessageRequestDTO("Fe")))
+            .with(csrf()))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("message").value("size must be between 5 and 100"))
         .andExpect(jsonPath("length()").value(1));
@@ -162,15 +166,12 @@ class BookControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
 
     this.mockMvc
-        .perform(
-            post("/generate-books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    objectMapper.writeValueAsString(
-                        new MessageRequestDTO(
-                            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor."
-                                + " Aenean mj")))
-                .with(csrf()))
+        .perform(post("/generate-books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(new MessageRequestDTO(
+                "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor."
+                    + " Aenean mj")))
+            .with(csrf()))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("message").value("size must be between 5 and 100"))
         .andExpect(jsonPath("length()").value(1));
@@ -187,11 +188,10 @@ class BookControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
 
     this.mockMvc
-        .perform(
-            post("/generate-books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
-                .with(csrf()))
+        .perform(post("/generate-books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
+            .with(csrf()))
         .andExpect(status().isUnauthorized());
 
     // Ask LLM why without I get 403?
@@ -226,23 +226,19 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@gmail.com",
-                passwordEncoder.encode("WKXu63PxD3bHYB"),
-                List.of(role.orElseThrow())));
+    User user = this.userRepository.save(new User(
+        "jurgis@gmail.com",
+        passwordEncoder.encode("WKXu63PxD3bHYB"),
+        List.of(role.orElseThrow())));
 
     ObjectMapper objectMapper = new ObjectMapper();
 
     this.mockMvc
-        .perform(
-            post("/books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    objectMapper.writeValueAsString(
-                        new BookRequestDTO("Edward III: The Perfect King")))
-                .with(csrf()))
+        .perform(post("/books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper
+                .writeValueAsString(new BookRequestDTO("Edward III: The Perfect King")))
+            .with(csrf()))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("length()").value(2))
         .andExpect(jsonPath("title").value("Edward III: The Perfect King"))
@@ -256,13 +252,11 @@ class BookControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
 
     this.mockMvc
-        .perform(
-            post("/books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    objectMapper.writeValueAsString(
-                        new BookRequestDTO("Edward III: The Perfect King")))
-                .with(csrf()))
+        .perform(post("/books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper
+                .writeValueAsString(new BookRequestDTO("Edward III: The Perfect King")))
+            .with(csrf()))
         .andExpect(status().isUnauthorized());
   }
 
@@ -272,25 +266,21 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@gmail.com",
-                passwordEncoder.encode("WKXu63PxD3bHYB"),
-                List.of(role.orElseThrow())));
+    User user = this.userRepository.save(new User(
+        "jurgis@gmail.com",
+        passwordEncoder.encode("WKXu63PxD3bHYB"),
+        List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book("Edward III: The Perfect King", user));
 
     ObjectMapper objectMapper = new ObjectMapper();
 
     this.mockMvc
-        .perform(
-            post("/books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    objectMapper.writeValueAsString(
-                        new BookRequestDTO("Edward III: The Perfect King")))
-                .with(csrf()))
+        .perform(post("/books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper
+                .writeValueAsString(new BookRequestDTO("Edward III: The Perfect King")))
+            .with(csrf()))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("length()").value(1))
         .andExpect(jsonPath("title").value("Already exists"));
@@ -302,32 +292,27 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User otherUser =
-        this.userRepository.save(
-            new User(
-                "antanas@gmail.com",
-                passwordEncoder.encode("6BRMrh85uPWdMj"),
-                List.of(role.orElseThrow())));
+    User otherUser = this.userRepository.save(new User(
+        "antanas@gmail.com",
+        passwordEncoder.encode("6BRMrh85uPWdMj"),
+        List.of(role.orElseThrow())));
 
     String bookName = "Edward III: The Perfect King";
 
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@gmail.com",
-                passwordEncoder.encode("WKXu63PxD3bHYB"),
-                List.of(role.orElseThrow())));
+    User user = this.userRepository.save(new User(
+        "jurgis@gmail.com",
+        passwordEncoder.encode("WKXu63PxD3bHYB"),
+        List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book(bookName, otherUser));
 
     ObjectMapper objectMapper = new ObjectMapper();
 
     this.mockMvc
-        .perform(
-            post("/books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new BookRequestDTO(bookName)))
-                .with(csrf()))
+        .perform(post("/books")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(new BookRequestDTO(bookName)))
+            .with(csrf()))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("length()").value(2))
         .andExpect(jsonPath("title").value(bookName))
@@ -352,18 +337,15 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@gmail.com",
-                passwordEncoder.encode("WKXu63PxD3bHYB"),
-                List.of(role.orElseThrow())));
+    User user = this.userRepository.save(new User(
+        "jurgis@gmail.com",
+        passwordEncoder.encode("WKXu63PxD3bHYB"),
+        List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book("Edward III: The Perfect King", user));
-    this.bookRepository.save(
-        new Book(
-            "The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330",
-            user));
+    this.bookRepository.save(new Book(
+        "The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330",
+        user));
 
     this.mockMvc
         .perform(get("/books"))
@@ -371,10 +353,8 @@ class BookControllerTest {
         .andExpect(jsonPath("length()").value(2))
         .andExpect(jsonPath("[0].title").value("Edward III: The Perfect King"))
         .andExpect(jsonPath("[0].length()").value(1))
-        .andExpect(
-            jsonPath("[1].title")
-                .value(
-                    "The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330"))
+        .andExpect(jsonPath("[1].title")
+            .value("The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330"))
         .andExpect(jsonPath("[1].length()").value(1));
   }
 
@@ -383,18 +363,15 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@gmail.com",
-                passwordEncoder.encode("WKXu63PxD3bHYB"),
-                List.of(role.orElseThrow())));
+    User user = this.userRepository.save(new User(
+        "jurgis@gmail.com",
+        passwordEncoder.encode("WKXu63PxD3bHYB"),
+        List.of(role.orElseThrow())));
 
     this.bookRepository.save(new Book("Edward III: The Perfect King", user));
-    this.bookRepository.save(
-        new Book(
-            "The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330",
-            user));
+    this.bookRepository.save(new Book(
+        "The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330",
+        user));
 
     this.mockMvc
         .perform(get("/books"))
@@ -408,12 +385,10 @@ class BookControllerTest {
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@gmail.com",
-                passwordEncoder.encode("WKXu63PxD3bHYB"),
-                List.of(role.orElseThrow())));
+    User user = this.userRepository.save(new User(
+        "jurgis@gmail.com",
+        passwordEncoder.encode("WKXu63PxD3bHYB"),
+        List.of(role.orElseThrow())));
 
     this.mockMvc
         .perform(get("/books"))

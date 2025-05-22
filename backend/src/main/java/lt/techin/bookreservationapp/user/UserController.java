@@ -34,13 +34,13 @@ class UserController {
     return ResponseEntity.ok(this.userService.saveUser(userRequestDTO));
   }
 
-  //  @PostMapping("/login")
-  //  public User login(@RequestBody User user) {
-  //    User userDb = userService.findUserByUsernameAndPassword(user.getUsername(),
+  // @PostMapping("/login")
+  // public User login(@RequestBody User user) {
+  // User userDb = userService.findUserByUsernameAndPassword(user.getUsername(),
   // user.getPassword());
   //
-  //    return userDb;
-  //  }
+  // return userDb;
+  // }
 
   @GetMapping("/user")
   Authentication getUser(Authentication authentication) {
