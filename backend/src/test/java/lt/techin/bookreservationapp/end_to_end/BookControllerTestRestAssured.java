@@ -128,6 +128,7 @@ class BookControllerTestRestAssured {
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
         .body(new ObjectMapper().writeValueAsString(new MessageRequestDTO(null)))
+        .when()
         .post("/generate-books")
         .then()
         .statusCode(400)
@@ -146,6 +147,7 @@ class BookControllerTestRestAssured {
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
         .body(new ObjectMapper().writeValueAsString(new MessageRequestDTO("Fe")))
+        .when()
         .post("/generate-books")
         .then()
         .statusCode(400)
@@ -166,6 +168,7 @@ class BookControllerTestRestAssured {
         .body(new ObjectMapper()
             .writeValueAsString(new MessageRequestDTO(
                 "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean mj")))
+        .when()
         .post("/generate-books")
         .then()
         .statusCode(400)
@@ -179,6 +182,7 @@ class BookControllerTestRestAssured {
         .contentType(ContentType.JSON)
         .body(new ObjectMapper()
             .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+        .when()
         .post("/generate-books")
         .then()
         .statusCode(401)
@@ -196,6 +200,7 @@ class BookControllerTestRestAssured {
         .contentType(ContentType.JSON)
         .body(new ObjectMapper()
             .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+        .when()
         .post("/generate-books")
         .then()
         .statusCode(403)
@@ -230,6 +235,7 @@ class BookControllerTestRestAssured {
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
         .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .when()
         .post("/books")
         .then()
         .statusCode(201)
@@ -262,7 +268,12 @@ class BookControllerTestRestAssured {
     Book bookTwo = this.bookRepository
         .save(new Book("Romeo and Juliet by William Shakespeare", user));
 
-    Response csrfResponse = given().when().get("/open").then().extract().response();
+    Response csrfResponse = given()
+        .when()
+        .get("/open")
+        .then()
+        .extract()
+        .response();
 
     String csrfToken = csrfResponse.cookie("XSRF-TOKEN");
 
@@ -279,6 +290,7 @@ class BookControllerTestRestAssured {
 
     given()
         .cookie("JSESSIONID", response.getSessionId())
+        .when()
         .get("/books")
         .then()
         .statusCode(200)
