@@ -43,10 +43,11 @@ import lt.techin.bookreservationapp.user.UserRepository;
 @ActiveProfiles("test")
 class BookControllerTestRestAssured {
 
-  @LocalServerPort private Integer port;
+  @LocalServerPort
+  private Integer port;
 
-  static MariaDBContainer<?> mariaDB =
-      new MariaDBContainer<>(DockerImageName.parse("mariadb:10.11"));
+  static MariaDBContainer<?> mariaDB = new MariaDBContainer<>(
+      DockerImageName.parse("mariadb:10.11"));
 
   @BeforeAll
   static void beforeAll() {
@@ -65,10 +66,14 @@ class BookControllerTestRestAssured {
     registry.add("spring.datasource.password", mariaDB::getPassword);
   }
 
-  @Autowired UserRepository userRepository;
-  @Autowired RoleRepository roleRepository;
-  @Autowired PasswordEncoder passwordEncoder;
-  @Autowired BookRepository bookRepository;
+  @Autowired
+  UserRepository userRepository;
+  @Autowired
+  RoleRepository roleRepository;
+  @Autowired
+  PasswordEncoder passwordEncoder;
+  @Autowired
+  BookRepository bookRepository;
 
   @BeforeEach
   void setUp() {
@@ -101,8 +106,10 @@ class BookControllerTestRestAssured {
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
-        .body(
-            new ObjectMapper().writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+        .body(new ObjectMapper()
+            .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+        // Add when everywhere
+        .when()
         .post("/generate-books")
         .then()
         .statusCode(200)
@@ -156,11 +163,9 @@ class BookControllerTestRestAssured {
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
-        .body(
-            new ObjectMapper()
-                .writeValueAsString(
-                    new MessageRequestDTO(
-                        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean mj")))
+        .body(new ObjectMapper()
+            .writeValueAsString(new MessageRequestDTO(
+                "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean mj")))
         .post("/generate-books")
         .then()
         .statusCode(400)
@@ -172,8 +177,8 @@ class BookControllerTestRestAssured {
   void generateBooks_whenUnauthenticated_thenReturn401() throws JsonProcessingException {
     given()
         .contentType(ContentType.JSON)
-        .body(
-            new ObjectMapper().writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+        .body(new ObjectMapper()
+            .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
         .post("/generate-books")
         .then()
         .statusCode(401)
@@ -189,8 +194,8 @@ class BookControllerTestRestAssured {
     given()
         .cookie("JSESSIONID", loginResponse.getSessionId())
         .contentType(ContentType.JSON)
-        .body(
-            new ObjectMapper().writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+        .body(new ObjectMapper()
+            .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
         .post("/generate-books")
         .then()
         .statusCode(403)
@@ -249,31 +254,28 @@ class BookControllerTestRestAssured {
   void getBooks_whenAuthenticated_returnBooksAnd200() {
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@inbox.lt", passwordEncoder.encode("123456"), List.of(role.orElseThrow())));
+    User user = this.userRepository.save(new User(
+        "jurgis@inbox.lt", passwordEncoder.encode("123456"), List.of(role.orElseThrow())));
 
     Book bookOne = this.bookRepository.save(new Book("Pride and Prejudice by Jane Austen", user));
 
-    Book bookTwo =
-        this.bookRepository.save(new Book("Romeo and Juliet by William Shakespeare", user));
+    Book bookTwo = this.bookRepository
+        .save(new Book("Romeo and Juliet by William Shakespeare", user));
 
     Response csrfResponse = given().when().get("/open").then().extract().response();
 
     String csrfToken = csrfResponse.cookie("XSRF-TOKEN");
 
-    Response response =
-        given()
-            .cookie("XSRF-TOKEN", csrfToken)
-            .header("X-XSRF-TOKEN", csrfToken)
-            .contentType(ContentType.URLENC)
-            .body("username=jurgis%40inbox.lt&password=123456")
-            .post("/login")
-            .then()
-            .statusCode(200)
-            .extract()
-            .response();
+    Response response = given()
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.URLENC)
+        .body("username=jurgis%40inbox.lt&password=123456")
+        .post("/login")
+        .then()
+        .statusCode(200)
+        .extract()
+        .response();
 
     given()
         .cookie("JSESSIONID", response.getSessionId())
@@ -298,13 +300,14 @@ class BookControllerTestRestAssured {
   //
   //
 
-  // TODO: refactor all tests to use the separate createUser ad getCsrfToken methods?
+  // TODO: refactor all tests to use the separate createUser ad getCsrfToken
+  // methods?
 
   private User createUser() {
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    return this.userRepository.save(
-        new User("jurgis@inbox.lt", passwordEncoder.encode("123456"), List.of(role.orElseThrow())));
+    return this.userRepository.save(new User("jurgis@inbox.lt", passwordEncoder.encode("123456"),
+        List.of(role.orElseThrow())));
   }
 
   private String getCsrfToken() {
@@ -316,10 +319,15 @@ class BookControllerTestRestAssured {
   private String createUserAndGetCsrfToken() {
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    this.userRepository.save(
-        new User("jurgis@inbox.lt", passwordEncoder.encode("123456"), List.of(role.orElseThrow())));
+    this.userRepository.save(new User("jurgis@inbox.lt", passwordEncoder.encode("123456"),
+        List.of(role.orElseThrow())));
 
-    Response csrfResponse = given().when().get("/open").then().extract().response();
+    Response csrfResponse = given()
+        .when()
+        .get("/open")
+        .then()
+        .extract()
+        .response();
 
     return csrfResponse.cookie("XSRF-TOKEN");
   }
