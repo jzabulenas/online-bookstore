@@ -342,39 +342,18 @@ class BookControllerTestRestAssured {
   //
 
   @Test
-  void getBooks_whenAuthenticated_returnBooksAnd200() {
-    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
-
-    User user = this.userRepository.save(new User(
-        "jurgis@inbox.lt", passwordEncoder.encode("123456"), List.of(role.orElseThrow())));
+  void getBooks_whenCalled_thenReturnBooksAnd200() {
+    User user = createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
 
     Book bookOne = this.bookRepository.save(new Book("Pride and Prejudice by Jane Austen", user));
 
     Book bookTwo = this.bookRepository
         .save(new Book("Romeo and Juliet by William Shakespeare", user));
 
-    Response csrfResponse = given()
-        .when()
-        .get("/open")
-        .then()
-        .extract()
-        .response();
-
-    String csrfToken = csrfResponse.cookie("XSRF-TOKEN");
-
-    Response response = given()
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.URLENC)
-        .body("username=jurgis%40inbox.lt&password=123456")
-        .post("/login")
-        .then()
-        .statusCode(200)
-        .extract()
-        .response();
-
     given()
-        .cookie("JSESSIONID", response.getSessionId())
+        .cookie("JSESSIONID", loginResponse.getSessionId())
         .when()
         .get("/books")
         .then()
