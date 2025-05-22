@@ -267,6 +267,37 @@ class BookControllerTestRestAssured {
         .body("$", aMapWithSize(1));
   }
 
+  // TODO: add "then" word to all the tests names. Keep it consistent.
+
+  @Test
+  void saveBook_whenTitleAlreadyExistsForOtherUser_thenReturn201AndMessage()
+      throws JsonProcessingException {
+    User user = createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
+
+    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+    User otherUser = this.userRepository
+        .save(new User("antanas@inbox.lt", passwordEncoder.encode("123456"),
+            List.of(role.orElseThrow())));
+    this.bookRepository.save(new Book("Dracula by Bram Stoker", otherUser));
+
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .when()
+        .post("/books")
+        .then()
+        .statusCode(201)
+        .body("title", equalTo("Dracula by Bram Stoker"))
+        .body("userId", equalTo(user.getId().intValue()))
+        .body("$", aMapWithSize(2))
+        .header("Location", containsString("/books/" + user.getId()));
+  }
+
   // getBooks
   //
   //
@@ -316,7 +347,7 @@ class BookControllerTestRestAssured {
         .get("/books")
         .then()
         .statusCode(200)
-        .body(".", hasSize(2))
+        .body("$", hasSize(2))
         .body("[0].title", equalTo(bookOne.getTitle()))
         .body("[0]", aMapWithSize(1))
         .body("[1].title", equalTo(bookTwo.getTitle()))
