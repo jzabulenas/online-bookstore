@@ -4,6 +4,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.blankOrNullString;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -363,6 +364,21 @@ class BookControllerTestRestAssured {
         .body("[0]", aMapWithSize(1))
         .body("[1].title", equalTo(bookTwo.getTitle()))
         .body("[1]", aMapWithSize(1));
+  }
+
+  @Test
+  void getBooks_whenListEmpty_returnEmptyListAnd200() {
+    User user = createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
+
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .when()
+        .get("/books")
+        .then()
+        .statusCode(200)
+        .body("$", empty());
   }
 
   // Helper methods
