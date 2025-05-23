@@ -2,9 +2,9 @@ package lt.techin.bookreservationapp.end_to_end;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.aMapWithSize;
-import static org.hamcrest.Matchers.blankOrNullString;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -187,7 +187,7 @@ class BookControllerTestRestAssured {
         .post("/generate-books")
         .then()
         .statusCode(401)
-        .body(blankOrNullString());
+        .body(emptyOrNullString());
   }
 
   @Test
@@ -308,7 +308,7 @@ class BookControllerTestRestAssured {
         .post("/books")
         .then()
         .statusCode(401)
-        .body(blankOrNullString());
+        .body(emptyOrNullString());
   }
 
   @Test
