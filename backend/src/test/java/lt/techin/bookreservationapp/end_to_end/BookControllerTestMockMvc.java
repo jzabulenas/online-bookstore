@@ -49,7 +49,7 @@ import lt.techin.bookreservationapp.user.UserRepository;
 @Import(SecurityConfig.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-class BookControllerTest {
+class BookControllerTestMockMvc {
 
   @Autowired
   BookRepository bookRepository;
