@@ -381,6 +381,16 @@ class BookControllerTestRestAssured {
         .body("$", empty());
   }
 
+  @Test
+  void getBooks_whenUnauthenticated_thenReturn401AndNoBody() {
+    given()
+        .when()
+        .get("/books")
+        .then()
+        .statusCode(401)
+        .body(emptyOrNullString());
+  }
+
   // Helper methods
   //
   //
