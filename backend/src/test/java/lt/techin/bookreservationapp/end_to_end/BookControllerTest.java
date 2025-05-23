@@ -98,7 +98,8 @@ class BookControllerTest {
   // Ar ne per daug?
 
   @Test
-  void generateBooks_whenBookIsGenerated_return200AndListOfBooks() throws JsonProcessingException {
+  void generateBooks_whenBookIsGenerated_thenReturn200AndListOfBooks()
+      throws JsonProcessingException {
     String csrfToken = createUserAndGetCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
 
@@ -109,7 +110,6 @@ class BookControllerTest {
         .contentType(ContentType.JSON)
         .body(new ObjectMapper()
             .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
-        // Add when everywhere
         .when()
         .post("/generate-books")
         .then()
@@ -119,7 +119,7 @@ class BookControllerTest {
   }
 
   @Test
-  void generateBooks_whenMessageIsNull_return400AndMessage() throws JsonProcessingException {
+  void generateBooks_whenMessageIsNull_thenReturn400AndMessage() throws JsonProcessingException {
     String csrfToken = createUserAndGetCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
 
@@ -138,7 +138,8 @@ class BookControllerTest {
   }
 
   @Test
-  void generateBooks_whenMessageIsTooShort_return400AndMessage() throws JsonProcessingException {
+  void generateBooks_whenMessageIsTooShort_thenReturn400AndMessage()
+      throws JsonProcessingException {
     String csrfToken = createUserAndGetCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
 
@@ -157,7 +158,7 @@ class BookControllerTest {
   }
 
   @Test
-  void generateBooks_whenMessageIsTooLong_return400AndMessage() throws JsonProcessingException {
+  void generateBooks_whenMessageIsTooLong_thenReturn400AndMessage() throws JsonProcessingException {
     String csrfToken = createUserAndGetCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
 
@@ -225,7 +226,7 @@ class BookControllerTest {
   //
 
   @Test
-  void saveBook_whenBookIsSaved_return201AndBody() throws JsonProcessingException {
+  void saveBook_whenBookIsSaved_thenReturn201AndBody() throws JsonProcessingException {
     User user = createUser();
     String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
@@ -367,7 +368,7 @@ class BookControllerTest {
   }
 
   @Test
-  void getBooks_whenListEmpty_returnEmptyListAnd200() {
+  void getBooks_whenListEmpty_thenReturnEmptyListAnd200() {
     User user = createUser();
     String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
