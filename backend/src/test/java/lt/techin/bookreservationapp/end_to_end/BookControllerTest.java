@@ -42,7 +42,7 @@ import lt.techin.bookreservationapp.user.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class BookControllerTestRestAssured {
+class BookControllerTest {
 
   @LocalServerPort
   private Integer port;
