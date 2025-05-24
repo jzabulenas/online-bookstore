@@ -1,4 +1,5 @@
 package lt.techin.bookreservationapp.book;
 
-record BookResponseDTO(String title, Long userId) {
+// TODO: should it be Long, or maybe long
+record BookResponseDTO(long id, String title, long userId) {
 }
