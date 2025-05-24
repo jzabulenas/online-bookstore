@@ -100,7 +100,8 @@ class BookControllerTest {
   @Test
   void generateBooks_whenBookIsGenerated_thenReturn200AndListOfBooks()
       throws JsonProcessingException {
-    String csrfToken = createUserAndGetCsrfToken();
+    createUser();
+    String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
 
     given()
@@ -120,7 +121,8 @@ class BookControllerTest {
 
   @Test
   void generateBooks_whenMessageIsNull_thenReturn400AndMessage() throws JsonProcessingException {
-    String csrfToken = createUserAndGetCsrfToken();
+    createUser();
+    String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
 
     given()
@@ -140,7 +142,8 @@ class BookControllerTest {
   @Test
   void generateBooks_whenMessageIsTooShort_thenReturn400AndMessage()
       throws JsonProcessingException {
-    String csrfToken = createUserAndGetCsrfToken();
+    createUser();
+    String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
 
     given()
@@ -159,7 +162,8 @@ class BookControllerTest {
 
   @Test
   void generateBooks_whenMessageIsTooLong_thenReturn400AndMessage() throws JsonProcessingException {
-    String csrfToken = createUserAndGetCsrfToken();
+    createUser();
+    String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
 
     given()
@@ -194,7 +198,8 @@ class BookControllerTest {
   @Test
   void generateBooks_whenAuthenticatedButNoCSRF_thenReturn403AndBody()
       throws JsonProcessingException {
-    String csrfToken = createUserAndGetCsrfToken();
+    createUser();
+    String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
 
     given()
@@ -269,8 +274,6 @@ class BookControllerTest {
         .body("$", aMapWithSize(1));
   }
 
-  // TODO: add "then" word to all the tests names. Keep it consistent.
-
   @Test
   void saveBook_whenTitleAlreadyExistsForOtherUser_thenReturn201AndMessage()
       throws JsonProcessingException {
@@ -314,7 +317,8 @@ class BookControllerTest {
 
   @Test
   void saveBook_whenAuthenticatedButNoCSRF_thenReturn403AndBody() throws JsonProcessingException {
-    String csrfToken = createUserAndGetCsrfToken();
+    createUser();
+    String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
 
     given()
@@ -369,7 +373,7 @@ class BookControllerTest {
 
   @Test
   void getBooks_whenListEmpty_thenReturnEmptyListAnd200() {
-    User user = createUser();
+    createUser();
     String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
 
@@ -403,9 +407,6 @@ class BookControllerTest {
   //
   //
 
-  // TODO: refactor all tests to use the separate createUser ad getCsrfToken
-  // methods?
-
   private User createUser() {
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
@@ -415,22 +416,6 @@ class BookControllerTest {
 
   private String getCsrfToken() {
     Response csrfResponse = given().when().get("/open").then().extract().response();
-
-    return csrfResponse.cookie("XSRF-TOKEN");
-  }
-
-  private String createUserAndGetCsrfToken() {
-    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
-
-    this.userRepository.save(new User("jurgis@inbox.lt", passwordEncoder.encode("123456"),
-        List.of(role.orElseThrow())));
-
-    Response csrfResponse = given()
-        .when()
-        .get("/open")
-        .then()
-        .extract()
-        .response();
 
     return csrfResponse.cookie("XSRF-TOKEN");
   }
