@@ -28,6 +28,8 @@ public class BookService {
   }
 
   MessageResponseDTO generateBooks(MessageRequestDTO messageRequestDTO) {
+    // TODO: validate this? Like, if repository contains a particular book, it
+    // should not be in generated result
     List<String> titles = this.bookRepository.findAllTitles();
 
     String result = chatClient
@@ -76,7 +78,8 @@ public class BookService {
 
     Book savedBook = this.bookRepository.save(new Book(bookRequestDTO.title(), user));
 
-    return new BookResponseDTO(savedBook.getTitle(), savedBook.getUser().getId());
+    return new BookResponseDTO(savedBook.getId(), savedBook.getTitle(),
+        savedBook.getUser().getId());
   }
 
   List<BookTitleResponseDTO> findAllBooks() {
