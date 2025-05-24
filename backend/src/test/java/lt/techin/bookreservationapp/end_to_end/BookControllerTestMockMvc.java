@@ -117,15 +117,8 @@ class BookControllerTestMockMvc {
             .with(csrf()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("length()").value(1))
-        // TODO: yra bugas, kadangi matau kad generuoja kartais ir 5. Pakeiciau kiek
-        // business logic,
-        // tai gal bus geriau dabar
         .andExpect(jsonPath("result", hasSize(3)));
   }
-
-  // TODO: o kaip del csrf? Gal parasyti testa, kuris tiktrintu, kas atsitinka,
-  // jei csrf
-  // nepaduodamas.
 
   @Test
   @WithMockUser(username = "jurgis@gmail.com")
@@ -177,11 +170,6 @@ class BookControllerTestMockMvc {
         .andExpect(jsonPath("length()").value(1));
   }
 
-  // TODO: gal reikes padaryti, kad vis delto grazintu programa 401 kai
-  // unauthenticated, be redirect
-  // Tai galioja ir kitiems testams
-  // Be csrf() meta 403, nors turetu buti 302. Su RestAssured veikia tinkamai,
-  // su MockMVC ne. Cia tikriausiai del to, kad MockMVC
   @Test
   void generateBooks_whenUnauthenticated_thenReturn401() throws Exception {
 
