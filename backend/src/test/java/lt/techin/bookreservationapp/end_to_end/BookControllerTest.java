@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.book.BookRepository;
 import lt.techin.bookreservationapp.book.BookRequestDTO;
@@ -93,9 +95,6 @@ class BookControllerTest {
   //
   //
   //
-
-  // TODO: o kaip del testu, tarkime, neautentifikuotas bet ir body null...
-  // Ar ne per daug?
 
   @Test
   void generateBooks_whenBookIsGenerated_thenReturn200AndListOfBooks()
@@ -180,6 +179,44 @@ class BookControllerTest {
         .statusCode(400)
         .body("message", equalTo("size must be between 5 and 100"))
         .body("$", aMapWithSize(1));
+  }
+
+  @Test
+  void generateBooks_whenCalledTwiceWithSameInput_thenResultsShouldDiffer()
+      throws JsonProcessingException {
+    createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
+
+    // Prepare request setup
+    RequestSpecification spec = given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper()
+            .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
+
+    // First response
+    Response first = spec.when()
+        .post("/generate-books")
+        .then()
+        .statusCode(200)
+        .extract()
+        .response();
+    List<String> firstResult = first.jsonPath().getList("result");
+
+    // Second response
+    Response second = spec.when()
+        .post("/generate-books")
+        .then()
+        .statusCode(200)
+        .extract()
+        .response();
+    List<String> secondResult = second.jsonPath().getList("result");
+
+    // Assertion that results are different
+    assertNotEquals(firstResult, secondResult, "Expected different results for repeated calls");
   }
 
   @Test
