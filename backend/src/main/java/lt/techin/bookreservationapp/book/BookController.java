@@ -49,7 +49,7 @@ public class BookController {
 
     return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
-        .buildAndExpand(bookResponseDTO.userId())
+        .buildAndExpand(bookResponseDTO.id())
         .toUri())
         .body(bookResponseDTO);
   }
