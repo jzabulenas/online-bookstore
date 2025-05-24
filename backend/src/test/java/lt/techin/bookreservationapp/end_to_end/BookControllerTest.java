@@ -202,6 +202,8 @@ class BookControllerTest {
         .post("/generate-books")
         .then()
         .statusCode(200)
+        .body("$", aMapWithSize(1))
+        .body("result", hasSize(3))
         .extract()
         .response();
     List<String> firstResult = first.jsonPath().getList("result");
@@ -211,6 +213,8 @@ class BookControllerTest {
         .post("/generate-books")
         .then()
         .statusCode(200)
+        .body("$", aMapWithSize(1))
+        .body("result", hasSize(3))
         .extract()
         .response();
     List<String> secondResult = second.jsonPath().getList("result");
