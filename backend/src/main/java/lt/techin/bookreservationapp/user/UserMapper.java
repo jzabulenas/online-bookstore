@@ -1,3 +1,4 @@
 package lt.techin.bookreservationapp.user;
 
-public class UserMapper {}
+public class UserMapper {
+}

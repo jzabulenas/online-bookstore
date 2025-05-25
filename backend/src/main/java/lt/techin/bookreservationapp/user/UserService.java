@@ -25,23 +25,22 @@ public class UserService {
   }
 
   UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
-    List<Role> toRoles =
-        userRequestDTO.roles().stream()
-            .map(r -> this.roleRepository.findById(r).orElseThrow())
-            .toList();
+    List<Role> toRoles = userRequestDTO.roles()
+        .stream()
+        .map(r -> this.roleRepository.findById(r).orElseThrow())
+        .toList();
 
-    User toUser =
-        new User(
-            userRequestDTO.email(),
-            this.passwordEncoder.encode(userRequestDTO.password()),
-            toRoles);
+    User toUser = new User(
+        userRequestDTO.email(),
+        this.passwordEncoder.encode(userRequestDTO.password()),
+        toRoles);
 
     User savedUser = this.userRepository.save(toUser);
 
     List<Long> toRolesIds = savedUser.getRoles().stream().map(r -> r.getId()).toList();
 
-    UserResponseDTO toDTO =
-        new UserResponseDTO(savedUser.getId(), savedUser.getEmail(), toRolesIds);
+    UserResponseDTO toDTO = new UserResponseDTO(savedUser.getId(), savedUser.getEmail(),
+        toRolesIds);
 
     return toDTO;
   }
@@ -50,14 +49,14 @@ public class UserService {
     return this.userRepository.existsByEmail(email);
   }
 
-  //  public User findUserByUsernameAndPassword(String username, String password) {
-  //    return userRepository
-  //        .findUserByUsername(username)
-  //        .filter(u -> passwordEncoder.matches(password, u.getPassword()))
-  //        .orElseThrow();
-  //  }
+  // public User findUserByUsernameAndPassword(String username, String password) {
+  // return userRepository
+  // .findUserByUsername(username)
+  // .filter(u -> passwordEncoder.matches(password, u.getPassword()))
+  // .orElseThrow();
+  // }
 
-  //  public boolean existsUserByUsername(String username) {
-  //    return userRepository.existsByUsername(username);
-  //  }
+  // public boolean existsUserByUsername(String username) {
+  // return userRepository.existsByUsername(username);
+  // }
 }

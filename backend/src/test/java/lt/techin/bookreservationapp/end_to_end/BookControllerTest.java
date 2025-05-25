@@ -1,14 +1,13 @@
 package lt.techin.bookreservationapp.end_to_end;
 
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.emptyOrNullString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,67 +17,66 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.utility.DockerImageName;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.book.BookRepository;
 import lt.techin.bookreservationapp.book.BookRequestDTO;
 import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.role.RoleRepository;
-import lt.techin.bookreservationapp.security.SecurityConfig;
 import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import(SecurityConfig.class)
 @ActiveProfiles("test")
-@AutoConfigureMockMvc
 class BookControllerTest {
 
-  @Autowired BookRepository bookRepository;
-  @Autowired UserRepository userRepository;
-  @Autowired RoleRepository roleRepository;
-  @Autowired PasswordEncoder passwordEncoder;
+  @LocalServerPort
+  private Integer port;
 
-  @LocalServerPort private Integer port;
-
-  @Autowired private MockMvc mockMvc;
-
-  static MariaDBContainer<?> mariaDBContainer =
-      new MariaDBContainer<>(DockerImageName.parse("mariadb:10.11"));
+  static MariaDBContainer<?> mariaDB = new MariaDBContainer<>(
+      DockerImageName.parse("mariadb:10.11"));
 
   @BeforeAll
   static void beforeAll() {
-    mariaDBContainer.start();
+    mariaDB.start();
   }
 
   @AfterAll
   static void afterAll() {
-    mariaDBContainer.stop();
+    mariaDB.stop();
   }
 
   @DynamicPropertySource
   static void configureProperties(DynamicPropertyRegistry registry) {
-    registry.add("spring.datasource.url", mariaDBContainer::getJdbcUrl);
-    registry.add("spring.datasource.username", mariaDBContainer::getUsername);
-    registry.add("spring.datasource.password", mariaDBContainer::getPassword);
+    registry.add("spring.datasource.url", mariaDB::getJdbcUrl);
+    registry.add("spring.datasource.username", mariaDB::getUsername);
+    registry.add("spring.datasource.password", mariaDB::getPassword);
   }
+
+  @Autowired
+  UserRepository userRepository;
+  @Autowired
+  RoleRepository roleRepository;
+  @Autowired
+  PasswordEncoder passwordEncoder;
+  @Autowired
+  BookRepository bookRepository;
 
   @BeforeEach
   void setUp() {
@@ -99,115 +97,168 @@ class BookControllerTest {
   //
 
   @Test
-  @WithMockUser(username = "jurgis@gmail.com")
-  void generateBooks_whenBookIsGenerated_return200AndListOfBooks() throws Exception {
+  void generateBooks_whenBookIsGenerated_thenReturn200AndListOfBooks()
+      throws JsonProcessingException {
+    createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    this.mockMvc
-        .perform(
-            post("/generate-books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
-                .with(csrf()))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("length()").value(1))
-        // TODO: yra bugas, kadangi matau kad generuoja kartais ir 5. Pakeiciau kiek business logic,
-        // tai gal bus geriau dabar
-        .andExpect(jsonPath("result", hasSize(3)));
-  }
-
-  // TODO: o kaip del csrf? Gal parasyti testa, kuris tiktrintu, kas atsitinka,
-  // jei csrf
-  // nepaduodamas.
-
-  @Test
-  @WithMockUser(username = "jurgis@gmail.com")
-  void generateBooks_whenMessageIsNull_return400AndMessage() throws Exception {
-
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    this.mockMvc
-        .perform(
-            post("/generate-books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new MessageRequestDTO(null)))
-                .with(csrf()))
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("message").value("must not be null"))
-        .andExpect(jsonPath("length()").value(1));
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper()
+            .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+        .when()
+        .post("/generate-books")
+        .then()
+        .statusCode(200)
+        .body("$", aMapWithSize(1))
+        .body("result", hasSize(3));
   }
 
   @Test
-  @WithMockUser(username = "jurgis@gmail.com")
-  void generateBooks_whenMessageIsTooShort_return400AndMessage() throws Exception {
+  void generateBooks_whenMessageIsNull_thenReturn400AndMessage() throws JsonProcessingException {
+    createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    this.mockMvc
-        .perform(
-            post("/generate-books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new MessageRequestDTO("Fe")))
-                .with(csrf()))
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("message").value("size must be between 5 and 100"))
-        .andExpect(jsonPath("length()").value(1));
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper().writeValueAsString(new MessageRequestDTO(null)))
+        .when()
+        .post("/generate-books")
+        .then()
+        .statusCode(400)
+        .body("message", equalTo("must not be null"))
+        .body("$", aMapWithSize(1));
   }
 
   @Test
-  @WithMockUser(username = "jurgis@gmail.com")
-  void generateBooks_whenMessageIsTooLong_return400AndMessage() throws Exception {
+  void generateBooks_whenMessageIsTooShort_thenReturn400AndMessage()
+      throws JsonProcessingException {
+    createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    this.mockMvc
-        .perform(
-            post("/generate-books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    objectMapper.writeValueAsString(
-                        new MessageRequestDTO(
-                            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor."
-                                + " Aenean mj")))
-                .with(csrf()))
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("message").value("size must be between 5 and 100"))
-        .andExpect(jsonPath("length()").value(1));
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper().writeValueAsString(new MessageRequestDTO("Fe")))
+        .when()
+        .post("/generate-books")
+        .then()
+        .statusCode(400)
+        .body("message", equalTo("size must be between 5 and 100"))
+        .body("$", aMapWithSize(1));
   }
 
-  // TODO: gal reikes padaryti, kad vis delto grazintu programa 401 kai
-  // unauthenticated, be redirect
-  // Tai galioja ir kitiems testams
-  // Be csrf() meta 403, nors turetu buti 302. Su RestAssured veikia tinkamai,
-  // su MockMVC ne. Cia tikriausiai del to, kad MockMVC
   @Test
-  void generateBooks_whenUnauthenticated_thenReturn401() throws Exception {
+  void generateBooks_whenMessageIsTooLong_thenReturn400AndMessage() throws JsonProcessingException {
+    createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    this.mockMvc
-        .perform(
-            post("/generate-books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
-                .with(csrf()))
-        .andExpect(status().isUnauthorized());
-
-    // Ask LLM why without I get 403?
-    // .with(csrf))
-
-    // RestAssured equivalent
-    // given()
-    // .contentType(ContentType.JSON)
-    // .body(objectMapper.writeValueAsString(new MessageRequestDTO("Gabagol")))
-    // .redirects()
-    // .follow(true)
-    // .when()
-    // .post("/generate-books")
-    // .then()
-    // .statusCode(302);
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper()
+            .writeValueAsString(new MessageRequestDTO(
+                "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean mj")))
+        .when()
+        .post("/generate-books")
+        .then()
+        .statusCode(400)
+        .body("message", equalTo("size must be between 5 and 100"))
+        .body("$", aMapWithSize(1));
   }
+
+  @Test
+  void generateBooks_whenCalledTwiceWithSameInput_thenResultsShouldDiffer()
+      throws JsonProcessingException {
+    createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
+
+    // Prepare request setup
+    RequestSpecification spec = given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper()
+            .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
+
+    // First response
+    Response first = spec.when()
+        .post("/generate-books")
+        .then()
+        .statusCode(200)
+        .body("$", aMapWithSize(1))
+        .body("result", hasSize(3))
+        .extract()
+        .response();
+    List<String> firstResult = first.jsonPath().getList("result");
+
+    // Second response
+    Response second = spec.when()
+        .post("/generate-books")
+        .then()
+        .statusCode(200)
+        .body("$", aMapWithSize(1))
+        .body("result", hasSize(3))
+        .extract()
+        .response();
+    List<String> secondResult = second.jsonPath().getList("result");
+
+    // Assertion that results are different
+    assertNotEquals(firstResult, secondResult, "Expected different results for repeated calls");
+  }
+
+  @Test
+  void generateBooks_whenUnauthenticated_thenReturn401() throws JsonProcessingException {
+    given()
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper()
+            .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+        .when()
+        .post("/generate-books")
+        .then()
+        .statusCode(401)
+        .body(emptyOrNullString());
+  }
+
+  @Test
+  void generateBooks_whenAuthenticatedButNoCSRF_thenReturn403AndBody()
+      throws JsonProcessingException {
+    createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
+
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper()
+            .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+        .when()
+        .post("/generate-books")
+        .then()
+        .statusCode(403)
+        .body("timestamp", containsString("2025"))
+        .body("status", equalTo(403))
+        .body("error", equalTo("Forbidden"))
+        .body("path", equalTo("/generate-books"));
+  }
+
+  // TODO: test to check if same books are not generated as previously?
 
   // saveBook
   //
@@ -221,118 +272,109 @@ class BookControllerTest {
   //
 
   @Test
-  @WithMockUser(username = "jurgis@gmail.com")
-  void saveBook_whenBookIsSaved_return201() throws Exception {
+  void saveBook_whenBookIsSaved_thenReturn201AndBody() throws JsonProcessingException {
+    User user = createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
 
-    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
-
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@gmail.com",
-                passwordEncoder.encode("WKXu63PxD3bHYB"),
-                List.of(role.orElseThrow())));
-
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    this.mockMvc
-        .perform(
-            post("/books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    objectMapper.writeValueAsString(
-                        new BookRequestDTO("Edward III: The Perfect King")))
-                .with(csrf()))
-        .andExpect(status().isCreated())
-        .andExpect(jsonPath("length()").value(2))
-        .andExpect(jsonPath("title").value("Edward III: The Perfect King"))
-        .andExpect(jsonPath("userId").value(user.getId()))
-        .andExpect(header().string("Location", containsString("/books/" + user.getId())));
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .when()
+        .post("/books")
+        .then()
+        .statusCode(201)
+        .body("title", equalTo("Dracula by Bram Stoker"))
+        .body("userId", equalTo(user.getId().intValue()))
+        .body("$", aMapWithSize(2))
+        .header("Location", containsString("/books/" + user.getId()));
   }
 
   @Test
-  void saveBook_whenUnauthenticatedCalls_thenReturn401() throws Exception {
+  void saveBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage()
+      throws JsonProcessingException {
+    User user = createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
+    this.bookRepository.save(new Book("Dracula by Bram Stoker", user));
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    this.mockMvc
-        .perform(
-            post("/books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    objectMapper.writeValueAsString(
-                        new BookRequestDTO("Edward III: The Perfect King")))
-                .with(csrf()))
-        .andExpect(status().isUnauthorized());
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .when()
+        .post("/books")
+        .then()
+        .statusCode(400)
+        .body("title", equalTo("Already exists"))
+        .body("$", aMapWithSize(1));
   }
 
   @Test
-  @WithMockUser(username = "jurgis@gmail.com")
-  void saveBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage() throws Exception {
+  void saveBook_whenTitleAlreadyExistsForOtherUser_thenReturn201AndMessage()
+      throws JsonProcessingException {
+    User user = createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+    User otherUser = this.userRepository
+        .save(new User("antanas@inbox.lt", passwordEncoder.encode("123456"),
+            List.of(role.orElseThrow())));
+    this.bookRepository.save(new Book("Dracula by Bram Stoker", otherUser));
 
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@gmail.com",
-                passwordEncoder.encode("WKXu63PxD3bHYB"),
-                List.of(role.orElseThrow())));
-
-    this.bookRepository.save(new Book("Edward III: The Perfect King", user));
-
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    this.mockMvc
-        .perform(
-            post("/books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    objectMapper.writeValueAsString(
-                        new BookRequestDTO("Edward III: The Perfect King")))
-                .with(csrf()))
-        .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("length()").value(1))
-        .andExpect(jsonPath("title").value("Already exists"));
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .when()
+        .post("/books")
+        .then()
+        .statusCode(201)
+        .body("title", equalTo("Dracula by Bram Stoker"))
+        .body("userId", equalTo(user.getId().intValue()))
+        .body("$", aMapWithSize(2))
+        .header("Location", containsString("/books/" + user.getId()));
   }
 
   @Test
-  @WithMockUser(username = "jurgis@gmail.com")
-  void saveBook_whenTitleAlreadyExistsForOtherUser_thenReturn201AndMessage() throws Exception {
+  void saveBook_whenUnauthenticatedCalls_thenReturn401() throws JsonProcessingException {
+    given()
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .when()
+        .post("/books")
+        .then()
+        .statusCode(401)
+        .body(emptyOrNullString());
+  }
 
-    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+  @Test
+  void saveBook_whenAuthenticatedButNoCSRF_thenReturn403AndBody() throws JsonProcessingException {
+    createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
 
-    User otherUser =
-        this.userRepository.save(
-            new User(
-                "antanas@gmail.com",
-                passwordEncoder.encode("6BRMrh85uPWdMj"),
-                List.of(role.orElseThrow())));
-
-    String bookName = "Edward III: The Perfect King";
-
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@gmail.com",
-                passwordEncoder.encode("WKXu63PxD3bHYB"),
-                List.of(role.orElseThrow())));
-
-    this.bookRepository.save(new Book(bookName, otherUser));
-
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    this.mockMvc
-        .perform(
-            post("/books")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new BookRequestDTO(bookName)))
-                .with(csrf()))
-        .andExpect(status().isCreated())
-        .andExpect(jsonPath("length()").value(2))
-        .andExpect(jsonPath("title").value(bookName))
-        .andExpect(jsonPath("userId").value(user.getId()))
-        .andExpect(header().string("Location", containsString("/books/" + user.getId())));
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .contentType(ContentType.JSON)
+        .body(new ObjectMapper()
+            .writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .when()
+        .post("/books")
+        .then()
+        .statusCode(403)
+        .body("timestamp", containsString("2025"))
+        .body("status", equalTo(403))
+        .body("error", equalTo("Forbidden"))
+        .body("path", equalTo("/books"));
   }
 
   // getBooks
@@ -347,78 +389,88 @@ class BookControllerTest {
   //
 
   @Test
-  @WithMockUser(username = "jurgis@gmail.com")
-  void getBooks_whenCalled_returnBooksAnd200() throws Exception {
+  void getBooks_whenCalled_thenReturnBooksAnd200() {
+    User user = createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
 
-    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
+    Book bookOne = this.bookRepository.save(new Book("Pride and Prejudice by Jane Austen", user));
 
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@gmail.com",
-                passwordEncoder.encode("WKXu63PxD3bHYB"),
-                List.of(role.orElseThrow())));
+    Book bookTwo = this.bookRepository
+        .save(new Book("Romeo and Juliet by William Shakespeare", user));
 
-    this.bookRepository.save(new Book("Edward III: The Perfect King", user));
-    this.bookRepository.save(
-        new Book(
-            "The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330",
-            user));
-
-    this.mockMvc
-        .perform(get("/books"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("length()").value(2))
-        .andExpect(jsonPath("[0].title").value("Edward III: The Perfect King"))
-        .andExpect(jsonPath("[0].length()").value(1))
-        .andExpect(
-            jsonPath("[1].title")
-                .value(
-                    "The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330"))
-        .andExpect(jsonPath("[1].length()").value(1));
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .when()
+        .get("/books")
+        .then()
+        .statusCode(200)
+        .body("$", hasSize(2))
+        .body("[0].title", equalTo(bookOne.getTitle()))
+        .body("[0]", aMapWithSize(1))
+        .body("[1].title", equalTo(bookTwo.getTitle()))
+        .body("[1]", aMapWithSize(1));
   }
 
   @Test
-  void getBooks_whenCalledUnauthenticated_thenReturn401() throws Exception {
+  void getBooks_whenListEmpty_thenReturnEmptyListAnd200() {
+    createUser();
+    String csrfToken = getCsrfToken();
+    Response loginResponse = loginAndGetSession(csrfToken);
 
-    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
-
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@gmail.com",
-                passwordEncoder.encode("WKXu63PxD3bHYB"),
-                List.of(role.orElseThrow())));
-
-    this.bookRepository.save(new Book("Edward III: The Perfect King", user));
-    this.bookRepository.save(
-        new Book(
-            "The Greatest Traitor: The Life of Sir Roger Mortimer, Ruler of England 1327–1330",
-            user));
-
-    this.mockMvc
-        .perform(get("/books"))
-        .andExpect(status().isUnauthorized())
-        .andExpect(content().string(""));
+    given()
+        .cookie("JSESSIONID", loginResponse.getSessionId())
+        .when()
+        .get("/books")
+        .then()
+        .statusCode(200)
+        .body("$", empty());
   }
 
   @Test
-  @WithMockUser(username = "jurgis@gmail.com")
-  void getBooks_whenCalledAndListEmpty_returnEmptyListAnd200() throws Exception {
+  void getBooks_whenUnauthenticated_thenReturn401AndNoBody() {
+    given()
+        .when()
+        .get("/books")
+        .then()
+        .statusCode(401)
+        .body(emptyOrNullString());
+  }
 
+  // Helper methods
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+
+  private User createUser() {
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
-    User user =
-        this.userRepository.save(
-            new User(
-                "jurgis@gmail.com",
-                passwordEncoder.encode("WKXu63PxD3bHYB"),
-                List.of(role.orElseThrow())));
+    return this.userRepository.save(new User("jurgis@inbox.lt", passwordEncoder.encode("123456"),
+        List.of(role.orElseThrow())));
+  }
 
-    this.mockMvc
-        .perform(get("/books"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$").isEmpty());
+  private String getCsrfToken() {
+    Response csrfResponse = given().when().get("/open").then().extract().response();
+
+    return csrfResponse.cookie("XSRF-TOKEN");
+  }
+
+  private Response loginAndGetSession(String csrfToken) {
+    return given()
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.URLENC)
+        .body("username=jurgis%40inbox.lt&password=123456")
+        .post("/login")
+        .then()
+        .statusCode(200)
+        .extract()
+        .response();
   }
 }

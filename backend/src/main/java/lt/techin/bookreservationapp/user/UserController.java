@@ -1,5 +1,8 @@
 package lt.techin.bookreservationapp.user;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -31,13 +34,13 @@ class UserController {
     return ResponseEntity.ok(this.userService.saveUser(userRequestDTO));
   }
 
-  //  @PostMapping("/login")
-  //  public User login(@RequestBody User user) {
-  //    User userDb = userService.findUserByUsernameAndPassword(user.getUsername(),
+  // @PostMapping("/login")
+  // public User login(@RequestBody User user) {
+  // User userDb = userService.findUserByUsernameAndPassword(user.getUsername(),
   // user.getPassword());
   //
-  //    return userDb;
-  //  }
+  // return userDb;
+  // }
 
   @GetMapping("/user")
   Authentication getUser(Authentication authentication) {
