@@ -11,8 +11,8 @@ import jakarta.validation.constraints.NotNull;
 import lt.techin.bookreservationapp.user.User;
 
 @Entity
-@Table(name = "books", uniqueConstraints = {
-    @UniqueConstraint(columnNames = { "title", "user_id" }) })
+@Table(name = "books",
+    uniqueConstraints = { @UniqueConstraint(columnNames = { "title", "user_id" }) })
 public class Book {
 
   @Id
