@@ -1,16 +1,18 @@
 package lt.techin.bookreservationapp.book;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.NotNull;
-import lt.techin.bookreservationapp.user.User;
+import lt.techin.bookreservationapp.user_book.UserBook;
 
 @Entity
+// TODO: remove this
 @Table(name = "books",
     uniqueConstraints = { @UniqueConstraint(columnNames = { "title", "user_id" }) })
 public class Book {
@@ -19,30 +21,37 @@ public class Book {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotNull
   private String title;
 
-  @NotNull
-  @ManyToOne
-  private User user;
+  @OneToMany
+  private List<UserBook> users;
 
-  public Book(String title, User user) {
+  public Book(String title, List<UserBook> users) {
     this.title = title;
-    this.user = user;
+    this.users = users;
   }
 
-  Book() {
-  }
-
-  public Long getId() {
-    return id;
+  public Book() {
   }
 
   public String getTitle() {
     return title;
   }
 
-  public User getUser() {
-    return user;
+  public void setTitle(String title) {
+    this.title = title;
   }
+
+  public List<UserBook> getUsers() {
+    return users;
+  }
+
+  public void setUsers(List<UserBook> users) {
+    this.users = users;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
 }
