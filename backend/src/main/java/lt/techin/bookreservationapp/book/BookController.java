@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection;
 import lt.techin.bookreservationapp.user.UserRepository;
+import lt.techin.bookreservationapp.user_book.UserBookResponseDTO;
 
 @RestController
 public class BookController {
@@ -42,10 +43,10 @@ public class BookController {
   }
 
   @PostMapping("/books")
-  ResponseEntity<BookResponseDTO> saveBook(
+  ResponseEntity<UserBookResponseDTO> saveBook(
       @Valid @RequestBody BookRequestDTO bookRequestDTO, Principal principal) {
 
-    BookResponseDTO bookResponseDTO = this.bookService.saveBook(bookRequestDTO, principal);
+    UserBookResponseDTO bookResponseDTO = this.bookService.saveBook(bookRequestDTO, principal);
 
     return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
