@@ -33,7 +33,8 @@ public class UserService {
     User toUser = new User(
         userRequestDTO.email(),
         this.passwordEncoder.encode(userRequestDTO.password()),
-        toRoles);
+        toRoles,
+        null);
 
     User savedUser = this.userRepository.save(toUser);
 
