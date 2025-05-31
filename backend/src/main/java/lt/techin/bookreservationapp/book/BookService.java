@@ -11,6 +11,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
+import lt.techin.bookreservationapp.user_book.UserBook;
+import lt.techin.bookreservationapp.user_book.UserBookRepository;
+import lt.techin.bookreservationapp.user_book.UserBookResponseDTO;
 
 @Service
 public class BookService {
@@ -18,19 +21,22 @@ public class BookService {
   private final ChatClient chatClient;
   private final BookRepository bookRepository;
   private final UserRepository userRepository;
+  private final UserBookRepository userBookRepository;
 
   @Autowired
   public BookService(
-      ChatClient chatClient, BookRepository bookRepository, UserRepository userRepository) {
+      ChatClient chatClient, BookRepository bookRepository, UserRepository userRepository,
+      UserBookRepository userBookRepository) {
     this.chatClient = chatClient;
     this.bookRepository = bookRepository;
     this.userRepository = userRepository;
+    this.userBookRepository = userBookRepository;
   }
 
   MessageResponseDTO generateBooks(MessageRequestDTO messageRequestDTO) {
     // TODO: validate this? Like, if repository contains a particular book, it
     // should not be in generated result
-    List<String> titles = this.bookRepository.findAllTitles();
+    List<String> titles = this.userBookRepository.findAllTitles();
 
     String result = chatClient
         .prompt()
@@ -65,26 +71,38 @@ public class BookService {
     return new MessageResponseDTO(books);
   }
 
-  BookResponseDTO saveBook(BookRequestDTO bookRequestDTO, Principal principal) {
+  UserBookResponseDTO saveBook(BookRequestDTO bookRequestDTO, Principal principal) {
 
     // TODO: validate this?
     User user = this.userRepository
         .findByEmail(principal.getName())
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-    if (this.bookRepository.existsByTitleAndUser(bookRequestDTO.title(), user)) {
-      throw new BookTitleAlreadyExistsException();
+//    if (this.bookRepository.existsByTitleAndUser(bookRequestDTO.title(), user)) {
+//      throw new BookTitleAlreadyExistsException();
+//    }
+
+    if (this.bookRepository.existsByTitle(bookRequestDTO.title())) {
+      Book book = this.bookRepository.findByTitle(bookRequestDTO.title()).orElseThrow();
+
+      UserBook savedUserBook = this.userBookRepository.save(new UserBook(user, book));
+
+      return new UserBookResponseDTO(savedUserBook.getId(), savedUserBook.getUser().getId(),
+          savedUserBook.getBook().getId());
+    } else {
+      Book book = this.bookRepository.save(new Book(bookRequestDTO.title(), null));
+
+      UserBook savedUserBook = this.userBookRepository.save(new UserBook(user, book));
+
+      return new UserBookResponseDTO(savedUserBook.getId(), savedUserBook.getUser().getId(),
+          savedUserBook.getBook().getId());
     }
 
-    Book savedBook = this.bookRepository.save(new Book(bookRequestDTO.title(), user));
-
-    return new BookResponseDTO(savedBook.getId(), savedBook.getTitle(),
-        savedBook.getUser().getId());
   }
 
   List<BookTitleResponseDTO> findAllBooks() {
 
-    List<String> titles = this.bookRepository.findAllTitles();
+    List<String> titles = this.userBookRepository.findAllTitles();
 
     List<BookTitleResponseDTO> books = titles.stream()
         .map(title -> new BookTitleResponseDTO(title))
