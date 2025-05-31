@@ -307,7 +307,9 @@ class BookControllerTest {
     User user = createUser();
     String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
-    this.bookRepository.save(new Book("Dracula by Bram Stoker", user));
+    // TODO: is adding null like that to constructor even smart?
+    Book book = this.bookRepository.save(new Book("Dracula by Bram Stoker", null));
+    this.userBookRepository.save(new UserBook(user, book));
 
     given()
         .cookie("JSESSIONID", loginResponse.getSessionId())
@@ -329,28 +331,32 @@ class BookControllerTest {
     User user = createUser();
     String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
+    String bookTitle = "Dracula by Bram Stoker";
 
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
     User otherUser = this.userRepository
         .save(new User("antanas@inbox.lt", passwordEncoder.encode("123456"),
-            List.of(role.orElseThrow())));
-    this.bookRepository.save(new Book("Dracula by Bram Stoker", otherUser));
+            List.of(role.orElseThrow()), null));
+    Book book = this.bookRepository.save(new Book(bookTitle, null));
+    this.userBookRepository.save(new UserBook(otherUser, book));
 
     given()
         .cookie("JSESSIONID", loginResponse.getSessionId())
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
-        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO(bookTitle)))
         .when()
         .post("/books")
         .then()
         .statusCode(201)
-        .body("id", equalTo(findBookIdByTitleAndUser(user).intValue()))
-        .body("title", equalTo("Dracula by Bram Stoker"))
+        .body("id", equalTo(findUserBookIdByUserIdAndBookTitle(user.getId(), bookTitle)))
         .body("userId", equalTo(user.getId().intValue()))
+        .body("bookId", equalTo(findBookIdByTitle(bookTitle)))
         .body("$", aMapWithSize(3))
-        .header("Location", containsString("/books/" + findBookIdByTitleAndUser(user)));
+        // TODO: change location url, to reflect changes in controller
+        .header("Location", containsString("/books/"
+            + findUserBookIdByUserIdAndBookTitle(user.getId(), bookTitle)));
   }
 
   @Test
