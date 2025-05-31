@@ -41,6 +41,8 @@ import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.role.RoleRepository;
 import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
+import lt.techin.bookreservationapp.user_book.UserBook;
+import lt.techin.bookreservationapp.user_book.UserBookRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -69,6 +71,7 @@ class BookControllerTest {
     registry.add("spring.datasource.password", mariaDB::getPassword);
   }
 
+  // TODO: private?
   @Autowired
   UserRepository userRepository;
   @Autowired
@@ -77,6 +80,8 @@ class BookControllerTest {
   PasswordEncoder passwordEncoder;
   @Autowired
   BookRepository bookRepository;
+  @Autowired
+  private UserBookRepository userBookRepository;
 
   @BeforeEach
   void setUp() {
@@ -274,22 +279,25 @@ class BookControllerTest {
     User user = createUser();
     String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
+    String bookTitle = "Dracula by Bram Stoker";
 
     given()
         .cookie("JSESSIONID", loginResponse.getSessionId())
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
-        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO(bookTitle)))
         .when()
         .post("/books")
         .then()
         .statusCode(201)
-        .body("id", equalTo(findBookIdByTitleAndUser(user).intValue()))
-        .body("title", equalTo("Dracula by Bram Stoker"))
+        .body("id", equalTo(findUserBookIdByUserIdAndBookTitle(user.getId(), bookTitle)))
         .body("userId", equalTo(user.getId().intValue()))
+        .body("bookId", equalTo(findBookIdByTitle(bookTitle)))
         .body("$", aMapWithSize(3))
-        .header("Location", containsString("/books/" + findBookIdByTitleAndUser(user)));
+        // TODO: change /books to /usersbooks
+        .header("Location", containsString("/books/"
+            + findUserBookIdByUserIdAndBookTitle(user.getId(), bookTitle)));
   }
 
   @Test
@@ -388,16 +396,21 @@ class BookControllerTest {
   //
   //
 
+  // TODO: fix all warnings in code
+
   @Test
   void getBooks_whenCalled_thenReturnBooksAnd200() {
     User user = createUser();
     String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
 
-    Book bookOne = this.bookRepository.save(new Book("Pride and Prejudice by Jane Austen", user));
+    Book bookOne = this.bookRepository.save(new Book("Pride and Prejudice by Jane Austen", null));
 
     Book bookTwo = this.bookRepository
-        .save(new Book("Romeo and Juliet by William Shakespeare", user));
+        .save(new Book("Romeo and Juliet by William Shakespeare", null));
+
+    this.userBookRepository.save(new UserBook(user, bookOne));
+    this.userBookRepository.save(new UserBook(user, bookTwo));
 
     given()
         .cookie("JSESSIONID", loginResponse.getSessionId())
@@ -452,7 +465,7 @@ class BookControllerTest {
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
     return this.userRepository.save(new User("jurgis@inbox.lt", passwordEncoder.encode("123456"),
-        List.of(role.orElseThrow())));
+        List.of(role.orElseThrow()), null));
   }
 
   private String getCsrfToken() {
@@ -474,9 +487,17 @@ class BookControllerTest {
         .response();
   }
 
-  private Long findBookIdByTitleAndUser(User user) {
-    return this.bookRepository.findByTitleAndUser("Dracula by Bram Stoker", user)
+  private int findUserBookIdByUserIdAndBookTitle(long id, String title) {
+    return this.userBookRepository.findByUserIdAndBookTitle(id, title)
         .orElseThrow()
-        .getId();
+        .getId()
+        .intValue();
+  }
+
+  private int findBookIdByTitle(String title) {
+    return this.bookRepository.findByTitle(title)
+        .orElseThrow()
+        .getId()
+        .intValue();
   }
 }
