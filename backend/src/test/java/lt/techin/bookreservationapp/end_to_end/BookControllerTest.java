@@ -73,13 +73,13 @@ class BookControllerTest {
 
   // TODO: private?
   @Autowired
-  UserRepository userRepository;
+  private UserRepository userRepository;
   @Autowired
-  RoleRepository roleRepository;
+  private RoleRepository roleRepository;
   @Autowired
-  PasswordEncoder passwordEncoder;
+  private PasswordEncoder passwordEncoder;
   @Autowired
-  BookRepository bookRepository;
+  private BookRepository bookRepository;
   @Autowired
   private UserBookRepository userBookRepository;
 
