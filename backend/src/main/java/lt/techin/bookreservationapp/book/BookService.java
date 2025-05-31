@@ -78,9 +78,10 @@ public class BookService {
         .findByEmail(principal.getName())
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-//    if (this.bookRepository.existsByTitleAndUser(bookRequestDTO.title(), user)) {
-//      throw new BookTitleAlreadyExistsException();
-//    }
+    // TODO: is this all logic good, or am I missing something?
+    if (this.userBookRepository.existsByBookTitleAndUser(bookRequestDTO.title(), user)) {
+      throw new BookTitleAlreadyExistsException();
+    }
 
     if (this.bookRepository.existsByTitle(bookRequestDTO.title())) {
       Book book = this.bookRepository.findByTitle(bookRequestDTO.title()).orElseThrow();
