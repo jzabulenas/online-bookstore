@@ -8,13 +8,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lt.techin.bookreservationapp.user_book.UserBook;
 
 @Entity
-// TODO: remove this
-@Table(name = "books",
-    uniqueConstraints = { @UniqueConstraint(columnNames = { "title", "user_id" }) })
+@Table(name = "books")
 public class Book {
 
   @Id
@@ -23,7 +20,7 @@ public class Book {
 
   private String title;
 
-  @OneToMany
+  @OneToMany(mappedBy = "book")
   private List<UserBook> users;
 
   public Book(String title, List<UserBook> users) {
