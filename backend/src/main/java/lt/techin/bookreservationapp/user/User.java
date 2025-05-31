@@ -36,7 +36,7 @@ public class User implements UserDetails {
       inverseJoinColumns = @JoinColumn(name = "role_id"))
   private List<Role> roles;
 
-  @OneToMany
+  @OneToMany(mappedBy = "user")
   private List<UserBook> books;
 
   public User(String email, String password, List<Role> roles, List<UserBook> books) {
