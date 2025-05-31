@@ -17,4 +17,6 @@ public interface UserBookRepository extends JpaRepository<UserBook, Long> {
 
   @Query("SELECT ub.book.title FROM UserBook ub WHERE ub.user.email = :#{authentication.name}")
   List<String> findAllTitles();
+
+  boolean existsByBookTitleAndUser(String title, User user);
 }
