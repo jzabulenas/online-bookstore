@@ -1,37 +1,41 @@
--- TODO: not sure if this should be pushed to db...
-CREATE TABLE `users` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-);
+-- TODO: update readme file with this
+-- TODO: I think the length of columns should match reality. As well as, check if all unique is good. Check if I am able to register
+-- with these new changes...
+-- Is it bad I already pushed the db with unique key codes to repository?!
+-- Wait a minute... my db design is sus. Now, a user can have many books, but one book belongs to one user?!
 
-CREATE TABLE `books` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UKqv8dy63m3nvdya1slwm78okld` (`title`,`user_id`),
-  KEY `FKcqud6407tfhc3y3dv60eevw9d` (`user_id`),
-  CONSTRAINT `FKcqud6407tfhc3y3dv60eevw9d` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-);
-
-CREATE TABLE `roles` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE roles (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL
 );
 
 INSERT INTO roles (name)
 VALUES ('ROLE_USER'), ('ROLE_ADMIN');
 
--- TODO: maybe make DDL less specific, just foreign keys and what not?
-CREATE TABLE `users_roles` (
-  `user_id` bigint NOT NULL,
-  `role_id` bigint NOT NULL,
-  PRIMARY KEY (`user_id`,`role_id`),
-  UNIQUE KEY `user_id` (`user_id`,`role_id`),
-  KEY `role_id` (`role_id`),
-  CONSTRAINT `users_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `users_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
+CREATE TABLE users (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE users_roles (
+  user_id BIGINT NOT NULL,
+  role_id BIGINT NOT NULL,
+  PRIMARY KEY (user_id, role_id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+CREATE TABLE books (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE users_books (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  user_id BIGINT NOT NULL,
+  book_id BIGINT NOT NULL,
+  UNIQUE KEY (user_id, book_id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (book_id) REFERENCES books(id)
 );
