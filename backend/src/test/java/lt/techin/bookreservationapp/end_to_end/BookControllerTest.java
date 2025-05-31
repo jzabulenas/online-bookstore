@@ -188,6 +188,8 @@ class BookControllerTest {
   }
 
   @Test
+  // TODO: sometimes generates same twice. Need to figure out how to tweak the
+  // query perhaps?
   void generateBooks_whenCalledTwiceWithSameInput_thenResultsShouldDiffer()
       throws JsonProcessingException {
     createUser();

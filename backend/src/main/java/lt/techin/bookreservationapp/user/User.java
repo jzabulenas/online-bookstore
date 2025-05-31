@@ -95,6 +95,4 @@ public class User implements UserDetails {
   public void setBooks(List<UserBook> books) {
     this.books = books;
   }
-
-  // TODO: change all modifiers to public?
 }

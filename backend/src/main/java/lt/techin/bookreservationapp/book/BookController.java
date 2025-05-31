@@ -19,9 +19,6 @@ import lt.techin.bookreservationapp.user_book.UserBookResponseDTO;
 @RestController
 public class BookController {
 
-  private final ChatClient chatClient;
-  private final BookRepository bookRepository;
-  private final UserRepository userRepository;
   private final BookService bookService;
 
   BookController(
@@ -29,9 +26,6 @@ public class BookController {
       BookRepository bookRepository,
       UserRepository userRepository,
       BookService bookService) {
-    this.chatClient = chatClient;
-    this.bookRepository = bookRepository;
-    this.userRepository = userRepository;
     this.bookService = bookService;
   }
 
