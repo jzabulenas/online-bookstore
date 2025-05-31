@@ -14,8 +14,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lt.techin.bookreservationapp.role.Role;
+import lt.techin.bookreservationapp.user_book.UserBook;
 
 @Entity
 @Table(name = "Users")
@@ -34,10 +36,14 @@ public class User implements UserDetails {
       inverseJoinColumns = @JoinColumn(name = "role_id"))
   private List<Role> roles;
 
-  public User(String email, String password, List<Role> roles) {
+  @OneToMany
+  private List<UserBook> books;
+
+  public User(String email, String password, List<Role> roles, List<UserBook> books) {
     this.email = email;
     this.password = password;
     this.roles = roles;
+    this.books = books;
   }
 
   public User() {
@@ -81,4 +87,14 @@ public class User implements UserDetails {
   public String getUsername() {
     return this.email;
   }
+
+  public List<UserBook> getBooks() {
+    return books;
+  }
+
+  public void setBooks(List<UserBook> books) {
+    this.books = books;
+  }
+
+  // TODO: change all modifiers to public?
 }
