@@ -258,8 +258,6 @@ class BookControllerTest {
         .body("path", equalTo("/generate-books"));
   }
 
-  // TODO: test to check if same books are not generated as previously?
-
   // saveBook
   //
   //
@@ -287,10 +285,11 @@ class BookControllerTest {
         .post("/books")
         .then()
         .statusCode(201)
+        .body("id", equalTo(findBookIdByTitleAndUser(user).intValue()))
         .body("title", equalTo("Dracula by Bram Stoker"))
         .body("userId", equalTo(user.getId().intValue()))
-        .body("$", aMapWithSize(2))
-        .header("Location", containsString("/books/" + user.getId()));
+        .body("$", aMapWithSize(3))
+        .header("Location", containsString("/books/" + findBookIdByTitleAndUser(user)));
   }
 
   @Test
@@ -338,10 +337,11 @@ class BookControllerTest {
         .post("/books")
         .then()
         .statusCode(201)
+        .body("id", equalTo(findBookIdByTitleAndUser(user).intValue()))
         .body("title", equalTo("Dracula by Bram Stoker"))
         .body("userId", equalTo(user.getId().intValue()))
-        .body("$", aMapWithSize(2))
-        .header("Location", containsString("/books/" + user.getId()));
+        .body("$", aMapWithSize(3))
+        .header("Location", containsString("/books/" + findBookIdByTitleAndUser(user)));
   }
 
   @Test
@@ -472,5 +472,11 @@ class BookControllerTest {
         .statusCode(200)
         .extract()
         .response();
+  }
+
+  private Long findBookIdByTitleAndUser(User user) {
+    return this.bookRepository.findByTitleAndUser("Dracula by Bram Stoker", user)
+        .orElseThrow()
+        .getId();
   }
 }
