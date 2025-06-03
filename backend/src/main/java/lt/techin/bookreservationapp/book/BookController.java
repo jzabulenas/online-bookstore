@@ -3,7 +3,6 @@ package lt.techin.bookreservationapp.book;
 import java.security.Principal;
 import java.util.List;
 
-import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection;
+import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
 import lt.techin.bookreservationapp.user_book.UserBookResponseDTO;
 
@@ -20,12 +20,12 @@ import lt.techin.bookreservationapp.user_book.UserBookResponseDTO;
 public class BookController {
 
   private final BookService bookService;
+  private final UserRepository userRepository;
 
   BookController(
-      ChatClient chatClient,
-      BookRepository bookRepository,
       UserRepository userRepository,
       BookService bookService) {
+    this.userRepository = userRepository;
     this.bookService = bookService;
   }
 
@@ -40,13 +40,18 @@ public class BookController {
   ResponseEntity<UserBookResponseDTO> saveBook(
       @Valid @RequestBody BookRequestDTO bookRequestDTO, Principal principal) {
 
-    UserBookResponseDTO bookResponseDTO = this.bookService.saveBook(bookRequestDTO, principal);
+    UserBookResponseDTO userBookResponseDTO = this.bookService.saveBook(bookRequestDTO, principal);
+
+    String email = principal.getName();
+
+    User user = this.userRepository.findByEmail(email)
+        .orElseThrow();
 
     return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{id}")
-        .buildAndExpand(bookResponseDTO.id())
+        .path("/{id}/users/{userId}")
+        .buildAndExpand(userBookResponseDTO.bookId(), user.getId())
         .toUri())
-        .body(bookResponseDTO);
+        .body(userBookResponseDTO);
   }
 
   @GetMapping("/books")
