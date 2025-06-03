@@ -298,9 +298,9 @@ class BookControllerTest {
         .body("userId", equalTo(user.getId().intValue()))
         .body("bookId", equalTo(findBookIdByTitle(bookTitle)))
         .body("$", aMapWithSize(3))
-        // TODO: change /books to /usersbooks
-        .header("Location", containsString("/books/"
-            + findUserBookIdByUserIdAndBookTitle(user.getId(), bookTitle)));
+        .header("Location", containsString("/books/" + findBookIdByTitle(bookTitle) + "/users/"
+            + user.getId()));
+
   }
 
   @Test
@@ -356,9 +356,8 @@ class BookControllerTest {
         .body("userId", equalTo(user.getId().intValue()))
         .body("bookId", equalTo(findBookIdByTitle(bookTitle)))
         .body("$", aMapWithSize(3))
-        // TODO: change location url, to reflect changes in controller
-        .header("Location", containsString("/books/"
-            + findUserBookIdByUserIdAndBookTitle(user.getId(), bookTitle)));
+        .header("Location", containsString("/books/" + findBookIdByTitle(bookTitle) + "/users/"
+            + user.getId()));
   }
 
   @Test
