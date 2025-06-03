@@ -27,37 +27,41 @@ Set `${MARIADB_USERNAME}` environment variable as your database username, and `$
 You will need to create a new database in MariaDB, named `online_bookstore`. The database must be filled with this DDL:
 
 ```SQL
-CREATE TABLE `roles` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `users` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `books` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY (`title`,`user_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-);
-
-CREATE TABLE `users_roles` (
-  `user_id` bigint(20) NOT NULL,
-  `role_id` bigint(20) NOT NULL,
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
+CREATE TABLE roles (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL
 );
 
 INSERT INTO roles (name)
 VALUES ('ROLE_USER'), ('ROLE_ADMIN');
+
+CREATE TABLE users (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE users_roles (
+  user_id BIGINT NOT NULL,
+  role_id BIGINT NOT NULL,
+  PRIMARY KEY (user_id, role_id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+CREATE TABLE books (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE users_books (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  user_id BIGINT NOT NULL,
+  book_id BIGINT NOT NULL,
+  UNIQUE KEY (user_id, book_id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (book_id) REFERENCES books(id)
+);
 ```
 
 Clone the the repository. `cd` into `online-bookstore` folder, then into `backend`.
