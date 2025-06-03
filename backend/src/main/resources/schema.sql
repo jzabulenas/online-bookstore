@@ -1,8 +1,6 @@
--- TODO: update readme file with this
--- TODO: I think the length of columns should match reality. As well as, check if all unique is good. Check if I am able to register
--- with these new changes...
--- Is it bad I already pushed the db with unique key codes to repository?!
--- Wait a minute... my db design is sus. Now, a user can have many books, but one book belongs to one user?!
+-- TODO: I think the length of columns should match reality.
+-- As well as, check if all unique is good. Check if I am able to register with these new changes...
+-- Column length should match DTO size
 
 CREATE TABLE roles (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,

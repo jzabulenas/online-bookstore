@@ -71,7 +71,6 @@ class BookControllerTest {
     registry.add("spring.datasource.password", mariaDB::getPassword);
   }
 
-  // TODO: private?
   @Autowired
   private UserRepository userRepository;
   @Autowired
@@ -403,8 +402,6 @@ class BookControllerTest {
   //
   //
   //
-
-  // TODO: fix all warnings in code
 
   @Test
   void getBooks_whenCalled_thenReturnBooksAnd200() {

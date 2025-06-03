@@ -73,12 +73,10 @@ public class BookService {
 
   UserBookResponseDTO saveBook(BookRequestDTO bookRequestDTO, Principal principal) {
 
-    // TODO: validate this?
     User user = this.userRepository
         .findByEmail(principal.getName())
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-    // TODO: is this all logic good, or am I missing something?
     if (this.userBookRepository.existsByBookTitleAndUser(bookRequestDTO.title(), user)) {
       throw new BookTitleAlreadyExistsException();
     }

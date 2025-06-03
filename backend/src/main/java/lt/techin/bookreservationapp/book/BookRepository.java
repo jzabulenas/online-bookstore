@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-// TODO: remove comments
+// Used this code before, when I saved title and user directly in table "books"
 //  @Query("SELECT sb.title FROM Book sb WHERE sb.user.email = :#{authentication.name}")
 //  List<String> findAllTitles();
 
