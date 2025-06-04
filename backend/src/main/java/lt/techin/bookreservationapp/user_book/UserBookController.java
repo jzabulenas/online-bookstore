@@ -20,12 +20,12 @@ import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
 
 @RestController
-public class BookController {
+public class UserBookController {
 
   private final UserBookService userBookService;
   private final UserRepository userRepository;
 
-  BookController(
+  UserBookController(
       UserRepository userRepository,
       UserBookService bookService) {
     this.userRepository = userRepository;
