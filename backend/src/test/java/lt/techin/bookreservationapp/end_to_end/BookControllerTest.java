@@ -35,7 +35,6 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.book.BookRepository;
-import lt.techin.bookreservationapp.book.BookRequestDTO;
 import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.role.RoleRepository;
@@ -43,6 +42,7 @@ import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
 import lt.techin.bookreservationapp.user_book.UserBook;
 import lt.techin.bookreservationapp.user_book.UserBookRepository;
+import lt.techin.bookreservationapp.user_book.UserBookRequestDTO;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -288,7 +288,7 @@ class BookControllerTest {
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
-        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO(bookTitle)))
+        .body(new ObjectMapper().writeValueAsString(new UserBookRequestDTO(bookTitle)))
         .when()
         .post("/books")
         .then()
@@ -317,7 +317,7 @@ class BookControllerTest {
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
-        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .body(new ObjectMapper().writeValueAsString(new UserBookRequestDTO("Dracula by Bram Stoker")))
         .when()
         .post("/books")
         .then()
@@ -346,7 +346,7 @@ class BookControllerTest {
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
-        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO(bookTitle)))
+        .body(new ObjectMapper().writeValueAsString(new UserBookRequestDTO(bookTitle)))
         .when()
         .post("/books")
         .then()
@@ -363,7 +363,7 @@ class BookControllerTest {
   void saveUserBook_whenUnauthenticatedCalls_thenReturn401() throws JsonProcessingException {
     given()
         .contentType(ContentType.JSON)
-        .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+        .body(new ObjectMapper().writeValueAsString(new UserBookRequestDTO("Dracula by Bram Stoker")))
         .when()
         .post("/books")
         .then()
@@ -382,7 +382,7 @@ class BookControllerTest {
         .cookie("JSESSIONID", loginResponse.getSessionId())
         .contentType(ContentType.JSON)
         .body(new ObjectMapper()
-            .writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
+            .writeValueAsString(new UserBookRequestDTO("Dracula by Bram Stoker")))
         .when()
         .post("/books")
         .then()

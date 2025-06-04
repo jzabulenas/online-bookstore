@@ -11,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.book.BookRepository;
-import lt.techin.bookreservationapp.book.BookRequestDTO;
 import lt.techin.bookreservationapp.book.BookTitleAlreadyExistsException;
 import lt.techin.bookreservationapp.book.BookTitleResponseDTO;
 import lt.techin.bookreservationapp.book.MessageRequestDTO;
@@ -75,25 +74,25 @@ public class UserBookService {
     return new MessageResponseDTO(books);
   }
 
-  UserBookResponseDTO saveUserBook(BookRequestDTO bookRequestDTO, Principal principal) {
+  UserBookResponseDTO saveUserBook(UserBookRequestDTO userBookRequestDTO, Principal principal) {
 
     User user = this.userRepository
         .findByEmail(principal.getName())
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-    if (this.userBookRepository.existsByBookTitleAndUser(bookRequestDTO.title(), user)) {
+    if (this.userBookRepository.existsByBookTitleAndUser(userBookRequestDTO.title(), user)) {
       throw new BookTitleAlreadyExistsException();
     }
 
-    if (this.bookRepository.existsByTitle(bookRequestDTO.title())) {
-      Book book = this.bookRepository.findByTitle(bookRequestDTO.title()).orElseThrow();
+    if (this.bookRepository.existsByTitle(userBookRequestDTO.title())) {
+      Book book = this.bookRepository.findByTitle(userBookRequestDTO.title()).orElseThrow();
 
       UserBook savedUserBook = this.userBookRepository.save(new UserBook(user, book));
 
       return new UserBookResponseDTO(savedUserBook.getId(), savedUserBook.getUser().getId(),
           savedUserBook.getBook().getId());
     } else {
-      Book book = this.bookRepository.save(new Book(bookRequestDTO.title(), null));
+      Book book = this.bookRepository.save(new Book(userBookRequestDTO.title(), null));
 
       UserBook savedUserBook = this.userBookRepository.save(new UserBook(user, book));
 

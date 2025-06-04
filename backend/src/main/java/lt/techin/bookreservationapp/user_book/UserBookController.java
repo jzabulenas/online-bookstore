@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
-import lt.techin.bookreservationapp.book.BookRequestDTO;
 import lt.techin.bookreservationapp.book.BookTitleResponseDTO;
 import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.book.MessageResponseDTO;
@@ -41,10 +40,10 @@ public class UserBookController {
 
   @PostMapping("/books")
   ResponseEntity<UserBookResponseDTO> saveUserBook(
-      @Valid @RequestBody BookRequestDTO bookRequestDTO, Principal principal) {
+      @Valid @RequestBody UserBookRequestDTO userBookRequestDTO, Principal principal) {
 
     UserBookResponseDTO userBookResponseDTO = this.userBookService
-        .saveUserBook(bookRequestDTO, principal);
+        .saveUserBook(userBookRequestDTO, principal);
 
     String email = principal.getName();
 
