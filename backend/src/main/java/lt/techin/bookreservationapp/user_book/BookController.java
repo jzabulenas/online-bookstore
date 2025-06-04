@@ -22,28 +22,28 @@ import lt.techin.bookreservationapp.user.UserRepository;
 @RestController
 public class BookController {
 
-  private final BookService bookService;
+  private final UserBookService userBookService;
   private final UserRepository userRepository;
 
   BookController(
       UserRepository userRepository,
-      BookService bookService) {
+      UserBookService bookService) {
     this.userRepository = userRepository;
-    this.bookService = bookService;
+    this.userBookService = bookService;
   }
 
   @PostMapping("/generate-books")
   @WithRateLimitProtection
   ResponseEntity<MessageResponseDTO> generateBooks(
       @RequestBody @Valid MessageRequestDTO messageRequestDTO) {
-    return ResponseEntity.ok(this.bookService.generateBooks(messageRequestDTO));
+    return ResponseEntity.ok(this.userBookService.generateBooks(messageRequestDTO));
   }
 
   @PostMapping("/books")
   ResponseEntity<UserBookResponseDTO> saveUserBook(
       @Valid @RequestBody BookRequestDTO bookRequestDTO, Principal principal) {
 
-    UserBookResponseDTO userBookResponseDTO = this.bookService
+    UserBookResponseDTO userBookResponseDTO = this.userBookService
         .saveUserBook(bookRequestDTO, principal);
 
     String email = principal.getName();
@@ -60,6 +60,6 @@ public class BookController {
 
   @GetMapping("/books")
   ResponseEntity<List<BookTitleResponseDTO>> getUserBooks() {
-    return ResponseEntity.ok(this.bookService.findAllUserBooks());
+    return ResponseEntity.ok(this.userBookService.findAllUserBooks());
   }
 }
