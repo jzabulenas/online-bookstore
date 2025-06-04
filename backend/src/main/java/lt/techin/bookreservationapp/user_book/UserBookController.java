@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
-import lt.techin.bookreservationapp.book.BookTitleResponseDTO;
+import lt.techin.bookreservationapp.book.UserBookTitleResponseDTO;
 import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.book.MessageResponseDTO;
 import lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection;
@@ -57,8 +57,10 @@ public class UserBookController {
         .body(userBookResponseDTO);
   }
 
+  // TODO: write a test, do I not see books on my user if saved books for other
+  // user?
   @GetMapping("/books")
-  ResponseEntity<List<BookTitleResponseDTO>> getUserBooks() {
+  ResponseEntity<List<UserBookTitleResponseDTO>> getUserBooks() {
     return ResponseEntity.ok(this.userBookService.findAllUserBooks());
   }
 }

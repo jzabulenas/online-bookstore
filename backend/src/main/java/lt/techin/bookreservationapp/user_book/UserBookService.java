@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.book.BookRepository;
 import lt.techin.bookreservationapp.book.BookTitleAlreadyExistsException;
-import lt.techin.bookreservationapp.book.BookTitleResponseDTO;
+import lt.techin.bookreservationapp.book.UserBookTitleResponseDTO;
 import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.book.MessageResponseDTO;
 import lt.techin.bookreservationapp.user.User;
@@ -102,12 +102,12 @@ public class UserBookService {
 
   }
 
-  List<BookTitleResponseDTO> findAllUserBooks() {
+  List<UserBookTitleResponseDTO> findAllUserBooks() {
 
     List<String> titles = this.userBookRepository.findAllTitles();
 
-    List<BookTitleResponseDTO> books = titles.stream()
-        .map(title -> new BookTitleResponseDTO(title))
+    List<UserBookTitleResponseDTO> books = titles.stream()
+        .map(title -> new UserBookTitleResponseDTO(title))
         .toList();
 
     return books;
