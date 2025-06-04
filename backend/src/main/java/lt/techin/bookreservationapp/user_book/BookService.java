@@ -75,7 +75,7 @@ public class BookService {
     return new MessageResponseDTO(books);
   }
 
-  UserBookResponseDTO saveBook(BookRequestDTO bookRequestDTO, Principal principal) {
+  UserBookResponseDTO saveUserBook(BookRequestDTO bookRequestDTO, Principal principal) {
 
     User user = this.userRepository
         .findByEmail(principal.getName())
@@ -103,7 +103,7 @@ public class BookService {
 
   }
 
-  List<BookTitleResponseDTO> findAllBooks() {
+  List<BookTitleResponseDTO> findAllUserBooks() {
 
     List<String> titles = this.userBookRepository.findAllTitles();
 

@@ -43,7 +43,8 @@ public class BookController {
   ResponseEntity<UserBookResponseDTO> saveUserBook(
       @Valid @RequestBody BookRequestDTO bookRequestDTO, Principal principal) {
 
-    UserBookResponseDTO userBookResponseDTO = this.bookService.saveBook(bookRequestDTO, principal);
+    UserBookResponseDTO userBookResponseDTO = this.bookService
+        .saveUserBook(bookRequestDTO, principal);
 
     String email = principal.getName();
 
@@ -59,6 +60,6 @@ public class BookController {
 
   @GetMapping("/books")
   ResponseEntity<List<BookTitleResponseDTO>> getUserBooks() {
-    return ResponseEntity.ok(this.bookService.findAllBooks());
+    return ResponseEntity.ok(this.bookService.findAllUserBooks());
   }
 }
