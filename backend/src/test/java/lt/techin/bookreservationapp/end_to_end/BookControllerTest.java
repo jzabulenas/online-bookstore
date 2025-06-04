@@ -277,7 +277,7 @@ class BookControllerTest {
   //
 
   @Test
-  void saveBook_whenBookIsSaved_thenReturn201AndBody() throws JsonProcessingException {
+  void saveUserBook_whenBookIsSaved_thenReturn201AndBody() throws JsonProcessingException {
     User user = createUser();
     String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
@@ -303,7 +303,7 @@ class BookControllerTest {
   }
 
   @Test
-  void saveBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage()
+  void saveUserBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage()
       throws JsonProcessingException {
     User user = createUser();
     String csrfToken = getCsrfToken();
@@ -327,7 +327,7 @@ class BookControllerTest {
   }
 
   @Test
-  void saveBook_whenTitleAlreadyExistsForOtherUser_thenReturn201AndMessage()
+  void saveUserBook_whenTitleAlreadyExistsForOtherUser_thenReturn201AndMessage()
       throws JsonProcessingException {
     User user = createUser();
     String csrfToken = getCsrfToken();
@@ -360,7 +360,7 @@ class BookControllerTest {
   }
 
   @Test
-  void saveBook_whenUnauthenticatedCalls_thenReturn401() throws JsonProcessingException {
+  void saveUserBook_whenUnauthenticatedCalls_thenReturn401() throws JsonProcessingException {
     given()
         .contentType(ContentType.JSON)
         .body(new ObjectMapper().writeValueAsString(new BookRequestDTO("Dracula by Bram Stoker")))
@@ -372,7 +372,8 @@ class BookControllerTest {
   }
 
   @Test
-  void saveBook_whenAuthenticatedButNoCSRF_thenReturn403AndBody() throws JsonProcessingException {
+  void saveUserBook_whenAuthenticatedButNoCSRF_thenReturn403AndBody()
+      throws JsonProcessingException {
     createUser();
     String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
@@ -404,7 +405,7 @@ class BookControllerTest {
   //
 
   @Test
-  void getBooks_whenCalled_thenReturnBooksAnd200() {
+  void getUserBooks_whenCalled_thenReturnBooksAnd200() {
     User user = createUser();
     String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
@@ -431,7 +432,7 @@ class BookControllerTest {
   }
 
   @Test
-  void getBooks_whenListEmpty_thenReturnEmptyListAnd200() {
+  void getUserBooks_whenListEmpty_thenReturnEmptyListAnd200() {
     createUser();
     String csrfToken = getCsrfToken();
     Response loginResponse = loginAndGetSession(csrfToken);
@@ -446,7 +447,7 @@ class BookControllerTest {
   }
 
   @Test
-  void getBooks_whenUnauthenticated_thenReturn401AndNoBody() {
+  void getUserBooks_whenUnauthenticated_thenReturn401AndNoBody() {
     given()
         .when()
         .get("/books")

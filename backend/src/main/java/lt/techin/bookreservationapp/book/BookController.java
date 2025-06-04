@@ -37,7 +37,7 @@ public class BookController {
   }
 
   @PostMapping("/books")
-  ResponseEntity<UserBookResponseDTO> saveBook(
+  ResponseEntity<UserBookResponseDTO> saveUserBook(
       @Valid @RequestBody BookRequestDTO bookRequestDTO, Principal principal) {
 
     UserBookResponseDTO userBookResponseDTO = this.bookService.saveBook(bookRequestDTO, principal);
@@ -55,7 +55,7 @@ public class BookController {
   }
 
   @GetMapping("/books")
-  ResponseEntity<List<BookTitleResponseDTO>> getBooks() {
+  ResponseEntity<List<BookTitleResponseDTO>> getUserBooks() {
     return ResponseEntity.ok(this.bookService.findAllBooks());
   }
 }
