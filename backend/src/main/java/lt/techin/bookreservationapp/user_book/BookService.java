@@ -1,4 +1,4 @@
-package lt.techin.bookreservationapp.book;
+package lt.techin.bookreservationapp.user_book;
 
 import java.security.Principal;
 import java.util.List;
@@ -9,11 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import lt.techin.bookreservationapp.book.Book;
+import lt.techin.bookreservationapp.book.BookRepository;
+import lt.techin.bookreservationapp.book.BookRequestDTO;
+import lt.techin.bookreservationapp.book.BookTitleAlreadyExistsException;
+import lt.techin.bookreservationapp.book.BookTitleResponseDTO;
+import lt.techin.bookreservationapp.book.MessageRequestDTO;
+import lt.techin.bookreservationapp.book.MessageResponseDTO;
 import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
-import lt.techin.bookreservationapp.user_book.UserBook;
-import lt.techin.bookreservationapp.user_book.UserBookRepository;
-import lt.techin.bookreservationapp.user_book.UserBookResponseDTO;
 
 @Service
 public class BookService {

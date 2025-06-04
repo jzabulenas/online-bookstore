@@ -1,4 +1,4 @@
 package lt.techin.bookreservationapp.book;
 
-class BookTitleAlreadyExistsException extends RuntimeException {
+public class BookTitleAlreadyExistsException extends RuntimeException {
 }

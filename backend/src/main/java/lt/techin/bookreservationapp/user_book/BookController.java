@@ -1,4 +1,4 @@
-package lt.techin.bookreservationapp.book;
+package lt.techin.bookreservationapp.user_book;
 
 import java.security.Principal;
 import java.util.List;
@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
+import lt.techin.bookreservationapp.book.BookRequestDTO;
+import lt.techin.bookreservationapp.book.BookTitleResponseDTO;
+import lt.techin.bookreservationapp.book.MessageRequestDTO;
+import lt.techin.bookreservationapp.book.MessageResponseDTO;
 import lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection;
 import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
-import lt.techin.bookreservationapp.user_book.UserBookResponseDTO;
 
 @RestController
 public class BookController {
