@@ -32,7 +32,10 @@ public class UserBook {
   }
 
   public UserBook() {
+  }
 
+  public Long getId() {
+    return id;
   }
 
   public User getUser() {
@@ -49,10 +52,6 @@ public class UserBook {
 
   public void setBook(Book book) {
     this.book = book;
-  }
-
-  public Long getId() {
-    return id;
   }
 
 }
