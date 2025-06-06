@@ -21,7 +21,7 @@ import lt.techin.bookreservationapp.user.UserRepository;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+class SecurityConfig {
 
   private final String frontendUrl;
 

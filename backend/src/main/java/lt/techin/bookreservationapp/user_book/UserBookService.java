@@ -18,7 +18,7 @@ import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
 
 @Service
-public class UserBookService {
+class UserBookService {
 
   private final ChatClient chatClient;
   private final BookRepository bookRepository;
@@ -26,7 +26,7 @@ public class UserBookService {
   private final UserBookRepository userBookRepository;
 
   @Autowired
-  public UserBookService(
+  UserBookService(
       ChatClient chatClient, BookRepository bookRepository, UserRepository userRepository,
       UserBookRepository userBookRepository) {
     this.chatClient = chatClient;

@@ -7,7 +7,7 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ApiErrorMessage {
+class ApiErrorMessage {
 
   private final UUID id = UUID.randomUUID();
   private final int status;
@@ -16,34 +16,34 @@ public class ApiErrorMessage {
   private final LocalDateTime timestamp = LocalDateTime.now(Clock.systemUTC());
   private final String path;
 
-  public ApiErrorMessage(int status, String error, String message, String path) {
+  ApiErrorMessage(int status, String error, String message, String path) {
     this.status = status;
     this.error = error;
     this.message = message;
     this.path = path;
   }
 
-  public UUID getId() {
+  UUID getId() {
     return id;
   }
 
-  public int getStatus() {
+  int getStatus() {
     return status;
   }
 
-  public String getError() {
+  String getError() {
     return error;
   }
 
-  public String getMessage() {
+  String getMessage() {
     return message;
   }
 
-  public LocalDateTime getTimestamp() {
+  LocalDateTime getTimestamp() {
     return timestamp;
   }
 
-  public String getPath() {
+  String getPath() {
     return path;
   }
 }

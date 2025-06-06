@@ -1,4 +1,4 @@
 package lt.techin.bookreservationapp.user_book;
 
-public record UserBookTitleResponseDTO(String title) {
+record UserBookTitleResponseDTO(String title) {
 }

@@ -18,7 +18,7 @@ import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
 
 @RestController
-public class UserBookController {
+class UserBookController {
 
   private final UserBookService userBookService;
   private final UserRepository userRepository;
