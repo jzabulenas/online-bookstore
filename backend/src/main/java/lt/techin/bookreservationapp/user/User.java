@@ -78,6 +78,14 @@ public class User implements UserDetails {
     this.roles = roles;
   }
 
+  public List<UserBook> getBooks() {
+    return books;
+  }
+
+  public void setBooks(List<UserBook> books) {
+    this.books = books;
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return this.roles;
@@ -88,11 +96,4 @@ public class User implements UserDetails {
     return this.email;
   }
 
-  public List<UserBook> getBooks() {
-    return books;
-  }
-
-  public void setBooks(List<UserBook> books) {
-    this.books = books;
-  }
 }
