@@ -31,6 +31,10 @@ public class Book {
   public Book() {
   }
 
+  public Long getId() {
+    return id;
+  }
+
   public String getTitle() {
     return title;
   }
@@ -45,10 +49,6 @@ public class Book {
 
   public void setUsers(List<UserBook> users) {
     this.users = users;
-  }
-
-  public Long getId() {
-    return id;
   }
 
 }
