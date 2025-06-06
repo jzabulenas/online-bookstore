@@ -12,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.book.BookRepository;
 import lt.techin.bookreservationapp.book.BookTitleAlreadyExistsException;
-import lt.techin.bookreservationapp.book.UserBookTitleResponseDTO;
 import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.book.MessageResponseDTO;
 import lt.techin.bookreservationapp.user.User;

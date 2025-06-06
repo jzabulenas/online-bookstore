@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
-import lt.techin.bookreservationapp.book.UserBookTitleResponseDTO;
 import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.book.MessageResponseDTO;
 import lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection;
