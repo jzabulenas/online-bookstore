@@ -1,37 +1,34 @@
 package lt.techin.bookreservationapp.book;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.NotNull;
-import lt.techin.bookreservationapp.user.User;
+import lt.techin.bookreservationapp.user_book.UserBook;
 
 @Entity
-@Table(name = "books",
-    uniqueConstraints = { @UniqueConstraint(columnNames = { "title", "user_id" }) })
+@Table(name = "books")
 public class Book {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotNull
   private String title;
 
-  @NotNull
-  @ManyToOne
-  private User user;
+  @OneToMany(mappedBy = "book")
+  private List<UserBook> users;
 
-  public Book(String title, User user) {
+  public Book(String title, List<UserBook> users) {
     this.title = title;
-    this.user = user;
+    this.users = users;
   }
 
-  Book() {
+  public Book() {
   }
 
   public Long getId() {
@@ -42,7 +39,16 @@ public class Book {
     return title;
   }
 
-  public User getUser() {
-    return user;
+  public void setTitle(String title) {
+    this.title = title;
   }
+
+  public List<UserBook> getUsers() {
+    return users;
+  }
+
+  public void setUsers(List<UserBook> users) {
+    this.users = users;
+  }
+
 }

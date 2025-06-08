@@ -13,12 +13,12 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class RateLimitExceptionHandler {
+class RateLimitExceptionHandler {
 
   private static final Logger LOG = LoggerFactory.getLogger(RateLimitExceptionHandler.class);
 
   @ExceptionHandler(RateLimitException.class)
-  public ResponseEntity<ApiErrorMessage> handleInvalidFieldsInValidJson(
+  ResponseEntity<ApiErrorMessage> handleInvalidFieldsInValidJson(
       final RateLimitException rateLimitException, final HttpServletRequest request) {
 
     final ApiErrorMessage apiErrorMessage = rateLimitException

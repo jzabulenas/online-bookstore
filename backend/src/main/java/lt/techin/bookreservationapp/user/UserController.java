@@ -23,7 +23,7 @@ class UserController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<Object> signup(@RequestBody UserRequestDTO userRequestDTO) {
+  ResponseEntity<Object> signup(@RequestBody UserRequestDTO userRequestDTO) {
     if (this.userService.existsUserByEmail(userRequestDTO.email())) {
       Map<String, String> response = new HashMap<>();
       response.put("username", "Already exists");
@@ -48,7 +48,7 @@ class UserController {
   }
 
   @GetMapping("/open")
-  public String openCall() {
+  String openCall() {
     return "This is an open endpoint";
   }
 }

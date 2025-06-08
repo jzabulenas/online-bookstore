@@ -13,9 +13,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Aspect
 @Component
-public class RateLimitAspect {
+class RateLimitAspect {
 
-  public static final String ERROR_MESSAGE = "Too many requests at endpoint %s from IP %s! Please try again after %d milliseconds!";
+  private static final String ERROR_MESSAGE = "Too many requests at endpoint %s from IP %s! Please try again after %d milliseconds!";
   private final ConcurrentHashMap<String, List<Long>> requestCounts = new ConcurrentHashMap<>();
 
   @Value("${APP_RATE_LIMIT:#{10}}")
@@ -36,7 +36,7 @@ public class RateLimitAspect {
    *                            exceeded
    */
   @Before("@annotation(lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection)")
-  public void rateLimit() {
+  void rateLimit() {
 
     final ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder
         .currentRequestAttributes();

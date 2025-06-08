@@ -21,19 +21,15 @@ import lt.techin.bookreservationapp.user.UserRepository;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+class SecurityConfig {
 
   private final String frontendUrl;
-  private final UserRepository userRepository;
-  private final RoleRepository roleRepository;
 
   SecurityConfig(
       @Value("${frontend.url}") String frontendUrl,
       UserRepository userRepository,
       RoleRepository roleRepository) {
     this.frontendUrl = frontendUrl;
-    this.userRepository = userRepository;
-    this.roleRepository = roleRepository;
   }
 
   @Bean

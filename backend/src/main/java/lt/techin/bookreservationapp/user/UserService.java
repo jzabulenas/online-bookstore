@@ -9,7 +9,7 @@ import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.role.RoleRepository;
 
 @Service
-public class UserService {
+class UserService {
 
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
@@ -33,7 +33,8 @@ public class UserService {
     User toUser = new User(
         userRequestDTO.email(),
         this.passwordEncoder.encode(userRequestDTO.password()),
-        toRoles);
+        toRoles,
+        null);
 
     User savedUser = this.userRepository.save(toUser);
 

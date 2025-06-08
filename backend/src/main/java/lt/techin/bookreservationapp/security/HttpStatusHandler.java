@@ -22,7 +22,7 @@ class HttpStatusHandler
 
   private final HttpStatus status;
 
-  public HttpStatusHandler(HttpStatus status) {
+  HttpStatusHandler(HttpStatus status) {
     this.status = status;
   }
 
