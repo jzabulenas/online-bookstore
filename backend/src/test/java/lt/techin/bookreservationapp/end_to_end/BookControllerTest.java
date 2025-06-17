@@ -15,6 +15,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -90,382 +91,353 @@ class BookControllerTest {
     this.userRepository.deleteAll();
   }
 
-  // generateBooks
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
+  @Nested
+  class GenerateBooksTests {
 
-  @Test
-  void generateBooks_whenBookIsGenerated_thenReturn200AndListOfBooks()
-      throws JsonProcessingException {
-    createUser();
-    String csrfToken = getCsrfToken();
-    Response loginResponse = loginAndGetSession(csrfToken);
+    @Test
+    void generateBooks_whenBookIsGenerated_thenReturn200AndListOfBooks()
+        throws JsonProcessingException {
+      createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
 
-    given()
-        .cookie("JSESSIONID", loginResponse.getSessionId())
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(new ObjectMapper()
-            .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
-        .when()
-        .post("/generate-books")
-        .then()
-        .statusCode(200)
-        .body("$", aMapWithSize(1))
-        .body("result", hasSize(3));
+      given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3));
+    }
+
+    @Test
+    void generateBooks_whenMessageIsNull_thenReturn400AndMessage() throws JsonProcessingException {
+      createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+
+      given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper().writeValueAsString(new MessageRequestDTO(null)))
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(400)
+          .body("message", equalTo("must not be null"))
+          .body("$", aMapWithSize(1));
+    }
+
+    @Test
+    void generateBooks_whenMessageIsTooShort_thenReturn400AndMessage()
+        throws JsonProcessingException {
+      createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+
+      given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper().writeValueAsString(new MessageRequestDTO("Fe")))
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(400)
+          .body("message", equalTo("size must be between 5 and 100"))
+          .body("$", aMapWithSize(1));
+    }
+
+    @Test
+    void generateBooks_whenMessageIsTooLong_thenReturn400AndMessage()
+        throws JsonProcessingException {
+      createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+
+      given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new MessageRequestDTO(
+                  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean mj")))
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(400)
+          .body("message", equalTo("size must be between 5 and 100"))
+          .body("$", aMapWithSize(1));
+    }
+
+    @Test
+    // TODO: sometimes generates same twice. Need to figure out how to tweak the
+    // query perhaps?
+    void generateBooks_whenCalledTwiceWithSameInput_thenResultsShouldDiffer()
+        throws JsonProcessingException {
+      createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+
+      // Prepare request setup
+      RequestSpecification spec = given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
+
+      // First response
+      Response first = spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
+      List<String> firstResult = first.jsonPath().getList("result");
+
+      // Second response
+      Response second = spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
+      List<String> secondResult = second.jsonPath().getList("result");
+
+      // Assertion that results are different
+      assertNotEquals(firstResult, secondResult, "Expected different results for repeated calls");
+    }
+
+    @Test
+    void generateBooks_whenUnauthenticated_thenReturn401() throws JsonProcessingException {
+      given()
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(401)
+          .body(emptyOrNullString());
+    }
+
+    @Test
+    void generateBooks_whenAuthenticatedButNoCSRF_thenReturn403AndBody()
+        throws JsonProcessingException {
+      createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+
+      given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(403)
+          .body("timestamp", containsString("2025"))
+          .body("status", equalTo(403))
+          .body("error", equalTo("Forbidden"))
+          .body("path", equalTo("/generate-books"));
+    }
   }
 
-  @Test
-  void generateBooks_whenMessageIsNull_thenReturn400AndMessage() throws JsonProcessingException {
-    createUser();
-    String csrfToken = getCsrfToken();
-    Response loginResponse = loginAndGetSession(csrfToken);
+  @Nested
+  class SaveUserBookTests {
 
-    given()
-        .cookie("JSESSIONID", loginResponse.getSessionId())
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(new ObjectMapper().writeValueAsString(new MessageRequestDTO(null)))
-        .when()
-        .post("/generate-books")
-        .then()
-        .statusCode(400)
-        .body("message", equalTo("must not be null"))
-        .body("$", aMapWithSize(1));
+    @Test
+    void saveUserBook_whenBookIsSaved_thenReturn201AndBody() throws JsonProcessingException {
+      User user = createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+      String bookTitle = "Dracula by Bram Stoker";
+
+      given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper().writeValueAsString(new UserBookRequestDTO(bookTitle)))
+          .when()
+          .post("/books")
+          .then()
+          .statusCode(201)
+          .body("id", equalTo(findUserBookIdByUserIdAndBookTitle(user.getId(), bookTitle)))
+          .body("userId", equalTo(user.getId().intValue()))
+          .body("bookId", equalTo(findBookIdByTitle(bookTitle)))
+          .body("$", aMapWithSize(3))
+          .header("Location", containsString("/books/" + findBookIdByTitle(bookTitle) + "/users/"
+              + user.getId()));
+
+    }
+
+    @Test
+    void saveUserBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage()
+        throws JsonProcessingException {
+      User user = createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+      // TODO: is adding null like that to constructor even smart?
+      Book book = bookRepository.save(new Book("Dracula by Bram Stoker", null));
+      userBookRepository.save(new UserBook(user, book));
+
+      given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserBookRequestDTO("Dracula by Bram Stoker")))
+          .when()
+          .post("/books")
+          .then()
+          .statusCode(400)
+          .body("title", equalTo("Already exists"))
+          .body("$", aMapWithSize(1));
+    }
+
+    @Test
+    void saveUserBook_whenTitleAlreadyExistsForOtherUser_thenReturn201AndMessage()
+        throws JsonProcessingException {
+      User user = createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+      String bookTitle = "Dracula by Bram Stoker";
+
+      Optional<Role> role = roleRepository.findByName("ROLE_USER");
+      User otherUser = userRepository
+          .save(new User("antanas@inbox.lt", passwordEncoder.encode("123456"),
+              List.of(role.orElseThrow()), null));
+      Book book = bookRepository.save(new Book(bookTitle, null));
+      userBookRepository.save(new UserBook(otherUser, book));
+
+      given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper().writeValueAsString(new UserBookRequestDTO(bookTitle)))
+          .when()
+          .post("/books")
+          .then()
+          .statusCode(201)
+          .body("id", equalTo(findUserBookIdByUserIdAndBookTitle(user.getId(), bookTitle)))
+          .body("userId", equalTo(user.getId().intValue()))
+          .body("bookId", equalTo(findBookIdByTitle(bookTitle)))
+          .body("$", aMapWithSize(3))
+          .header("Location", containsString("/books/" + findBookIdByTitle(bookTitle) + "/users/"
+              + user.getId()));
+    }
+
+    @Test
+    void saveUserBook_whenUnauthenticatedCalls_thenReturn401() throws JsonProcessingException {
+      given()
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserBookRequestDTO("Dracula by Bram Stoker")))
+          .when()
+          .post("/books")
+          .then()
+          .statusCode(401)
+          .body(emptyOrNullString());
+    }
+
+    @Test
+    void saveUserBook_whenAuthenticatedButNoCSRF_thenReturn403AndBody()
+        throws JsonProcessingException {
+      createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+
+      given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserBookRequestDTO("Dracula by Bram Stoker")))
+          .when()
+          .post("/books")
+          .then()
+          .statusCode(403)
+          .body("timestamp", containsString("2025"))
+          .body("status", equalTo(403))
+          .body("error", equalTo("Forbidden"))
+          .body("path", equalTo("/books"));
+    }
   }
 
-  @Test
-  void generateBooks_whenMessageIsTooShort_thenReturn400AndMessage()
-      throws JsonProcessingException {
-    createUser();
-    String csrfToken = getCsrfToken();
-    Response loginResponse = loginAndGetSession(csrfToken);
+  @Nested
+  class GetUserBooksTests {
 
-    given()
-        .cookie("JSESSIONID", loginResponse.getSessionId())
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(new ObjectMapper().writeValueAsString(new MessageRequestDTO("Fe")))
-        .when()
-        .post("/generate-books")
-        .then()
-        .statusCode(400)
-        .body("message", equalTo("size must be between 5 and 100"))
-        .body("$", aMapWithSize(1));
+    @Test
+    void getUserBooks_whenCalled_thenReturnBooksAnd200() {
+      User user = createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+
+      Book bookOne = bookRepository.save(new Book("Pride and Prejudice by Jane Austen", null));
+
+      Book bookTwo = bookRepository
+          .save(new Book("Romeo and Juliet by William Shakespeare", null));
+
+      userBookRepository.save(new UserBook(user, bookOne));
+      userBookRepository.save(new UserBook(user, bookTwo));
+
+      given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .when()
+          .get("/books")
+          .then()
+          .statusCode(200)
+          .body("$", hasSize(2))
+          .body("[0].title", equalTo(bookOne.getTitle()))
+          .body("[0]", aMapWithSize(1))
+          .body("[1].title", equalTo(bookTwo.getTitle()))
+          .body("[1]", aMapWithSize(1));
+    }
+
+    @Test
+    void getUserBooks_whenListEmpty_thenReturnEmptyListAnd200() {
+      createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+
+      given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .when()
+          .get("/books")
+          .then()
+          .statusCode(200)
+          .body("$", empty());
+    }
+
+    @Test
+    void getUserBooks_whenUnauthenticated_thenReturn401AndNoBody() {
+      given()
+          .when()
+          .get("/books")
+          .then()
+          .statusCode(401)
+          .body(emptyOrNullString());
+    }
   }
-
-  @Test
-  void generateBooks_whenMessageIsTooLong_thenReturn400AndMessage() throws JsonProcessingException {
-    createUser();
-    String csrfToken = getCsrfToken();
-    Response loginResponse = loginAndGetSession(csrfToken);
-
-    given()
-        .cookie("JSESSIONID", loginResponse.getSessionId())
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(new ObjectMapper()
-            .writeValueAsString(new MessageRequestDTO(
-                "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean mj")))
-        .when()
-        .post("/generate-books")
-        .then()
-        .statusCode(400)
-        .body("message", equalTo("size must be between 5 and 100"))
-        .body("$", aMapWithSize(1));
-  }
-
-  @Test
-  // TODO: sometimes generates same twice. Need to figure out how to tweak the
-  // query perhaps?
-  void generateBooks_whenCalledTwiceWithSameInput_thenResultsShouldDiffer()
-      throws JsonProcessingException {
-    createUser();
-    String csrfToken = getCsrfToken();
-    Response loginResponse = loginAndGetSession(csrfToken);
-
-    // Prepare request setup
-    RequestSpecification spec = given()
-        .cookie("JSESSIONID", loginResponse.getSessionId())
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(new ObjectMapper()
-            .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
-
-    // First response
-    Response first = spec.when()
-        .post("/generate-books")
-        .then()
-        .statusCode(200)
-        .body("$", aMapWithSize(1))
-        .body("result", hasSize(3))
-        .extract()
-        .response();
-    List<String> firstResult = first.jsonPath().getList("result");
-
-    // Second response
-    Response second = spec.when()
-        .post("/generate-books")
-        .then()
-        .statusCode(200)
-        .body("$", aMapWithSize(1))
-        .body("result", hasSize(3))
-        .extract()
-        .response();
-    List<String> secondResult = second.jsonPath().getList("result");
-
-    // Assertion that results are different
-    assertNotEquals(firstResult, secondResult, "Expected different results for repeated calls");
-  }
-
-  @Test
-  void generateBooks_whenUnauthenticated_thenReturn401() throws JsonProcessingException {
-    given()
-        .contentType(ContentType.JSON)
-        .body(new ObjectMapper()
-            .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
-        .when()
-        .post("/generate-books")
-        .then()
-        .statusCode(401)
-        .body(emptyOrNullString());
-  }
-
-  @Test
-  void generateBooks_whenAuthenticatedButNoCSRF_thenReturn403AndBody()
-      throws JsonProcessingException {
-    createUser();
-    String csrfToken = getCsrfToken();
-    Response loginResponse = loginAndGetSession(csrfToken);
-
-    given()
-        .cookie("JSESSIONID", loginResponse.getSessionId())
-        .contentType(ContentType.JSON)
-        .body(new ObjectMapper()
-            .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")))
-        .when()
-        .post("/generate-books")
-        .then()
-        .statusCode(403)
-        .body("timestamp", containsString("2025"))
-        .body("status", equalTo(403))
-        .body("error", equalTo("Forbidden"))
-        .body("path", equalTo("/generate-books"));
-  }
-
-  // saveBook
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-
-  @Test
-  void saveUserBook_whenBookIsSaved_thenReturn201AndBody() throws JsonProcessingException {
-    User user = createUser();
-    String csrfToken = getCsrfToken();
-    Response loginResponse = loginAndGetSession(csrfToken);
-    String bookTitle = "Dracula by Bram Stoker";
-
-    given()
-        .cookie("JSESSIONID", loginResponse.getSessionId())
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(new ObjectMapper().writeValueAsString(new UserBookRequestDTO(bookTitle)))
-        .when()
-        .post("/books")
-        .then()
-        .statusCode(201)
-        .body("id", equalTo(findUserBookIdByUserIdAndBookTitle(user.getId(), bookTitle)))
-        .body("userId", equalTo(user.getId().intValue()))
-        .body("bookId", equalTo(findBookIdByTitle(bookTitle)))
-        .body("$", aMapWithSize(3))
-        .header("Location", containsString("/books/" + findBookIdByTitle(bookTitle) + "/users/"
-            + user.getId()));
-
-  }
-
-  @Test
-  void saveUserBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage()
-      throws JsonProcessingException {
-    User user = createUser();
-    String csrfToken = getCsrfToken();
-    Response loginResponse = loginAndGetSession(csrfToken);
-    // TODO: is adding null like that to constructor even smart?
-    Book book = this.bookRepository.save(new Book("Dracula by Bram Stoker", null));
-    this.userBookRepository.save(new UserBook(user, book));
-
-    given()
-        .cookie("JSESSIONID", loginResponse.getSessionId())
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(new ObjectMapper().writeValueAsString(new UserBookRequestDTO("Dracula by Bram Stoker")))
-        .when()
-        .post("/books")
-        .then()
-        .statusCode(400)
-        .body("title", equalTo("Already exists"))
-        .body("$", aMapWithSize(1));
-  }
-
-  @Test
-  void saveUserBook_whenTitleAlreadyExistsForOtherUser_thenReturn201AndMessage()
-      throws JsonProcessingException {
-    User user = createUser();
-    String csrfToken = getCsrfToken();
-    Response loginResponse = loginAndGetSession(csrfToken);
-    String bookTitle = "Dracula by Bram Stoker";
-
-    Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
-    User otherUser = this.userRepository
-        .save(new User("antanas@inbox.lt", passwordEncoder.encode("123456"),
-            List.of(role.orElseThrow()), null));
-    Book book = this.bookRepository.save(new Book(bookTitle, null));
-    this.userBookRepository.save(new UserBook(otherUser, book));
-
-    given()
-        .cookie("JSESSIONID", loginResponse.getSessionId())
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(new ObjectMapper().writeValueAsString(new UserBookRequestDTO(bookTitle)))
-        .when()
-        .post("/books")
-        .then()
-        .statusCode(201)
-        .body("id", equalTo(findUserBookIdByUserIdAndBookTitle(user.getId(), bookTitle)))
-        .body("userId", equalTo(user.getId().intValue()))
-        .body("bookId", equalTo(findBookIdByTitle(bookTitle)))
-        .body("$", aMapWithSize(3))
-        .header("Location", containsString("/books/" + findBookIdByTitle(bookTitle) + "/users/"
-            + user.getId()));
-  }
-
-  @Test
-  void saveUserBook_whenUnauthenticatedCalls_thenReturn401() throws JsonProcessingException {
-    given()
-        .contentType(ContentType.JSON)
-        .body(new ObjectMapper().writeValueAsString(new UserBookRequestDTO("Dracula by Bram Stoker")))
-        .when()
-        .post("/books")
-        .then()
-        .statusCode(401)
-        .body(emptyOrNullString());
-  }
-
-  @Test
-  void saveUserBook_whenAuthenticatedButNoCSRF_thenReturn403AndBody()
-      throws JsonProcessingException {
-    createUser();
-    String csrfToken = getCsrfToken();
-    Response loginResponse = loginAndGetSession(csrfToken);
-
-    given()
-        .cookie("JSESSIONID", loginResponse.getSessionId())
-        .contentType(ContentType.JSON)
-        .body(new ObjectMapper()
-            .writeValueAsString(new UserBookRequestDTO("Dracula by Bram Stoker")))
-        .when()
-        .post("/books")
-        .then()
-        .statusCode(403)
-        .body("timestamp", containsString("2025"))
-        .body("status", equalTo(403))
-        .body("error", equalTo("Forbidden"))
-        .body("path", equalTo("/books"));
-  }
-
-  // getBooks
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-
-  @Test
-  void getUserBooks_whenCalled_thenReturnBooksAnd200() {
-    User user = createUser();
-    String csrfToken = getCsrfToken();
-    Response loginResponse = loginAndGetSession(csrfToken);
-
-    Book bookOne = this.bookRepository.save(new Book("Pride and Prejudice by Jane Austen", null));
-
-    Book bookTwo = this.bookRepository
-        .save(new Book("Romeo and Juliet by William Shakespeare", null));
-
-    this.userBookRepository.save(new UserBook(user, bookOne));
-    this.userBookRepository.save(new UserBook(user, bookTwo));
-
-    given()
-        .cookie("JSESSIONID", loginResponse.getSessionId())
-        .when()
-        .get("/books")
-        .then()
-        .statusCode(200)
-        .body("$", hasSize(2))
-        .body("[0].title", equalTo(bookOne.getTitle()))
-        .body("[0]", aMapWithSize(1))
-        .body("[1].title", equalTo(bookTwo.getTitle()))
-        .body("[1]", aMapWithSize(1));
-  }
-
-  @Test
-  void getUserBooks_whenListEmpty_thenReturnEmptyListAnd200() {
-    createUser();
-    String csrfToken = getCsrfToken();
-    Response loginResponse = loginAndGetSession(csrfToken);
-
-    given()
-        .cookie("JSESSIONID", loginResponse.getSessionId())
-        .when()
-        .get("/books")
-        .then()
-        .statusCode(200)
-        .body("$", empty());
-  }
-
-  @Test
-  void getUserBooks_whenUnauthenticated_thenReturn401AndNoBody() {
-    given()
-        .when()
-        .get("/books")
-        .then()
-        .statusCode(401)
-        .body(emptyOrNullString());
-  }
-
-  // Helper methods
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
 
   private User createUser() {
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
