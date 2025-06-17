@@ -47,7 +47,7 @@ import lt.techin.bookreservationapp.user_book.UserBookRequestDTO;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-class BookControllerTest {
+class UserBookControllerTest {
 
   @LocalServerPort
   private Integer port;
@@ -479,3 +479,5 @@ class BookControllerTest {
         .intValue();
   }
 }
+
+// TODO: I did a git stash
