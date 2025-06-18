@@ -116,6 +116,17 @@ class UserBookControllerTest {
           .body("result", hasSize(3));
     }
 
+    // Unhappy path
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+
     @Test
     void generateBooks_whenMessageIsNull_thenReturn400AndMessage() throws JsonProcessingException {
       createUser();
@@ -289,6 +300,17 @@ class UserBookControllerTest {
 
     }
 
+    // Unhappy path
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+
     @Test
     void saveUserBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage()
         throws JsonProcessingException {
@@ -412,6 +434,17 @@ class UserBookControllerTest {
           .body("[1].title", equalTo(bookTwo.getTitle()))
           .body("[1]", aMapWithSize(1));
     }
+
+    // Unhappy path
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
 
     @Test
     void getUserBooks_whenListEmpty_thenReturnEmptyListAnd200() {
