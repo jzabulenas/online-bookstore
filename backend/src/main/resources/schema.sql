@@ -1,10 +1,8 @@
--- TODO: I think the length of columns should match reality.
--- As well as, check if all unique is good. Check if I am able to register with these new changes...
--- Column length should match DTO size
+-- TODO: add DTO length validation
 
 CREATE TABLE roles (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(255) NOT NULL
+  name VARCHAR(20) NOT NULL
 );
 
 INSERT INTO roles (name)
