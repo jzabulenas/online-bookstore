@@ -116,6 +116,55 @@ class UserBookControllerTest {
           .body("result", hasSize(3));
     }
 
+    @Test
+    void generateBooks_whenUserBooksExist_thenNotSeeThemInNewlyGeneratedBooks()
+        throws JsonProcessingException {
+      User user = createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+
+      RequestSpecification spec = given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
+
+      Response responseOne = spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
+      List<String> resultOne = responseOne.jsonPath().getList("result");
+
+      Book bookOne = bookRepository.save(new Book(resultOne.get(0), null));
+      Book bookTwo = bookRepository.save(new Book(resultOne.get(1), null));
+      Book bookThree = bookRepository.save(new Book(resultOne.get(2), null));
+
+      userBookRepository.save(new UserBook(user, bookOne));
+      userBookRepository.save(new UserBook(user, bookTwo));
+      userBookRepository.save(new UserBook(user, bookThree));
+
+      List<String> existingUserBooks = userBookRepository
+          .findAllTitlesByEmail(user.getEmail());
+
+      Response response = spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
+      List<String> result = response.jsonPath().getList("result");
+
+      assertNotEquals(existingUserBooks, result, "Expected different results for repeated calls");
+    }
+
     // Unhappy path
     //
     //
@@ -512,5 +561,3 @@ class UserBookControllerTest {
         .intValue();
   }
 }
-
-// TODO: I did a git stash
