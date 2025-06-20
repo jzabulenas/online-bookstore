@@ -1,5 +1,3 @@
--- TODO: add DTO length validation
-
 CREATE TABLE roles (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(20) NOT NULL
