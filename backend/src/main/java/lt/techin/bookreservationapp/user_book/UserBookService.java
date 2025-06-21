@@ -38,8 +38,6 @@ class UserBookService {
   }
 
   MessageResponseDTO generateBooks(MessageRequestDTO messageRequestDTO) {
-    // TODO: validate this? Like, if repository contains a particular book, it
-    // should not be in generated result
     List<String> titles = this.userBookRepository.findAllTitles();
 
     String result = chatClient

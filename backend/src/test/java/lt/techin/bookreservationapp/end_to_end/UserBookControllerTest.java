@@ -241,8 +241,6 @@ class UserBookControllerTest {
     }
 
     @Test
-    // TODO: sometimes generates same twice. Need to figure out how to tweak the
-    // query perhaps?
     void generateBooks_whenCalledTwiceWithSameInput_thenResultsShouldDiffer()
         throws JsonProcessingException {
       createUser();
@@ -366,7 +364,6 @@ class UserBookControllerTest {
       User user = createUser();
       String csrfToken = getCsrfToken();
       Response loginResponse = loginAndGetSession(csrfToken);
-      // TODO: is adding null like that to constructor even smart?
       Book book = bookRepository.save(new Book("Dracula by Bram Stoker", null));
       userBookRepository.save(new UserBook(user, book));
 
