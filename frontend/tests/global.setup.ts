@@ -18,7 +18,9 @@ setup("create new database", async ({ page }) => {
   await page.getByRole("textbox", { name: "Password:" }).tap();
   await page.getByRole("textbox", { name: "Password:" }).fill("123456");
   await page.getByRole("button", { name: "Submit" }).click();
-  await expect(page.getByText("You have successfully signed")).toBeVisible();
+  await expect(
+    page.getByText("You have successfully signed up. You may now log in.")
+  ).toBeVisible();
   await expect(page.getByRole("alert")).toContainText(
     "You have successfully signed up. You may now log in."
   );
