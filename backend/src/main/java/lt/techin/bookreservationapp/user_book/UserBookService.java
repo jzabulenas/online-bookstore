@@ -78,7 +78,9 @@ class UserBookService {
 
       UserBook savedUserBook = this.userBookRepository.save(new UserBook(user, book));
 
-      return new UserBookResponseDTO(savedUserBook.getId(), savedUserBook.getUser().getId(),
+      return new UserBookResponseDTO(
+          savedUserBook.getId(),
+          savedUserBook.getUser().getId(),
           savedUserBook.getBook().getId());
     }
 
