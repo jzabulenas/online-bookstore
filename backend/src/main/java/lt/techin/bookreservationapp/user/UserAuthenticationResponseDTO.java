@@ -2,8 +2,8 @@ package lt.techin.bookreservationapp.user;
 
 import java.util.List;
 
-public record UserAuthenticationResponseDTO(long id,
-    String email,
+public record UserAuthenticationResponseDTO(
+    String name,
     List<String> authorities) {
 
 }

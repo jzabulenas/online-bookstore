@@ -49,7 +49,6 @@ class UserController {
     User user = (User) authentication.getPrincipal();
 
     return new UserAuthenticationResponseDTO(
-        user.getId(),
         user.getEmail(),
         user.getRoles()
             .stream()
