@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import lt.techin.bookreservationapp.role.Role;
+
 // @CrossOrigin("http://localhost:5173")
 @RestController
 class UserController {
@@ -43,8 +45,16 @@ class UserController {
   // }
 
   @GetMapping("/user")
-  Authentication getUser(Authentication authentication) {
-    return authentication;
+  UserAuthenticationResponseDTO getUser(Authentication authentication) {
+    User user = (User) authentication.getPrincipal();
+
+    return new UserAuthenticationResponseDTO(
+        user.getId(),
+        user.getEmail(),
+        user.getRoles()
+            .stream()
+            .map(Role::getName)
+            .toList());
   }
 
   @GetMapping("/open")
