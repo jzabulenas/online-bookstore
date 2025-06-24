@@ -241,8 +241,6 @@ class UserBookControllerTest {
     }
 
     @Test
-    // TODO: sometimes generates same twice. Need to figure out how to tweak the
-    // query perhaps?
     void generateBooks_whenCalledTwiceWithSameInput_thenResultsShouldDiffer()
         throws JsonProcessingException {
       createUser();
@@ -366,7 +364,6 @@ class UserBookControllerTest {
       User user = createUser();
       String csrfToken = getCsrfToken();
       Response loginResponse = loginAndGetSession(csrfToken);
-      // TODO: is adding null like that to constructor even smart?
       Book book = bookRepository.save(new Book("Dracula by Bram Stoker", null));
       userBookRepository.save(new UserBook(user, book));
 
@@ -482,6 +479,39 @@ class UserBookControllerTest {
           .body("[0]", aMapWithSize(1))
           .body("[1].title", equalTo(bookTwo.getTitle()))
           .body("[1]", aMapWithSize(1));
+    }
+
+    @Test
+    void getUserBooks_whenOneUserHasBooks_thenOtherUserHasNoneAnd200() {
+      User user = createUser();
+      Book bookOne = bookRepository.save(new Book("Pride and Prejudice by Jane Austen", null));
+      Book bookTwo = bookRepository
+          .save(new Book("Romeo and Juliet by William Shakespeare", null));
+      userBookRepository.save(new UserBook(user, bookOne));
+      userBookRepository.save(new UserBook(user, bookTwo));
+
+      Optional<Role> role = roleRepository.findByName("ROLE_USER");
+      userRepository.save(new User("antanas@inbox.lt",
+          passwordEncoder.encode("123456"), List.of(role.orElseThrow()), null));
+      String csrfToken = getCsrfToken();
+      Response response = given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.URLENC)
+          .body("username=antanas%40inbox.lt&password=123456")
+          .post("/login")
+          .then()
+          .statusCode(200)
+          .extract()
+          .response();
+
+      given()
+          .cookie("JSESSIONID", response.getSessionId())
+          .when()
+          .get("/books")
+          .then()
+          .statusCode(200)
+          .body("$", empty());
     }
 
     // Unhappy path

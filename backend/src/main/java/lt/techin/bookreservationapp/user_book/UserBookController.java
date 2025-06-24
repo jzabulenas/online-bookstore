@@ -56,8 +56,6 @@ class UserBookController {
         .body(userBookResponseDTO);
   }
 
-  // TODO: write a test, do I not see books on my user if saved books for other
-  // user?
   @GetMapping("/books")
   ResponseEntity<List<UserBookTitleResponseDTO>> getUserBooks() {
     return ResponseEntity.ok(this.userBookService.findAllUserBooks());

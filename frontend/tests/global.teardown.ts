@@ -12,7 +12,7 @@ teardown("delete database", async ({}) => {
     port: 3307,
     user: process.env.MARIADB_USERNAME,
     password: process.env.MARIADB_PASSWORD,
-    database: "online_bookstore_test_env",
+    database: "online_bookstore",
   });
 
   await conn.execute("DELETE FROM users_roles");

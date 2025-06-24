@@ -6,7 +6,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-record UserRequestDTO(@Email @NotNull @Size(min = 3, max = 255) String email,
+record UserRequestDTO(
+    @Email @NotNull @Size(min = 3, max = 255) String email,
     @NotNull @Size(min = 8, max = 20) String password,
     @NotNull List<Long> roles) {
 }
