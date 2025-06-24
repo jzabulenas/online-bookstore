@@ -15,6 +15,7 @@ test("should sign up", async ({ page }) => {
   await page.getByRole("textbox", { name: "Password:" }).tap();
   await page.getByRole("textbox", { name: "Password:" }).fill("123456");
   await page.getByRole("button", { name: "Submit" }).click();
+
   await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
     page.getByText("You have successfully signed up. You may now log in.")
@@ -22,4 +23,5 @@ test("should sign up", async ({ page }) => {
   await expect(page.getByRole("alert")).toContainText(
     "You have successfully signed up. You may now log in."
   );
+  await expect(page).toHaveScreenshot();
 });

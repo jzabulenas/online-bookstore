@@ -18,4 +18,5 @@ test("should sign up", async ({ page }) => {
   await expect(page.getByRole("alert")).toContainText(
     "You have successfully signed up. You may now log in."
   );
+  await expect(page).toHaveScreenshot();
 });
