@@ -117,8 +117,8 @@ export default function Navbar() {
                 </>
               )}
 
-              {(roles?.some((role) => role.authority === "ROLE_ADMIN") ||
-                roles?.some((role) => role.authority === "ROLE_USER")) && (
+              {(roles?.some((role) => role === "ROLE_ADMIN") ||
+                roles?.some((role) => role === "ROLE_USER")) && (
                 <>
                   <NavLink
                     className="nav-link"
