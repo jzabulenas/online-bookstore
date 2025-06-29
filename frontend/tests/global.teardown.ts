@@ -16,6 +16,7 @@ teardown("delete database", async ({}) => {
   });
 
   await conn.execute("DELETE FROM users_roles");
+  await conn.execute("DELETE FROM users_books");
   await conn.execute("DELETE FROM books");
   await conn.execute("DELETE FROM users");
   await conn.end();
