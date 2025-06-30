@@ -64,7 +64,7 @@ export default function Signup({ setIsSignedUp }) {
               })}
             />
           </div>
-          {errors.email && (
+          {errors.email && errors.email.type === "required" && (
             <p className="text-danger">This field is required.</p>
           )}
 
