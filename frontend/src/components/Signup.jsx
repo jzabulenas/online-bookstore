@@ -3,7 +3,11 @@ import csrfToken from "../util/getCsrfToken";
 import { useNavigate } from "react-router-dom";
 
 export default function Signup({ setIsSignedUp }) {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
@@ -55,9 +59,14 @@ export default function Signup({ setIsSignedUp }) {
               name="email"
               id="email"
               className="form-control"
-              {...register("email")}
+              {...register("email", {
+                required: true,
+              })}
             />
           </div>
+          {errors.email && (
+            <p className="text-danger">This field is required.</p>
+          )}
 
           <div className="mb-3">
             <label
