@@ -15,7 +15,7 @@ test("should sign up", async ({ page }) => {
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
   await page.getByRole("textbox", { name: "Password:" }).tap();
   await page.getByRole("textbox", { name: "Password:" }).fill("123456");
-  await page.getByRole("button", { name: "Submit" }).click();
+  await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
