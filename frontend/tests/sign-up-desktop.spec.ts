@@ -52,3 +52,26 @@ test("should display an error message when email is too short", async ({
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
+
+test("should display an error message when email is too long", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Sign up" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).click();
+  await page
+    .getByRole("textbox", { name: "Email:" })
+    // This is 256 characters
+    .fill(
+      "dfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfs@gmail.com"
+    );
+  await page.getByRole("textbox", { name: "Password:" }).click();
+  await page.getByRole("textbox", { name: "Password:" }).fill("123456");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(
+    page.getByText("Email must be at most 255 characters long.")
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
