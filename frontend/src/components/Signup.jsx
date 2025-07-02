@@ -92,9 +92,14 @@ export default function Signup({ setIsSignedUp }) {
               name="password"
               id="password"
               className="form-control"
-              {...register("password")}
+              {...register("password", {
+                required: true,
+              })}
             />
           </div>
+          {errors.password && (
+            <p className="text-danger">This field is required.</p>
+          )}
 
           <button
             type="submit"
