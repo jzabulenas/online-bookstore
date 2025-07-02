@@ -19,6 +19,10 @@ setup("create new database", async ({ page }) => {
   await page.getByRole("textbox", { name: "Password:" }).tap();
   await page.getByRole("textbox", { name: "Password:" }).fill("123456");
   await page.getByRole("button", { name: "Submit" }).click();
+
+  // Moving snapshot at top of excpect here
+  await expect(page).toHaveScreenshot();
+  await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
     page.getByText("You have successfully signed up. You may now log in.")
   ).toBeVisible();
