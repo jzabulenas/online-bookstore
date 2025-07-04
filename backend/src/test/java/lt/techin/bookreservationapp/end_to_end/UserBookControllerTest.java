@@ -53,7 +53,7 @@ class UserBookControllerTest {
   private Integer port;
 
   static MariaDBContainer<?> mariaDB = new MariaDBContainer<>(
-      DockerImageName.parse("mariadb:10.11"));
+      DockerImageName.parse("mariadb:11.4"));
 
   @BeforeAll
   static void beforeAll() {
