@@ -62,3 +62,46 @@ test("should display an error message when email is too short", async ({
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
+
+test("should display an error message when email is too long", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Sign up" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).tap();
+  await page
+    .getByRole("textbox", { name: "Email:" })
+    // This is 256 characters
+    .fill(
+      "dfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfs@gmail.com"
+    );
+  await page.getByRole("textbox", { name: "Password:" }).tap();
+  await page.getByRole("textbox", { name: "Password:" }).fill("123456");
+  await page.getByRole("button", { name: "Submit" }).tap();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(
+    page.getByText("Email must be at most 255 characters long.")
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
+
+test("should display an error message when password is empty", async ({
+  page,
+}) => {
+  const email = `antanas@inbox.lt`;
+
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Sign up" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("button", { name: "Submit" }).tap();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(page.getByText("This field is required.")).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});

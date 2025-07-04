@@ -12,12 +12,17 @@ setup("create new database", async ({ page }) => {
 
   await page.goto("http://localhost:5173/");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
   await page.getByRole("link", { name: "Sign up" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
   await page.getByRole("textbox", { name: "Password:" }).tap();
   await page.getByRole("textbox", { name: "Password:" }).fill("123456");
   await page.getByRole("button", { name: "Submit" }).click();
+
+  // Moving snapshot at top of excpect here
+  await expect(page).toHaveScreenshot();
+  await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
     page.getByText("You have successfully signed up. You may now log in.")
   ).toBeVisible();

@@ -62,6 +62,7 @@ export default function Signup({ setIsSignedUp }) {
               {...register("email", {
                 required: true,
                 minLength: 7,
+                maxLength: 255,
               })}
             />
           </div>
@@ -71,6 +72,11 @@ export default function Signup({ setIsSignedUp }) {
           {errors.email && errors.email.type === "minLength" && (
             <p className="text-danger">
               Email must be at least 7 characters long.
+            </p>
+          )}
+          {errors.email && errors.email.type === "maxLength" && (
+            <p className="text-danger">
+              Email must be at most 255 characters long.
             </p>
           )}
 
@@ -86,9 +92,14 @@ export default function Signup({ setIsSignedUp }) {
               name="password"
               id="password"
               className="form-control"
-              {...register("password")}
+              {...register("password", {
+                required: true,
+              })}
             />
           </div>
+          {errors.password && (
+            <p className="text-danger">This field is required.</p>
+          )}
 
           <button
             type="submit"
