@@ -27,6 +27,17 @@ test("should sign up", async ({ page }) => {
   await expect(page).toHaveScreenshot();
 });
 
+// Email
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 test("should display an error message when email is empty", async ({
   page,
 }) => {
@@ -87,6 +98,17 @@ test("should display an error message when email is too long", async ({
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
+
+// Password
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 test("should display an error message when password is empty", async ({
   page,
