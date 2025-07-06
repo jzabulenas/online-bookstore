@@ -95,6 +95,7 @@ export default function Signup({ setIsSignedUp }) {
               {...register("password", {
                 required: true,
                 minLength: 8,
+                maxLength: 20,
               })}
             />
           </div>
@@ -104,6 +105,11 @@ export default function Signup({ setIsSignedUp }) {
           {errors.password && errors.password.type === "minLength" && (
             <p className="text-danger">
               Password must be at least 8 characters long.
+            </p>
+          )}
+          {errors.password && errors.password.type === "maxLength" && (
+            <p className="text-danger">
+              Password must be at most 20 characters long.
             </p>
           )}
 

@@ -149,3 +149,27 @@ test("should display an error message when password is too short", async ({
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
+
+test("should display an error message when password is too long", async ({
+  page,
+}) => {
+  const email = `antanas@inbox.lt`;
+
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Sign up" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:" }).tap();
+  await page
+    .getByRole("textbox", { name: "Password:" })
+    .fill("123456789123456789123");
+  await page.getByRole("button", { name: "Submit" }).tap();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(
+    page.getByText("Password must be at most 20 characters long.")
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
