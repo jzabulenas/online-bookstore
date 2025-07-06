@@ -14,20 +14,20 @@
     "mysql2": "^3.14.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-hook-form": "^7.58.1",
+    "react-hook-form": "^7.60.0",
     "react-icons": "^5.5.0",
-    "react-router-dom": "^7.6.2"
+    "react-router-dom": "^7.6.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.53.1",
-    "@types/node": "^24.0.4",
+    "@playwright/test": "^1.53.2",
+    "@types/node": "^24.0.10",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
-    "eslint": "^9.29.0",
+    "eslint": "^9.30.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
-    "vite": "^7.0.0"
+    "vite": "^7.0.2"
   }
 }
