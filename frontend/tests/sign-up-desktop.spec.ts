@@ -113,3 +113,23 @@ test("should display an error message when password is empty", async ({
   await expect(page.getByText("This field is required.")).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
+
+test("should display an error message when password is too short", async ({
+  page,
+}) => {
+  const email = `antanas@inbox.lt`;
+
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Sign up" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:" }).click();
+  await page.getByRole("textbox", { name: "Password:" }).fill("12345");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(
+    page.getByText("Password must be at least 8 characters long.")
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});

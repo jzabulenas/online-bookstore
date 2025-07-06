@@ -94,11 +94,17 @@ export default function Signup({ setIsSignedUp }) {
               className="form-control"
               {...register("password", {
                 required: true,
+                minLength: 8,
               })}
             />
           </div>
-          {errors.password && (
+          {errors.password && errors.password.type === "required" && (
             <p className="text-danger">This field is required.</p>
+          )}
+          {errors.email && errors.password.type === "minLength" && (
+            <p className="text-danger">
+              Password must be at least 8 characters long.
+            </p>
           )}
 
           <button
