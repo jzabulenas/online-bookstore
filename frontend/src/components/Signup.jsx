@@ -101,7 +101,7 @@ export default function Signup({ setIsSignedUp }) {
           {errors.password && errors.password.type === "required" && (
             <p className="text-danger">This field is required.</p>
           )}
-          {errors.email && errors.password.type === "minLength" && (
+          {errors.password && errors.password.type === "minLength" && (
             <p className="text-danger">
               Password must be at least 8 characters long.
             </p>
