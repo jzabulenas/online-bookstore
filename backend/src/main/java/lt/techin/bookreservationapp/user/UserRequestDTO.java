@@ -7,8 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 record UserRequestDTO(
-    // TODO: update min to 7
-    @Email @NotNull @Size(min = 3, max = 255) String email,
+    @Email @NotNull @Size(min = 7, max = 255) String email,
     @NotNull @Size(min = 8, max = 20) String password,
     @NotNull List<Long> roles) {
 }

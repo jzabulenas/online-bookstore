@@ -17,11 +17,9 @@ setup("create new database", async ({ page }) => {
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("123456");
+  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
   await page.getByRole("button", { name: "Submit" }).click();
 
-  // Moving snapshot at top of excpect here
-  await expect(page).toHaveScreenshot();
   await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
     page.getByText("You have successfully signed up. You may now log in.")
@@ -29,6 +27,7 @@ setup("create new database", async ({ page }) => {
   await expect(page.getByRole("alert")).toContainText(
     "You have successfully signed up. You may now log in."
   );
+  await expect(page).toHaveScreenshot();
 });
 
 // The solution below works too, though I am not sure if it is a more proper way, considering you can just use Playwright to do it, as above
