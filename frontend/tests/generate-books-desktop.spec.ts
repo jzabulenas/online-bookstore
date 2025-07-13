@@ -30,3 +30,21 @@ test("should generate 3 books to read when provided input", async ({
       - paragraph
     `);
 });
+
+test("should display an error when book field input is empty", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Log in" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
+  await page.getByRole("textbox", { name: "Password:" }).click();
+  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("button", { name: "Submit" }).click();
+  await page.getByRole("textbox", { name: "Input your book:" }).click();
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page).toHaveURL("http://localhost:5173/");
+  await expect(page.getByText("Cannot be empty.")).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
