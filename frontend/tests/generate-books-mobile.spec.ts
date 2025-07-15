@@ -79,3 +79,30 @@ test("should display an error when book field input is too short", async ({
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
+
+test("should display an error when book field input is too long", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Log in" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
+  await page.getByRole("textbox", { name: "Password:" }).tap();
+  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await page.getByRole("textbox", { name: "Input your book:" }).tap();
+  await page
+    .getByRole("textbox", { name: "Input your book:" })
+    .fill(
+      "jurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgis"
+    ); // 102 characters
+  await page.getByRole("button", { name: "Submit" }).tap();
+
+  await expect(page).toHaveURL("http://localhost:5173/");
+  await expect(
+    page.getByText("Must be at most 100 characters long.")
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});

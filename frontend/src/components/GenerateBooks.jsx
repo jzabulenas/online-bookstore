@@ -106,6 +106,7 @@ export default function GenerateBooks() {
             {...register("book", {
               required: true,
               minLength: 5,
+              maxLength: 100,
             })}
             className="form-control"
           />
@@ -115,6 +116,9 @@ export default function GenerateBooks() {
         )}
         {errors.book && errors.book.type === "minLength" && (
           <p className="text-danger">Must be at least 5 characters long.</p>
+        )}
+        {errors.book && errors.book.type === "maxLength" && (
+          <p className="text-danger">Must be at most 100 characters long.</p>
         )}
 
         <button className="btn btn-primary mb-3">Submit</button>
