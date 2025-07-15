@@ -56,3 +56,26 @@ test("should display an error when book field input is empty", async ({
   await expect(page.getByText("Cannot be empty.")).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
+
+test("should display an error when book field input is too short", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Log in" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
+  await page.getByRole("textbox", { name: "Password:" }).tap();
+  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await page.getByRole("textbox", { name: "Input your book:" }).tap();
+  await page.getByRole("textbox", { name: "Input your book:" }).fill("The ");
+  await page.getByRole("button", { name: "Submit" }).tap();
+
+  await expect(page).toHaveURL("http://localhost:5173/");
+  await expect(
+    page.getByText("Must be at least 5 characters long.")
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
