@@ -5,7 +5,11 @@ import { useNavigate } from "react-router-dom";
 import csrfToken from "../util/getCsrfToken";
 
 export default function GenerateBooks() {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [books, setBooks] = useState(null);
   const [likedBooks, setLikedBooks] = useState([]); // Track liked books
   const navigate = useNavigate();
@@ -99,10 +103,23 @@ export default function GenerateBooks() {
           <input
             type="text"
             id="book"
-            {...register("book")}
+            {...register("book", {
+              required: true,
+              minLength: 5,
+              maxLength: 100,
+            })}
             className="form-control"
           />
         </div>
+        {errors.book && errors.book.type === "required" && (
+          <p className="text-danger">Cannot be empty.</p>
+        )}
+        {errors.book && errors.book.type === "minLength" && (
+          <p className="text-danger">Must be at least 5 characters long.</p>
+        )}
+        {errors.book && errors.book.type === "maxLength" && (
+          <p className="text-danger">Must be at most 100 characters long.</p>
+        )}
 
         <button className="btn btn-primary mb-3">Submit</button>
       </form>
