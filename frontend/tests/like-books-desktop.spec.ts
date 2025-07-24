@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { v4 as uuidv4 } from "uuid";
 
 test("should click like on a single generated book, and see it displayed in 'saved books'", async ({
   page,
 }) => {
-  const email = `antanas+${Date.now()}@inbox.lt`;
+  const email = `antanas+${uuidv4()}@inbox.lt`;
 
   await page.goto("http://localhost:5173/");
   await page.getByRole("link", { name: "Sign up" }).click();
@@ -46,7 +47,7 @@ test("should click like on a single generated book, and see it displayed in 'sav
 test("should click like on two generated books, and see them displayed in 'saved books'", async ({
   page,
 }) => {
-  const email = `antanas+${Date.now()}@inbox.lt`;
+  const email = `antanas+${uuidv4()}@inbox.lt`;
 
   await page.goto("http://localhost:5173/");
   await page.getByRole("link", { name: "Sign up" }).click();

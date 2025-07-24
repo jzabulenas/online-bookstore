@@ -1,11 +1,12 @@
 import { test, expect, devices } from "@playwright/test";
+import { v4 as uuidv4 } from "uuid";
 
 test.use({
   ...devices["Pixel 5"],
 });
 
 test("should sign up", async ({ page }) => {
-  const email = `antanas+${Date.now()}@inbox.lt`;
+  const email = `antanas+${uuidv4()}@inbox.lt`;
 
   await page.goto("http://localhost:5173/");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();

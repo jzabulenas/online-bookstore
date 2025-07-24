@@ -8,7 +8,7 @@ test.use({
 test("should click like on a single generated book, and see it displayed in 'saved books'", async ({
   page,
 }) => {
-  const email = `antanas+${Date.now()}@inbox.lt`;
+  const email = `antanas+${uuidv4()}@inbox.lt`;
 
   await page.goto("http://localhost:5173/");
   await page.getByRole("button", { name: "Toggle navigation" }).click();
@@ -57,7 +57,7 @@ test("should click like on a single generated book, and see it displayed in 'sav
 test("should click like on two generated books, and see them displayed in 'saved books'", async ({
   page,
 }) => {
-  const email = `antanas+${Date.now()}@inbox.lt`;
+  const email = `antanas+${uuidv4()}@inbox.lt`;
 
   await page.goto("http://localhost:5173/");
   await page.getByRole("button", { name: "Toggle navigation" }).click();
