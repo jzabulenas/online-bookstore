@@ -36,7 +36,6 @@ test("should click like on a single generated book, and see it displayed in 'sav
   await expect(page.getByText("Books you have saved")).toBeVisible();
   await expect(page.getByRole("heading")).toContainText("Books you have saved");
   await expect(page.getByText(bookTitle)).toBeVisible();
-  // await expect(page.getByRole("paragraph")).toContainText(bookTitle);
   await expect(page.getByRole("main")).toMatchAriaSnapshot(`
     - main:
       - heading "Books you have saved" [level=1]
@@ -81,9 +80,7 @@ test("should click like on two generated books, and see them displayed in 'saved
   await expect(page.getByText("Books you have saved")).toBeVisible();
   await expect(page.getByRole("heading")).toContainText("Books you have saved");
   await expect(page.getByText(bookTitle1)).toBeVisible();
-  // await expect(page.getByRole("paragraph").nth(0)).toContainText(bookTitle1);
   await expect(page.getByText(bookTitle2)).toBeVisible();
-  // await expect(page.getByRole("paragraph").nth(1)).toContainText(bookTitle2);
   await expect(page.getByRole("main")).toMatchAriaSnapshot(`
     - main:
       - heading "Books you have saved" [level=1]
