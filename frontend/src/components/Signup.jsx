@@ -7,6 +7,7 @@ export default function Signup({ setIsSignedUp }) {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm();
   const navigate = useNavigate();
 
@@ -29,6 +30,16 @@ export default function Signup({ setIsSignedUp }) {
           }),
         });
 
+        const body = await response.json();
+
+        if (response.status === 400 && body.username === "Already exists") {
+          setError("root.serverError", {
+            type: response.status,
+          });
+        }
+
+        // This if statement is needed, because it prevents "navigate" from activating if any server error occurs,
+        // notably the root.serverError above
         if (!response.ok) {
           throw new Error(`Response status: ${response.status}`);
         }
@@ -78,6 +89,9 @@ export default function Signup({ setIsSignedUp }) {
             <p className="text-danger">
               Email must be at most 255 characters long.
             </p>
+          )}
+          {errors.root?.serverError?.type === 400 && (
+            <p className="text-danger">Such email address is already in use.</p>
           )}
 
           <div className="mb-3">
