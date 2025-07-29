@@ -36,6 +36,7 @@ export default function GenerateBooks() {
           localStorage.removeItem("email");
           localStorage.removeItem("roles");
           window.dispatchEvent(new Event("storage")); // Trigger a storage event manually
+          navigate("/login");
         }
 
         if (!response.ok) {
@@ -46,9 +47,7 @@ export default function GenerateBooks() {
         setBooks(json);
         console.log(json);
       } catch (error) {
-        // console.error(error.message);
-        sessionStorage.clear();
-        navigate("/login");
+        console.error(error.message);
       }
     }
 
