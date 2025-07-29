@@ -25,6 +25,10 @@ class UserService {
   }
 
   UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
+    if (this.userRepository.existsByEmail(userRequestDTO.email())) {
+      throw new EmailAlreadyExistsException();
+    }
+
     List<Role> toRoles = userRequestDTO.roles()
         .stream()
         .map(r -> this.roleRepository.findById(r).orElseThrow())
