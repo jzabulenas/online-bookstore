@@ -124,20 +124,22 @@ export default function GenerateBooks() {
         <button className="btn btn-primary mb-3">Submit</button>
       </form>
 
-      {books &&
-        books.result.map((book, index) => (
-          <p key={index}>
-            {book}
-            {likedBooks.includes(book) ? (
-              <BsHandThumbsUpFill className="ms-1 fs-4" />
-            ) : (
-              <BsHandThumbsUp
-                onClick={() => clickThumbsUp(book)}
-                className="ms-1 fs-4"
-              />
-            )}
-          </p>
-        ))}
+      <div data-testid="generated-books">
+        {books &&
+          books.result.map((book, index) => (
+            <p key={index}>
+              {book}
+              {likedBooks.includes(book) ? (
+                <BsHandThumbsUpFill className="ms-1 fs-4" />
+              ) : (
+                <BsHandThumbsUp
+                  onClick={() => clickThumbsUp(book)}
+                  className="ms-1 fs-4"
+                />
+              )}
+            </p>
+          ))}
+      </div>
     </>
   );
 }
