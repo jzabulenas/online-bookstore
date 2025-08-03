@@ -9,6 +9,7 @@ export default function GenerateBooks() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm();
   const [books, setBooks] = useState(null);
   const [likedBooks, setLikedBooks] = useState([]); // Track liked books
@@ -36,6 +37,15 @@ export default function GenerateBooks() {
           localStorage.removeItem("email");
           localStorage.removeItem("roles");
           window.dispatchEvent(new Event("storage")); // Trigger a storage event manually
+          navigate("/login");
+        }
+
+        // Will not write test for this, because I have turned off the rate limiting feature for localhost in backend.
+        // This was done so Playwright can run other tests normally
+        if (response.status === 429) {
+          setError("root.serverError", {
+            type: response.status,
+          });
         }
 
         if (!response.ok) {
@@ -46,9 +56,7 @@ export default function GenerateBooks() {
         setBooks(json);
         console.log(json);
       } catch (error) {
-        // console.error(error.message);
-        sessionStorage.clear();
-        navigate("/login");
+        console.error(error.message);
       }
     }
 
@@ -119,6 +127,11 @@ export default function GenerateBooks() {
         )}
         {errors.book && errors.book.type === "maxLength" && (
           <p className="text-danger">Must be at most 100 characters long.</p>
+        )}
+        {errors.root?.serverError?.type === 429 && (
+          <p className="text-danger">
+            Too many requests. Please wait 60 seconds.
+          </p>
         )}
 
         <button className="btn btn-primary mb-3">Submit</button>

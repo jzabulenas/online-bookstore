@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import lt.techin.bookreservationapp.user.EmailAlreadyExistsException;
 
 @RestControllerAdvice
 class BeanValidation {
@@ -27,5 +30,13 @@ class BeanValidation {
         });
 
     return errors;
+  }
+
+  @ExceptionHandler(EmailAlreadyExistsException.class)
+  public ResponseEntity<Object> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
+    Map<String, String> response = new HashMap<>();
+    response.put("username", "Already exists");
+
+    return ResponseEntity.badRequest().body(response);
   }
 }

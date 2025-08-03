@@ -42,6 +42,12 @@ class RateLimitAspect {
         .currentRequestAttributes();
 
     final String key = requestAttributes.getRequest().getRemoteAddr();
+
+    // Ignore localhost requests
+    if ("127.0.0.1".equals(key) || "0:0:0:0:0:0:0:1".equals(key)) {
+      return;
+    }
+
     final long currentTime = System.currentTimeMillis();
 
     requestCounts.putIfAbsent(key, new ArrayList<>());

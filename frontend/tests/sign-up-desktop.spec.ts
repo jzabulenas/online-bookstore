@@ -88,6 +88,25 @@ test("should display an error message when email is too long", async ({
   await expect(page).toHaveScreenshot();
 });
 
+test("should display an error message when email already exists", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Sign up" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).click();
+  // This email already exists because it was created during global setup
+  await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
+  await page.getByRole("textbox", { name: "Password:" }).click();
+  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(
+    page.getByText("Such email address is already in use.")
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
+
 // Password
 //
 //
