@@ -51,7 +51,10 @@ class UserBookService {
         .content();
 
     String[] books = result.split("\\|");
-    resultFromApiCall = result;
+    // Wait a minute... is "resultFromApiCall" bound to each and every user?
+    // Disabling for now
+    // resultFromApiCall = result;
+    // System.out.println(resultFromApiCall);
 
     return new MessageResponseDTO(books);
   }
