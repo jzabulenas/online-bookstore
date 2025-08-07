@@ -16,8 +16,14 @@ setup("create new database", async ({ page }) => {
   await page.getByRole("link", { name: "Sign up" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
-  await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("12345678");
+  await page.getByRole("textbox", { name: "Confirm password:" }).tap();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("12345678");
   await page.getByRole("button", { name: "Submit" }).click();
 
   await expect(page).toHaveURL("http://localhost:5173/");
