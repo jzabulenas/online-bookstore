@@ -1,6 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { v4 as uuidv4 } from "uuid";
 
+// The reason why I create a new user for each and every test, is because the
+// individual tests themselves run at least three times, for each browser. I
+// have to make sure there is no overlap
+
 test("should click like on a single generated book, and see it displayed in 'saved books'", async ({
   page,
 }) => {
