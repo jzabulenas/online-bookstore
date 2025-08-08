@@ -217,3 +217,34 @@ test("should display an error message when password is too long", async ({
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
+
+// Confirm password
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+test("should display an error message when confirm password is empty", async ({
+  page,
+}) => {
+  const email = `antanas@inbox.lt`;
+
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Sign up" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:", exact: true }).click();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("12345678");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(page.getByText("This field is required.")).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
