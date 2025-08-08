@@ -10,8 +10,14 @@ test("should click like on a single generated book, and see it displayed in 'sav
   await page.getByRole("link", { name: "Sign up" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
-  await page.getByRole("textbox", { name: "Password:" }).click();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:", exact: true }).click();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("12345678");
+  await page.getByRole("textbox", { name: "Confirm password:" }).click();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("12345678");
   await page.getByRole("button", { name: "Submit" }).click();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
@@ -52,8 +58,14 @@ test("should click like on two generated books, and see them displayed in 'saved
   await page.getByRole("link", { name: "Sign up" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
-  await page.getByRole("textbox", { name: "Password:" }).click();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:", exact: true }).click();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("12345678");
+  await page.getByRole("textbox", { name: "Confirm password:" }).click();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("12345678");
   await page.getByRole("button", { name: "Submit" }).click();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
@@ -98,8 +110,14 @@ test("should click like on three generated books, and see them displayed in 'sav
   await page.getByRole("link", { name: "Sign up" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
-  await page.getByRole("textbox", { name: "Password:" }).click();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:", exact: true }).click();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("12345678");
+  await page.getByRole("textbox", { name: "Confirm password:" }).click();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("12345678");
   await page.getByRole("button", { name: "Submit" }).click();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
