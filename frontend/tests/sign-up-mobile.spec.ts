@@ -271,3 +271,29 @@ test("should display an error message when confirm password is empty", async ({
   await expect(page.getByText("This field is required.")).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
+
+test("should display an error message when confirm password does not match password", async ({
+  page,
+}) => {
+  const email = `antanas@inbox.lt`;
+
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Sign up" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("12345678");
+  await page.getByRole("textbox", { name: "Confirm password:" }).tap();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("1234567");
+  await page.getByRole("button", { name: "Submit" }).tap();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(page.getByText("Passwords do not match.")).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
