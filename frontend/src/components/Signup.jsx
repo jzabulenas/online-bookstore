@@ -8,6 +8,7 @@ export default function Signup({ setIsSignedUp }) {
     handleSubmit,
     formState: { errors },
     setError,
+    watch,
   } = useForm();
   const navigate = useNavigate();
 
@@ -126,6 +127,37 @@ export default function Signup({ setIsSignedUp }) {
               Password must be at most 20 characters long.
             </p>
           )}
+
+          <div className="mb-3">
+            <label
+              htmlFor="confirm-password"
+              className="form-label"
+            >
+              Confirm password:
+            </label>
+            <input
+              type="password"
+              name="confirm-password"
+              id="confirm-password"
+              className="form-control"
+              {...register("confirmPassword", {
+                required: true,
+                validate: (value) => {
+                  if (watch("password") != value) {
+                    return "Passwords do not match.";
+                  }
+                },
+              })}
+            />
+          </div>
+          {errors.confirmPassword &&
+            errors.confirmPassword.type === "required" && (
+              <p className="text-danger">This field is required.</p>
+            )}
+          {errors.confirmPassword &&
+            errors.confirmPassword.type === "validate" && (
+              <p className="text-danger">{errors.confirmPassword.message}</p>
+            )}
 
           <button
             type="submit"

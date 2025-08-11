@@ -240,6 +240,7 @@ class UserBookControllerTest {
           .body("$", aMapWithSize(1));
     }
 
+    // This may be flaky, as I disabled the additional check in service method
     @Test
     void generateBooks_whenCalledTwiceWithSameInput_thenResultsShouldDiffer()
         throws JsonProcessingException {
