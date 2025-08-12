@@ -89,9 +89,7 @@ class UserBookService {
 
     List<String> titles = this.userBookRepository.findAllTitles();
 
-    List<UserBookTitleResponseDTO> books = titles.stream()
-        .map(title -> new UserBookTitleResponseDTO(title))
-        .toList();
+    List<UserBookTitleResponseDTO> books = UserBookMapper.toEntities(titles);
 
     return books;
   }
