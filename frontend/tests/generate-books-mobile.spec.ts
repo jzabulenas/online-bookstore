@@ -1,4 +1,5 @@
 import { test, expect, devices } from "@playwright/test";
+import { v4 as uuidv4 } from "uuid";
 
 test.use({
   ...devices["Pixel 5"],
@@ -87,6 +88,80 @@ test("should generate 3 books to read when provided input", async ({
 //       - paragraph
 //     `);
 // });
+
+test("should not generate particular books if they were liked before", async ({
+  page,
+}) => {
+  const email = `antanas+${uuidv4()}@inbox.lt`;
+
+  // Sign up
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Sign up" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("12345678");
+  await page.getByRole("textbox", { name: "Confirm password:" }).tap();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("12345678");
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+
+  // Log in
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Log in" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:" }).tap();
+  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("button", { name: "Submit" }).tap();
+
+  // Generate books, like them and retrieve their text
+  await page.getByRole("textbox", { name: "Input your book:" }).tap();
+  await page
+    .getByRole("textbox", { name: "Input your book:" })
+    .fill("The Merry Adventures of Robin Hood by Howard Pyle");
+  await page.getByRole("button", { name: "Submit" }).tap();
+  const booksFirstRun = page.getByTestId("generated-books").locator("p"); // Selects all paragraphs in 'generated-books' test-id
+  await booksFirstRun.nth(0).getByRole("img").tap(); // taps on the like button of the first book
+  await booksFirstRun.nth(1).getByRole("img").tap(); // taps on the like button of the second book
+  await booksFirstRun.nth(2).getByRole("img").tap(); // taps on the like button of the third book
+  const book1FirstRun = await booksFirstRun.nth(0).innerText(); // Get the book title of previously taped first book
+  const book2FirstRun = await booksFirstRun.nth(1).innerText(); // Get the book title of previously taped second book
+  const book3FirstRun = await booksFirstRun.nth(2).innerText(); // Get the book title of previously taped third book
+
+  // Generate 3 books again,
+  // Need to wait for response, because otherwise the test uses old generated values
+  const responsePromise = page.waitForResponse(
+    "http://localhost:8080/generate-books"
+  );
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await responsePromise;
+
+  // Assert
+  await expect(page).toHaveURL("http://localhost:5173/");
+  await expect(page.getByText(book1FirstRun)).not.toBeVisible();
+  await expect(page.getByText(book2FirstRun)).not.toBeVisible();
+  await expect(page.getByText(book3FirstRun)).not.toBeVisible();
+  await expect(page.getByRole("main")).toMatchAriaSnapshot(`
+      - main:
+        - heading "Welcome, ${email}" [level=1]
+        - heading "How to use" [level=2]
+        - paragraph: For best results, try inputting the whole book title, with author. For example, Pride and Prejudice by Jane Austen.
+        - text: "Input your book:"
+        - textbox "Input your book:": The Merry Adventures of Robin Hood by Howard Pyle
+        - button "Submit"
+        - paragraph
+        - paragraph
+        - paragraph
+      `);
+});
 
 test("should display an error when book field input is empty", async ({
   page,
