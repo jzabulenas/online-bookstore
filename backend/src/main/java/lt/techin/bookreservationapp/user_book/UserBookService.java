@@ -74,17 +74,13 @@ class UserBookService {
 
       UserBook savedUserBook = this.userBookRepository.save(new UserBook(user, book));
 
-      return new UserBookResponseDTO(savedUserBook.getId(), savedUserBook.getUser().getId(),
-          savedUserBook.getBook().getId());
+      return UserBookMapper.toDTO(savedUserBook);
     } else {
       Book book = this.bookRepository.save(new Book(userBookRequestDTO.title(), null));
 
       UserBook savedUserBook = this.userBookRepository.save(new UserBook(user, book));
 
-      return new UserBookResponseDTO(
-          savedUserBook.getId(),
-          savedUserBook.getUser().getId(),
-          savedUserBook.getBook().getId());
+      return UserBookMapper.toDTO(savedUserBook);
     }
 
   }
@@ -93,9 +89,7 @@ class UserBookService {
 
     List<String> titles = this.userBookRepository.findAllTitles();
 
-    List<UserBookTitleResponseDTO> books = titles.stream()
-        .map(title -> new UserBookTitleResponseDTO(title))
-        .toList();
+    List<UserBookTitleResponseDTO> books = UserBookMapper.toEntities(titles);
 
     return books;
   }

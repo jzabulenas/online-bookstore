@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lt.techin.bookreservationapp.role.Role;
+import lt.techin.bookreservationapp.role.RoleMapper;
 import lt.techin.bookreservationapp.role.RoleRepository;
 
 @Service
@@ -29,25 +30,15 @@ class UserService {
       throw new EmailAlreadyExistsException();
     }
 
-    List<Role> toRoles = userRequestDTO.roles()
-        .stream()
-        .map(r -> this.roleRepository.findById(r).orElseThrow())
-        .toList();
+    List<Role> toRoles = RoleMapper.toEntities(userRequestDTO.roles(), roleRepository);
 
-    User toUser = new User(
-        userRequestDTO.email(),
-        this.passwordEncoder.encode(userRequestDTO.password()),
-        toRoles,
-        null);
+    User toUser = UserMapper.toEntity(userRequestDTO, passwordEncoder, toRoles);
 
     User savedUser = this.userRepository.save(toUser);
 
-    List<Long> toRolesIds = savedUser.getRoles().stream().map(r -> r.getId()).toList();
+    List<Long> toRolesIds = RoleMapper.toIds(savedUser);
 
-    UserResponseDTO toDTO = new UserResponseDTO(savedUser.getId(), savedUser.getEmail(),
-        toRolesIds);
-
-    return toDTO;
+    return UserMapper.toDTO(savedUser, toRolesIds);
   }
 
   boolean existsUserByEmail(String email) {

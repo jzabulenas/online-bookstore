@@ -28,7 +28,6 @@ export default function SavedBooks() {
 
         const json = await response.json();
         setBooks(json);
-        console.log(json);
       } catch (error) {
         // console.error(error.message);
         sessionStorage.clear();
