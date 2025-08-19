@@ -280,3 +280,62 @@ test("should click like on generated books, and not see them displayed in 'saved
   await expect(page.getByText(bookTitle3)).not.toBeVisible();
   await expect(page).toHaveScreenshot();
 });
+
+test("should not see liked books if no books are liked after generating books", async ({
+  page,
+}) => {
+  const email = `antanas+${uuidv4()}@inbox.lt`;
+
+  // Sign up
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Sign up" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("12345678");
+  await page.getByRole("textbox", { name: "Confirm password:" }).tap();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("12345678");
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+
+  // Log in
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Log in" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:" }).tap();
+  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("button", { name: "Submit" }).tap();
+
+  // Generate books, retrieve text
+  await page.getByRole("textbox", { name: "Input your book:" }).tap();
+  await page
+    .getByRole("textbox", { name: "Input your book:" })
+    .fill("The Merry Adventures of Robin Hood by Howard Pyle");
+  await page.getByRole("button", { name: "Submit" }).tap();
+  const books = page.getByTestId("generated-books").locator("p");
+  const bookTitle1 = await books.nth(0).innerText();
+  const bookTitle2 = await books.nth(1).innerText();
+  const bookTitle3 = await books.nth(2).innerText();
+
+  // Go to "Saved books"
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Saved books" }).tap();
+
+  // Assert
+  await expect(page).toHaveURL("http://localhost:5173/saved-books");
+  await expect(page.getByText("Books you have saved")).toBeVisible();
+  await expect(page.getByRole("heading")).toContainText("Books you have saved");
+  await expect(page.getByText(bookTitle1)).not.toBeVisible();
+  await expect(page.getByText(bookTitle2)).not.toBeVisible();
+  await expect(page.getByText(bookTitle3)).not.toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
