@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.role.Role;
 
 // @CrossOrigin("http://localhost:5173")
@@ -23,7 +24,7 @@ class UserController {
   }
 
   @PostMapping("/signup")
-  ResponseEntity<Object> signup(@RequestBody UserRequestDTO userRequestDTO) {
+  ResponseEntity<Object> signup(@RequestBody @Valid UserRequestDTO userRequestDTO) {
     UserResponseDTO savedUser = this.userService.saveUser(userRequestDTO);
 
     return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
