@@ -98,6 +98,30 @@ class UserControllerTest {
           .header("Location", equalTo("http://localhost:" + port + "/signup/"
               + findUserIdByEmail(email)));
     }
+
+    // Unhappy path
+    //
+    //
+    //
+    //
+
+    @Test
+    void signup_whenEmailIsNull_thenReturn400AndBody() throws JsonProcessingException {
+      String csrfToken = getCsrfToken();
+
+      given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserRequestDTO(null, "12345678", List.of(1L))))
+          .when()
+          .post("/signup")
+          .then()
+          .statusCode(400)
+          .body("$", aMapWithSize(1))
+          .body("email", equalTo("must not be null"));
+    }
   }
 
   private String getCsrfToken() {
