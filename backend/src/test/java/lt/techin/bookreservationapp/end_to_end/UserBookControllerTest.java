@@ -345,7 +345,8 @@ class UserBookControllerTest {
           .body("userId", equalTo(user.getId().intValue()))
           .body("bookId", equalTo(findBookIdByTitle(bookTitle)))
           .body("$", aMapWithSize(3))
-          .header("Location", containsString("/books/" + findBookIdByTitle(bookTitle) + "/users/"
+          .header("Location", equalTo("http://localhost:" + port + "/books/"
+              + findBookIdByTitle(bookTitle) + "/users/"
               + user.getId()));
 
     }
@@ -414,7 +415,8 @@ class UserBookControllerTest {
           .body("userId", equalTo(user.getId().intValue()))
           .body("bookId", equalTo(findBookIdByTitle(bookTitle)))
           .body("$", aMapWithSize(3))
-          .header("Location", containsString("/books/" + findBookIdByTitle(bookTitle) + "/users/"
+          .header("Location", equalTo("http://localhost:" + port + "/books/"
+              + findBookIdByTitle(bookTitle) + "/users/"
               + user.getId()));
     }
 
