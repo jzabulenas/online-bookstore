@@ -23,6 +23,8 @@ class UserController {
     this.userService = userService;
   }
 
+  // TODO: change this to /users? Because the Location header is something like
+  // this: /signup/113
   @PostMapping("/signup")
   ResponseEntity<Object> signup(@RequestBody @Valid UserRequestDTO userRequestDTO) {
     UserResponseDTO savedUser = this.userService.saveUser(userRequestDTO);
