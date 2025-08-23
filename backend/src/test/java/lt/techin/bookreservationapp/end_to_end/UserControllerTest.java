@@ -138,7 +138,8 @@ class UserControllerTest {
           .then()
           .statusCode(400)
           .body("$", aMapWithSize(1))
-          .body("email", equalTo("size must be between 7 and 255"));
+          .body("email", equalTo("Email must be at least 7 characters long"));
+    }
     }
 
     // TODO: should I test combinations? That is, for example, email and password is
