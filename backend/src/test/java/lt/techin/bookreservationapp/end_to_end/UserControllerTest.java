@@ -140,6 +140,25 @@ class UserControllerTest {
           .body("$", aMapWithSize(1))
           .body("email", equalTo("Email must be at least 7 characters long"));
     }
+
+    @Test
+    void signup_whenEmailLocalPartIsTooLong_thenReturn400AndBody() throws JsonProcessingException {
+      String csrfToken = getCsrfToken();
+
+      given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserRequestDTO(
+                  "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrv@gmail.com",
+                  "12345678", List.of(1L))))
+          .when()
+          .post("/signup")
+          .then()
+          .statusCode(400)
+          .body("$", aMapWithSize(1))
+          .body("email", equalTo("must be a well-formed email address"));
     }
 
     // TODO: should I test combinations? That is, for example, email and password is
