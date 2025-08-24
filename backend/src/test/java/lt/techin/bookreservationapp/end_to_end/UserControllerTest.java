@@ -28,7 +28,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.role.RoleRepository;
+import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
 import lt.techin.bookreservationapp.user.UserRequestDTO;
 
@@ -200,6 +202,30 @@ class UserControllerTest {
           .statusCode(400)
           .body("$", aMapWithSize(1))
           .body("email", equalTo("must be a well-formed email address"));
+    }
+
+    @Test
+    void signup_whenEmailAlreadyExists_thenReturn400AndBody()
+        throws JsonProcessingException {
+      String csrfToken = getCsrfToken();
+      String email = "jurgis@inbox.lt";
+      String password = "12345678";
+      Role role = roleRepository.findByName("ROLE_USER").orElseThrow();
+      userRepository.save(new User(email, password, List.of(role), null));
+
+      given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserRequestDTO(
+                  email, password, List.of(1L))))
+          .when()
+          .post("/signup")
+          .then()
+          .statusCode(400)
+          .body("$", aMapWithSize(1))
+          .body("email", equalTo("Already exists"));
     }
 
     // TODO: should I test combinations? That is, for example, email and password is
