@@ -35,7 +35,7 @@ class BeanValidation {
   @ExceptionHandler(EmailAlreadyExistsException.class)
   public ResponseEntity<Object> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
     Map<String, String> response = new HashMap<>();
-    response.put("username", "Already exists");
+    response.put("email", "Already exists");
 
     return ResponseEntity.badRequest().body(response);
   }

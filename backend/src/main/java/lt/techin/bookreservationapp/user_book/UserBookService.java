@@ -51,7 +51,10 @@ class UserBookService {
         .content();
 
     String[] books = result.split("\\|");
+    // TODO:
     // Wait a minute... is "resultFromApiCall" bound to each and every user?
+    // And even then, if Playwright for each browser calls this endpoint again,
+    // doesn't that create problems?
     // Disabling for now
     // resultFromApiCall = result;
     // System.out.println(resultFromApiCall);

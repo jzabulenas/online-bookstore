@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.role.Role;
 
 // @CrossOrigin("http://localhost:5173")
@@ -21,9 +23,17 @@ class UserController {
     this.userService = userService;
   }
 
+  // TODO: change this to /users? Because the Location header is something like
+  // this: /signup/113
   @PostMapping("/signup")
-  ResponseEntity<Object> signup(@RequestBody UserRequestDTO userRequestDTO) {
-    return ResponseEntity.ok(this.userService.saveUser(userRequestDTO));
+  ResponseEntity<Object> signup(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+    UserResponseDTO savedUser = this.userService.saveUser(userRequestDTO);
+
+    return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(savedUser.id())
+        .toUri())
+        .body(savedUser);
   }
 
   // @PostMapping("/login")

@@ -33,7 +33,7 @@ export default function Signup({ setIsSignedUp }) {
 
         const body = await response.json();
 
-        if (response.status === 400 && body.username === "Already exists") {
+        if (response.status === 400 && body.email === "Already exists") {
           setError("root.serverError", {
             type: response.status,
           });
