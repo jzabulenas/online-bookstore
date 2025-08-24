@@ -252,6 +252,24 @@ class UserControllerTest {
           .body("password", equalTo("must not be null"));
     }
 
+    @Test
+    void signup_whenPasswordIsTooShort_shouldReturn400AndBody() throws JsonProcessingException {
+      String csrfToken = getCsrfToken();
+
+      given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "12345", List.of(1L))))
+          .when()
+          .post("/signup")
+          .then()
+          .statusCode(400)
+          .body("$", aMapWithSize(1))
+          .body("password", equalTo("size must be between 8 and 20"));
+    }
+
     // TODO: should I test combinations? That is, for example, email and password is
     // null.
   }
