@@ -228,6 +228,30 @@ class UserControllerTest {
           .body("email", equalTo("Already exists"));
     }
 
+    // Password
+    //
+    //
+    //
+    //
+
+    @Test
+    void signup_whenPasswordIsNull_shouldReturn400AndBody() throws JsonProcessingException {
+      String csrfToken = getCsrfToken();
+
+      given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", null, List.of(1L))))
+          .when()
+          .post("/signup")
+          .then()
+          .statusCode(400)
+          .body("$", aMapWithSize(1))
+          .body("password", equalTo("must not be null"));
+    }
+
     // TODO: should I test combinations? That is, for example, email and password is
     // null.
   }
