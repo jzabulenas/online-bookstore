@@ -4,15 +4,18 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.book.MessageResponseDTO;
+import lt.techin.bookreservationapp.rate_limiting.GenerateBooksRateLimitService;
 import lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection;
 import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
@@ -22,18 +25,26 @@ class UserBookController {
 
   private final UserBookService userBookService;
   private final UserRepository userRepository;
+  private final GenerateBooksRateLimitService generateBooksRateLimitService;
 
   UserBookController(
       UserRepository userRepository,
-      UserBookService bookService) {
+      UserBookService bookService, GenerateBooksRateLimitService generateBooksRateLimitService) {
     this.userRepository = userRepository;
     this.userBookService = bookService;
+    this.generateBooksRateLimitService = generateBooksRateLimitService;
   }
 
   @PostMapping("/generate-books")
   @WithRateLimitProtection
   ResponseEntity<MessageResponseDTO> generateBooks(
-      @RequestBody @Valid MessageRequestDTO messageRequestDTO) {
+      @RequestBody @Valid MessageRequestDTO messageRequestDTO, Authentication authentication,
+      HttpServletRequest request) {
+    User user = (User) authentication.getPrincipal();
+    String ip = request.getRemoteAddr();
+
+    this.generateBooksRateLimitService.checkLimit(user.getId(), ip, "/generate-books");
+
     return ResponseEntity.ok(this.userBookService.generateBooks(messageRequestDTO));
   }
 
