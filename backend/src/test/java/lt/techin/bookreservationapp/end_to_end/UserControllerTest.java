@@ -87,7 +87,7 @@ class UserControllerTest {
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
           .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO(email, "12345678", List.of(1L))))
+              .writeValueAsString(new UserRequestDTO(email, "r9$CbHEaGXLUsP", List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -116,7 +116,7 @@ class UserControllerTest {
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
           .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO(null, "12345678", List.of(1L))))
+              .writeValueAsString(new UserRequestDTO(null, "r9$CbHEaGXLUsP", List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -134,7 +134,7 @@ class UserControllerTest {
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
           .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("f@b.c", "12345678", List.of(1L))))
+              .writeValueAsString(new UserRequestDTO("f@b.c", "r9$CbHEaGXLUsP", List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -154,7 +154,7 @@ class UserControllerTest {
           .body(new ObjectMapper()
               .writeValueAsString(new UserRequestDTO(
                   "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrv@gmail.com",
-                  "12345678", List.of(1L))))
+                  "r8@D^6PCg7&3Zn", List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -174,7 +174,7 @@ class UserControllerTest {
           .body(new ObjectMapper()
               .writeValueAsString(new UserRequestDTO(
                   "jurgis@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegw.com",
-                  "12345678", List.of(1L))))
+                  "r9$CbHEaGXLUsP", List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -195,7 +195,7 @@ class UserControllerTest {
           .body(new ObjectMapper()
               .writeValueAsString(new UserRequestDTO(
                   "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrrsdfsdfse@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegwasdasde.com",
-                  "12345678", List.of(1L))))
+                  "r8@D^6PCg7&3Zn", List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -209,7 +209,7 @@ class UserControllerTest {
         throws JsonProcessingException {
       String csrfToken = getCsrfToken();
       String email = "jurgis@inbox.lt";
-      String password = "12345678";
+      String password = "r9$CbHEaGXLUsP";
       Role role = roleRepository.findByName("ROLE_USER").orElseThrow();
       userRepository.save(new User(email, password, List.of(role), null));
 
@@ -261,13 +261,14 @@ class UserControllerTest {
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
           .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "12345", List.of(1L))))
+              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "B*nx5sZ#N4u@8",
+                  List.of(1L))))
           .when()
           .post("/signup")
           .then()
           .statusCode(400)
           .body("$", aMapWithSize(1))
-          .body("password", equalTo("size must be between 8 and 20"));
+          .body("password", equalTo("size must be between 14 and 20"));
     }
 
     @Test
@@ -279,14 +280,14 @@ class UserControllerTest {
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
           .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "123456789123456789123",
+              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "4*PzxNQLDK%FbGdS76Jm!",
                   List.of(1L))))
           .when()
           .post("/signup")
           .then()
           .statusCode(400)
           .body("$", aMapWithSize(1))
-          .body("password", equalTo("size must be between 8 and 20"));
+          .body("password", equalTo("size must be between 14 and 20"));
     }
 
     // TODO: should I test combinations? That is, for example, email and password is
