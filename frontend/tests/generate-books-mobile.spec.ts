@@ -15,7 +15,7 @@ test("should generate 3 books to read when provided input", async ({
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:" }).fill("JfRn9Lb97*qs!#");
   await page.getByRole("button", { name: "Submit" }).tap();
   await page.getByRole("textbox", { name: "Input your book:" }).tap();
   await page
@@ -114,11 +114,11 @@ test("should not generate particular books if they were liked before", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
@@ -129,7 +129,7 @@ test("should not generate particular books if they were liked before", async ({
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:" }).fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   // Generate books, like them and retrieve their text
@@ -183,7 +183,7 @@ test("should display an error when book field input is empty", async ({
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:" }).fill("JfRn9Lb97*qs!#");
   await page.getByRole("button", { name: "Submit" }).tap();
   await page.getByRole("textbox", { name: "Input your book:" }).tap();
   await page.getByRole("button", { name: "Submit" }).tap();
@@ -203,7 +203,7 @@ test("should display an error when book field input is too short", async ({
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:" }).fill("JfRn9Lb97*qs!#");
   await page.getByRole("button", { name: "Submit" }).tap();
   await page.getByRole("textbox", { name: "Input your book:" }).tap();
   await page.getByRole("textbox", { name: "Input your book:" }).fill("The ");
@@ -226,7 +226,7 @@ test("should display an error when book field input is too long", async ({
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:" }).fill("JfRn9Lb97*qs!#");
   await page.getByRole("button", { name: "Submit" }).tap();
   await page.getByRole("textbox", { name: "Input your book:" }).tap();
   await page
