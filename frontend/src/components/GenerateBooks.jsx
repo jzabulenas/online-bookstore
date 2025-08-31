@@ -40,11 +40,14 @@ export default function GenerateBooks() {
           navigate("/login");
         }
 
+        const json = await response.json();
+
         // Will not write test for this, because I have turned off the rate limiting feature for localhost in backend.
         // This was done so Playwright can run other tests normally
         if (response.status === 429) {
           setError("root.serverError", {
             type: response.status,
+            message: json.error,
           });
         }
 
@@ -52,7 +55,6 @@ export default function GenerateBooks() {
           throw new Error(`Response status: ${response.status}`);
         }
 
-        const json = await response.json();
         setBooks(json);
         console.log(json);
       } catch (error) {
@@ -129,9 +131,7 @@ export default function GenerateBooks() {
           <p className="text-danger">Must be at most 100 characters long.</p>
         )}
         {errors.root?.serverError?.type === 429 && (
-          <p className="text-danger">
-            Too many requests. Please wait 60 seconds.
-          </p>
+          <p className="text-danger">{errors.root?.serverError?.message}</p>
         )}
 
         <button className="btn btn-primary mb-3">Submit</button>

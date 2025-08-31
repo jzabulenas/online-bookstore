@@ -1,0 +1,12 @@
+package lt.techin.bookreservationapp.rate_limiting;
+
+import java.time.Instant;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface GenerateBooksRequestLimitRepository
+    extends JpaRepository<GenerateBooksRequestLimit, Long> {
+
+  long countByUserIdAndIpAndEndpointAndRequestTimeAfter(
+      Long userId, String ip, String endpoint, Instant after);
+}

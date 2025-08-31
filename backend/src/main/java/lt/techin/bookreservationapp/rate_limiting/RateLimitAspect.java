@@ -35,6 +35,8 @@ class RateLimitAspect {
    * @throws RateLimitException if rate limit for a given remote address has been
    *                            exceeded
    */
+  // TODO: Do I even need this? Because I already have the 5 requests in 24 hour
+  // limit
   @Before("@annotation(lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection)")
   void rateLimit() {
 
