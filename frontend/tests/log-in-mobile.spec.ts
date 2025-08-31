@@ -14,7 +14,7 @@ test("should log in, when correct credentials are provided", async ({
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill("jurgis@inbox.lt");
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:" }).fill("JfRn9Lb97*qs!#");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/");
