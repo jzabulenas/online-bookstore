@@ -347,6 +347,26 @@ class UserControllerTest {
           .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: #?!@$%^&*-"));
     }
 
+    @Test
+    void signup_whenPasswordIsRightLengthButDoesNotContainSpecialSymbol_thenReturn400AndBody()
+        throws JsonProcessingException {
+      String csrfToken = getCsrfToken();
+
+      given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "TSK3bgRXkduc66",
+                  List.of(1L))))
+          .when()
+          .post("/signup")
+          .then()
+          .statusCode(400)
+          .body("$", aMapWithSize(1))
+          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: #?!@$%^&*-"));
+    }
+
     // TODO: should I test combinations? That is, for example, email and password is
     // null.
   }
