@@ -13,7 +13,7 @@ public record UserRequestDTO(
     @Email @NotNull @Size(min = 7,
         message = "Email must be at least 7 characters long") String email,
     @NotNull @Size(min = 14, max = 20) @Pattern(
-        regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[#?!@$%^&*-]).*$",
-        message = "Must contain at least one uppercase and lowercase letter, number and any of these symbols: #?!@$%^&*-") String password,
+        regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).*$",
+        message = "Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*") String password,
     @NotNull List<Long> roles) {
 }

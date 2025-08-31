@@ -304,7 +304,7 @@ class UserControllerTest {
           .then()
           .statusCode(400)
           .body("$", aMapWithSize(1))
-          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: #?!@$%^&*-"));
+          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"));
     }
 
     @Test
@@ -324,7 +324,7 @@ class UserControllerTest {
           .then()
           .statusCode(400)
           .body("$", aMapWithSize(1))
-          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: #?!@$%^&*-"));
+          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"));
     }
 
     @Test
@@ -344,7 +344,7 @@ class UserControllerTest {
           .then()
           .statusCode(400)
           .body("$", aMapWithSize(1))
-          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: #?!@$%^&*-"));
+          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"));
     }
 
     @Test
@@ -364,7 +364,7 @@ class UserControllerTest {
           .then()
           .statusCode(400)
           .body("$", aMapWithSize(1))
-          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: #?!@$%^&*-"));
+          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"));
     }
 
     // TODO: should I test combinations? That is, for example, email and password is
