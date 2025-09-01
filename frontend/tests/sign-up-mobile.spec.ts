@@ -17,11 +17,11 @@ test("should sign up", async ({ page }) => {
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/");
@@ -55,11 +55,11 @@ test("should display an error message when email is empty", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -79,11 +79,11 @@ test("should display an error message when email is too short", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -110,11 +110,11 @@ test("should display an error message when email is too long", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -137,11 +137,11 @@ test("should display an error message when email already exists", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -176,7 +176,7 @@ test("should display an error message when password is empty", async ({
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -225,11 +225,11 @@ test("should display an error message when password is too long", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("123456789123456789123");
+    .fill("7VXuW8eJ#@F#iN97VXuW8eJ#@F#iN9123");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("123456789123456789123");
+    .fill("7VXuW8eJ#@F#iN97VXuW8eJ#@F#iN9123");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -264,7 +264,7 @@ test("should display an error message when confirm password is empty", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -286,7 +286,7 @@ test("should display an error message when confirm password does not match passw
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
