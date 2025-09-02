@@ -218,6 +218,34 @@ test("should display an error message when password is too long", async ({
   await expect(page).toHaveScreenshot();
 });
 
+test("should display an error message when password is of right length but does not contain uppercase letter", async ({
+  page,
+}) => {
+  const email = `antanas@inbox.lt`;
+
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Sign up" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:", exact: true }).click();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("gd3k&$xvh!%q$t");
+  await page.getByRole("textbox", { name: "Confirm password:" }).click();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("gd3k&$xvh!%q$t");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(
+    page.getByText(
+      "Password must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"
+    )
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
+
 // Confirm password
 //
 //
