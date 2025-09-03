@@ -111,6 +111,11 @@ export default function Signup({ setIsSignedUp }) {
                 required: true,
                 minLength: 8,
                 maxLength: 20,
+                // Without RegExp it won't work, as React expects RegExp, or using
+                // that weird / syntax
+                pattern: new RegExp(
+                  "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).*$"
+                ),
               })}
             />
           </div>
@@ -125,6 +130,12 @@ export default function Signup({ setIsSignedUp }) {
           {errors.password && errors.password.type === "maxLength" && (
             <p className="text-danger">
               Password must be at most 20 characters long.
+            </p>
+          )}
+          {errors.password && errors.password.type === "pattern" && (
+            <p className="text-danger">
+              Password must contain at least one uppercase and lowercase letter,
+              number and any of these symbols: !@#$%^&*
             </p>
           )}
 
