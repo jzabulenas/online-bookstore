@@ -17,13 +17,11 @@ public class GenerateBooksRequestLimit {
   private Long id;
 
   private Long userId;
-  private String ip;
   private String endpoint;
   private Instant requestTime;
 
-  public GenerateBooksRequestLimit(Long userId, String ip, String endpoint, Instant requestTime) {
+  public GenerateBooksRequestLimit(Long userId, String endpoint, Instant requestTime) {
     this.userId = userId;
-    this.ip = ip;
     this.endpoint = endpoint;
     this.requestTime = requestTime;
   }
@@ -34,14 +32,6 @@ public class GenerateBooksRequestLimit {
 
   public void setUserId(Long userId) {
     this.userId = userId;
-  }
-
-  public String getIp() {
-    return ip;
-  }
-
-  public void setIp(String ip) {
-    this.ip = ip;
   }
 
   public String getEndpoint() {

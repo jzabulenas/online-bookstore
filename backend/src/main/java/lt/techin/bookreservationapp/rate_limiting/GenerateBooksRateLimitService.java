@@ -20,12 +20,7 @@ public class GenerateBooksRateLimitService {
     this.requestLimitRepository = requestLimitRepository;
   }
 
-  public void checkLimit(Long userId, String ip, String endpoint) {
-    // Ignore localhost requests
-    if ("127.0.0.1".equals(ip) || "0:0:0:0:0:0:0:1".equals(ip)) {
-      return;
-    }
-
+  public void checkLimit(Long userId, String endpoint) {
     // Subtract 24 hours from today. Result is yesterday, same time as today
     Instant since = Instant.now().minus(24, ChronoUnit.HOURS);
 
@@ -34,14 +29,14 @@ public class GenerateBooksRateLimitService {
     // In other words, if there were requests made in the time frame between
     // yesterday and today, that is, in those previous 24 hours, they are counted
     long count = requestLimitRepository
-        .countByUserIdAndIpAndEndpointAndRequestTimeAfter(userId, ip, endpoint, since);
+        .countByUserIdAndEndpointAndRequestTimeAfter(userId, endpoint, since);
 
     if (count >= maxRequests) {
       throw new GenerateBooksRequestLimitException();
     }
 
     // Save request log
-    GenerateBooksRequestLimit rl = new GenerateBooksRequestLimit(userId, ip, endpoint,
+    GenerateBooksRequestLimit rl = new GenerateBooksRequestLimit(userId, endpoint,
         Instant.now());
     this.requestLimitRepository.save(rl);
   }

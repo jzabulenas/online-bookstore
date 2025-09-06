@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface GenerateBooksRequestLimitRepository
     extends JpaRepository<GenerateBooksRequestLimit, Long> {
 
-  long countByUserIdAndIpAndEndpointAndRequestTimeAfter(
-      Long userId, String ip, String endpoint, Instant after);
+  long countByUserIdAndEndpointAndRequestTimeAfter(
+      Long userId, String endpoint, Instant after);
 }

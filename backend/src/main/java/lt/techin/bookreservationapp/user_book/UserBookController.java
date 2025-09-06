@@ -41,9 +41,8 @@ class UserBookController {
       @RequestBody @Valid MessageRequestDTO messageRequestDTO, Authentication authentication,
       HttpServletRequest request) {
     User user = (User) authentication.getPrincipal();
-    String ip = request.getRemoteAddr();
 
-    this.generateBooksRateLimitService.checkLimit(user.getId(), ip, "/generate-books");
+    this.generateBooksRateLimitService.checkLimit(user.getId(), "/generate-books");
 
     return ResponseEntity.ok(this.userBookService.generateBooks(messageRequestDTO));
   }
@@ -68,6 +67,8 @@ class UserBookController {
   }
 
   @GetMapping("/books")
+  // TODO: should I add that rate limit annotation here, and remove from
+  // generateBooks?
   ResponseEntity<List<UserBookTitleResponseDTO>> getUserBooks() {
     return ResponseEntity.ok(this.userBookService.findAllUserBooks());
   }
