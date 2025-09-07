@@ -16,7 +16,6 @@ import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.book.MessageResponseDTO;
 import lt.techin.bookreservationapp.rate_limiting.GenerateBooksRateLimitService;
-import lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection;
 import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
 
@@ -36,7 +35,7 @@ class UserBookController {
   }
 
   @PostMapping("/generate-books")
-  @WithRateLimitProtection
+//  @WithRateLimitProtection
   ResponseEntity<MessageResponseDTO> generateBooks(
       @RequestBody @Valid MessageRequestDTO messageRequestDTO, Authentication authentication,
       HttpServletRequest request) {
