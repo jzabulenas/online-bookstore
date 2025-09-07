@@ -11,11 +11,11 @@ test("should sign up", async ({ page }) => {
   await page.getByRole("textbox", { name: "Password:", exact: true }).click();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).click();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).click();
 
   await expect(page).toHaveURL("http://localhost:5173/");
@@ -47,11 +47,11 @@ test("should display an error message when email is empty", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).click();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).click();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).click();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -69,11 +69,11 @@ test("should display an error message when email is too short", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).click();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).click();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).click();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -98,11 +98,11 @@ test("should display an error message when email is too long", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).click();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).click();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).click();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -123,11 +123,11 @@ test("should display an error message when email already exists", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).click();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).click();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).click();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -160,7 +160,7 @@ test("should display an error message when password is empty", async ({
   await page.getByRole("textbox", { name: "Confirm password:" }).click();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).click();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -204,16 +204,128 @@ test("should display an error message when password is too long", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).click();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("123456789123456789123");
+    .fill("7VXuW8eJ#@F#iN97VXuW8eJ#@F#iN9123");
   await page.getByRole("textbox", { name: "Confirm password:" }).click();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("123456789123456789123");
+    .fill("7VXuW8eJ#@F#iN97VXuW8eJ#@F#iN9123");
   await page.getByRole("button", { name: "Submit" }).click();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
   await expect(
     page.getByText("Password must be at most 20 characters long.")
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
+
+test("should display an error message when password is of right length but does not contain uppercase letter", async ({
+  page,
+}) => {
+  const email = `antanas@inbox.lt`;
+
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Sign up" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:", exact: true }).click();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("gd3k&$xvh!%q$t");
+  await page.getByRole("textbox", { name: "Confirm password:" }).click();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("gd3k&$xvh!%q$t");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(
+    page.getByText(
+      "Password must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"
+    )
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
+
+test("should display an error message when password is of right length but does not contain lowercase letter", async ({
+  page,
+}) => {
+  const email = `antanas@inbox.lt`;
+
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Sign up" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:", exact: true }).click();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("S3FHCD4XMN!8T3");
+  await page.getByRole("textbox", { name: "Confirm password:" }).click();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("S3FHCD4XMN!8T3");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(
+    page.getByText(
+      "Password must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"
+    )
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
+
+test("should display an error message when password is of right length but does not contain number", async ({
+  page,
+}) => {
+  const email = `antanas@inbox.lt`;
+
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Sign up" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:", exact: true }).click();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("vDGgVJbNHLjQAj");
+  await page.getByRole("textbox", { name: "Confirm password:" }).click();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("vDGgVJbNHLjQAj");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(
+    page.getByText(
+      "Password must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"
+    )
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
+
+test("should display an error message when password is of right length but does not contain special symbol", async ({
+  page,
+}) => {
+  const email = `antanas@inbox.lt`;
+
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Sign up" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:", exact: true }).click();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("6paBNyxhAeLY65");
+  await page.getByRole("textbox", { name: "Confirm password:" }).click();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("6paBNyxhAeLY65");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(
+    page.getByText(
+      "Password must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"
+    )
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
@@ -241,7 +353,7 @@ test("should display an error message when confirm password is empty", async ({
   await page.getByRole("textbox", { name: "Password:", exact: true }).click();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).click();
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
@@ -261,7 +373,7 @@ test("should display an error message when confirm password does not match passw
   await page.getByRole("textbox", { name: "Password:", exact: true }).click();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).click();
   await page
     .getByRole("textbox", { name: "Confirm password:" })

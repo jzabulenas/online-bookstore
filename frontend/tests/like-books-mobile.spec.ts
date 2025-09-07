@@ -23,11 +23,11 @@ test("should click like on a single generated book, and see it displayed in 'sav
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
 
   await page.getByRole("button", { name: "Submit" }).tap();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
@@ -38,7 +38,7 @@ test("should click like on a single generated book, and see it displayed in 'sav
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:" }).fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await page.getByRole("textbox", { name: "Input your book:" }).tap();
@@ -78,11 +78,11 @@ test("should click like on two generated books, and see them displayed in 'saved
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
@@ -92,7 +92,7 @@ test("should click like on two generated books, and see them displayed in 'saved
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:" }).fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await page.getByRole("textbox", { name: "Input your book:" }).tap();
@@ -136,11 +136,11 @@ test("should click like on three generated books, and see them displayed in 'sav
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
@@ -150,7 +150,7 @@ test("should click like on three generated books, and see them displayed in 'sav
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:" }).fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await page.getByRole("textbox", { name: "Input your book:" }).tap();
@@ -200,11 +200,11 @@ test("should click like on generated books, and not see them displayed in 'saved
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
@@ -215,7 +215,7 @@ test("should click like on generated books, and not see them displayed in 'saved
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:" }).fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   // Generate books, click "like" on them, retrieve text
@@ -247,11 +247,11 @@ test("should click like on generated books, and not see them displayed in 'saved
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
@@ -262,7 +262,7 @@ test("should click like on generated books, and not see them displayed in 'saved
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill(email2);
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:" }).fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   // Go to "Saved books"
@@ -296,11 +296,11 @@ test("should not see liked books if no books are liked after generating books", 
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
@@ -311,7 +311,7 @@ test("should not see liked books if no books are liked after generating books", 
   await page.getByRole("textbox", { name: "Email:" }).tap();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
   await page.getByRole("textbox", { name: "Password:" }).tap();
-  await page.getByRole("textbox", { name: "Password:" }).fill("12345678");
+  await page.getByRole("textbox", { name: "Password:" }).fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
 
   // Generate books, retrieve text

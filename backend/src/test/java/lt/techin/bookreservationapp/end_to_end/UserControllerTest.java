@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -65,8 +64,6 @@ class UserControllerTest {
   private UserRepository userRepository;
   @Autowired
   private RoleRepository roleRepository;
-  @Autowired
-  private PasswordEncoder passwordEncoder;
 
   @BeforeEach
   void setUp() {
@@ -288,6 +285,86 @@ class UserControllerTest {
           .statusCode(400)
           .body("$", aMapWithSize(1))
           .body("password", equalTo("size must be between 14 and 20"));
+    }
+
+    @Test
+    void signup_whenPasswordIsRightLengthButDoesNotContainUppercaseLetter_thenReturn400AndBody()
+        throws JsonProcessingException {
+      String csrfToken = getCsrfToken();
+
+      given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "nr5vb567q5ae8g",
+                  List.of(1L))))
+          .when()
+          .post("/signup")
+          .then()
+          .statusCode(400)
+          .body("$", aMapWithSize(1))
+          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"));
+    }
+
+    @Test
+    void signup_whenPasswordIsRightLengthButDoesNotContainLowercaseLetter_thenReturn400AndBody()
+        throws JsonProcessingException {
+      String csrfToken = getCsrfToken();
+
+      given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "QTDNRM7URY5QQ7",
+                  List.of(1L))))
+          .when()
+          .post("/signup")
+          .then()
+          .statusCode(400)
+          .body("$", aMapWithSize(1))
+          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"));
+    }
+
+    @Test
+    void signup_whenPasswordIsRightLengthButDoesNotContainNumber_thenReturn400AndBody()
+        throws JsonProcessingException {
+      String csrfToken = getCsrfToken();
+
+      given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "kUvsraVGEYyTNc",
+                  List.of(1L))))
+          .when()
+          .post("/signup")
+          .then()
+          .statusCode(400)
+          .body("$", aMapWithSize(1))
+          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"));
+    }
+
+    @Test
+    void signup_whenPasswordIsRightLengthButDoesNotContainSpecialSymbol_thenReturn400AndBody()
+        throws JsonProcessingException {
+      String csrfToken = getCsrfToken();
+
+      given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "TSK3bgRXkduc66",
+                  List.of(1L))))
+          .when()
+          .post("/signup")
+          .then()
+          .statusCode(400)
+          .body("$", aMapWithSize(1))
+          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"));
     }
 
     // TODO: should I test combinations? That is, for example, email and password is

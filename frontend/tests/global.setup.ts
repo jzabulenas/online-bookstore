@@ -19,11 +19,11 @@ setup("create new database", async ({ page }) => {
   await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
   await page
     .getByRole("textbox", { name: "Password:", exact: true })
-    .fill("12345678");
+    .fill("JfRn9Lb97*qs!#");
   await page.getByRole("textbox", { name: "Confirm password:" }).tap();
   await page
     .getByRole("textbox", { name: "Confirm password:" })
-    .fill("12345678");
+    .fill("JfRn9Lb97*qs!#");
   await page.getByRole("button", { name: "Submit" }).click();
 
   await expect(page).toHaveURL("http://localhost:5173/");
