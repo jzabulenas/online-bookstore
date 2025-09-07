@@ -33,3 +33,10 @@ CREATE TABLE users_books (
   FOREIGN KEY (user_id) REFERENCES users(id),
   FOREIGN KEY (book_id) REFERENCES books(id)
 );
+
+CREATE TABLE generate_books_request_limits (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  user_id BIGINT NOT NULL,
+  endpoint VARCHAR(255) NOT NULL,
+  request_time TIMESTAMP NOT NULL
+);
