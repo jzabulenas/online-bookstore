@@ -83,6 +83,8 @@ class UserBookControllerTest {
   @Autowired
   private UserBookRepository userBookRepository;
 
+  // TODO: why don't I do this in frontend? I mean, delete after each and every
+  // test
   @BeforeEach
   void setUp() {
     RestAssured.baseURI = "http://localhost:" + port;
@@ -318,6 +320,92 @@ class UserBookControllerTest {
           .body("status", equalTo(403))
           .body("error", equalTo("Forbidden"))
           .body("path", equalTo("/generate-books"));
+    }
+
+    @Test
+    void generateBooks_whenCalledMoreThan6Times_thenReturn429AndBody()
+        throws JsonProcessingException {
+      User user = createUser();
+      String csrfToken = getCsrfToken();
+      Response loginResponse = loginAndGetSession(csrfToken);
+
+      RequestSpecification spec = given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
+
+      Response responseOne = spec
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
+
+      Response responseTwo = spec
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
+
+      Response responseThree = spec
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
+
+      Response responseFour = spec
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
+
+      Response responseFive = spec
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
+
+      Response responseSix = spec
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
+
+      Response responseSeven = spec
+          .when()
+          .post("/generate-books")
+          .then()
+          .statusCode(429)
+          .body("$", aMapWithSize(1))
+          .body("error", equalTo("Free users get 6 free requests a day. Please wait 24 hours."))
+          .extract()
+          .response();
     }
   }
 
