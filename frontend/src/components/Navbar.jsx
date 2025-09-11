@@ -8,6 +8,7 @@ export default function Navbar() {
   const roles = useLocalStorage("roles");
   const navigate = useNavigate();
 
+  // TODO: I think I should test log out too
   const logout = () => {
     localStorage.removeItem("email");
     localStorage.removeItem("roles");
@@ -31,6 +32,17 @@ export default function Navbar() {
     setTimeout(() => {
       navigate("/");
     }, 0);
+
+    // This is needed so new CSRF token is generate on log out.
+    // If I don't do this, I have to manually refresh in order to
+    // be able to log in or sign up, or click twice on "Submit"
+    // TODO: is this smart though?
+    setTimeout(async () => {
+      await fetch("http://localhost:8080/open", {
+        method: "GET",
+        credentials: "include",
+      });
+    }, 500);
   };
 
   const handleLinkClick = () => {
