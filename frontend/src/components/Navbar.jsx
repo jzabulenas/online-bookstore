@@ -8,7 +8,6 @@ export default function Navbar() {
   const roles = useLocalStorage("roles");
   const navigate = useNavigate();
 
-  // TODO: I think I should test log out too
   const logout = () => {
     localStorage.removeItem("email");
     localStorage.removeItem("roles");
