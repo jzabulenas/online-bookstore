@@ -297,7 +297,7 @@ class UserControllerTest {
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
           .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "nr5vb567q5ae8g",
+              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "oif3r2t^x^k%n9",
                   List.of(1L))))
           .when()
           .post("/signup")
@@ -317,7 +317,7 @@ class UserControllerTest {
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
           .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "QTDNRM7URY5QQ7",
+              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "$EES#!CZ28L#$2",
                   List.of(1L))))
           .when()
           .post("/signup")
@@ -337,7 +337,7 @@ class UserControllerTest {
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
           .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "kUvsraVGEYyTNc",
+              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "QFUWmF$YsrBS#h",
                   List.of(1L))))
           .when()
           .post("/signup")

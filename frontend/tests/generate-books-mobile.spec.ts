@@ -244,3 +244,102 @@ test("should display an error when book field input is too long", async ({
 });
 
 // TODO: write test to check if on second run of book generation, the books differ from last call
+
+test("should display error message when books are generated more than 6 times", async ({
+  page,
+}) => {
+  const email = `antanas+${uuidv4()}@inbox.lt`;
+
+  // Sign up
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Sign up" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:", exact: true }).tap();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("7VXuW8eJ#@F#iN");
+  await page.getByRole("textbox", { name: "Confirm password:" }).tap();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("7VXuW8eJ#@F#iN");
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+
+  // Log in
+  await page.getByRole("button", { name: "Toggle navigation" }).tap();
+  await page.locator(".navbar-collapse.collapse.show").waitFor();
+  await page.getByRole("link", { name: "Log in" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).tap();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:" }).tap();
+  await page.getByRole("textbox", { name: "Password:" }).fill("7VXuW8eJ#@F#iN");
+  await page.getByRole("button", { name: "Submit" }).tap();
+
+  // Generate books
+  await page.getByRole("textbox", { name: "Input your book:" }).tap();
+  await page
+    .getByRole("textbox", { name: "Input your book:" })
+    .fill("The Merry Adventures of Robin Hood by Howard Pyle");
+
+  // I am awaiting so the "Submit" clicks don't happen too quickly
+  const responsePromise1 = page.waitForResponse(
+    "http://localhost:8080/generate-books"
+  );
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await responsePromise1;
+
+  const responsePromise2 = page.waitForResponse(
+    "http://localhost:8080/generate-books"
+  );
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await responsePromise2;
+
+  const responsePromise3 = page.waitForResponse(
+    "http://localhost:8080/generate-books"
+  );
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await responsePromise3;
+
+  const responsePromise4 = page.waitForResponse(
+    "http://localhost:8080/generate-books"
+  );
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await responsePromise4;
+
+  const responsePromise5 = page.waitForResponse(
+    "http://localhost:8080/generate-books"
+  );
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await responsePromise5;
+
+  const responsePromise6 = page.waitForResponse(
+    "http://localhost:8080/generate-books"
+  );
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await responsePromise6;
+
+  const responsePromise7 = page.waitForResponse(
+    "http://localhost:8080/generate-books"
+  );
+  await page.getByRole("button", { name: "Submit" }).tap();
+  await responsePromise7;
+
+  // Assert
+  await expect(page).toHaveURL("http://localhost:5173/");
+  await expect(page.getByRole("main")).toMatchAriaSnapshot(`
+      - main:
+        - heading "Welcome, ${email}" [level=1]
+        - heading "How to use" [level=2]
+        - paragraph: For best results, try inputting the whole book title, with author. For example, Pride and Prejudice by Jane Austen.
+        - text: "Input your book:"
+        - textbox "Input your book:": The Merry Adventures of Robin Hood by Howard Pyle
+        - paragraph
+        - button "Submit"
+        - paragraph
+        - paragraph
+        - paragraph
+      `);
+});

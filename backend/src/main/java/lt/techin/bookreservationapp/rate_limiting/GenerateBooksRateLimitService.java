@@ -12,7 +12,7 @@ public class GenerateBooksRateLimitService {
 
   private final GenerateBooksRequestLimitRepository requestLimitRepository;
 
-  @Value("${app.rate-limit.max-requests:5}")
+  @Value("${app.rate-limit.max-requests:6}")
   private int maxRequests;
 
   @Autowired

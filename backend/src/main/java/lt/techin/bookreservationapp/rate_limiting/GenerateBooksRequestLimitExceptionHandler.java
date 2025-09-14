@@ -14,7 +14,7 @@ public class GenerateBooksRequestLimitExceptionHandler {
   public ResponseEntity<Object> handleTooManyBookGenerationRequests(
       GenerateBooksRequestLimitException ex) {
     Map<String, String> response = new HashMap<>();
-    response.put("error", "Free users get 5 free requests a day. Please wait 24 hours.");
+    response.put("error", "Free users get 6 free requests a day. Please wait 24 hours.");
 
     return ResponseEntity.status(429).body(response);
   }
