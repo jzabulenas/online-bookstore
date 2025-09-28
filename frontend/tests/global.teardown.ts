@@ -9,7 +9,7 @@ teardown("delete database", async ({}) => {
   // Delete the database
   const conn = await mysql.createConnection({
     host: "localhost",
-    port: 3307,
+    port: 3306,
     user: process.env.MARIADB_USERNAME,
     password: process.env.MARIADB_PASSWORD,
     database: "online_bookstore",
