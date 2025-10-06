@@ -6,10 +6,13 @@ export default function OAuth2RedirectHandler() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:8080/user", {
-        method: "GET",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/user`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         const result = await response.json();

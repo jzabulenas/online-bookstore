@@ -17,7 +17,7 @@ export default function GenerateBooks() {
 
   const onSubmit = (data) => {
     async function postData() {
-      const url = "http://localhost:8080/generate-books";
+      const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/generate-books`;
 
       try {
         const response = await fetch(url, {
@@ -66,7 +66,7 @@ export default function GenerateBooks() {
   };
 
   const clickThumbsUp = async (bookTitle) => {
-    const url = "http://localhost:8080/books";
+    const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/books`;
 
     try {
       const response = await fetch(url, {
