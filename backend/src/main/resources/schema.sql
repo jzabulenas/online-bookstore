@@ -9,7 +9,9 @@ VALUES ('ROLE_USER'), ('ROLE_ADMIN');
 CREATE TABLE users (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   email VARCHAR(255) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL
+  password VARCHAR(255) NOT NULL,
+  is_enabled tinyint(1) NOT NULL,
+  verification_code char(32)
 );
 
 CREATE TABLE users_roles (
