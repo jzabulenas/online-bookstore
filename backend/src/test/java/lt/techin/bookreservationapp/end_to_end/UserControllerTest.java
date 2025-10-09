@@ -208,7 +208,7 @@ class UserControllerTest {
       String email = "jurgis@inbox.lt";
       String password = "r9$CbHEaGXLUsP";
       Role role = roleRepository.findByName("ROLE_USER").orElseThrow();
-      userRepository.save(new User(email, password, List.of(role), null));
+      userRepository.save(new User(email, password, true, null, List.of(role), null));
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
