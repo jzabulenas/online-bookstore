@@ -51,6 +51,18 @@ class UserService {
     return this.userRepository.existsByEmail(email);
   }
 
+  /**
+   * Retrieves the user based on the unique verification code. This method is used
+   * to find the user based on code that was delivered to an email address, for
+   * verification.
+   * 
+   * @param code the verification code that uniquely identifies the user
+   * @return User found based on that code
+   */
+  User findUserByVerificationCode(String code) {
+    return this.userRepository.findByVerificationCode(code).orElseThrow();
+  }
+
   // public User findUserByUsernameAndPassword(String username, String password) {
   // return userRepository
   // .findUserByUsername(username)
