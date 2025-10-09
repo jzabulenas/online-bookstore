@@ -15,14 +15,16 @@ class UserService {
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
   private final PasswordEncoder passwordEncoder;
+  private final EmailService emailService;
 
   UserService(
       UserRepository userRepository,
       RoleRepository roleRepository,
-      PasswordEncoder passwordEncoder) {
+      PasswordEncoder passwordEncoder, EmailService emailService) {
     this.userRepository = userRepository;
     this.roleRepository = roleRepository;
     this.passwordEncoder = passwordEncoder;
+    this.emailService = emailService;
   }
 
   UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
@@ -31,12 +33,16 @@ class UserService {
     }
 
     List<Role> toRoles = RoleMapper.toEntities(userRequestDTO.roles(), roleRepository);
-
     User toUser = UserMapper.toEntity(userRequestDTO, passwordEncoder, toRoles);
-
     User savedUser = this.userRepository.save(toUser);
-
     List<Long> toRolesIds = RoleMapper.toIds(savedUser);
+
+    try {
+      this.emailService.sendVerificationMail(savedUser);
+    } catch (UserMailFailedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
     return UserMapper.toDTO(savedUser, toRolesIds);
   }
