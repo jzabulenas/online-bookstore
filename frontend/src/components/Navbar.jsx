@@ -13,13 +13,16 @@ export default function Navbar() {
     localStorage.removeItem("roles");
 
     const callLogoutEndpoint = async () => {
-      const response = await fetch("http://localhost:8080/logout", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "X-XSRF-TOKEN": csrfToken(),
-        },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/logout`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "X-XSRF-TOKEN": csrfToken(),
+          },
+        }
+      );
     };
 
     callLogoutEndpoint();
@@ -37,7 +40,7 @@ export default function Navbar() {
     // be able to log in or sign up, or click twice on "Submit"
     // TODO: is this smart though?
     setTimeout(async () => {
-      await fetch("http://localhost:8080/open", {
+      await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/open`, {
         method: "GET",
         credentials: "include",
       });

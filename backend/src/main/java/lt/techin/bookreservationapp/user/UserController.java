@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -13,14 +14,17 @@ import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.role.Role;
 
 // @CrossOrigin("http://localhost:5173")
+// TOOD: add /api? Also, maybe add /users?
 @RestController
 class UserController {
 
   private final UserService userService;
+  private final UserRepository userRepository;
 
   @Autowired
-  UserController(UserService userService) {
+  UserController(UserService userService, UserRepository userRepository) {
     this.userService = userService;
+    this.userRepository = userRepository;
   }
 
   // TODO: change this to /users? Because the Location header is something like
@@ -59,5 +63,14 @@ class UserController {
   @GetMapping("/open")
   String openCall() {
     return "This is an open endpoint";
+  }
+
+  @GetMapping("/verify")
+  public void verify(@RequestParam String code) {
+    User user = this.userService.findUserByVerificationCode(code);
+    user.setEnabled(true);
+    user.setVerificationCode(null);
+    
+    this.userRepository.save(user);
   }
 }

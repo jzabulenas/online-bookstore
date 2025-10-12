@@ -13,7 +13,7 @@ export default function Home({ isSignedUp, setIsSignedUp }) {
   // Using this for receiving CSRF token
   useEffect(() => {
     async function getToken() {
-      const url = "http://localhost:8080/open";
+      const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/open`;
 
       try {
         const response = await fetch(url, {

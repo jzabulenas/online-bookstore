@@ -24,7 +24,7 @@ spring:
           model: gpt-4o-mini
 
 frontend:
-  url: http://localhost:5173
+  url: ${FRONTEND_URL}
 
 server:
   servlet:

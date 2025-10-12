@@ -53,6 +53,8 @@ class SecurityConfig {
             .permitAll()
             .requestMatchers("/open")
             .permitAll()
+            .requestMatchers("/verify")
+            .permitAll()
             .anyRequest()
             .authenticated());
 

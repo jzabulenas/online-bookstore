@@ -13,7 +13,7 @@ export default function Login() {
 
   const onSubmit = (data) => {
     async function postData() {
-      const url = "http://localhost:8080/login";
+      const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/login`;
 
       try {
         const response = await fetch(url, {

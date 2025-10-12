@@ -7,7 +7,7 @@ export default function SavedBooks() {
 
   useEffect(() => {
     async function getBooks() {
-      const url = "http://localhost:8080/books";
+      const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/books`;
 
       try {
         const response = await fetch(url, {

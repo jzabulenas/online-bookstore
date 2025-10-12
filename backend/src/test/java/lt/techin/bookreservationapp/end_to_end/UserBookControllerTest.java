@@ -485,7 +485,7 @@ class UserBookControllerTest {
       Optional<Role> role = roleRepository.findByName("ROLE_USER");
       User otherUser = userRepository
           .save(new User("antanas@inbox.lt", passwordEncoder.encode("123456"),
-              List.of(role.orElseThrow()), null));
+              true, null, List.of(role.orElseThrow()), null));
       Book book = bookRepository.save(new Book(bookTitle, null));
       userBookRepository.save(new UserBook(otherUser, book));
 
@@ -585,7 +585,7 @@ class UserBookControllerTest {
 
       Optional<Role> role = roleRepository.findByName("ROLE_USER");
       userRepository.save(new User("antanas@inbox.lt",
-          passwordEncoder.encode("123456"), List.of(role.orElseThrow()), null));
+          passwordEncoder.encode("123456"), true, null, List.of(role.orElseThrow()), null));
       String csrfToken = getCsrfToken();
       Response response = given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -648,7 +648,7 @@ class UserBookControllerTest {
     Optional<Role> role = this.roleRepository.findByName("ROLE_USER");
 
     return this.userRepository.save(new User("jurgis@inbox.lt", passwordEncoder.encode("123456"),
-        List.of(role.orElseThrow()), null));
+        true, null, List.of(role.orElseThrow()), null));
   }
 
   private String getCsrfToken() {

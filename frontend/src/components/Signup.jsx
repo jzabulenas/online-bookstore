@@ -14,7 +14,7 @@ export default function Signup({ setIsSignedUp }) {
 
   const onSubmit = (data) => {
     async function postData() {
-      const url = "http://localhost:8080/signup";
+      const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/signup`;
 
       try {
         const response = await fetch(url, {
