@@ -104,9 +104,22 @@ test("should not generate particular books if they were liked before", async ({
     .getByRole("textbox", { name: "Confirm password:" })
     .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).click();
-  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+  // Waits for success sign up message
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor();
+
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .click();
+  const page1 = await page1Promise;
 
   // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("link", { name: "Log in" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
@@ -153,6 +166,11 @@ test("should not generate particular books if they were liked before", async ({
         - paragraph
         - paragraph
       `);
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  await page.getByRole("button", { name: "Delete" }).click();
 });
 
 test("should display an error when book field input is empty", async ({
@@ -238,9 +256,22 @@ test("should display error message when books are generated more than 6 times", 
     .getByRole("textbox", { name: "Confirm password:" })
     .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).click();
-  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+  // Wait for success sign up message
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor();
+
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .click();
+  const page1 = await page1Promise;
 
   // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("link", { name: "Log in" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
@@ -312,4 +343,9 @@ test("should display error message when books are generated more than 6 times", 
         - paragraph
         - paragraph
       `);
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  await page.getByRole("button", { name: "Delete" }).click();
 });
