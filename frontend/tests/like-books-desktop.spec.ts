@@ -10,6 +10,7 @@ test("should click like on a single generated book, and see it displayed in 'sav
 }) => {
   const email = `antanas+${uuidv4()}@inbox.lt`;
 
+  // Sign up
   await page.goto("http://localhost:5173/");
   await page.getByRole("link", { name: "Sign up" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
@@ -23,8 +24,22 @@ test("should click like on a single generated book, and see it displayed in 'sav
     .getByRole("textbox", { name: "Confirm password:" })
     .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).click();
-  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+  // Waits for success sign up message
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor();
 
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .click();
+  const page1 = await page1Promise;
+
+  // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("link", { name: "Log in" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
@@ -51,6 +66,11 @@ test("should click like on a single generated book, and see it displayed in 'sav
       - heading "Books you have saved" [level=1]
       - paragraph
     `);
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  await page.getByRole("button", { name: "Delete" }).click();
 });
 
 test("should click like on two generated books, and see them displayed in 'saved books'", async ({
@@ -58,6 +78,7 @@ test("should click like on two generated books, and see them displayed in 'saved
 }) => {
   const email = `antanas+${uuidv4()}@inbox.lt`;
 
+  // Sign up
   await page.goto("http://localhost:5173/");
   await page.getByRole("link", { name: "Sign up" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
@@ -73,6 +94,19 @@ test("should click like on two generated books, and see them displayed in 'saved
   await page.getByRole("button", { name: "Submit" }).click();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .click();
+  const page1 = await page1Promise;
+
+  // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("link", { name: "Log in" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
@@ -103,6 +137,11 @@ test("should click like on two generated books, and see them displayed in 'saved
       - paragraph
       - paragraph
     `);
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  await page.getByRole("button", { name: "Delete" }).click();
 });
 
 test("should click like on three generated books, and see them displayed in 'saved books'", async ({
@@ -110,6 +149,7 @@ test("should click like on three generated books, and see them displayed in 'sav
 }) => {
   const email = `antanas+${uuidv4()}@inbox.lt`;
 
+  // Sign up
   await page.goto("http://localhost:5173/");
   await page.getByRole("link", { name: "Sign up" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
@@ -125,6 +165,19 @@ test("should click like on three generated books, and see them displayed in 'sav
   await page.getByRole("button", { name: "Submit" }).click();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .click();
+  const page1 = await page1Promise;
+
+  // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("link", { name: "Log in" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
@@ -159,6 +212,11 @@ test("should click like on three generated books, and see them displayed in 'sav
       - paragraph
       - paragraph
     `);
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  await page.getByRole("button", { name: "Delete" }).click();
 });
 
 test("should click like on generated books, and not see them displayed in 'saved books' for other user", async ({
@@ -183,7 +241,19 @@ test("should click like on generated books, and not see them displayed in 'saved
   await page.getByRole("button", { name: "Submit" }).click();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .click();
+  const page1 = await page1Promise;
+
   // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("link", { name: "Log in" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
@@ -222,9 +292,22 @@ test("should click like on generated books, and not see them displayed in 'saved
     .getByRole("textbox", { name: "Confirm password:" })
     .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).click();
-  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+  // Waits for success sign up message
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor();
+
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email2 }).click();
+  const page2Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .click();
+  const page2 = await page2Promise;
 
   // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("link", { name: "Log in" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
   await page.getByRole("textbox", { name: "Email:" }).fill(email2);
@@ -233,7 +316,8 @@ test("should click like on generated books, and not see them displayed in 'saved
   await page.getByRole("button", { name: "Submit" }).click();
 
   // Go to "Saved books"
-  await page.getByRole("textbox", { name: "Input your book:" }).waitFor(); // Waits for the text seen after log in
+  // Waits for the text seen after log in
+  await page.getByRole("textbox", { name: "Input your book:" }).waitFor();
   await page.getByRole("link", { name: "Saved books" }).click();
 
   // Assert
@@ -244,6 +328,16 @@ test("should click like on generated books, and not see them displayed in 'saved
   await expect(page.getByText(bookTitle2)).not.toBeVisible();
   await expect(page.getByText(bookTitle3)).not.toBeVisible();
   await expect(page).toHaveScreenshot();
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  await page.getByRole("button", { name: "Delete" }).click();
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email2 }).click();
+  await page.getByRole("button", { name: "Delete" }).click();
 });
 
 test("should not see liked books if no books are liked after generating books", async ({
@@ -267,7 +361,19 @@ test("should not see liked books if no books are liked after generating books", 
   await page.getByRole("button", { name: "Submit" }).click();
   await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
 
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .click();
+  const page1 = await page1Promise;
+
   // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("link", { name: "Log in" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
   await page.getByRole("textbox", { name: "Email:" }).fill(email);
@@ -297,4 +403,9 @@ test("should not see liked books if no books are liked after generating books", 
   await expect(page.getByText(bookTitle2)).not.toBeVisible();
   await expect(page.getByText(bookTitle3)).not.toBeVisible();
   await expect(page).toHaveScreenshot();
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  await page.getByRole("button", { name: "Delete" }).click();
 });
