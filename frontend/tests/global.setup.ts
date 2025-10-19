@@ -4,12 +4,12 @@ setup.use({
   ...devices["Pixel 5"],
 });
 
-setup("create new database", async ({ page }) => {
+setup("create default user", async ({ page }) => {
   console.log("---");
-  console.log("creating new database...");
+  console.log("create default user...");
   console.log("---");
-  // Initialize the database
 
+  // Sign up
   await page.goto("http://localhost:5173/");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
@@ -24,7 +24,7 @@ setup("create new database", async ({ page }) => {
   await page
     .getByRole("textbox", { name: "Confirm password:" })
     .fill("JfRn9Lb97*qs!#");
-  await page.getByRole("button", { name: "Submit" }).click();
+  await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
@@ -33,6 +33,21 @@ setup("create new database", async ({ page }) => {
   await expect(page.getByRole("alert")).toContainText(
     "You have successfully signed up. You may now log in."
   );
+  await expect(page).toHaveScreenshot();
+
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: "noreply@myapp.xyz" }).tap();
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .tap();
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: "noreply@myapp.xyz" }).tap();
+  // Clicks on the trash icon logo to delete the email. Not sure how this 
+  // signifies a trash can
+  await page.getByRole("button", { name: "" }).tap();
   await expect(page).toHaveScreenshot();
 });
 

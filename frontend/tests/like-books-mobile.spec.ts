@@ -14,6 +14,7 @@ test("should click like on a single generated book, and see it displayed in 'sav
 }) => {
   const email = `antanas+${uuidv4()}@inbox.lt`;
 
+  // Sign up
   await page.goto("http://localhost:5173/");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
@@ -28,10 +29,23 @@ test("should click like on a single generated book, and see it displayed in 'sav
   await page
     .getByRole("textbox", { name: "Confirm password:" })
     .fill("7VXuW8eJ#@F#iN");
-
   await page.getByRole("button", { name: "Submit" }).tap();
-  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+  // Waits for success sign up message
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor();
 
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).tap();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .tap();
+  const page1 = await page1Promise;
+
+  // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
   await page.getByRole("link", { name: "Log in" }).tap();
@@ -62,6 +76,13 @@ test("should click like on a single generated book, and see it displayed in 'sav
       - heading "Books you have saved" [level=1]
       - paragraph
     `);
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).tap();
+  // Clicks on the trash icon logo to delete the email. Not sure how this 
+  // signifies a trash can
+  await page.getByRole("button", { name: "" }).tap();
 });
 
 test("should click like on two generated books, and see them displayed in 'saved books'", async ({
@@ -69,6 +90,7 @@ test("should click like on two generated books, and see them displayed in 'saved
 }) => {
   const email = `antanas+${uuidv4()}@inbox.lt`;
 
+  // Sign up
   await page.goto("http://localhost:5173/");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
@@ -84,8 +106,22 @@ test("should click like on two generated books, and see them displayed in 'saved
     .getByRole("textbox", { name: "Confirm password:" })
     .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
-  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+  // Waits for success sign up message
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor();
 
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).tap();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .tap();
+  const page1 = await page1Promise;
+
+  // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
   await page.getByRole("link", { name: "Log in" }).tap();
@@ -120,6 +156,13 @@ test("should click like on two generated books, and see them displayed in 'saved
       - paragraph
       - paragraph
     `);
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).tap();
+  // Clicks on the trash icon logo to delete the email. Not sure how this 
+  // signifies a trash can
+  await page.getByRole("button", { name: "" }).tap();
 });
 
 test("should click like on three generated books, and see them displayed in 'saved books'", async ({
@@ -127,6 +170,7 @@ test("should click like on three generated books, and see them displayed in 'sav
 }) => {
   const email = `antanas+${uuidv4()}@inbox.lt`;
 
+  // Sign up
   await page.goto("http://localhost:5173/");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
@@ -142,8 +186,22 @@ test("should click like on three generated books, and see them displayed in 'sav
     .getByRole("textbox", { name: "Confirm password:" })
     .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
-  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+  // Waits for success sign up message
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor();
 
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).tap();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .tap();
+  const page1 = await page1Promise;
+
+  // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
   await page.getByRole("link", { name: "Log in" }).tap();
@@ -182,6 +240,13 @@ test("should click like on three generated books, and see them displayed in 'sav
       - paragraph
       - paragraph
     `);
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).tap();
+  // Clicks on the trash icon logo to delete the email. Not sure how this 
+  // signifies a trash can
+  await page.getByRole("button", { name: "" }).tap();
 });
 
 test("should click like on generated books, and not see them displayed in 'saved books' for other user", async ({
@@ -206,9 +271,22 @@ test("should click like on generated books, and not see them displayed in 'saved
     .getByRole("textbox", { name: "Confirm password:" })
     .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
-  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+  // Waits for success sign up message
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor();
+
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).tap();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .tap();
+  const page1 = await page1Promise;
 
   // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
   await page.getByRole("link", { name: "Log in" }).tap();
@@ -253,9 +331,22 @@ test("should click like on generated books, and not see them displayed in 'saved
     .getByRole("textbox", { name: "Confirm password:" })
     .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
-  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+  // Waits for success sign up message
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor();
+
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email2 }).tap();
+  const page2Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .tap();
+  const page2 = await page2Promise;
 
   // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
   await page.getByRole("link", { name: "Log in" }).tap();
@@ -279,6 +370,20 @@ test("should click like on generated books, and not see them displayed in 'saved
   await expect(page.getByText(bookTitle2)).not.toBeVisible();
   await expect(page.getByText(bookTitle3)).not.toBeVisible();
   await expect(page).toHaveScreenshot();
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).tap();
+  // Clicks on the trash icon logo to delete the email. Not sure how this 
+  // signifies a trash can
+  await page.getByRole("button", { name: "" }).tap();
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email2 }).tap();
+  // Clicks on the trash icon logo to delete the email. Not sure how this 
+  // signifies a trash can
+  await page.getByRole("button", { name: "" }).tap();
 });
 
 test("should not see liked books if no books are liked after generating books", async ({
@@ -302,9 +407,22 @@ test("should not see liked books if no books are liked after generating books", 
     .getByRole("textbox", { name: "Confirm password:" })
     .fill("7VXuW8eJ#@F#iN");
   await page.getByRole("button", { name: "Submit" }).tap();
-  await page.locator(".alert.alert-success.alert-dismissible").waitFor(); // Waits for success sign up message
+  // Waits for success sign up message
+  await page.locator(".alert.alert-success.alert-dismissible").waitFor();
+
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).tap();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .tap();
+  const page1 = await page1Promise;
 
   // Log in
+  await page.goto("http://localhost:5173");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
   await page.getByRole("link", { name: "Log in" }).tap();
@@ -338,4 +456,11 @@ test("should not see liked books if no books are liked after generating books", 
   await expect(page.getByText(bookTitle2)).not.toBeVisible();
   await expect(page.getByText(bookTitle3)).not.toBeVisible();
   await expect(page).toHaveScreenshot();
+
+  // Delete email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).tap();
+  // Clicks on the trash icon logo to delete the email. Not sure how this 
+  // signifies a trash can
+  await page.getByRole("button", { name: "" }).tap();
 });
