@@ -64,9 +64,9 @@ export default function Home({ isSignedUp, setIsSignedUp }) {
             </div>
           )}
           <div className="text-center p-5">
-            <h1 className="fw-bold text-break">Book recommendation app</h1>
-            <h2 className="fs-5 text-black text-opacity-75">
-              Easily find new books to read
+            <h1 className="fw-bold text-break mb-3">Book recommendation app</h1>
+            <h2 className="fs-5 text-black text-opacity-75 mb-3">
+              Easily find new books to read using AI
             </h2>
             <Link to="/about">Learn more</Link>
           </div>
