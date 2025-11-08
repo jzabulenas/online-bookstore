@@ -16,9 +16,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import lt.techin.bookreservationapp.role.RoleRepository;
-import lt.techin.bookreservationapp.user.UserRepository;
-
 @Configuration
 @EnableWebSecurity
 class SecurityConfig {
@@ -26,9 +23,7 @@ class SecurityConfig {
   private final String frontendUrl;
 
   SecurityConfig(
-      @Value("${frontend.url}") String frontendUrl,
-      UserRepository userRepository,
-      RoleRepository roleRepository) {
+      @Value("${frontend.url}") String frontendUrl) {
     this.frontendUrl = frontendUrl;
   }
 
