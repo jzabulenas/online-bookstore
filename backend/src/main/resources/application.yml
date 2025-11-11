@@ -24,8 +24,10 @@ spring:
           model: gpt-4o-mini
           
   mail:
-    host: localhost
-    port: 1025
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
 
 frontend:
   url: ${FRONTEND_URL}
