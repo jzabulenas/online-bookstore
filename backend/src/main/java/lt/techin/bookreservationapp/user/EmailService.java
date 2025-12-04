@@ -70,10 +70,10 @@ public class EmailService {
    * @param entity the User to whom a verification email will be sent to.
    */
   public void sendVerificationMail(User entity) throws UserMailFailedException {
-    String content = getVerificationMailContent(entity);
+    String content = this.getVerificationMailContent(entity);
 
     try {
-      this.mailSender.send(createMessage(entity, content));
+      this.mailSender.send(this.createMessage(entity, content));
     } catch (MessagingException ex) {
       throw new UserMailFailedException(
           "Could not send e-mail to verify user with e-mail '" + entity.getEmail() + "'", ex);

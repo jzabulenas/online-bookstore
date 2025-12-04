@@ -36,7 +36,7 @@ class SecurityConfig {
     // .ignoringRequestMatchers("/signup") // Is this good idea?
     )
         // .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .cors(cors -> cors.configurationSource(this.corsConfigurationSource()))
         // .httpBasic(Customizer.withDefaults())
         .exceptionHandling(e -> e
             .authenticationEntryPoint(new HttpStatusHandler(HttpStatus.UNAUTHORIZED)))

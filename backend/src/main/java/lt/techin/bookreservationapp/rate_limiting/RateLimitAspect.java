@@ -54,7 +54,7 @@ class RateLimitAspect {
 
     this.requestCounts.putIfAbsent(key, new ArrayList<>());
     this.requestCounts.get(key).add(currentTime);
-    cleanUpRequestCounts(currentTime);
+    this.cleanUpRequestCounts(currentTime);
 
     if (this.requestCounts.get(key).size() > this.rateLimit) {
       throw new RateLimitException(
@@ -67,7 +67,7 @@ class RateLimitAspect {
     this.requestCounts
         .values()
         .forEach(l -> {
-          l.removeIf(t -> timeIsTooOld(currentTime, t));
+          l.removeIf(t -> this.timeIsTooOld(currentTime, t));
         });
   }
 

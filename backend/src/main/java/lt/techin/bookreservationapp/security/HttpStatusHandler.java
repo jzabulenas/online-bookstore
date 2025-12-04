@@ -34,21 +34,21 @@ class HttpStatusHandler
   public void onAuthenticationFailure(
       HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
       throws IOException, ServletException {
-    handle(response);
+    this.handle(response);
   }
 
   @Override
   public void onAuthenticationSuccess(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication)
       throws IOException, ServletException {
-    handle(response);
+    this.handle(response);
   }
 
   @Override
   public void onLogoutSuccess(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication)
       throws IOException, ServletException {
-    handle(response);
+    this.handle(response);
   }
 
   @Override
@@ -57,6 +57,6 @@ class HttpStatusHandler
       HttpServletResponse response,
       AuthenticationException authException)
       throws IOException, ServletException {
-    handle(response);
+    this.handle(response);
   }
 }
