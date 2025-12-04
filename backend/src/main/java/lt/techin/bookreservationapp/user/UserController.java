@@ -70,7 +70,7 @@ class UserController {
     User user = this.userService.findUserByVerificationCode(code);
     user.setEnabled(true);
     user.setVerificationCode(null);
-    
+
     this.userRepository.save(user);
   }
 }

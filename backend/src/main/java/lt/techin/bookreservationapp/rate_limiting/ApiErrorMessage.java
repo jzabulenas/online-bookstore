@@ -24,26 +24,26 @@ class ApiErrorMessage {
   }
 
   UUID getId() {
-    return id;
+    return this.id;
   }
 
   int getStatus() {
-    return status;
+    return this.status;
   }
 
   String getError() {
-    return error;
+    return this.error;
   }
 
   String getMessage() {
-    return message;
+    return this.message;
   }
 
   LocalDateTime getTimestamp() {
-    return timestamp;
+    return this.timestamp;
   }
 
   String getPath() {
-    return path;
+    return this.path;
   }
 }

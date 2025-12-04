@@ -52,19 +52,19 @@ class RateLimitAspect {
 
     final long currentTime = System.currentTimeMillis();
 
-    requestCounts.putIfAbsent(key, new ArrayList<>());
-    requestCounts.get(key).add(currentTime);
+    this.requestCounts.putIfAbsent(key, new ArrayList<>());
+    this.requestCounts.get(key).add(currentTime);
     cleanUpRequestCounts(currentTime);
 
-    if (requestCounts.get(key).size() > rateLimit) {
+    if (this.requestCounts.get(key).size() > this.rateLimit) {
       throw new RateLimitException(
           String.format(ERROR_MESSAGE, requestAttributes.getRequest()
-              .getRequestURI(), key, rateDuration));
+              .getRequestURI(), key, this.rateDuration));
     }
   }
 
   private void cleanUpRequestCounts(final long currentTime) {
-    requestCounts
+    this.requestCounts
         .values()
         .forEach(l -> {
           l.removeIf(t -> timeIsTooOld(currentTime, t));
@@ -72,6 +72,6 @@ class RateLimitAspect {
   }
 
   private boolean timeIsTooOld(final long currentTime, final long timeToCheck) {
-    return currentTime - timeToCheck > rateDuration;
+    return currentTime - timeToCheck > this.rateDuration;
   }
 }

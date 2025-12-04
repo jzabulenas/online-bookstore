@@ -27,7 +27,7 @@ public class GenerateBooksRequestLimit {
   }
 
   public Long getUserId() {
-    return userId;
+    return this.userId;
   }
 
   public void setUserId(Long userId) {
@@ -35,7 +35,7 @@ public class GenerateBooksRequestLimit {
   }
 
   public String getEndpoint() {
-    return endpoint;
+    return this.endpoint;
   }
 
   public void setEndpoint(String endpoint) {
@@ -43,7 +43,7 @@ public class GenerateBooksRequestLimit {
   }
 
   public Instant getRequestTime() {
-    return requestTime;
+    return this.requestTime;
   }
 
   public void setRequestTime(Instant requestTime) {
@@ -51,7 +51,7 @@ public class GenerateBooksRequestLimit {
   }
 
   public Long getId() {
-    return id;
+    return this.id;
   }
 
 }

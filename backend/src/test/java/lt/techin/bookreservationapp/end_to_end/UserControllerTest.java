@@ -67,7 +67,7 @@ class UserControllerTest {
 
   @BeforeEach
   void setUp() {
-    RestAssured.baseURI = "http://localhost:" + port;
+    RestAssured.baseURI = "http://localhost:" + this.port;
     this.userRepository.deleteAll();
   }
 
@@ -94,7 +94,8 @@ class UserControllerTest {
           .body("email", equalTo(email))
           .body("roles", hasSize(1))
           .body("roles[0]", equalTo(1))
-          .header("Location", equalTo("http://localhost:" + port + "/signup/"
+          .header("Location", equalTo("http://localhost:" + UserControllerTest.this.port
+              + "/signup/"
               + findUserIdByEmail(email)));
     }
 
@@ -207,8 +208,9 @@ class UserControllerTest {
       String csrfToken = getCsrfToken();
       String email = "jurgis@inbox.lt";
       String password = "r9$CbHEaGXLUsP";
-      Role role = roleRepository.findByName("ROLE_USER").orElseThrow();
-      userRepository.save(new User(email, password, true, null, List.of(role), null));
+      Role role = UserControllerTest.this.roleRepository.findByName("ROLE_USER").orElseThrow();
+      UserControllerTest.this.userRepository
+          .save(new User(email, password, true, null, List.of(role), null));
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)

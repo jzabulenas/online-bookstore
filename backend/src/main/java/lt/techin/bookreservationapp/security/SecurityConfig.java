@@ -157,7 +157,7 @@ class SecurityConfig {
     // configuration.addAllowedHeader("*");
     // configuration.addAllowedMethod("*");
 
-    configuration.addAllowedOrigin(frontendUrl);
+    configuration.addAllowedOrigin(this.frontendUrl);
     configuration.setAllowedHeaders(List.of("Content-Type", "X-XSRF-TOKEN"));
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
     configuration.setAllowCredentials(true);
