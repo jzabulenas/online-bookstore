@@ -16,7 +16,7 @@ public class GenerateBooksRateLimitService {
   private int maxRequests;
 
   @Autowired
-  public GenerateBooksRateLimitService(GenerateBooksRequestLimitRepository requestLimitRepository) {
+  GenerateBooksRateLimitService(GenerateBooksRequestLimitRepository requestLimitRepository) {
     this.requestLimitRepository = requestLimitRepository;
   }
 
