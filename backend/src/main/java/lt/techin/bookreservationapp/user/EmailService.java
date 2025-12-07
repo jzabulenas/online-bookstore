@@ -12,14 +12,14 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 @Service
-public class EmailService {
+class EmailService {
 
   private final JavaMailSender mailSender;
   private final SpringTemplateEngine templateEngine;
   private final String backendUrl;
 
   @Autowired
-  public EmailService(JavaMailSender mailSender, SpringTemplateEngine templateEngine,
+  EmailService(JavaMailSender mailSender, SpringTemplateEngine templateEngine,
       @Value("${backend.url}") String backendUrl) {
     this.mailSender = mailSender;
     this.templateEngine = templateEngine;
@@ -69,7 +69,7 @@ public class EmailService {
    *
    * @param entity the User to whom a verification email will be sent to.
    */
-  public void sendVerificationMail(User entity) throws UserMailFailedException {
+  void sendVerificationMail(User entity) throws UserMailFailedException {
     String content = this.getVerificationMailContent(entity);
 
     try {

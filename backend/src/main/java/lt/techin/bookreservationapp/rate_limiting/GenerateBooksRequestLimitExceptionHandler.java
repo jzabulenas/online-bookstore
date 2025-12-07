@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class GenerateBooksRequestLimitExceptionHandler {
+class GenerateBooksRequestLimitExceptionHandler {
 
   @ExceptionHandler(GenerateBooksRequestLimitException.class)
-  public ResponseEntity<Object> handleTooManyBookGenerationRequests(
+  ResponseEntity<Object> handleTooManyBookGenerationRequests(
       GenerateBooksRequestLimitException ex) {
     Map<String, String> response = new HashMap<>();
     response.put("error", "Free users get 6 free requests a day. Please wait 24 hours.");

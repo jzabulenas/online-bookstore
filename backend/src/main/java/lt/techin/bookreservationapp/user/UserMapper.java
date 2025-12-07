@@ -7,9 +7,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lt.techin.bookreservationapp.role.Role;
 
-public class UserMapper {
+class UserMapper {
 
-  public static User toEntity(UserRequestDTO userRequestDTO, PasswordEncoder passwordEncoder,
+  static User toEntity(UserRequestDTO userRequestDTO, PasswordEncoder passwordEncoder,
       List<Role> roles) {
     return new User(
         userRequestDTO.email(),
@@ -20,7 +20,7 @@ public class UserMapper {
         null);
   }
 
-  public static UserResponseDTO toDTO(User user, List<Long> toRolesIds) {
+  static UserResponseDTO toDTO(User user, List<Long> toRolesIds) {
     return new UserResponseDTO(
         user.getId(),
         user.getEmail(),
