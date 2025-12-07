@@ -55,11 +55,11 @@ public class User implements UserDetails {
   }
 
   public Long getId() {
-    return id;
+    return this.id;
   }
 
   public String getEmail() {
-    return email;
+    return this.email;
   }
 
   public void setEmail(String email) {
@@ -76,7 +76,7 @@ public class User implements UserDetails {
   }
 
   public List<Role> getRoles() {
-    return roles;
+    return this.roles;
   }
 
   public void setRoles(List<Role> roles) {
@@ -84,7 +84,7 @@ public class User implements UserDetails {
   }
 
   public List<UserBook> getBooks() {
-    return books;
+    return this.books;
   }
 
   public void setBooks(List<UserBook> books) {
@@ -111,7 +111,7 @@ public class User implements UserDetails {
   }
 
   public String getVerificationCode() {
-    return verificationCode;
+    return this.verificationCode;
   }
 
   public void setVerificationCode(String verificationCode) {

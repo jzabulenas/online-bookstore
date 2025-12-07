@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "generate_books_request_limits")
-public class GenerateBooksRequestLimit {
+class GenerateBooksRequestLimit {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,38 +20,38 @@ public class GenerateBooksRequestLimit {
   private String endpoint;
   private Instant requestTime;
 
-  public GenerateBooksRequestLimit(Long userId, String endpoint, Instant requestTime) {
+  GenerateBooksRequestLimit(Long userId, String endpoint, Instant requestTime) {
     this.userId = userId;
     this.endpoint = endpoint;
     this.requestTime = requestTime;
   }
 
-  public Long getUserId() {
-    return userId;
+  Long getUserId() {
+    return this.userId;
   }
 
-  public void setUserId(Long userId) {
+  void setUserId(Long userId) {
     this.userId = userId;
   }
 
-  public String getEndpoint() {
-    return endpoint;
+  String getEndpoint() {
+    return this.endpoint;
   }
 
-  public void setEndpoint(String endpoint) {
+  void setEndpoint(String endpoint) {
     this.endpoint = endpoint;
   }
 
-  public Instant getRequestTime() {
-    return requestTime;
+  Instant getRequestTime() {
+    return this.requestTime;
   }
 
-  public void setRequestTime(Instant requestTime) {
+  void setRequestTime(Instant requestTime) {
     this.requestTime = requestTime;
   }
 
-  public Long getId() {
-    return id;
+  Long getId() {
+    return this.id;
   }
 
 }

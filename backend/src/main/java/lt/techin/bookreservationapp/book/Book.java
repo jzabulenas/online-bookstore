@@ -32,11 +32,11 @@ public class Book {
   }
 
   public Long getId() {
-    return id;
+    return this.id;
   }
 
   public String getTitle() {
-    return title;
+    return this.title;
   }
 
   public void setTitle(String title) {
@@ -44,7 +44,7 @@ public class Book {
   }
 
   public List<UserBook> getUsers() {
-    return users;
+    return this.users;
   }
 
   public void setUsers(List<UserBook> users) {

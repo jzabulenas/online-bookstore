@@ -67,7 +67,7 @@ class UserControllerTest {
 
   @BeforeEach
   void setUp() {
-    RestAssured.baseURI = "http://localhost:" + port;
+    RestAssured.baseURI = "http://localhost:" + this.port;
     this.userRepository.deleteAll();
   }
 
@@ -76,7 +76,7 @@ class UserControllerTest {
 
     @Test
     void signup_whenUserSignsUp_thenReturn201AndBody() throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
       String email = "jurgis@inbox.lt";
 
       given()
@@ -90,12 +90,13 @@ class UserControllerTest {
           .then()
           .statusCode(201)
           .body("$", aMapWithSize(3))
-          .body("id", equalTo(findUserIdByEmail(email)))
+          .body("id", equalTo(UserControllerTest.this.findUserIdByEmail(email)))
           .body("email", equalTo(email))
           .body("roles", hasSize(1))
           .body("roles[0]", equalTo(1))
-          .header("Location", equalTo("http://localhost:" + port + "/signup/"
-              + findUserIdByEmail(email)));
+          .header("Location", equalTo("http://localhost:" + UserControllerTest.this.port
+              + "/signup/"
+              + UserControllerTest.this.findUserIdByEmail(email)));
     }
 
     // Unhappy path
@@ -106,7 +107,7 @@ class UserControllerTest {
 
     @Test
     void signup_whenEmailIsNull_thenReturn400AndBody() throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -124,7 +125,7 @@ class UserControllerTest {
 
     @Test
     void signup_whenEmailIsTooShort_thenReturn400AndBody() throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -142,7 +143,7 @@ class UserControllerTest {
 
     @Test
     void signup_whenEmailLocalPartIsTooLong_thenReturn400AndBody() throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -162,7 +163,7 @@ class UserControllerTest {
 
     @Test
     void signup_whenEmailDomainPartIsTooLong_thenReturn400AndBody() throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -183,7 +184,7 @@ class UserControllerTest {
     @Test
     void signup_whenEmailLocalPartAndDomainPartIsTooLong_thenReturn400AndBody()
         throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -204,11 +205,12 @@ class UserControllerTest {
     @Test
     void signup_whenEmailAlreadyExists_thenReturn400AndBody()
         throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
       String email = "jurgis@inbox.lt";
       String password = "r9$CbHEaGXLUsP";
-      Role role = roleRepository.findByName("ROLE_USER").orElseThrow();
-      userRepository.save(new User(email, password, true, null, List.of(role), null));
+      Role role = UserControllerTest.this.roleRepository.findByName("ROLE_USER").orElseThrow();
+      UserControllerTest.this.userRepository
+          .save(new User(email, password, true, null, List.of(role), null));
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -233,7 +235,7 @@ class UserControllerTest {
 
     @Test
     void signup_whenPasswordIsNull_shouldReturn400AndBody() throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -251,7 +253,7 @@ class UserControllerTest {
 
     @Test
     void signup_whenPasswordIsTooShort_shouldReturn400AndBody() throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -270,7 +272,7 @@ class UserControllerTest {
 
     @Test
     void signup_whenPasswordIsTooLong_shouldReturn400AndBody() throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -290,7 +292,7 @@ class UserControllerTest {
     @Test
     void signup_whenPasswordIsRightLengthButDoesNotContainUppercaseLetter_thenReturn400AndBody()
         throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -310,7 +312,7 @@ class UserControllerTest {
     @Test
     void signup_whenPasswordIsRightLengthButDoesNotContainLowercaseLetter_thenReturn400AndBody()
         throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -330,7 +332,7 @@ class UserControllerTest {
     @Test
     void signup_whenPasswordIsRightLengthButDoesNotContainNumber_thenReturn400AndBody()
         throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
@@ -350,7 +352,7 @@ class UserControllerTest {
     @Test
     void signup_whenPasswordIsRightLengthButDoesNotContainSpecialSymbol_thenReturn400AndBody()
         throws JsonProcessingException {
-      String csrfToken = getCsrfToken();
+      String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)

@@ -36,7 +36,7 @@ class SecurityConfig {
     // .ignoringRequestMatchers("/signup") // Is this good idea?
     )
         // .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .cors(cors -> cors.configurationSource(this.corsConfigurationSource()))
         // .httpBasic(Customizer.withDefaults())
         .exceptionHandling(e -> e
             .authenticationEntryPoint(new HttpStatusHandler(HttpStatus.UNAUTHORIZED)))
@@ -157,7 +157,7 @@ class SecurityConfig {
     // configuration.addAllowedHeader("*");
     // configuration.addAllowedMethod("*");
 
-    configuration.addAllowedOrigin(frontendUrl);
+    configuration.addAllowedOrigin(this.frontendUrl);
     configuration.setAllowedHeaders(List.of("Content-Type", "X-XSRF-TOKEN"));
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
     configuration.setAllowCredentials(true);

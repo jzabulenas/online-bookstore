@@ -66,11 +66,11 @@ class UserController {
   }
 
   @GetMapping("/verify")
-  public void verify(@RequestParam String code) {
+  void verify(@RequestParam String code) {
     User user = this.userService.findUserByVerificationCode(code);
     user.setEnabled(true);
     user.setVerificationCode(null);
-    
+
     this.userRepository.save(user);
   }
 }

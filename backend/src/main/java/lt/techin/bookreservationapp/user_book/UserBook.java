@@ -35,11 +35,11 @@ public class UserBook {
   }
 
   public Long getId() {
-    return id;
+    return this.id;
   }
 
   public User getUser() {
-    return user;
+    return this.user;
   }
 
   public void setUser(User user) {
@@ -47,7 +47,7 @@ public class UserBook {
   }
 
   public Book getBook() {
-    return book;
+    return this.book;
   }
 
   public void setBook(Book book) {
