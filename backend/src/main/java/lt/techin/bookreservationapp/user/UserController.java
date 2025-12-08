@@ -13,7 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.role.Role;
 
-// @CrossOrigin("http://localhost:5173")
 // TOOD: add /api? Also, maybe add /users?
 @RestController
 class UserController {
@@ -39,14 +38,6 @@ class UserController {
         .toUri())
         .body(savedUser);
   }
-
-  // @PostMapping("/login")
-  // public User login(@RequestBody User user) {
-  // User userDb = userService.findUserByUsernameAndPassword(user.getUsername(),
-  // user.getPassword());
-  //
-  // return userDb;
-  // }
 
   @GetMapping("/user")
   UserAuthenticationResponseDTO getUser(Authentication authentication) {

@@ -35,7 +35,6 @@ class UserBookController {
   }
 
   @PostMapping("/generate-books")
-//  @WithRateLimitProtection
   ResponseEntity<MessageResponseDTO> generateBooks(
       @RequestBody @Valid MessageRequestDTO messageRequestDTO, Authentication authentication,
       HttpServletRequest request) {
