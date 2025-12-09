@@ -2,6 +2,7 @@ package lt.techin.bookreservationapp.user;
 
 import java.util.List;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import lt.techin.bookreservationapp.role.RoleMapper;
 import lt.techin.bookreservationapp.role.RoleRepository;
 
 @Service
-class UserService {
+public class UserService {
 
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
@@ -63,14 +64,8 @@ class UserService {
     return this.userRepository.findByVerificationCode(code).orElseThrow();
   }
 
-  // public User findUserByUsernameAndPassword(String username, String password) {
-  // return userRepository
-  // .findUserByUsername(username)
-  // .filter(u -> passwordEncoder.matches(password, u.getPassword()))
-  // .orElseThrow();
-  // }
-
-  // public boolean existsUserByUsername(String username) {
-  // return userRepository.existsByUsername(username);
-  // }
+  public User findUserByEmail(String email) {
+    return this.userRepository.findByEmail(email)
+        .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+  }
 }
