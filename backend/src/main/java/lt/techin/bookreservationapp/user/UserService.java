@@ -68,4 +68,8 @@ public class UserService {
     return this.userRepository.findByEmail(email)
         .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
   }
+
+  User saveUser(User user) {
+    return this.userRepository.save(user);
+  }
 }
