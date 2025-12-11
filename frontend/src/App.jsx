@@ -32,10 +32,6 @@ function App() {
             element={<About />}
           />
           <Route
-            path="*"
-            element={<ErrorPage />}
-          />
-          <Route
             path="/login"
             element={<Login />}
           />
@@ -50,6 +46,10 @@ function App() {
           <Route
             path="/signup"
             element={<Signup setIsSignedUp={setIsSignedUp} />}
+          />
+          <Route
+            path="*"
+            element={<ErrorPage />}
           />
         </Routes>
       </main>
