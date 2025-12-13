@@ -444,42 +444,6 @@ class UserBookControllerTest {
 
     }
 
-    // Unhappy path
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-
-    @Test
-    void saveUserBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage()
-        throws JsonProcessingException {
-      User user = UserBookControllerTest.this.createUser();
-      String csrfToken = UserBookControllerTest.this.getCsrfToken();
-      Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
-      Book book = UserBookControllerTest.this.bookRepository
-          .save(new Book("Dracula by Bram Stoker", null));
-      UserBookControllerTest.this.userBookRepository.save(new UserBook(user, book));
-
-      given()
-          .cookie("JSESSIONID", loginResponse.getSessionId())
-          .cookie("XSRF-TOKEN", csrfToken)
-          .header("X-XSRF-TOKEN", csrfToken)
-          .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserBookRequestDTO("Dracula by Bram Stoker")))
-          .when()
-          .post("/books")
-          .then()
-          .statusCode(400)
-          .body("title", equalTo("Already exists"))
-          .body("$", aMapWithSize(1));
-    }
-
     @Test
     void saveUserBook_whenTitleAlreadyExistsForOtherUser_thenReturn201AndMessage()
         throws JsonProcessingException {
@@ -515,6 +479,42 @@ class UserBookControllerTest {
               + "/books/"
               + UserBookControllerTest.this.findBookIdByTitle(bookTitle) + "/users/"
               + user.getId()));
+    }
+
+    // Unhappy path
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+
+    @Test
+    void saveUserBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage()
+        throws JsonProcessingException {
+      User user = UserBookControllerTest.this.createUser();
+      String csrfToken = UserBookControllerTest.this.getCsrfToken();
+      Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
+      Book book = UserBookControllerTest.this.bookRepository
+          .save(new Book("Dracula by Bram Stoker", null));
+      UserBookControllerTest.this.userBookRepository.save(new UserBook(user, book));
+
+      given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(new ObjectMapper()
+              .writeValueAsString(new UserBookRequestDTO("Dracula by Bram Stoker")))
+          .when()
+          .post("/books")
+          .then()
+          .statusCode(400)
+          .body("title", equalTo("Already exists"))
+          .body("$", aMapWithSize(1));
     }
 
     @Test
