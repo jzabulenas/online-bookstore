@@ -28,7 +28,7 @@ public class Book {
     this.users = users;
   }
 
-  public Book() {
+  Book() {
   }
 
   public Long getId() {
@@ -39,15 +39,15 @@ public class Book {
     return this.title;
   }
 
-  public void setTitle(String title) {
+  void setTitle(String title) {
     this.title = title;
   }
 
-  public List<UserBook> getUsers() {
+  List<UserBook> getUsers() {
     return this.users;
   }
 
-  public void setUsers(List<UserBook> users) {
+  void setUsers(List<UserBook> users) {
     this.users = users;
   }
 

@@ -1,6 +1,7 @@
 package lt.techin.bookreservationapp.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,22 +10,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.servlet.view.RedirectView;
 
 import jakarta.validation.Valid;
 import lt.techin.bookreservationapp.role.Role;
 
-// @CrossOrigin("http://localhost:5173")
 // TOOD: add /api? Also, maybe add /users?
 @RestController
 class UserController {
 
   private final UserService userService;
   private final UserRepository userRepository;
+  private final String frontendUrl;
 
   @Autowired
-  UserController(UserService userService, UserRepository userRepository) {
+  UserController(UserService userService, UserRepository userRepository,
+      @Value("${FRONTEND_URL}") String frontendUrl) {
     this.userService = userService;
     this.userRepository = userRepository;
+    this.frontendUrl = frontendUrl;
   }
 
   // TODO: change this to /users? Because the Location header is something like
@@ -39,14 +43,6 @@ class UserController {
         .toUri())
         .body(savedUser);
   }
-
-  // @PostMapping("/login")
-  // public User login(@RequestBody User user) {
-  // User userDb = userService.findUserByUsernameAndPassword(user.getUsername(),
-  // user.getPassword());
-  //
-  // return userDb;
-  // }
 
   @GetMapping("/user")
   UserAuthenticationResponseDTO getUser(Authentication authentication) {
@@ -66,11 +62,13 @@ class UserController {
   }
 
   @GetMapping("/verify")
-  void verify(@RequestParam String code) {
+  RedirectView verify(@RequestParam String code) {
     User user = this.userService.findUserByVerificationCode(code);
     user.setEnabled(true);
     user.setVerificationCode(null);
 
-    this.userRepository.save(user);
+    this.userService.saveUser(user);
+
+    return new RedirectView(this.frontendUrl + "/verification-success");
   }
 }

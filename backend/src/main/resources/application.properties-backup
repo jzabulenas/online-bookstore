@@ -1,7 +1,0 @@
-spring.h2.console.enabled=true
-
-spring.datasource.url=jdbc:h2:file:./online-bookstore;AUTO_SERVER=TRUE
-spring.datasource.username=test
-spring.datasource.password=labas123
-
-spring.jpa.hibernate.ddl-auto=update

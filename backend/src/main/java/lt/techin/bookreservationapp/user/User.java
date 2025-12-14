@@ -51,7 +51,7 @@ public class User implements UserDetails {
     this.books = books;
   }
 
-  public User() {
+  User() {
   }
 
   public Long getId() {
@@ -62,7 +62,7 @@ public class User implements UserDetails {
     return this.email;
   }
 
-  public void setEmail(String email) {
+  void setEmail(String email) {
     this.email = email;
   }
 
@@ -71,7 +71,7 @@ public class User implements UserDetails {
     return this.password;
   }
 
-  public void setPassword(String password) {
+  void setPassword(String password) {
     this.password = password;
   }
 
@@ -79,15 +79,15 @@ public class User implements UserDetails {
     return this.roles;
   }
 
-  public void setRoles(List<Role> roles) {
+  void setRoles(List<Role> roles) {
     this.roles = roles;
   }
 
-  public List<UserBook> getBooks() {
+  List<UserBook> getBooks() {
     return this.books;
   }
 
-  public void setBooks(List<UserBook> books) {
+  void setBooks(List<UserBook> books) {
     this.books = books;
   }
 
@@ -106,15 +106,15 @@ public class User implements UserDetails {
     return this.isEnabled;
   }
 
-  public void setEnabled(boolean isEnabled) {
+  void setEnabled(boolean isEnabled) {
     this.isEnabled = isEnabled;
   }
 
-  public String getVerificationCode() {
+  String getVerificationCode() {
     return this.verificationCode;
   }
 
-  public void setVerificationCode(String verificationCode) {
+  void setVerificationCode(String verificationCode) {
     this.verificationCode = verificationCode;
   }
 

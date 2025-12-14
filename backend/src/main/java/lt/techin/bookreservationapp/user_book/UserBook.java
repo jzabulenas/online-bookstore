@@ -31,26 +31,26 @@ public class UserBook {
     this.book = book;
   }
 
-  public UserBook() {
+  UserBook() {
   }
 
   public Long getId() {
     return this.id;
   }
 
-  public User getUser() {
+  User getUser() {
     return this.user;
   }
 
-  public void setUser(User user) {
+  void setUser(User user) {
     this.user = user;
   }
 
-  public Book getBook() {
+  Book getBook() {
     return this.book;
   }
 
-  public void setBook(Book book) {
+  void setBook(Book book) {
     this.book = book;
   }
 

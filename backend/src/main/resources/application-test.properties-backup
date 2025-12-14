@@ -1,3 +1,0 @@
-spring.datasource.url=jdbc:h2:file:./online-bookstore-test
-spring.datasource.username=test
-spring.datasource.password=labas123

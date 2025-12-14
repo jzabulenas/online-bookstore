@@ -9,6 +9,7 @@ import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
 import SavedBooks from "./components/SavedBooks";
 import Signup from "./components/Signup";
 import { useState } from "react";
+import VerificationSuccess from "./components/VerificationSuccess";
 
 function App() {
   const [isSignedUp, setIsSignedUp] = useState(false);
@@ -32,10 +33,6 @@ function App() {
             element={<About />}
           />
           <Route
-            path="*"
-            element={<ErrorPage />}
-          />
-          <Route
             path="/login"
             element={<Login />}
           />
@@ -50,6 +47,14 @@ function App() {
           <Route
             path="/signup"
             element={<Signup setIsSignedUp={setIsSignedUp} />}
+          />
+          <Route
+            path="/verification-success"
+            element={<VerificationSuccess />}
+          />
+          <Route
+            path="*"
+            element={<ErrorPage />}
           />
         </Routes>
       </main>
