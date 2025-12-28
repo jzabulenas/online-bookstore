@@ -28,10 +28,10 @@ setup("create default user", async ({ page }) => {
 
   await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
-    page.getByText("You have successfully signed up. You may now log in.")
+    page.getByText("Check your email to verify the account.")
   ).toBeVisible();
   await expect(page.getByRole("alert")).toContainText(
-    "You have successfully signed up. You may now log in."
+    "Check your email to verify the account."
   );
   await expect(page).toHaveScreenshot();
 
