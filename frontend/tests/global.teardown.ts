@@ -1,7 +1,12 @@
 import { test as teardown } from "@playwright/test";
 import mysql from "mysql2/promise";
+import { test as setup, devices } from "@playwright/test";
 
-teardown("delete database", async ({}) => {
+setup.use({
+  ...devices["Pixel 5"],
+});
+
+teardown("delete database, wipe mailpit", async ({ page }) => {
   console.log("---");
   console.log("deleting test database...");
   console.log("---");
@@ -20,4 +25,10 @@ teardown("delete database", async ({}) => {
   await conn.execute("DELETE FROM books");
   await conn.execute("DELETE FROM users");
   await conn.end();
+
+  // Remove existing emails
+  await page.goto("http://localhost:8025/");
+  await page.getByRole("button").nth(1).tap();
+  await page.getByRole("button", { name: " Delete all" }).tap();
+  await page.getByRole("button", { name: "Delete", exact: true }).tap();
 });

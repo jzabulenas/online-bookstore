@@ -54,7 +54,7 @@ export default function Home({ isSignedUp, setIsSignedUp }) {
               className="alert alert-success alert-dismissible"
               role="alert"
             >
-              You have successfully signed up. You may now log in.
+              Check your email to verify the account.
               <button
                 type="button"
                 className="btn-close"

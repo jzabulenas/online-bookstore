@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -319,7 +320,7 @@ class UserBookControllerTest {
           .post("/generate-books")
           .then()
           .statusCode(403)
-          .body("timestamp", containsString("2025"))
+          .body("timestamp", containsString(String.valueOf(LocalDateTime.now().getYear())))
           .body("status", equalTo(403))
           .body("error", equalTo("Forbidden"))
           .body("path", equalTo("/generate-books"));
@@ -546,7 +547,7 @@ class UserBookControllerTest {
           .post("/books")
           .then()
           .statusCode(403)
-          .body("timestamp", containsString("2025"))
+          .body("timestamp", containsString(String.valueOf(LocalDateTime.now().getYear())))
           .body("status", equalTo(403))
           .body("error", equalTo("Forbidden"))
           .body("path", equalTo("/books"));
