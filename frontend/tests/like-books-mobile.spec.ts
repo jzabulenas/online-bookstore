@@ -76,13 +76,6 @@ test("should click like on a single generated book, and see it displayed in 'sav
       - heading "Books you have saved" [level=1]
       - paragraph
     `);
-
-  // Delete email
-  await page.goto("http://localhost:8025");
-  await page.getByRole("link", { name: email }).tap();
-  // Clicks on the trash icon logo to delete the email. Not sure how this 
-  // signifies a trash can
-  await page.getByRole("button", { name: "" }).tap();
 });
 
 test("should click like on two generated books, and see them displayed in 'saved books'", async ({
@@ -156,13 +149,6 @@ test("should click like on two generated books, and see them displayed in 'saved
       - paragraph
       - paragraph
     `);
-
-  // Delete email
-  await page.goto("http://localhost:8025");
-  await page.getByRole("link", { name: email }).tap();
-  // Clicks on the trash icon logo to delete the email. Not sure how this 
-  // signifies a trash can
-  await page.getByRole("button", { name: "" }).tap();
 });
 
 test("should click like on three generated books, and see them displayed in 'saved books'", async ({
@@ -240,13 +226,6 @@ test("should click like on three generated books, and see them displayed in 'sav
       - paragraph
       - paragraph
     `);
-
-  // Delete email
-  await page.goto("http://localhost:8025");
-  await page.getByRole("link", { name: email }).tap();
-  // Clicks on the trash icon logo to delete the email. Not sure how this 
-  // signifies a trash can
-  await page.getByRole("button", { name: "" }).tap();
 });
 
 test("should click like on generated books, and not see them displayed in 'saved books' for other user", async ({
@@ -370,20 +349,6 @@ test("should click like on generated books, and not see them displayed in 'saved
   await expect(page.getByText(bookTitle2)).not.toBeVisible();
   await expect(page.getByText(bookTitle3)).not.toBeVisible();
   await expect(page).toHaveScreenshot();
-
-  // Delete email
-  await page.goto("http://localhost:8025");
-  await page.getByRole("link", { name: email }).tap();
-  // Clicks on the trash icon logo to delete the email. Not sure how this 
-  // signifies a trash can
-  await page.getByRole("button", { name: "" }).tap();
-
-  // Delete email
-  await page.goto("http://localhost:8025");
-  await page.getByRole("link", { name: email2 }).tap();
-  // Clicks on the trash icon logo to delete the email. Not sure how this 
-  // signifies a trash can
-  await page.getByRole("button", { name: "" }).tap();
 });
 
 test("should not see liked books if no books are liked after generating books", async ({
@@ -456,11 +421,4 @@ test("should not see liked books if no books are liked after generating books", 
   await expect(page.getByText(bookTitle2)).not.toBeVisible();
   await expect(page.getByText(bookTitle3)).not.toBeVisible();
   await expect(page).toHaveScreenshot();
-
-  // Delete email
-  await page.goto("http://localhost:8025");
-  await page.getByRole("link", { name: email }).tap();
-  // Clicks on the trash icon logo to delete the email. Not sure how this 
-  // signifies a trash can
-  await page.getByRole("button", { name: "" }).tap();
 });
