@@ -29,7 +29,9 @@ class UserBookService {
 
   @Autowired
   UserBookService(
-      ChatClient chatClient, BookRepository bookRepository, UserRepository userRepository,
+      ChatClient chatClient,
+      BookRepository bookRepository,
+      UserRepository userRepository,
       UserBookRepository userBookRepository) {
     this.chatClient = chatClient;
     this.bookRepository = bookRepository;
@@ -40,15 +42,19 @@ class UserBookService {
   MessageResponseDTO generateBooks(MessageRequestDTO messageRequestDTO) {
     List<String> titles = this.userBookRepository.findAllTitles();
 
-    String result = this.chatClient
-        .prompt()
-        .user("I have read "
-            + messageRequestDTO.message()
-            + " and liked it. Suggest me 3 new books to read. They must adhere this format: 'Amet Consectetur by Adipisicing Elit|Necessitatibus Eum by Numquam Architecto|Eem Illum by Dolorem Error'."
-            + "Return only the three comma separated values. Also make sure to not include these books in the result: "
-            + titles + " and: " + this.resultFromApiCall)
-        .call()
-        .content();
+    String result =
+        this.chatClient
+            .prompt()
+            .user(
+                "I have read "
+                    + messageRequestDTO.message()
+                    + " and liked it. Suggest me 3 new books to read. They must adhere this format: 'Amet Consectetur by Adipisicing Elit|Necessitatibus Eum by Numquam Architecto|Eem Illum by Dolorem Error'."
+                    + "Return only the three comma separated values. Also make sure to not include these books in the result: "
+                    + titles
+                    + " and: "
+                    + this.resultFromApiCall)
+            .call()
+            .content();
 
     String[] books = result.split("\\|");
     // TODO:
@@ -64,9 +70,10 @@ class UserBookService {
 
   UserBookResponseDTO saveUserBook(UserBookRequestDTO userBookRequestDTO, Principal principal) {
 
-    User user = this.userRepository
-        .findByEmail(principal.getName())
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    User user =
+        this.userRepository
+            .findByEmail(principal.getName())
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
     if (this.userBookRepository.existsByBookTitleAndUser(userBookRequestDTO.title(), user)) {
       throw new BookTitleAlreadyExistsException();
@@ -85,7 +92,6 @@ class UserBookService {
 
       return UserBookMapper.toDTO(savedUserBook);
     }
-
   }
 
   List<UserBookTitleResponseDTO> findAllUserBooks() {

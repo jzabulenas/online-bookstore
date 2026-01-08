@@ -18,21 +18,16 @@ public class UserBook {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotNull
-  @ManyToOne
-  private User user;
+  @NotNull @ManyToOne private User user;
 
-  @NotNull
-  @ManyToOne
-  private Book book;
+  @NotNull @ManyToOne private Book book;
 
   public UserBook(User user, Book book) {
     this.user = user;
     this.book = book;
   }
 
-  UserBook() {
-  }
+  UserBook() {}
 
   public Long getId() {
     return this.id;
@@ -53,5 +48,4 @@ public class UserBook {
   void setBook(Book book) {
     this.book = book;
   }
-
 }

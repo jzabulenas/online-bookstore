@@ -21,8 +21,8 @@ class RateLimitExceptionHandler {
   ResponseEntity<ApiErrorMessage> handleInvalidFieldsInValidJson(
       final RateLimitException rateLimitException, final HttpServletRequest request) {
 
-    final ApiErrorMessage apiErrorMessage = rateLimitException
-        .toApiErrorMessage(request.getRequestURI());
+    final ApiErrorMessage apiErrorMessage =
+        rateLimitException.toApiErrorMessage(request.getRequestURI());
     logIncomingCallException(rateLimitException, apiErrorMessage);
 
     return new ResponseEntity<>(apiErrorMessage, HttpStatus.TOO_MANY_REQUESTS);
@@ -31,7 +31,8 @@ class RateLimitExceptionHandler {
   private static void logIncomingCallException(
       final RateLimitException rateLimitException, final ApiErrorMessage apiErrorMessage) {
 
-    LOG.error(String.format("%s: %s", apiErrorMessage.getId(), rateLimitException
-        .getMessage()), rateLimitException);
+    LOG.error(
+        String.format("%s: %s", apiErrorMessage.getId(), rateLimitException.getMessage()),
+        rateLimitException);
   }
 }

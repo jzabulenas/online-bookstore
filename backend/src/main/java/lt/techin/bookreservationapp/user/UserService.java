@@ -21,7 +21,8 @@ public class UserService {
   UserService(
       UserRepository userRepository,
       RoleRepository roleRepository,
-      PasswordEncoder passwordEncoder, EmailService emailService) {
+      PasswordEncoder passwordEncoder,
+      EmailService emailService) {
     this.userRepository = userRepository;
     this.roleRepository = roleRepository;
     this.passwordEncoder = passwordEncoder;
@@ -53,9 +54,8 @@ public class UserService {
   }
 
   /**
-   * Retrieves the user based on the unique verification code. This method is used
-   * to find the user based on code that was delivered to an email address, for
-   * verification.
+   * Retrieves the user based on the unique verification code. This method is used to find the user
+   * based on code that was delivered to an email address, for verification.
    *
    * @param code the verification code that uniquely identifies the user
    * @return User found based on that code
@@ -65,7 +65,8 @@ public class UserService {
   }
 
   public User findUserByEmail(String email) {
-    return this.userRepository.findByEmail(email)
+    return this.userRepository
+        .findByEmail(email)
         .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
   }
 

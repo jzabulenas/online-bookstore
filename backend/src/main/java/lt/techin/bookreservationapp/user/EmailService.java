@@ -19,7 +19,9 @@ class EmailService {
   private final String backendUrl;
 
   @Autowired
-  EmailService(JavaMailSender mailSender, SpringTemplateEngine templateEngine,
+  EmailService(
+      JavaMailSender mailSender,
+      SpringTemplateEngine templateEngine,
       @Value("${backend.url}") String backendUrl) {
     this.mailSender = mailSender;
     this.templateEngine = templateEngine;
@@ -29,8 +31,7 @@ class EmailService {
   /**
    * Constructs the HTML content of the email message.
    *
-   * @param entity User who's verification code will be used in the URL for
-   *               verification.
+   * @param entity User who's verification code will be used in the URL for verification.
    * @return String containing the HTML code.
    */
   private String getVerificationMailContent(User entity) {
@@ -48,7 +49,7 @@ class EmailService {
   /**
    * Creates an email message deliverable, containing text, subject, from and to.
    *
-   * @param entity  User to who's email the message will be addressed.
+   * @param entity User to who's email the message will be addressed.
    * @param content content containing HTML message.
    * @return MimeMessage
    * @throws MessagingException
@@ -79,5 +80,4 @@ class EmailService {
           "Could not send e-mail to verify user with e-mail '" + entity.getEmail() + "'", ex);
     }
   }
-
 }

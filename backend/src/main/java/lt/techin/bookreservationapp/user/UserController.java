@@ -24,7 +24,9 @@ class UserController {
   private final String frontendUrl;
 
   @Autowired
-  UserController(UserService userService, UserRepository userRepository,
+  UserController(
+      UserService userService,
+      UserRepository userRepository,
       @Value("${FRONTEND_URL}") String frontendUrl) {
     this.userService = userService;
     this.userRepository = userRepository;
@@ -37,10 +39,11 @@ class UserController {
   ResponseEntity<Object> signup(@RequestBody @Valid UserRequestDTO userRequestDTO) {
     UserResponseDTO savedUser = this.userService.saveUser(userRequestDTO);
 
-    return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{id}")
-        .buildAndExpand(savedUser.id())
-        .toUri())
+    return ResponseEntity.created(
+            ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedUser.id())
+                .toUri())
         .body(savedUser);
   }
 
@@ -49,11 +52,7 @@ class UserController {
     User user = (User) authentication.getPrincipal();
 
     return new UserAuthenticationResponseDTO(
-        user.getEmail(),
-        user.getRoles()
-            .stream()
-            .map(Role::getName)
-            .toList());
+        user.getEmail(), user.getRoles().stream().map(Role::getName).toList());
   }
 
   @GetMapping("/open")
