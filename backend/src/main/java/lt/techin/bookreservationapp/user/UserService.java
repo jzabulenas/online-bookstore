@@ -2,6 +2,8 @@ package lt.techin.bookreservationapp.user;
 
 import java.util.List;
 
+import org.springframework.security.authentication.password.CompromisedPasswordChecker;
+import org.springframework.security.authentication.password.CompromisedPasswordException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,21 +19,29 @@ public class UserService {
   private final RoleRepository roleRepository;
   private final PasswordEncoder passwordEncoder;
   private final EmailService emailService;
+  private final CompromisedPasswordChecker compromisedPasswordChecker;
 
   UserService(
       UserRepository userRepository,
       RoleRepository roleRepository,
       PasswordEncoder passwordEncoder,
-      EmailService emailService) {
+      EmailService emailService,
+      CompromisedPasswordChecker compromisedPasswordChecker) {
     this.userRepository = userRepository;
     this.roleRepository = roleRepository;
     this.passwordEncoder = passwordEncoder;
     this.emailService = emailService;
+    this.compromisedPasswordChecker = compromisedPasswordChecker;
   }
 
   UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
     if (this.userRepository.existsByEmail(userRequestDTO.email())) {
       throw new EmailAlreadyExistsException();
+    }
+
+    if (this.compromisedPasswordChecker.check(userRequestDTO.password()).isCompromised()) {
+      throw new CompromisedPasswordException(
+          "The provided password is compromised and cannot be used. Use something more unique");
     }
 
     List<Role> toRoles = RoleMapper.toEntities(userRequestDTO.roles(), this.roleRepository);
