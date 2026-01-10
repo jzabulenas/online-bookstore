@@ -632,7 +632,7 @@ class UserBookControllerTest {
       UserBookControllerTest.this.userRepository.save(
           new User(
               "antanas@inbox.lt",
-              UserBookControllerTest.this.passwordEncoder.encode("123456"),
+              UserBookControllerTest.this.passwordEncoder.encode("myqgrqrbvobhwm"),
               true,
               null,
               List.of(role.orElseThrow()),
@@ -643,7 +643,7 @@ class UserBookControllerTest {
               .cookie("XSRF-TOKEN", csrfToken)
               .header("X-XSRF-TOKEN", csrfToken)
               .contentType(ContentType.URLENC)
-              .body("username=antanas%40inbox.lt&password=123456")
+              .body("username=antanas%40inbox.lt&password=myqgrqrbvobhwm")
               .post("/login")
               .then()
               .statusCode(200)
@@ -697,7 +697,7 @@ class UserBookControllerTest {
     return this.userRepository.save(
         new User(
             "jurgis@inbox.lt",
-            this.passwordEncoder.encode("123456"),
+            this.passwordEncoder.encode("myqgrqrbvobhwm"),
             true,
             null,
             List.of(role.orElseThrow()),
@@ -715,7 +715,7 @@ class UserBookControllerTest {
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.URLENC)
-        .body("username=jurgis%40inbox.lt&password=123456")
+        .body("username=jurgis%40inbox.lt&password=myqgrqrbvobhwm")
         .post("/login")
         .then()
         .statusCode(200)
