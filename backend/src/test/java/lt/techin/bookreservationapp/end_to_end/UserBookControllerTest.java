@@ -333,7 +333,7 @@ class UserBookControllerTest {
     @Test
     void generateBooks_whenCalledMoreThan6Times_thenReturn429AndBody()
         throws JsonProcessingException {
-      User user = UserBookControllerTest.this.createUser();
+      UserBookControllerTest.this.createUser();
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
 
@@ -347,75 +347,75 @@ class UserBookControllerTest {
                   new ObjectMapper()
                       .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
 
-      Response responseOne =
-          spec.when()
-              .post("/generate-books")
-              .then()
-              .statusCode(200)
-              .body("$", aMapWithSize(1))
-              .body("result", hasSize(3))
-              .extract()
-              .response();
+      // Response one
+      spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
 
-      Response responseTwo =
-          spec.when()
-              .post("/generate-books")
-              .then()
-              .statusCode(200)
-              .body("$", aMapWithSize(1))
-              .body("result", hasSize(3))
-              .extract()
-              .response();
+      // Response two
+      spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
 
-      Response responseThree =
-          spec.when()
-              .post("/generate-books")
-              .then()
-              .statusCode(200)
-              .body("$", aMapWithSize(1))
-              .body("result", hasSize(3))
-              .extract()
-              .response();
+      // Response three
+      spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
 
-      Response responseFour =
-          spec.when()
-              .post("/generate-books")
-              .then()
-              .statusCode(200)
-              .body("$", aMapWithSize(1))
-              .body("result", hasSize(3))
-              .extract()
-              .response();
+      // Response four
+      spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
 
-      Response responseFive =
-          spec.when()
-              .post("/generate-books")
-              .then()
-              .statusCode(200)
-              .body("$", aMapWithSize(1))
-              .body("result", hasSize(3))
-              .extract()
-              .response();
+      // Response five
+      spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
 
-      Response responseSix =
-          spec.when()
-              .post("/generate-books")
-              .then()
-              .statusCode(200)
-              .body("$", aMapWithSize(1))
-              .body("result", hasSize(3))
-              .extract()
-              .response();
+      // Response six
+      spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
 
-      Response responseSeven =
-          spec.when()
-              .post("/generate-books")
-              .then()
-              .statusCode(429)
-              .body("$", aMapWithSize(1))
-              .body("error", equalTo("Free users get 6 free requests a day. Please wait 24 hours."))
-              .extract()
-              .response();
+      // Response seven
+      spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(429)
+          .body("$", aMapWithSize(1))
+          .body("error", equalTo("Free users get 6 free requests a day. Please wait 24 hours."))
+          .extract()
+          .response();
     }
   }
 

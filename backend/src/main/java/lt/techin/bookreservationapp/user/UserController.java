@@ -20,7 +20,6 @@ import lt.techin.bookreservationapp.role.Role;
 class UserController {
 
   private final UserService userService;
-  private final UserRepository userRepository;
   private final String frontendUrl;
 
   @Autowired
@@ -29,7 +28,6 @@ class UserController {
       UserRepository userRepository,
       @Value("${FRONTEND_URL}") String frontendUrl) {
     this.userService = userService;
-    this.userRepository = userRepository;
     this.frontendUrl = frontendUrl;
   }
 
