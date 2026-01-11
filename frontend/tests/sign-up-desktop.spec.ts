@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 test("should sign up", async ({ page }) => {
   const email = `antanas+${uuidv4()}@inbox.lt`;
 
+  // Fill form
   await page.goto("http://localhost:5173/");
   await page.getByRole("link", { name: "Sign up" }).click();
   await page.getByRole("textbox", { name: "Email:" }).click();
@@ -26,6 +27,27 @@ test("should sign up", async ({ page }) => {
     "Check your email to verify the account."
   );
   await expect(page).toHaveScreenshot();
+
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .click();
+  const page1 = await page1Promise;
+
+  // Assert final page
+  await expect(page1).toHaveURL("http://localhost:5173/verification-success");
+  await expect(
+    page1.getByText("Account activated! Feel free to log in.")
+  ).toBeVisible();
+  await expect(page1.getByRole("paragraph")).toContainText(
+    "Account activated! Feel free to log in."
+  );
+  await expect(page1).toHaveScreenshot();
 });
 
 // Email

@@ -28,8 +28,7 @@ public class Book {
     this.users = users;
   }
 
-  Book() {
-  }
+  Book() {}
 
   public Long getId() {
     return this.id;
@@ -50,5 +49,4 @@ public class Book {
   void setUsers(List<UserBook> users) {
     this.users = users;
   }
-
 }

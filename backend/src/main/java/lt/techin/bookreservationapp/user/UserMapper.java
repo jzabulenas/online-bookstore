@@ -9,8 +9,8 @@ import lt.techin.bookreservationapp.role.Role;
 
 class UserMapper {
 
-  static User toEntity(UserRequestDTO userRequestDTO, PasswordEncoder passwordEncoder,
-      List<Role> roles) {
+  static User toEntity(
+      UserRequestDTO userRequestDTO, PasswordEncoder passwordEncoder, List<Role> roles) {
     return new User(
         userRequestDTO.email(),
         passwordEncoder.encode(userRequestDTO.password()),
@@ -21,9 +21,6 @@ class UserMapper {
   }
 
   static UserResponseDTO toDTO(User user, List<Long> toRolesIds) {
-    return new UserResponseDTO(
-        user.getId(),
-        user.getEmail(),
-        toRolesIds);
+    return new UserResponseDTO(user.getId(), user.getEmail(), toRolesIds);
   }
 }

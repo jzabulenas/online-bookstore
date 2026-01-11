@@ -53,5 +53,4 @@ class GenerateBooksRequestLimit {
   Long getId() {
     return this.id;
   }
-
 }

@@ -28,16 +28,16 @@ public class GenerateBooksRateLimitService {
     // endpoint, since a particular date made
     // In other words, if there were requests made in the time frame between
     // yesterday and today, that is, in those previous 24 hours, they are counted
-    long count = this.requestLimitRepository
-        .countByUserIdAndEndpointAndRequestTimeAfter(userId, endpoint, since);
+    long count =
+        this.requestLimitRepository.countByUserIdAndEndpointAndRequestTimeAfter(
+            userId, endpoint, since);
 
     if (count >= this.maxRequests) {
       throw new GenerateBooksRequestLimitException();
     }
 
     // Save request log
-    GenerateBooksRequestLimit rl = new GenerateBooksRequestLimit(userId, endpoint,
-        Instant.now());
+    GenerateBooksRequestLimit rl = new GenerateBooksRequestLimit(userId, endpoint, Instant.now());
     this.requestLimitRepository.save(rl);
   }
 }

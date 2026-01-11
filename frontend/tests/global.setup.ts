@@ -38,11 +38,13 @@ setup("create default user", async ({ page }) => {
   // Verify email
   await page.goto("http://localhost:8025");
   await page.getByRole("link", { name: "noreply@myapp.xyz" }).tap();
+  const page1Promise = page.waitForEvent("popup");
   await page
     .locator("#preview-html")
     .contentFrame()
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .tap();
+  const page1 = await page1Promise;
   await page.goto("http://localhost:8025");
   await page.getByRole("link", { name: "noreply@myapp.xyz" }).tap();
   // Clicks on the trash icon logo to delete the email. Not sure how this 

@@ -37,11 +37,10 @@ import lt.techin.bookreservationapp.user.UserRequestDTO;
 @ActiveProfiles("test")
 class UserControllerTest {
 
-  @LocalServerPort
-  private Integer port;
+  @LocalServerPort private Integer port;
 
-  static MariaDBContainer<?> mariaDB = new MariaDBContainer<>(
-      DockerImageName.parse("mariadb:11.4"));
+  static MariaDBContainer<?> mariaDB =
+      new MariaDBContainer<>(DockerImageName.parse("mariadb:11.4"));
 
   @BeforeAll
   static void beforeAll() {
@@ -60,10 +59,8 @@ class UserControllerTest {
     registry.add("spring.datasource.password", mariaDB::getPassword);
   }
 
-  @Autowired
-  private UserRepository userRepository;
-  @Autowired
-  private RoleRepository roleRepository;
+  @Autowired private UserRepository userRepository;
+  @Autowired private RoleRepository roleRepository;
 
   @BeforeEach
   void setUp() {
@@ -83,8 +80,9 @@ class UserControllerTest {
           .cookie("XSRF-TOKEN", csrfToken)
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO(email, "r9$CbHEaGXLUsP", List.of(1L))))
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(new UserRequestDTO(email, "r9$CbHEaGXLUsP", List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -94,9 +92,13 @@ class UserControllerTest {
           .body("email", equalTo(email))
           .body("roles", hasSize(1))
           .body("roles[0]", equalTo(1))
-          .header("Location", equalTo("http://localhost:" + UserControllerTest.this.port
-              + "/signup/"
-              + UserControllerTest.this.findUserIdByEmail(email)));
+          .header(
+              "Location",
+              equalTo(
+                  "http://localhost:"
+                      + UserControllerTest.this.port
+                      + "/signup/"
+                      + UserControllerTest.this.findUserIdByEmail(email)));
     }
 
     // Unhappy path
@@ -113,8 +115,9 @@ class UserControllerTest {
           .cookie("XSRF-TOKEN", csrfToken)
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO(null, "r9$CbHEaGXLUsP", List.of(1L))))
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(new UserRequestDTO(null, "r9$CbHEaGXLUsP", List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -131,8 +134,9 @@ class UserControllerTest {
           .cookie("XSRF-TOKEN", csrfToken)
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("f@b.c", "r9$CbHEaGXLUsP", List.of(1L))))
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(new UserRequestDTO("f@b.c", "r9$CbHEaGXLUsP", List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -149,10 +153,13 @@ class UserControllerTest {
           .cookie("XSRF-TOKEN", csrfToken)
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO(
-                  "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrv@gmail.com",
-                  "r8@D^6PCg7&3Zn", List.of(1L))))
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(
+                      new UserRequestDTO(
+                          "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrv@gmail.com",
+                          "r8@D^6PCg7&3Zn",
+                          List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -169,10 +176,13 @@ class UserControllerTest {
           .cookie("XSRF-TOKEN", csrfToken)
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO(
-                  "jurgis@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegw.com",
-                  "r9$CbHEaGXLUsP", List.of(1L))))
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(
+                      new UserRequestDTO(
+                          "jurgis@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegw.com",
+                          "r9$CbHEaGXLUsP",
+                          List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -190,10 +200,13 @@ class UserControllerTest {
           .cookie("XSRF-TOKEN", csrfToken)
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO(
-                  "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrrsdfsdfse@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegwasdasde.com",
-                  "r8@D^6PCg7&3Zn", List.of(1L))))
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(
+                      new UserRequestDTO(
+                          "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrrsdfsdfse@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegwasdasde.com",
+                          "r8@D^6PCg7&3Zn",
+                          List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -203,28 +216,27 @@ class UserControllerTest {
     }
 
     @Test
-    void signup_whenEmailAlreadyExists_thenReturn400AndBody()
-        throws JsonProcessingException {
+    void signup_whenEmailAlreadyExists_thenReturn400AndBody() throws JsonProcessingException {
       String csrfToken = UserControllerTest.this.getCsrfToken();
       String email = "jurgis@inbox.lt";
       String password = "r9$CbHEaGXLUsP";
       Role role = UserControllerTest.this.roleRepository.findByName("ROLE_USER").orElseThrow();
-      UserControllerTest.this.userRepository
-          .save(new User(email, password, true, null, List.of(role), null));
+      UserControllerTest.this.userRepository.save(
+          new User(email, password, true, null, List.of(role), null));
 
       given()
           .cookie("XSRF-TOKEN", csrfToken)
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO(
-                  email, password, List.of(1L))))
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(new UserRequestDTO(email, password, List.of(1L))))
           .when()
           .post("/signup")
           .then()
           .statusCode(400)
           .body("$", aMapWithSize(1))
-          .body("email", equalTo("Already exists"));
+          .body("email", equalTo("Such email address is already in use"));
     }
 
     // Password
@@ -241,8 +253,9 @@ class UserControllerTest {
           .cookie("XSRF-TOKEN", csrfToken)
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", null, List.of(1L))))
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", null, List.of(1L))))
           .when()
           .post("/signup")
           .then()
@@ -259,15 +272,16 @@ class UserControllerTest {
           .cookie("XSRF-TOKEN", csrfToken)
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "B*nx5sZ#N4u@8",
-                  List.of(1L))))
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(
+                      new UserRequestDTO("jurgis@inbox.lt", "grxnqdgnsqbqj", List.of(1L))))
           .when()
           .post("/signup")
           .then()
           .statusCode(400)
           .body("$", aMapWithSize(1))
-          .body("password", equalTo("size must be between 14 and 20"));
+          .body("password", equalTo("size must be between 14 and 64"));
     }
 
     @Test
@@ -278,116 +292,135 @@ class UserControllerTest {
           .cookie("XSRF-TOKEN", csrfToken)
           .header("X-XSRF-TOKEN", csrfToken)
           .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "4*PzxNQLDK%FbGdS76Jm!",
-                  List.of(1L))))
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(
+                      new UserRequestDTO(
+                          "jurgis@inbox.lt",
+                          // This is 65 characters
+                          "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbpr",
+                          List.of(1L))))
           .when()
           .post("/signup")
           .then()
           .statusCode(400)
           .body("$", aMapWithSize(1))
-          .body("password", equalTo("size must be between 14 and 20"));
+          .body("password", equalTo("size must be between 14 and 64"));
     }
 
-    @Test
-    void signup_whenPasswordIsRightLengthButDoesNotContainUppercaseLetter_thenReturn400AndBody()
-        throws JsonProcessingException {
-      String csrfToken = UserControllerTest.this.getCsrfToken();
+    //    @Test
+    //    void
+    // signup_whenPasswordIsRightLengthButDoesNotContainUppercaseLetter_thenReturn400AndBody()
+    //        throws JsonProcessingException {
+    //      String csrfToken = UserControllerTest.this.getCsrfToken();
+    //
+    //      given()
+    //          .cookie("XSRF-TOKEN", csrfToken)
+    //          .header("X-XSRF-TOKEN", csrfToken)
+    //          .contentType(ContentType.JSON)
+    //          .body(
+    //              new ObjectMapper()
+    //                  .writeValueAsString(
+    //                      new UserRequestDTO("jurgis@inbox.lt", "oif3r2t^x^k%n9", List.of(1L))))
+    //          .when()
+    //          .post("/signup")
+    //          .then()
+    //          .statusCode(400)
+    //          .body("$", aMapWithSize(1))
+    //          .body(
+    //              "password",
+    //              equalTo(
+    //                  "Must contain at least one uppercase and lowercase letter, number and any of
+    // these symbols: !@#$%^&*"));
+    //    }
 
-      given()
-          .cookie("XSRF-TOKEN", csrfToken)
-          .header("X-XSRF-TOKEN", csrfToken)
-          .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "oif3r2t^x^k%n9",
-                  List.of(1L))))
-          .when()
-          .post("/signup")
-          .then()
-          .statusCode(400)
-          .body("$", aMapWithSize(1))
-          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"));
-    }
+    //    @Test
+    //    void
+    // signup_whenPasswordIsRightLengthButDoesNotContainLowercaseLetter_thenReturn400AndBody()
+    //        throws JsonProcessingException {
+    //      String csrfToken = UserControllerTest.this.getCsrfToken();
+    //
+    //      given()
+    //          .cookie("XSRF-TOKEN", csrfToken)
+    //          .header("X-XSRF-TOKEN", csrfToken)
+    //          .contentType(ContentType.JSON)
+    //          .body(
+    //              new ObjectMapper()
+    //                  .writeValueAsString(
+    //                      new UserRequestDTO("jurgis@inbox.lt", "$EES#!CZ28L#$2", List.of(1L))))
+    //          .when()
+    //          .post("/signup")
+    //          .then()
+    //          .statusCode(400)
+    //          .body("$", aMapWithSize(1))
+    //          .body(
+    //              "password",
+    //              equalTo(
+    //                  "Must contain at least one uppercase and lowercase letter, number and any of
+    // these symbols: !@#$%^&*"));
+    //    }
 
-    @Test
-    void signup_whenPasswordIsRightLengthButDoesNotContainLowercaseLetter_thenReturn400AndBody()
-        throws JsonProcessingException {
-      String csrfToken = UserControllerTest.this.getCsrfToken();
+    //    @Test
+    //    void signup_whenPasswordIsRightLengthButDoesNotContainNumber_thenReturn400AndBody()
+    //        throws JsonProcessingException {
+    //      String csrfToken = UserControllerTest.this.getCsrfToken();
+    //
+    //      given()
+    //          .cookie("XSRF-TOKEN", csrfToken)
+    //          .header("X-XSRF-TOKEN", csrfToken)
+    //          .contentType(ContentType.JSON)
+    //          .body(
+    //              new ObjectMapper()
+    //                  .writeValueAsString(
+    //                      new UserRequestDTO("jurgis@inbox.lt", "QFUWmF$YsrBS#h", List.of(1L))))
+    //          .when()
+    //          .post("/signup")
+    //          .then()
+    //          .statusCode(400)
+    //          .body("$", aMapWithSize(1))
+    //          .body(
+    //              "password",
+    //              equalTo(
+    //                  "Must contain at least one uppercase and lowercase letter, number and any of
+    // these symbols: !@#$%^&*"));
+    //    }
 
-      given()
-          .cookie("XSRF-TOKEN", csrfToken)
-          .header("X-XSRF-TOKEN", csrfToken)
-          .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "$EES#!CZ28L#$2",
-                  List.of(1L))))
-          .when()
-          .post("/signup")
-          .then()
-          .statusCode(400)
-          .body("$", aMapWithSize(1))
-          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"));
-    }
-
-    @Test
-    void signup_whenPasswordIsRightLengthButDoesNotContainNumber_thenReturn400AndBody()
-        throws JsonProcessingException {
-      String csrfToken = UserControllerTest.this.getCsrfToken();
-
-      given()
-          .cookie("XSRF-TOKEN", csrfToken)
-          .header("X-XSRF-TOKEN", csrfToken)
-          .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "QFUWmF$YsrBS#h",
-                  List.of(1L))))
-          .when()
-          .post("/signup")
-          .then()
-          .statusCode(400)
-          .body("$", aMapWithSize(1))
-          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"));
-    }
-
-    @Test
-    void signup_whenPasswordIsRightLengthButDoesNotContainSpecialSymbol_thenReturn400AndBody()
-        throws JsonProcessingException {
-      String csrfToken = UserControllerTest.this.getCsrfToken();
-
-      given()
-          .cookie("XSRF-TOKEN", csrfToken)
-          .header("X-XSRF-TOKEN", csrfToken)
-          .contentType(ContentType.JSON)
-          .body(new ObjectMapper()
-              .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", "TSK3bgRXkduc66",
-                  List.of(1L))))
-          .when()
-          .post("/signup")
-          .then()
-          .statusCode(400)
-          .body("$", aMapWithSize(1))
-          .body("password", equalTo("Must contain at least one uppercase and lowercase letter, number and any of these symbols: !@#$%^&*"));
-    }
+    //    @Test
+    //    void signup_whenPasswordIsRightLengthButDoesNotContainSpecialSymbol_thenReturn400AndBody()
+    //        throws JsonProcessingException {
+    //      String csrfToken = UserControllerTest.this.getCsrfToken();
+    //
+    //      given()
+    //          .cookie("XSRF-TOKEN", csrfToken)
+    //          .header("X-XSRF-TOKEN", csrfToken)
+    //          .contentType(ContentType.JSON)
+    //          .body(
+    //              new ObjectMapper()
+    //                  .writeValueAsString(
+    //                      new UserRequestDTO("jurgis@inbox.lt", "TSK3bgRXkduc66", List.of(1L))))
+    //          .when()
+    //          .post("/signup")
+    //          .then()
+    //          .statusCode(400)
+    //          .body("$", aMapWithSize(1))
+    //          .body(
+    //              "password",
+    //              equalTo(
+    //                  "Must contain at least one uppercase and lowercase letter, number and any of
+    // these symbols: !@#$%^&*"));
+    //    }
 
     // TODO: should I test combinations? That is, for example, email and password is
     // null.
   }
 
   private String getCsrfToken() {
-    Response csrfResponse = given()
-        .when()
-        .get("/open")
-        .then()
-        .extract()
-        .response();
+    Response csrfResponse = given().when().get("/open").then().extract().response();
 
     return csrfResponse.cookie("XSRF-TOKEN");
   }
 
   private int findUserIdByEmail(String email) {
-    return this.userRepository.findByEmail(email)
-        .orElseThrow()
-        .getId()
-        .intValue();
+    return this.userRepository.findByEmail(email).orElseThrow().getId().intValue();
   }
 }

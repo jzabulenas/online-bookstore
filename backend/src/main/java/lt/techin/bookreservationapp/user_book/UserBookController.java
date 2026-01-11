@@ -28,7 +28,8 @@ class UserBookController {
 
   UserBookController(
       UserRepository userRepository,
-      UserBookService bookService, GenerateBooksRateLimitService generateBooksRateLimitService) {
+      UserBookService bookService,
+      GenerateBooksRateLimitService generateBooksRateLimitService) {
     this.userRepository = userRepository;
     this.userBookService = bookService;
     this.generateBooksRateLimitService = generateBooksRateLimitService;
@@ -36,7 +37,8 @@ class UserBookController {
 
   @PostMapping("/generate-books")
   ResponseEntity<MessageResponseDTO> generateBooks(
-      @RequestBody @Valid MessageRequestDTO messageRequestDTO, Authentication authentication,
+      @RequestBody @Valid MessageRequestDTO messageRequestDTO,
+      Authentication authentication,
       HttpServletRequest request) {
     User user = (User) authentication.getPrincipal();
 
@@ -49,18 +51,18 @@ class UserBookController {
   ResponseEntity<UserBookResponseDTO> saveUserBook(
       @Valid @RequestBody UserBookRequestDTO userBookRequestDTO, Principal principal) {
 
-    UserBookResponseDTO userBookResponseDTO = this.userBookService
-        .saveUserBook(userBookRequestDTO, principal);
+    UserBookResponseDTO userBookResponseDTO =
+        this.userBookService.saveUserBook(userBookRequestDTO, principal);
 
     String email = principal.getName();
 
-    User user = this.userRepository.findByEmail(email)
-        .orElseThrow();
+    User user = this.userRepository.findByEmail(email).orElseThrow();
 
-    return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{id}/users/{userId}")
-        .buildAndExpand(userBookResponseDTO.bookId(), user.getId())
-        .toUri())
+    return ResponseEntity.created(
+            ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}/users/{userId}")
+                .buildAndExpand(userBookResponseDTO.bookId(), user.getId())
+                .toUri())
         .body(userBookResponseDTO);
   }
 

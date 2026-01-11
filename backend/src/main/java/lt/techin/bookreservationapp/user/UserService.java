@@ -2,6 +2,8 @@ package lt.techin.bookreservationapp.user;
 
 import java.util.List;
 
+import org.springframework.security.authentication.password.CompromisedPasswordChecker;
+import org.springframework.security.authentication.password.CompromisedPasswordException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,20 +19,29 @@ public class UserService {
   private final RoleRepository roleRepository;
   private final PasswordEncoder passwordEncoder;
   private final EmailService emailService;
+  private final CompromisedPasswordChecker compromisedPasswordChecker;
 
   UserService(
       UserRepository userRepository,
       RoleRepository roleRepository,
-      PasswordEncoder passwordEncoder, EmailService emailService) {
+      PasswordEncoder passwordEncoder,
+      EmailService emailService,
+      CompromisedPasswordChecker compromisedPasswordChecker) {
     this.userRepository = userRepository;
     this.roleRepository = roleRepository;
     this.passwordEncoder = passwordEncoder;
     this.emailService = emailService;
+    this.compromisedPasswordChecker = compromisedPasswordChecker;
   }
 
   UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
     if (this.userRepository.existsByEmail(userRequestDTO.email())) {
       throw new EmailAlreadyExistsException();
+    }
+
+    if (this.compromisedPasswordChecker.check(userRequestDTO.password()).isCompromised()) {
+      throw new CompromisedPasswordException(
+          "The provided password is compromised and cannot be used. Use something more unique");
     }
 
     List<Role> toRoles = RoleMapper.toEntities(userRequestDTO.roles(), this.roleRepository);
@@ -53,9 +64,8 @@ public class UserService {
   }
 
   /**
-   * Retrieves the user based on the unique verification code. This method is used
-   * to find the user based on code that was delivered to an email address, for
-   * verification.
+   * Retrieves the user based on the unique verification code. This method is used to find the user
+   * based on code that was delivered to an email address, for verification.
    *
    * @param code the verification code that uniquely identifies the user
    * @return User found based on that code
@@ -65,7 +75,8 @@ public class UserService {
   }
 
   public User findUserByEmail(String email) {
-    return this.userRepository.findByEmail(email)
+    return this.userRepository
+        .findByEmail(email)
         .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
   }
 

@@ -22,8 +22,7 @@ public class Role implements GrantedAuthority {
     this.name = name;
   }
 
-  Role() {
-  }
+  Role() {}
 
   Long getId() {
     return this.id;

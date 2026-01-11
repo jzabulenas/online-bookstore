@@ -33,7 +33,8 @@ public class User implements UserDetails {
   private String verificationCode;
 
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "users_roles",
+  @JoinTable(
+      name = "users_roles",
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "role_id"))
   private List<Role> roles;
@@ -41,8 +42,13 @@ public class User implements UserDetails {
   @OneToMany(mappedBy = "user")
   private List<UserBook> books;
 
-  public User(String email, String password, boolean isEnabled, String verificationCode,
-      List<Role> roles, List<UserBook> books) {
+  public User(
+      String email,
+      String password,
+      boolean isEnabled,
+      String verificationCode,
+      List<Role> roles,
+      List<UserBook> books) {
     this.email = email;
     this.password = password;
     this.isEnabled = isEnabled;
@@ -51,8 +57,7 @@ public class User implements UserDetails {
     this.books = books;
   }
 
-  User() {
-  }
+  User() {}
 
   public Long getId() {
     return this.id;
@@ -117,5 +122,4 @@ public class User implements UserDetails {
   void setVerificationCode(String verificationCode) {
     this.verificationCode = verificationCode;
   }
-
 }
