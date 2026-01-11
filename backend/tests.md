@@ -38,6 +38,7 @@
 - `signup`
   - Happy path
     - `signup_whenUserSignsUp_thenReturn201AndBody`
+    - `signup_whenUserSignsUpWithAsBigPasswordAsPossible_thenReturn201AndBody`
   - Unhappy path
     - Email
       - `signup_whenEmailIsNull_thenReturn400AndBody`
@@ -50,3 +51,4 @@
       - `signup_whenPasswordIsNull_shouldReturn400AndBody`
       - `signup_whenPasswordIsTooShort_shouldReturn400AndBody`
       - `signup_whenPasswordIsTooLong_shouldReturn400AndBody`
+      - `signup_whenPasswordIsFoundToBeCompromised_thenReturn400AndBody`
