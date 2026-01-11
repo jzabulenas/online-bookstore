@@ -50,7 +50,3 @@
       - `signup_whenPasswordIsNull_shouldReturn400AndBody`
       - `signup_whenPasswordIsTooShort_shouldReturn400AndBody`
       - `signup_whenPasswordIsTooLong_shouldReturn400AndBody`
-      - `signup_whenPasswordIsRightLengthButDoesNotContainUppercaseLetter_thenReturn400AndBody`
-      - `signup_whenPasswordIsRightLengthButDoesNotContainLowercaseLetter_thenReturn400AndBody`
-      - `signup_whenPasswordIsRightLengthButDoesNotContainNumber_thenReturn400AndBody`
-      - `signup_whenPasswordIsRightLengthButDoesNotContainSpecialSymbol_thenReturn400AndBody`
