@@ -33,9 +33,24 @@ export default function Signup({ setIsSignedUp }) {
 
         const body = await response.json();
 
-        if (response.status === 400 && body.email === "Already exists") {
-          setError("root.serverError", {
+        if (
+          response.status === 400 &&
+          body.email === "Such email address is already in use"
+        ) {
+          setError("root.serverErrorEmail", {
             type: response.status,
+            message: body.email,
+          });
+        }
+
+        if (
+          response.status === 400 &&
+          body.detail ===
+            "The provided password is compromised and cannot be used. Use something more unique"
+        ) {
+          setError("root.serverErrorPassword", {
+            type: response.status,
+            message: body.detail,
           });
         }
 
@@ -91,8 +106,10 @@ export default function Signup({ setIsSignedUp }) {
               Email must be at most 255 characters long.
             </p>
           )}
-          {errors.root?.serverError?.type === 400 && (
-            <p className="text-danger">Such email address is already in use.</p>
+          {errors.root?.serverErrorEmail?.type === 400 && (
+            <p className="text-danger">
+              {errors.root?.serverErrorEmail?.message}
+            </p>
           )}
 
           <div className="mb-3">
@@ -109,13 +126,8 @@ export default function Signup({ setIsSignedUp }) {
               className="form-control"
               {...register("password", {
                 required: true,
-                minLength: 8,
-                maxLength: 20,
-                // Without RegExp it won't work, as React expects RegExp, or using
-                // that weird / syntax
-                pattern: new RegExp(
-                  "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).*$"
-                ),
+                minLength: 14,
+                maxLength: 64,
               })}
             />
           </div>
@@ -124,18 +136,17 @@ export default function Signup({ setIsSignedUp }) {
           )}
           {errors.password && errors.password.type === "minLength" && (
             <p className="text-danger">
-              Password must be at least 8 characters long.
+              Password must be at least 14 characters long.
             </p>
           )}
           {errors.password && errors.password.type === "maxLength" && (
             <p className="text-danger">
-              Password must be at most 20 characters long.
+              Password must be at most 64 characters long.
             </p>
           )}
-          {errors.password && errors.password.type === "pattern" && (
+          {errors.root?.serverErrorPassword?.type === 400 && (
             <p className="text-danger">
-              Password must contain at least one uppercase and lowercase letter,
-              number and any of these symbols: !@#$%^&*
+              {errors.root?.serverErrorPassword?.message}
             </p>
           )}
 
