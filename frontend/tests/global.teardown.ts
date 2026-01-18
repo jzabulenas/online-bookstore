@@ -29,6 +29,13 @@ teardown("delete database, wipe mailpit", async ({ page }) => {
   // Remove existing emails
   await page.goto("http://localhost:8025/");
   await page.getByRole("button").nth(1).tap();
-  await page.getByRole("button", { name: " Delete all" }).tap();
-  await page.getByRole("button", { name: "Delete", exact: true }).tap();
+
+  const deleteAllButton = page.getByRole("button", { name: " Delete all" });
+
+  // Check if deletion button can be clicked. This is so it would only delete if there is something
+  // to delete
+  if (await deleteAllButton.isEnabled()) {
+    await page.getByRole("button", { name: " Delete all" }).tap();
+    await page.getByRole("button", { name: "Delete", exact: true }).tap();
+  }
 });
