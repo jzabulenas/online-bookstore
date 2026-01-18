@@ -101,6 +101,42 @@ class UserControllerTest {
                       + UserControllerTest.this.findUserIdByEmail(email)));
     }
 
+    @Test
+    void signup_whenUserSignsUpWithAsBigPasswordAsPossible_thenReturn201AndBody()
+        throws JsonProcessingException {
+      String csrfToken = UserControllerTest.this.getCsrfToken();
+      String email = "jurgis@inbox.lt";
+
+      given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(
+                      new UserRequestDTO(
+                          email,
+                          // This is 64 characters
+                          "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+                          List.of(1L))))
+          .when()
+          .post("/signup")
+          .then()
+          .statusCode(201)
+          .body("$", aMapWithSize(3))
+          .body("id", equalTo(UserControllerTest.this.findUserIdByEmail(email)))
+          .body("email", equalTo(email))
+          .body("roles", hasSize(1))
+          .body("roles[0]", equalTo(1))
+          .header(
+              "Location",
+              equalTo(
+                  "http://localhost:"
+                      + UserControllerTest.this.port
+                      + "/signup/"
+                      + UserControllerTest.this.findUserIdByEmail(email)));
+    }
+
     // Unhappy path
     //
     //
@@ -306,6 +342,30 @@ class UserControllerTest {
           .statusCode(400)
           .body("$", aMapWithSize(1))
           .body("password", equalTo("size must be between 14 and 64"));
+    }
+
+    @Test
+    void signup_whenPasswordIsFoundToBeCompromised_thenReturn400AndBody()
+        throws JsonProcessingException {
+      String csrfToken = UserControllerTest.this.getCsrfToken();
+
+      given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(
+                      new UserRequestDTO("jurgis@inbox.lt", "12345678912345", List.of(1L))))
+          .when()
+          .post("/signup")
+          .then()
+          .statusCode(400)
+          .body("$", aMapWithSize(5))
+          .body(
+              "detail",
+              equalTo(
+                  "The provided password is compromised and cannot be used. Use something more unique"));
     }
 
     //    @Test
