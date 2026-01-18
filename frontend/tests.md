@@ -36,7 +36,7 @@
 
 ---
 
-- sign up
+- sign-up
   - should sign up
   - Email
     - should display an error message when email is empty
