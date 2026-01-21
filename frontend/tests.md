@@ -38,6 +38,7 @@
 
 - sign-up
   - should sign up
+  - should sign up with longest password possible
   - Email
     - should display an error message when email is empty
     - should display an error message when email is too short
@@ -92,6 +93,7 @@
 
 - sign-up
   - should sign up
+  - should sign up with longest password possible
   - Email
     - should display an error message when email is empty
     - should display an error message when email is too short
