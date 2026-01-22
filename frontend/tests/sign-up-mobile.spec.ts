@@ -119,9 +119,7 @@ test("should sign up with longest password possible", async ({ page }) => {
 //
 //
 
-test("should display an error message when email is empty", async ({
-  page,
-}) => {
+test("should display an error message when email is null", async ({ page }) => {
   await page.goto("http://localhost:5173/");
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
@@ -236,7 +234,7 @@ test("should display an error message when email already exists", async ({
 //
 //
 
-test("should display an error message when password is empty", async ({
+test("should display an error message when password is null", async ({
   page,
 }) => {
   const email = `antanas@inbox.lt`;
@@ -475,7 +473,7 @@ test("should display an error message when password is compromised", async ({
 //
 //
 
-test("should display an error message when confirm password is empty", async ({
+test("should display an error message when confirm password is null", async ({
   page,
 }) => {
   const email = `antanas@inbox.lt`;
