@@ -162,7 +162,7 @@ test("should not generate particular books if they were liked before", async ({
   // Generate 3 books again,
   // Need to wait for response, because otherwise the test uses old generated values
   const responsePromise = page.waitForResponse(
-    "http://localhost:8080/generate-books"
+    "http://localhost:8080/generate-books",
   );
   await page.getByRole("button", { name: "Submit" }).tap();
   await responsePromise;
@@ -193,7 +193,7 @@ test("should not generate particular books if they were liked before", async ({
   await page.getByRole("button", { name: "" }).tap();
 });
 
-test("should display an error when book field input is empty", async ({
+test("should display an error when book field input is null", async ({
   page,
 }) => {
   await page.goto("http://localhost:5173/");
@@ -231,7 +231,7 @@ test("should display an error when book field input is too short", async ({
 
   await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
-    page.getByText("Must be at least 5 characters long.")
+    page.getByText("Must be at least 5 characters long."),
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
@@ -252,13 +252,13 @@ test("should display an error when book field input is too long", async ({
   await page
     .getByRole("textbox", { name: "Input your book:" })
     .fill(
-      "jurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgis"
+      "jurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgisjurgis",
     ); // 102 characters
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
-    page.getByText("Must be at most 100 characters long.")
+    page.getByText("Must be at most 100 characters long."),
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
@@ -319,43 +319,43 @@ test("should display error message when books are generated more than 6 times", 
 
   // I am awaiting so the "Submit" clicks don't happen too quickly
   const responsePromise1 = page.waitForResponse(
-    "http://localhost:8080/generate-books"
+    "http://localhost:8080/generate-books",
   );
   await page.getByRole("button", { name: "Submit" }).tap();
   await responsePromise1;
 
   const responsePromise2 = page.waitForResponse(
-    "http://localhost:8080/generate-books"
+    "http://localhost:8080/generate-books",
   );
   await page.getByRole("button", { name: "Submit" }).tap();
   await responsePromise2;
 
   const responsePromise3 = page.waitForResponse(
-    "http://localhost:8080/generate-books"
+    "http://localhost:8080/generate-books",
   );
   await page.getByRole("button", { name: "Submit" }).tap();
   await responsePromise3;
 
   const responsePromise4 = page.waitForResponse(
-    "http://localhost:8080/generate-books"
+    "http://localhost:8080/generate-books",
   );
   await page.getByRole("button", { name: "Submit" }).tap();
   await responsePromise4;
 
   const responsePromise5 = page.waitForResponse(
-    "http://localhost:8080/generate-books"
+    "http://localhost:8080/generate-books",
   );
   await page.getByRole("button", { name: "Submit" }).tap();
   await responsePromise5;
 
   const responsePromise6 = page.waitForResponse(
-    "http://localhost:8080/generate-books"
+    "http://localhost:8080/generate-books",
   );
   await page.getByRole("button", { name: "Submit" }).tap();
   await responsePromise6;
 
   const responsePromise7 = page.waitForResponse(
-    "http://localhost:8080/generate-books"
+    "http://localhost:8080/generate-books",
   );
   await page.getByRole("button", { name: "Submit" }).tap();
   await responsePromise7;

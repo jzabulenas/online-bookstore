@@ -21,10 +21,10 @@ test("should sign up", async ({ page }) => {
 
   await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
-    page.getByText("Check your email to verify the account.")
+    page.getByText("Check your email to verify the account."),
   ).toBeVisible();
   await expect(page.getByRole("alert")).toContainText(
-    "Check your email to verify the account."
+    "Check your email to verify the account.",
   );
   await expect(page).toHaveScreenshot();
 
@@ -42,10 +42,60 @@ test("should sign up", async ({ page }) => {
   // Assert final page
   await expect(page1).toHaveURL("http://localhost:5173/verification-success");
   await expect(
-    page1.getByText("Account activated! Feel free to log in.")
+    page1.getByText("Account activated! Feel free to log in."),
   ).toBeVisible();
   await expect(page1.getByRole("paragraph")).toContainText(
-    "Account activated! Feel free to log in."
+    "Account activated! Feel free to log in.",
+  );
+  await expect(page1).toHaveScreenshot();
+});
+
+test("should sign up with longest password possible", async ({ page }) => {
+  const email = `antanas+${uuidv4()}@inbox.lt`;
+
+  // Fill form
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Sign up" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:", exact: true }).click();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    // This is 64 characters
+    .fill("metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp");
+  await page.getByRole("textbox", { name: "Confirm password:" }).click();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page).toHaveURL("http://localhost:5173/");
+  await expect(
+    page.getByText("Check your email to verify the account."),
+  ).toBeVisible();
+  await expect(page.getByRole("alert")).toContainText(
+    "Check your email to verify the account.",
+  );
+  await expect(page).toHaveScreenshot();
+
+  // Verify email
+  await page.goto("http://localhost:8025");
+  await page.getByRole("link", { name: email }).click();
+  const page1Promise = page.waitForEvent("popup");
+  await page
+    .locator("#preview-html")
+    .contentFrame()
+    .getByRole("link", { name: "http://localhost:8080/verify?" })
+    .click();
+  const page1 = await page1Promise;
+
+  // Assert final page
+  await expect(page1).toHaveURL("http://localhost:5173/verification-success");
+  await expect(
+    page1.getByText("Account activated! Feel free to log in."),
+  ).toBeVisible();
+  await expect(page1.getByRole("paragraph")).toContainText(
+    "Account activated! Feel free to log in.",
   );
   await expect(page1).toHaveScreenshot();
 });
@@ -61,9 +111,7 @@ test("should sign up", async ({ page }) => {
 //
 //
 
-test("should display an error message when email is empty", async ({
-  page,
-}) => {
+test("should display an error message when email is null", async ({ page }) => {
   await page.goto("http://localhost:5173/");
   await page.getByRole("link", { name: "Sign up" }).click();
   await page.getByRole("textbox", { name: "Password:", exact: true }).click();
@@ -100,7 +148,7 @@ test("should display an error message when email is too short", async ({
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
   await expect(
-    page.getByText("Email must be at least 7 characters long.")
+    page.getByText("Email must be at least 7 characters long."),
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
@@ -115,7 +163,7 @@ test("should display an error message when email is too long", async ({
     .getByRole("textbox", { name: "Email:" })
     // This is 256 characters
     .fill(
-      "dfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfs@gmail.com"
+      "dfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfsferqerdfs@gmail.com",
     );
   await page.getByRole("textbox", { name: "Password:", exact: true }).click();
   await page
@@ -129,7 +177,7 @@ test("should display an error message when email is too long", async ({
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
   await expect(
-    page.getByText("Email must be at most 255 characters long.")
+    page.getByText("Email must be at most 255 characters long."),
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
@@ -154,7 +202,7 @@ test("should display an error message when email already exists", async ({
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
   await expect(
-    page.getByText("Such email address is already in use")
+    page.getByText("Such email address is already in use"),
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
@@ -170,7 +218,7 @@ test("should display an error message when email already exists", async ({
 //
 //
 
-test("should display an error message when password is empty", async ({
+test("should display an error message when password is null", async ({
   page,
 }) => {
   const email = `antanas@inbox.lt`;
@@ -209,7 +257,7 @@ test("should display an error message when password is too short", async ({
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
   await expect(
-    page.getByText("Password must be at least 14 characters long.")
+    page.getByText("Password must be at least 14 characters long."),
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
@@ -236,7 +284,35 @@ test("should display an error message when password is too long", async ({
 
   await expect(page).toHaveURL("http://localhost:5173/signup");
   await expect(
-    page.getByText("Password must be at most 64 characters long.")
+    page.getByText("Password must be at most 64 characters long."),
+  ).toBeVisible();
+  await expect(page).toHaveScreenshot();
+});
+
+test("should display an error message when password is compromised", async ({
+  page,
+}) => {
+  const email = `antanas@inbox.lt`;
+
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Sign up" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).click();
+  await page.getByRole("textbox", { name: "Email:" }).fill(email);
+  await page.getByRole("textbox", { name: "Password:", exact: true }).click();
+  await page
+    .getByRole("textbox", { name: "Password:", exact: true })
+    .fill("12345678912345");
+  await page.getByRole("textbox", { name: "Confirm password:" }).click();
+  await page
+    .getByRole("textbox", { name: "Confirm password:" })
+    .fill("12345678912345");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page).toHaveURL("http://localhost:5173/signup");
+  await expect(
+    page.getByText(
+      "The provided password is compromised and cannot be used. Use something more unique",
+    ),
   ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });
@@ -364,7 +440,7 @@ test("should display an error message when password is too long", async ({
 //
 //
 
-test("should display an error message when confirm password is empty", async ({
+test("should display an error message when confirm password is null", async ({
   page,
 }) => {
   const email = `antanas@inbox.lt`;

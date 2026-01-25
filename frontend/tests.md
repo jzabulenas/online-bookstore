@@ -36,8 +36,9 @@
 
 ---
 
-- sign up
+- sign-up
   - should sign up
+  - should sign up with longest password possible
   - Email
     - should display an error message when email is empty
     - should display an error message when email is too short
@@ -47,6 +48,7 @@
     - should display an error message when password is empty
     - should display an error message when password is too short
     - should display an error message when password is too long
+    - should display an error message when password is compromised
   - Confirm password
     - should display an error message when confirm password is empty
     - should display an error message when confirm password does not match password
@@ -91,6 +93,7 @@
 
 - sign-up
   - should sign up
+  - should sign up with longest password possible
   - Email
     - should display an error message when email is empty
     - should display an error message when email is too short
@@ -100,6 +103,7 @@
     - should display an error message when password is empty
     - should display an error message when password is too short
     - should display an error message when password is too long
+    - should display an error message when password is compromised
   - Confirm password
     - should display an error message when confirm password is empty
     - should display an error message when confirm password does not match password
