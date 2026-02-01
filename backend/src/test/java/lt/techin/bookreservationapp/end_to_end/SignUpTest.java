@@ -41,7 +41,7 @@ class SignUpTest {
         .then()
         .statusCode(201)
         .body("$", aMapWithSize(3))
-        .body("id", is(notNullValue()))
+        .body("id", greaterThan(0))
         .body("email", equalTo(email))
         .body("roles", hasSize(1))
         .body("roles[0]", equalTo(1))
