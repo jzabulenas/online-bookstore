@@ -278,6 +278,93 @@ class SignUpTest {
         .body("email", equalTo("must be a well-formed email address"));
   }
 
+  @Test
+  void whenEmailAlreadyExists_thenReturn400AndBody() {
+    String csrfToken = this.getCsrfToken();
+    UUID uuid = UUID.randomUUID();
+    String email = "antanas" + uuid + "@gmail.com";
+
+    Response response =
+        given()
+            .cookie("XSRF-TOKEN", csrfToken)
+            .header("X-XSRF-TOKEN", csrfToken)
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {
+                  "email": "%s",
+                  "password": "r9$CbHEaGXLUsP",
+                  "roles": [
+                     1
+                  ]
+                }
+                """
+                    .formatted(email))
+            .when()
+            .post("/signup")
+            .then()
+            .statusCode(201)
+            .body("$", aMapWithSize(3))
+            .body("email", equalTo(email))
+            .body("roles", hasSize(1))
+            .body("roles[0]", equalTo(1))
+            .extract()
+            .response();
+
+    int id = response.path("id");
+    assertThat(id, greaterThan(0));
+    assertThat(response.getHeader("Location"), equalTo("http://localhost:8080/signup/" + id));
+
+    // Extract verification link from message
+    String verificationSnippet =
+        given()
+            .when()
+            .get("http://localhost:8025/api/v1/messages")
+            .then()
+            .statusCode(200)
+            .extract()
+            .path(
+                "messages.find { msg -> msg.To.any { it.Address == '%s' } }.Snippet"
+                    .formatted(email));
+
+    Pattern pattern = Pattern.compile("(http://localhost:8080/verify\\?code=[^\\s]+)");
+    Matcher matcher = pattern.matcher(verificationSnippet);
+
+    assertThat(matcher.find(), equalTo(true));
+    String verificationLink = matcher.group(1);
+
+    // Send verification request to extracted link
+    given()
+        .when()
+        .get(verificationLink)
+        .then()
+        .statusCode(200)
+        .body(containsString("Book recommendation app"));
+
+    // Do not allow second user to register with same email
+    given()
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "email": "%s",
+              "password": "r9$CbHEaGXLUsP",
+              "roles": [
+                 1
+              ]
+            }
+            """
+                .formatted(email))
+        .when()
+        .post("/signup")
+        .then()
+        .statusCode(400)
+        .body("$", aMapWithSize(1))
+        .body("email", equalTo("Such email address is already in use"));
+  }
+
   private String getCsrfToken() {
     Response csrfResponse =
         given().when().get("http://localhost:8080/open").then().extract().response();
