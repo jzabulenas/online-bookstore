@@ -170,6 +170,33 @@ class SignUpTest {
         .body("email", equalTo("must not be null"));
   }
 
+  @Test
+  void whenEmailIsTooShort_thenReturn400AndBody() {
+    String csrfToken = this.getCsrfToken();
+
+    // Send sign up request
+    given()
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "email": "f@b.c",
+              "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+              "roles": [
+                 1
+              ]
+            }
+            """)
+        .when()
+        .post("/signup")
+        .then()
+        .statusCode(400)
+        .body("$", aMapWithSize(1))
+        .body("email", equalTo("Email must be at least 7 characters long"));
+  }
+
   private String getCsrfToken() {
     Response csrfResponse =
         given().when().get("http://localhost:8080/open").then().extract().response();
