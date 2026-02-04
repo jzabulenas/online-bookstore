@@ -143,6 +143,33 @@ class SignUpTest {
         .body(containsString("Book recommendation app"));
   }
 
+  @Test
+  void whenEmailIsNull_thenReturn400AndBody() {
+    String csrfToken = this.getCsrfToken();
+
+    // Send sign up request
+    given()
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "email": null,
+              "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+              "roles": [
+                 1
+              ]
+            }
+            """)
+        .when()
+        .post("/signup")
+        .then()
+        .statusCode(400)
+        .body("$", aMapWithSize(1))
+        .body("email", equalTo("must not be null"));
+  }
+
   private String getCsrfToken() {
     Response csrfResponse =
         given().when().get("http://localhost:8080/open").then().extract().response();
