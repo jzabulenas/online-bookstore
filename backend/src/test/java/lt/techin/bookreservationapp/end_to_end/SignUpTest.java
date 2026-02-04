@@ -251,6 +251,33 @@ class SignUpTest {
         .body("email", equalTo("must be a well-formed email address"));
   }
 
+  @Test
+  void whenEmailLocalPartAndDomainPartIsTooLong_thenReturn400AndBody() {
+    String csrfToken = this.getCsrfToken();
+
+    // Send sign up request
+    given()
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrrsdfsdfse@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegwasdasde.com",
+              "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+              "roles": [
+                 1
+              ]
+            }
+            """)
+        .when()
+        .post("/signup")
+        .then()
+        .statusCode(400)
+        .body("$", aMapWithSize(1))
+        .body("email", equalTo("must be a well-formed email address"));
+  }
+
   private String getCsrfToken() {
     Response csrfResponse =
         given().when().get("http://localhost:8080/open").then().extract().response();
