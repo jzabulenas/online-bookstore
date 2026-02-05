@@ -143,6 +143,12 @@ class SignUpTest {
         .body(containsString("Book recommendation app"));
   }
 
+  // Email
+  //
+  //
+  //
+  //
+
   @Test
   void whenEmailIsNull_thenReturn400AndBody() {
     String csrfToken = this.getCsrfToken();
@@ -363,6 +369,42 @@ class SignUpTest {
         .statusCode(400)
         .body("$", aMapWithSize(1))
         .body("email", equalTo("Such email address is already in use"));
+  }
+
+  // Password
+  //
+  //
+  //
+  //
+
+  @Test
+  void whenPasswordIsNull_shouldReturn400AndBody() {
+    String csrfToken = this.getCsrfToken();
+    UUID uuid = UUID.randomUUID();
+    String email = "antanas" + uuid + "@gmail.com";
+
+    // Send sign up request
+    given()
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "email": "%s",
+              "password": null,
+              "roles": [
+                 1
+              ]
+            }
+            """
+                .formatted(email))
+        .when()
+        .post("/signup")
+        .then()
+        .statusCode(400)
+        .body("$", aMapWithSize(1))
+        .body("password", equalTo("must not be null"));
   }
 
   private String getCsrfToken() {
