@@ -407,6 +407,36 @@ class SignUpTest {
         .body("password", equalTo("must not be null"));
   }
 
+  @Test
+  void whenPasswordIsTooShort_shouldReturn400AndBody() {
+    String csrfToken = this.getCsrfToken();
+    UUID uuid = UUID.randomUUID();
+    String email = "antanas" + uuid + "@gmail.com";
+
+    // Send sign up request
+    given()
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "email": "%s",
+              "password": "grxnqdgnsqbqj",
+              "roles": [
+                 1
+              ]
+            }
+            """
+                .formatted(email))
+        .when()
+        .post("/signup")
+        .then()
+        .statusCode(400)
+        .body("$", aMapWithSize(1))
+        .body("password", equalTo("size must be between 14 and 64"));
+  }
+
   private String getCsrfToken() {
     Response csrfResponse =
         given().when().get("http://localhost:8080/open").then().extract().response();
