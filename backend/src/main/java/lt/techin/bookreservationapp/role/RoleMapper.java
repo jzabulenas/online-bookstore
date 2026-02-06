@@ -1,7 +1,6 @@
 package lt.techin.bookreservationapp.role;
 
 import java.util.List;
-
 import lt.techin.bookreservationapp.user.User;
 
 public class RoleMapper {

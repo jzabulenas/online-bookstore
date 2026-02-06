@@ -9,10 +9,25 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
+import lt.techin.bookreservationapp.book.Book;
+import lt.techin.bookreservationapp.book.BookRepository;
+import lt.techin.bookreservationapp.book.MessageRequestDTO;
+import lt.techin.bookreservationapp.role.Role;
+import lt.techin.bookreservationapp.role.RoleRepository;
+import lt.techin.bookreservationapp.user.User;
+import lt.techin.bookreservationapp.user.UserRepository;
+import lt.techin.bookreservationapp.user_book.UserBook;
+import lt.techin.bookreservationapp.user_book.UserBookRepository;
+import lt.techin.bookreservationapp.user_book.UserBookRequestDTO;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,24 +42,6 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.utility.DockerImageName;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-import lt.techin.bookreservationapp.book.Book;
-import lt.techin.bookreservationapp.book.BookRepository;
-import lt.techin.bookreservationapp.book.MessageRequestDTO;
-import lt.techin.bookreservationapp.role.Role;
-import lt.techin.bookreservationapp.role.RoleRepository;
-import lt.techin.bookreservationapp.user.User;
-import lt.techin.bookreservationapp.user.UserRepository;
-import lt.techin.bookreservationapp.user_book.UserBook;
-import lt.techin.bookreservationapp.user_book.UserBookRepository;
-import lt.techin.bookreservationapp.user_book.UserBookRequestDTO;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
