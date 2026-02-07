@@ -1,7 +1,5 @@
 package lt.techin.bookreservationapp.user;
 
-import jakarta.validation.Valid;
-import lt.techin.bookreservationapp.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
+
+import jakarta.validation.Valid;
+import lt.techin.bookreservationapp.role.Role;
 
 // TOOD: add /api? Also, maybe add /users?
 @RestController

@@ -2,14 +2,20 @@ package lt.techin.bookreservationapp.end_to_end;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.junit.jupiter.api.Test;
+
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 
 class SignUpTest {
 
@@ -27,14 +33,14 @@ class SignUpTest {
             .contentType(ContentType.JSON)
             .body(
                 """
-                {
-                  "email": "%s",
-                  "password": "r9$CbHEaGXLUsP",
-                  "roles": [
-                     1
-                  ]
-                }
-                """
+            {
+              "email": "%s",
+              "password": "r9$CbHEaGXLUsP",
+              "roles": [
+                 1
+              ]
+            }
+            """
                     .formatted(email))
             .when()
             .post("/signup")
@@ -92,14 +98,14 @@ class SignUpTest {
             .contentType(ContentType.JSON)
             .body(
                 """
-                {
-                  "email": "%s",
-                  "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
-                  "roles": [
-                     1
-                  ]
-                }
-                """
+            {
+              "email": "%s",
+              "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+              "roles": [
+                 1
+              ]
+            }
+            """
                     .formatted(email))
             .when()
             .post("/signup")
@@ -211,14 +217,14 @@ class SignUpTest {
         .contentType(ContentType.JSON)
         .body(
             """
-            {
-              "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrv@gmail.com",
-              "password": "r9$CbHEaGXLUsP",
-              "roles": [
-                 1
-              ]
-            }
-            """)
+                {
+                  "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrv@gmail.com",
+                  "password": "r9$CbHEaGXLUsP",
+                  "roles": [
+                     1
+                  ]
+                }
+                """)
         .when()
         .post("/signup")
         .then()
@@ -237,14 +243,14 @@ class SignUpTest {
         .contentType(ContentType.JSON)
         .body(
             """
-            {
-              "email": "jurgis@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegw.com",
-              "password": "r9$CbHEaGXLUsP",
-              "roles": [
-                 1
-              ]
-            }
-            """)
+                {
+                  "email": "jurgis@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegw.com",
+                  "password": "r9$CbHEaGXLUsP",
+                  "roles": [
+                     1
+                  ]
+                }
+                """)
         .when()
         .post("/signup")
         .then()
@@ -263,14 +269,14 @@ class SignUpTest {
         .contentType(ContentType.JSON)
         .body(
             """
-            {
-              "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrrsdfsdfse@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegwasdasde.com",
-              "password": "r9$CbHEaGXLUsP",
-              "roles": [
-                 1
-              ]
-            }
-            """)
+                {
+                  "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrrsdfsdfse@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegwasdasde.com",
+                  "password": "r9$CbHEaGXLUsP",
+                  "roles": [
+                     1
+                  ]
+                }
+                """)
         .when()
         .post("/signup")
         .then()
@@ -293,14 +299,14 @@ class SignUpTest {
             .contentType(ContentType.JSON)
             .body(
                 """
-                {
-                  "email": "%s",
-                  "password": "r9$CbHEaGXLUsP",
-                  "roles": [
-                     1
-                  ]
-                }
-                """
+            {
+              "email": "%s",
+              "password": "r9$CbHEaGXLUsP",
+              "roles": [
+                 1
+              ]
+            }
+            """
                     .formatted(email))
             .when()
             .post("/signup")

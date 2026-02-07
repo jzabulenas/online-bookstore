@@ -1,14 +1,8 @@
 package lt.techin.bookreservationapp.user_book;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import lt.techin.bookreservationapp.book.MessageRequestDTO;
-import lt.techin.bookreservationapp.book.MessageResponseDTO;
-import lt.techin.bookreservationapp.rate_limiting.GenerateBooksRateLimitService;
-import lt.techin.bookreservationapp.user.User;
-import lt.techin.bookreservationapp.user.UserRepository;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import lt.techin.bookreservationapp.book.MessageRequestDTO;
+import lt.techin.bookreservationapp.book.MessageResponseDTO;
+import lt.techin.bookreservationapp.rate_limiting.GenerateBooksRateLimitService;
+import lt.techin.bookreservationapp.user.User;
+import lt.techin.bookreservationapp.user.UserRepository;
 
 @RestController
 class UserBookController {

@@ -1,9 +1,10 @@
 package lt.techin.bookreservationapp.user;
 
+import java.util.List;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.util.List;
 
 public record UserRequestDTO(
     // @Email validation works as such: before the @ symbol there can be at most 64

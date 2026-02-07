@@ -2,6 +2,13 @@ package lt.techin.bookreservationapp.user_book;
 
 import java.security.Principal;
 import java.util.List;
+
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.book.BookRepository;
 import lt.techin.bookreservationapp.book.BookTitleAlreadyExistsException;
@@ -9,11 +16,6 @@ import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.book.MessageResponseDTO;
 import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 class UserBookService {

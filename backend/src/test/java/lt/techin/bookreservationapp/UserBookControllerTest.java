@@ -9,25 +9,10 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import lt.techin.bookreservationapp.book.Book;
-import lt.techin.bookreservationapp.book.BookRepository;
-import lt.techin.bookreservationapp.book.MessageRequestDTO;
-import lt.techin.bookreservationapp.role.Role;
-import lt.techin.bookreservationapp.role.RoleRepository;
-import lt.techin.bookreservationapp.user.User;
-import lt.techin.bookreservationapp.user.UserRepository;
-import lt.techin.bookreservationapp.user_book.UserBook;
-import lt.techin.bookreservationapp.user_book.UserBookRepository;
-import lt.techin.bookreservationapp.user_book.UserBookRequestDTO;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +27,24 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.utility.DockerImageName;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import lt.techin.bookreservationapp.book.Book;
+import lt.techin.bookreservationapp.book.BookRepository;
+import lt.techin.bookreservationapp.book.MessageRequestDTO;
+import lt.techin.bookreservationapp.role.Role;
+import lt.techin.bookreservationapp.role.RoleRepository;
+import lt.techin.bookreservationapp.user.User;
+import lt.techin.bookreservationapp.user.UserRepository;
+import lt.techin.bookreservationapp.user_book.UserBook;
+import lt.techin.bookreservationapp.user_book.UserBookRepository;
+import lt.techin.bookreservationapp.user_book.UserBookRequestDTO;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -170,48 +173,49 @@ class UserBookControllerTest {
     // This is flaky. It was flaky before I disabled the logic in service class, and
     // it certainly is still flaky considering that I disabled the logic in service
     // now
-    //    @Test
-    //    void generateBooks_whenCalledTwiceWithSameInput_thenResultsShouldDiffer()
-    //        throws JsonProcessingException {
-    //      createUser();
-    //      String csrfToken = getCsrfToken();
-    //      Response loginResponse = loginAndGetSession(csrfToken);
+    // @Test
+    // void generateBooks_whenCalledTwiceWithSameInput_thenResultsShouldDiffer()
+    // throws JsonProcessingException {
+    // createUser();
+    // String csrfToken = getCsrfToken();
+    // Response loginResponse = loginAndGetSession(csrfToken);
     //
-    //      // Prepare request setup
-    //      RequestSpecification spec = given()
-    //          .cookie("JSESSIONID", loginResponse.getSessionId())
-    //          .cookie("XSRF-TOKEN", csrfToken)
-    //          .header("X-XSRF-TOKEN", csrfToken)
-    //          .contentType(ContentType.JSON)
-    //          .body(new ObjectMapper()
-    //              .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
+    // // Prepare request setup
+    // RequestSpecification spec = given()
+    // .cookie("JSESSIONID", loginResponse.getSessionId())
+    // .cookie("XSRF-TOKEN", csrfToken)
+    // .header("X-XSRF-TOKEN", csrfToken)
+    // .contentType(ContentType.JSON)
+    // .body(new ObjectMapper()
+    // .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
     //
-    //      // First response
-    //      Response first = spec.when()
-    //          .post("/generate-books")
-    //          .then()
-    //          .statusCode(200)
-    //          .body("$", aMapWithSize(1))
-    //          .body("result", hasSize(3))
-    //          .extract()
-    //          .response();
-    //      List<String> firstResult = first.jsonPath().getList("result");
+    // // First response
+    // Response first = spec.when()
+    // .post("/generate-books")
+    // .then()
+    // .statusCode(200)
+    // .body("$", aMapWithSize(1))
+    // .body("result", hasSize(3))
+    // .extract()
+    // .response();
+    // List<String> firstResult = first.jsonPath().getList("result");
     //
-    //      // Second response
-    //      Response second = spec.when()
-    //          .post("/generate-books")
-    //          .then()
-    //          .statusCode(200)
-    //          .body("$", aMapWithSize(1))
-    //          .body("result", hasSize(3))
-    //          .extract()
-    //          .response();
-    //      List<String> secondResult = second.jsonPath().getList("result");
+    // // Second response
+    // Response second = spec.when()
+    // .post("/generate-books")
+    // .then()
+    // .statusCode(200)
+    // .body("$", aMapWithSize(1))
+    // .body("result", hasSize(3))
+    // .extract()
+    // .response();
+    // List<String> secondResult = second.jsonPath().getList("result");
     //
-    //      // Assertion that results are different
-    //      assertNotEquals(firstResult, secondResult, "Expected different results for repeated
+    // // Assertion that results are different
+    // assertNotEquals(firstResult, secondResult, "Expected different results for
+    // repeated
     // calls");
-    //    }
+    // }
 
     // Unhappy path
     //
