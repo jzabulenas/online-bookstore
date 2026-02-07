@@ -153,7 +153,6 @@ class SignUpTest {
   void whenEmailIsNull_thenReturn400AndBody() {
     String csrfToken = this.getCsrfToken();
 
-    // Send sign up request
     given()
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
@@ -162,7 +161,7 @@ class SignUpTest {
             """
             {
               "email": null,
-              "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+              "password": "r9$CbHEaGXLUsP",
               "roles": [
                  1
               ]
@@ -180,7 +179,6 @@ class SignUpTest {
   void whenEmailIsTooShort_thenReturn400AndBody() {
     String csrfToken = this.getCsrfToken();
 
-    // Send sign up request
     given()
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
@@ -189,7 +187,7 @@ class SignUpTest {
             """
             {
               "email": "f@b.c",
-              "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+              "password": "r9$CbHEaGXLUsP",
               "roles": [
                  1
               ]
@@ -207,7 +205,6 @@ class SignUpTest {
   void whenEmailLocalPartIsTooLong_thenReturn400AndBody() {
     String csrfToken = this.getCsrfToken();
 
-    // Send sign up request
     given()
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
@@ -216,7 +213,7 @@ class SignUpTest {
             """
             {
               "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrv@gmail.com",
-              "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+              "password": "r9$CbHEaGXLUsP",
               "roles": [
                  1
               ]
@@ -234,7 +231,6 @@ class SignUpTest {
   void whenEmailDomainPartIsTooLong_thenReturn400AndBody() {
     String csrfToken = this.getCsrfToken();
 
-    // Send sign up request
     given()
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
@@ -243,7 +239,7 @@ class SignUpTest {
             """
             {
               "email": "jurgis@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegw.com",
-              "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+              "password": "r9$CbHEaGXLUsP",
               "roles": [
                  1
               ]
@@ -261,7 +257,6 @@ class SignUpTest {
   void whenEmailLocalPartAndDomainPartIsTooLong_thenReturn400AndBody() {
     String csrfToken = this.getCsrfToken();
 
-    // Send sign up request
     given()
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
@@ -270,7 +265,7 @@ class SignUpTest {
             """
             {
               "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrrsdfsdfse@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegwasdasde.com",
-              "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+              "password": "r9$CbHEaGXLUsP",
               "roles": [
                  1
               ]
@@ -290,6 +285,7 @@ class SignUpTest {
     UUID uuid = UUID.randomUUID();
     String email = "antanas" + uuid + "@gmail.com";
 
+    // Send sign up request
     Response response =
         given()
             .cookie("XSRF-TOKEN", csrfToken)
@@ -383,7 +379,6 @@ class SignUpTest {
     UUID uuid = UUID.randomUUID();
     String email = "antanas" + uuid + "@gmail.com";
 
-    // Send sign up request
     given()
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
@@ -413,11 +408,11 @@ class SignUpTest {
     UUID uuid = UUID.randomUUID();
     String email = "antanas" + uuid + "@gmail.com";
 
-    // Send sign up request
     given()
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
         .contentType(ContentType.JSON)
+        // The password is 13 characters long
         .body(
             """
             {
@@ -443,7 +438,6 @@ class SignUpTest {
     UUID uuid = UUID.randomUUID();
     String email = "antanas" + uuid + "@gmail.com";
 
-    // Send sign up request
     given()
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
@@ -474,7 +468,6 @@ class SignUpTest {
     UUID uuid = UUID.randomUUID();
     String email = "antanas" + uuid + "@gmail.com";
 
-    // Send sign up request
     given()
         .cookie("XSRF-TOKEN", csrfToken)
         .header("X-XSRF-TOKEN", csrfToken)
