@@ -468,6 +468,39 @@ class SignUpTest {
         .body("password", equalTo("size must be between 14 and 64"));
   }
 
+  @Test
+  void whenPasswordIsFoundToBeCompromised_thenReturn400AndBody() {
+    String csrfToken = this.getCsrfToken();
+    UUID uuid = UUID.randomUUID();
+    String email = "antanas" + uuid + "@gmail.com";
+
+    // Send sign up request
+    given()
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "email": "%s",
+              "password": "12345678912345",
+              "roles": [
+                 1
+              ]
+            }
+            """
+                .formatted(email))
+        .when()
+        .post("/signup")
+        .then()
+        .statusCode(400)
+        .body("$", aMapWithSize(5))
+        .body(
+            "detail",
+            equalTo(
+                "The provided password is compromised and cannot be used. Use something more unique"));
+  }
+
   private String getCsrfToken() {
     Response csrfResponse =
         given().when().get("http://localhost:8080/open").then().extract().response();
