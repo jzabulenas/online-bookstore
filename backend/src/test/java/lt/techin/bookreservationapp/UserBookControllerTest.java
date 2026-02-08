@@ -173,48 +173,49 @@ class UserBookControllerTest {
     // This is flaky. It was flaky before I disabled the logic in service class, and
     // it certainly is still flaky considering that I disabled the logic in service
     // now
-    //    @Test
-    //    void generateBooks_whenCalledTwiceWithSameInput_thenResultsShouldDiffer()
-    //        throws JsonProcessingException {
-    //      createUser();
-    //      String csrfToken = getCsrfToken();
-    //      Response loginResponse = loginAndGetSession(csrfToken);
+    // @Test
+    // void generateBooks_whenCalledTwiceWithSameInput_thenResultsShouldDiffer()
+    // throws JsonProcessingException {
+    // createUser();
+    // String csrfToken = getCsrfToken();
+    // Response loginResponse = loginAndGetSession(csrfToken);
     //
-    //      // Prepare request setup
-    //      RequestSpecification spec = given()
-    //          .cookie("JSESSIONID", loginResponse.getSessionId())
-    //          .cookie("XSRF-TOKEN", csrfToken)
-    //          .header("X-XSRF-TOKEN", csrfToken)
-    //          .contentType(ContentType.JSON)
-    //          .body(new ObjectMapper()
-    //              .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
+    // // Prepare request setup
+    // RequestSpecification spec = given()
+    // .cookie("JSESSIONID", loginResponse.getSessionId())
+    // .cookie("XSRF-TOKEN", csrfToken)
+    // .header("X-XSRF-TOKEN", csrfToken)
+    // .contentType(ContentType.JSON)
+    // .body(new ObjectMapper()
+    // .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
     //
-    //      // First response
-    //      Response first = spec.when()
-    //          .post("/generate-books")
-    //          .then()
-    //          .statusCode(200)
-    //          .body("$", aMapWithSize(1))
-    //          .body("result", hasSize(3))
-    //          .extract()
-    //          .response();
-    //      List<String> firstResult = first.jsonPath().getList("result");
+    // // First response
+    // Response first = spec.when()
+    // .post("/generate-books")
+    // .then()
+    // .statusCode(200)
+    // .body("$", aMapWithSize(1))
+    // .body("result", hasSize(3))
+    // .extract()
+    // .response();
+    // List<String> firstResult = first.jsonPath().getList("result");
     //
-    //      // Second response
-    //      Response second = spec.when()
-    //          .post("/generate-books")
-    //          .then()
-    //          .statusCode(200)
-    //          .body("$", aMapWithSize(1))
-    //          .body("result", hasSize(3))
-    //          .extract()
-    //          .response();
-    //      List<String> secondResult = second.jsonPath().getList("result");
+    // // Second response
+    // Response second = spec.when()
+    // .post("/generate-books")
+    // .then()
+    // .statusCode(200)
+    // .body("$", aMapWithSize(1))
+    // .body("result", hasSize(3))
+    // .extract()
+    // .response();
+    // List<String> secondResult = second.jsonPath().getList("result");
     //
-    //      // Assertion that results are different
-    //      assertNotEquals(firstResult, secondResult, "Expected different results for repeated
+    // // Assertion that results are different
+    // assertNotEquals(firstResult, secondResult, "Expected different results for
+    // repeated
     // calls");
-    //    }
+    // }
 
     // Unhappy path
     //

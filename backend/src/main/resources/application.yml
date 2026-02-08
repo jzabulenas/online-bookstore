@@ -4,9 +4,9 @@ spring:
     username: ${MARIADB_USERNAME}
     password: ${MARIADB_PASSWORD}
 
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
+  #  jpa:
+  #    hibernate:
+  #      ddl-auto: update
 
   security:
     oauth2:
@@ -22,7 +22,7 @@ spring:
       chat:
         options:
           model: gpt-4o-mini
-          
+
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
