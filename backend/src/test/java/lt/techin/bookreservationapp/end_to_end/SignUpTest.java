@@ -43,7 +43,7 @@ class SignUpTest {
                 """
                     .formatted(email))
             .when()
-            .post("/signup")
+            .post("http://localhost:8080/signup")
             .then()
             .statusCode(201)
             .body("$", aMapWithSize(3))
@@ -108,7 +108,7 @@ class SignUpTest {
 	            """
                     .formatted(email))
             .when()
-            .post("/signup")
+            .post("http://localhost:8080/signup")
             .then()
             .statusCode(201)
             .body("$", aMapWithSize(3))
@@ -174,7 +174,7 @@ class SignUpTest {
             }
             """)
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -200,7 +200,7 @@ class SignUpTest {
             }
             """)
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -226,7 +226,7 @@ class SignUpTest {
 	        }
 	        """)
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -252,7 +252,7 @@ class SignUpTest {
             }
             """)
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -278,7 +278,7 @@ class SignUpTest {
             }
             """)
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -309,7 +309,7 @@ class SignUpTest {
 		  		"""
                     .formatted(email))
             .when()
-            .post("/signup")
+            .post("http://localhost:8080/signup")
             .then()
             .statusCode(201)
             .body("$", aMapWithSize(3))
@@ -366,7 +366,7 @@ class SignUpTest {
             """
                 .formatted(email))
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -401,7 +401,7 @@ class SignUpTest {
             """
                 .formatted(email))
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -431,7 +431,7 @@ class SignUpTest {
             """
                 .formatted(email))
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -461,7 +461,7 @@ class SignUpTest {
             """
                 .formatted(email))
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -490,7 +490,7 @@ class SignUpTest {
             """
                 .formatted(email))
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(5))
