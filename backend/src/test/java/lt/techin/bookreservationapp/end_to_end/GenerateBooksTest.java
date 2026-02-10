@@ -122,9 +122,9 @@ class GenerateBooksTest {
             .contentType(ContentType.JSON)
             .body(
                 """
-                  {
-                    "message": "Dracula by Bram Stoker"
-                  }
+                {
+                  "message": "Dracula by Bram Stoker"
+                }
                 """)
             .when()
             .post("http://localhost:8080/generate-books")
@@ -149,6 +149,30 @@ class GenerateBooksTest {
 
     assertThat(
         Collections.disjoint(newlyGeneratedBooksList2, existingUserBooksList), equalTo(true));
+  }
+
+  @Test
+  void whenMessageIsNull_thenReturn400AndMessage() {
+    String csrfToken = this.getCsrfToken();
+    Response logInResponse = createUserThenLogInAndGetSession();
+
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "message": null
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/generate-books")
+        .then()
+        .statusCode(400)
+        .body("message", equalTo("must not be null"))
+        .body("$", aMapWithSize(1));
   }
 
   private Response createUserThenLogInAndGetSession() {
