@@ -264,6 +264,152 @@ class GenerateBooksTest {
         .body("path", equalTo("/generate-books"));
   }
 
+  @Test
+  void whenBookGenerationIsCalledMoreThan6Times_thenReturn429AndBody() {
+    String csrfToken = this.getCsrfToken();
+    Response logInResponse = createUserThenLogInAndGetSession();
+
+    // Call one
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "message": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/generate-books")
+        .then()
+        .statusCode(200)
+        .body("$", aMapWithSize(1))
+        .body("result", hasSize(3));
+
+    // Call two
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "message": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/generate-books")
+        .then()
+        .statusCode(200)
+        .body("$", aMapWithSize(1))
+        .body("result", hasSize(3));
+
+    // Call three
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "message": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/generate-books")
+        .then()
+        .statusCode(200)
+        .body("$", aMapWithSize(1))
+        .body("result", hasSize(3));
+
+    // Call four
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "message": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/generate-books")
+        .then()
+        .statusCode(200)
+        .body("$", aMapWithSize(1))
+        .body("result", hasSize(3));
+
+    // Call five
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "message": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/generate-books")
+        .then()
+        .statusCode(200)
+        .body("$", aMapWithSize(1))
+        .body("result", hasSize(3));
+
+    // Call six
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "message": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/generate-books")
+        .then()
+        .statusCode(200)
+        .body("$", aMapWithSize(1))
+        .body("result", hasSize(3));
+
+    // Call seven
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "message": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/generate-books")
+        .then()
+        .statusCode(429)
+        .body("$", aMapWithSize(1))
+        .body("error", equalTo("Free users get 6 free requests a day. Please wait 24 hours."));
+  }
+
+  private String getCsrfToken() {
+    Response csrfResponse =
+        given().when().get("http://localhost:8080/open").then().extract().response();
+
+    return csrfResponse.cookie("XSRF-TOKEN");
+  }
+
   private Response createUserThenLogInAndGetSession() {
     String csrfToken = this.getCsrfToken();
     UUID uuid = UUID.randomUUID();
@@ -305,7 +451,7 @@ class GenerateBooksTest {
     Matcher matcher = pattern.matcher(verificationSnippet);
 
     // Must call find, otherwise it won't work
-    matcher.find();
+    assertThat(matcher.find(), equalTo(true));
     String verificationLink = matcher.group(1);
 
     // Send verification request to extracted link
@@ -321,12 +467,5 @@ class GenerateBooksTest {
         .then()
         .extract()
         .response();
-  }
-
-  private String getCsrfToken() {
-    Response csrfResponse =
-        given().when().get("http://localhost:8080/open").then().extract().response();
-
-    return csrfResponse.cookie("XSRF-TOKEN");
   }
 }
