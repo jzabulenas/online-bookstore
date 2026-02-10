@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.*;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -238,6 +239,29 @@ class GenerateBooksTest {
         .then()
         .statusCode(401)
         .body(emptyOrNullString());
+  }
+
+  @Test
+  void whenAuthenticatedButNoCSRF_thenReturn403AndBody() {
+    Response logInResponse = createUserThenLogInAndGetSession();
+
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "message": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/generate-books")
+        .then()
+        .statusCode(403)
+        .body("timestamp", containsString(String.valueOf(LocalDateTime.now().getYear())))
+        .body("status", equalTo(403))
+        .body("error", equalTo("Forbidden"))
+        .body("path", equalTo("/generate-books"));
   }
 
   private Response createUserThenLogInAndGetSession() {
