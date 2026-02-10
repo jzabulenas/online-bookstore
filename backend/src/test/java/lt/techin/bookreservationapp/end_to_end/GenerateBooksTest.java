@@ -175,6 +175,30 @@ class GenerateBooksTest {
         .body("$", aMapWithSize(1));
   }
 
+  @Test
+  void whenMessageIsTooShort_thenReturn400AndMessage() {
+    String csrfToken = this.getCsrfToken();
+    Response logInResponse = createUserThenLogInAndGetSession();
+
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "message": "Fe"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/generate-books")
+        .then()
+        .statusCode(400)
+        .body("message", equalTo("size must be between 5 and 100"))
+        .body("$", aMapWithSize(1));
+  }
+
   private Response createUserThenLogInAndGetSession() {
     String csrfToken = this.getCsrfToken();
     UUID uuid = UUID.randomUUID();
