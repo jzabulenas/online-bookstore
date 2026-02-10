@@ -223,6 +223,23 @@ class GenerateBooksTest {
         .body("$", aMapWithSize(1));
   }
 
+  @Test
+  void whenUnauthenticated_thenReturn401() {
+    given()
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "message": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/generate-books")
+        .then()
+        .statusCode(401)
+        .body(emptyOrNullString());
+  }
+
   private Response createUserThenLogInAndGetSession() {
     String csrfToken = this.getCsrfToken();
     UUID uuid = UUID.randomUUID();
