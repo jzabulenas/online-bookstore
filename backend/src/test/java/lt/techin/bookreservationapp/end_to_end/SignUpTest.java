@@ -8,14 +8,12 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.junit.jupiter.api.Test;
-
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 
 class SignUpTest {
 
@@ -33,13 +31,13 @@ class SignUpTest {
             .contentType(ContentType.JSON)
             .body(
                 """
-		        {
-		          "email": "%s",
-		          "password": "r9$CbHEaGXLUsP",
-		          "roles": [
-		             1
-		          ]
-		        }
+                {
+                  "email": "%s",
+                  "password": "r9$CbHEaGXLUsP",
+                  "roles": [
+                     1
+                  ]
+                }
                 """
                     .formatted(email))
             .when()
@@ -98,14 +96,14 @@ class SignUpTest {
             .contentType(ContentType.JSON)
             .body(
                 """
-		        {
-		          "email": "%s",
-		          "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
-		          "roles": [
-		             1
-		          ]
-		        }
-	            """
+                {
+                  "email": "%s",
+                  "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+                  "roles": [
+                     1
+                  ]
+                }
+                """
                     .formatted(email))
             .when()
             .post("http://localhost:8080/signup")
@@ -299,14 +297,14 @@ class SignUpTest {
             .contentType(ContentType.JSON)
             .body(
                 """
-		        {
-		          "email": "%s",
-		          "password": "r9$CbHEaGXLUsP",
-		          "roles": [
-		             1
-		          ]
-		        }
-		  		"""
+                {
+                  "email": "%s",
+                  "password": "r9$CbHEaGXLUsP",
+                  "roles": [
+                     1
+                  ]
+                }
+                """
                     .formatted(email))
             .when()
             .post("http://localhost:8080/signup")
