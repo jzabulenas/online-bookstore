@@ -115,6 +115,61 @@ class LikeBooksTest {
         equalTo("http://localhost:8080/books/" + bookId2 + "/users/" + userId2));
   }
 
+  @Test
+  void whenBookIsLikedForCurrentUserAndITryToLikeItAgain_thenReturn400AndMessage() {
+    String csrfToken = this.getCsrfToken();
+    Response logInResponse = createUserThenLogInAndGetSession();
+
+    // First request
+    Response userResponse =
+        given()
+            .cookie("JSESSIONID", logInResponse.getSessionId())
+            .cookie("XSRF-TOKEN", csrfToken)
+            .header("X-XSRF-TOKEN", csrfToken)
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {
+                  "title": "Dracula by Bram Stoker"
+                }
+                """)
+            .when()
+            .post("http://localhost:8080/books")
+            .then()
+            .statusCode(201)
+            .body("id", greaterThan(0))
+            .body("$", aMapWithSize(3))
+            .extract()
+            .response();
+
+    int bookId = userResponse.path("bookId");
+    int userId = userResponse.path("userId");
+    assertThat(bookId, greaterThan(0));
+    assertThat(userId, greaterThan(0));
+    assertThat(
+        userResponse.getHeader("Location"),
+        equalTo("http://localhost:8080/books/" + bookId + "/users/" + userId));
+
+    // Second request
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "title": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/books")
+        .then()
+        .statusCode(400)
+        .body("title", equalTo("Already exists"))
+        .body("$", aMapWithSize(1));
+  }
+
   private String getCsrfToken() {
     Response csrfResponse =
         given().when().get("http://localhost:8080/open").then().extract().response();
