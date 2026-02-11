@@ -170,6 +170,23 @@ class LikeBooksTest {
         .body("$", aMapWithSize(1));
   }
 
+  @Test
+  void whenUnauthenticatedTriesCalling_thenReturn401() {
+    given()
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "title": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/books")
+        .then()
+        .statusCode(401)
+        .body(emptyOrNullString());
+  }
+
   private String getCsrfToken() {
     Response csrfResponse =
         given().when().get("http://localhost:8080/open").then().extract().response();
