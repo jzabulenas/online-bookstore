@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.*;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -185,6 +186,29 @@ class LikeBooksTest {
         .then()
         .statusCode(401)
         .body(emptyOrNullString());
+  }
+
+  @Test
+  void whenAuthenticatedTriesCallingButNoCSRF_thenReturn403AndBody() {
+    Response logInResponse = createUserThenLogInAndGetSession();
+
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "title": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/books")
+        .then()
+        .statusCode(403)
+        .body("timestamp", containsString(String.valueOf(LocalDateTime.now().getYear())))
+        .body("status", equalTo(403))
+        .body("error", equalTo("Forbidden"))
+        .body("path", equalTo("/books"));
   }
 
   private String getCsrfToken() {
