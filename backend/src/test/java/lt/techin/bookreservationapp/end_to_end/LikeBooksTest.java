@@ -48,6 +48,73 @@ class LikeBooksTest {
         equalTo("http://localhost:8080/books/" + bookId + "/users/" + userId));
   }
 
+  @Test
+  void whenBookIsAlreadyLikedByOtherUserAndILikeSameBookForNewUser_thenReturn201AndMessage() {
+    String csrfToken = this.getCsrfToken();
+    Response logInResponse = createUserThenLogInAndGetSession();
+    Response logInResponse2 = createUserThenLogInAndGetSession();
+
+    // First user flow
+    Response userResponse =
+        given()
+            .cookie("JSESSIONID", logInResponse.getSessionId())
+            .cookie("XSRF-TOKEN", csrfToken)
+            .header("X-XSRF-TOKEN", csrfToken)
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {
+                  "title": "Dracula by Bram Stoker"
+                }
+                """)
+            .when()
+            .post("http://localhost:8080/books")
+            .then()
+            .statusCode(201)
+            .body("id", greaterThan(0))
+            .body("$", aMapWithSize(3))
+            .extract()
+            .response();
+
+    int bookId = userResponse.path("bookId");
+    int userId = userResponse.path("userId");
+    assertThat(bookId, greaterThan(0));
+    assertThat(userId, greaterThan(0));
+    assertThat(
+        userResponse.getHeader("Location"),
+        equalTo("http://localhost:8080/books/" + bookId + "/users/" + userId));
+
+    // Second user flow
+    Response user2Response =
+        given()
+            .cookie("JSESSIONID", logInResponse2.getSessionId())
+            .cookie("XSRF-TOKEN", csrfToken)
+            .header("X-XSRF-TOKEN", csrfToken)
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {
+                  "title": "Dracula by Bram Stoker"
+                }
+                """)
+            .when()
+            .post("http://localhost:8080/books")
+            .then()
+            .statusCode(201)
+            .body("id", greaterThan(0))
+            .body("$", aMapWithSize(3))
+            .extract()
+            .response();
+
+    int bookId2 = user2Response.path("bookId");
+    int userId2 = user2Response.path("userId");
+    assertThat(bookId2, greaterThan(0));
+    assertThat(userId2, greaterThan(0));
+    assertThat(
+        user2Response.getHeader("Location"),
+        equalTo("http://localhost:8080/books/" + bookId2 + "/users/" + userId2));
+  }
+
   private String getCsrfToken() {
     Response csrfResponse =
         given().when().get("http://localhost:8080/open").then().extract().response();
