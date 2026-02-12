@@ -36,16 +36,16 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 
 ## Generate books
 
-| Backend                                                              | Mobile                                                                  | Desktop                                                                 |
-| -------------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| generateBooks_whenBookIsGenerated_thenReturn200AndListOfBooks        | should generate 3 books to read when provided input                     | should generate 3 books to read when provided input                     |
-| generateBooks_whenUserBooksExist_thenNotSeeThemInNewlyGeneratedBooks | should not generate particular books if they were liked before          | should not generate particular books if they were liked before          |
-| generateBooks_whenMessageIsNull_thenReturn400AndMessage              | should display an error when book field input is null                   | should display an error when book field input is null                   |
-| generateBooks_whenMessageIsTooShort_thenReturn400AndMessage          | should display an error when book field input is too short              | should display an error when book field input is too short              |
-| generateBooks_whenMessageIsTooLong_thenReturn400AndMessage           | should display an error when book field input is too long               | should display an error when book field input is too long               |
-| generateBooks_whenUnauthenticated_thenReturn401                      | Can't replicate                                                         |                                                                         |
-| generateBooks_whenAuthenticatedButNoCSRF_thenReturn403AndBody        | Can't replicate                                                         |                                                                         |
-| generateBooks_whenCalledMoreThan6Times_thenReturn429AndBody          | should display error message when books are generated more than 6 times | should display error message when books are generated more than 6 times |
+| Backend                                                             | Mobile                                                                  | Desktop                                                                 |
+| ------------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| whenBooksAreGenerated_thenReturn200AndListOfBooks                   | should generate 3 books to read when provided input                     | should generate 3 books to read when provided input                     |
+| whenUserHasBooksTheyLikedBefore_thenNotSeeThemInNewlyGeneratedBooks | should not generate particular books if they were liked before          | should not generate particular books if they were liked before          |
+| whenMessageIsNull_thenReturn400AndMessage                           | should display an error when book field input is null                   | should display an error when book field input is null                   |
+| whenMessageIsTooShort_thenReturn400AndMessage                       | should display an error when book field input is too short              | should display an error when book field input is too short              |
+| whenMessageIsTooLong_thenReturn400AndMessage                        | should display an error when book field input is too long               | should display an error when book field input is too long               |
+| whenUnauthenticated_thenReturn401                                   | Can't replicate                                                         | Can't replicate                                                         |
+| whenAuthenticatedButNoCSRF_thenReturn403AndBody                     | Can't replicate                                                         | Can't replicate                                                         |
+| whenBookGenerationIsCalledMoreThan6Times_thenReturn429AndBody       | should display error message when books are generated more than 6 times | should display error message when books are generated more than 6 times |
 
 ## Like books
 
