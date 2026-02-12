@@ -31,8 +31,8 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 
 | Backend | Mobile                                                              | Desktop                                                             |
 | ------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
-|         | should log in, when correct credentials are provided                | should log in, when correct credentials are provided                |
-|         | should display error message, when log in credentials are incorrect | should display error message, when log in credentials are incorrect |
+| NEED    | should log in, when correct credentials are provided                | should log in, when correct credentials are provided                |
+| NEED    | should display error message, when log in credentials are incorrect | should display error message, when log in credentials are incorrect |
 
 ## Generate books
 
@@ -49,17 +49,17 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 
 ## Like books
 
-| Backend                                                                 | Mobile                                                                                           | Desktop         |
-| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | --------------- |
-| saveUserBook_whenBookIsSaved_thenReturn201AndBody                       | Can't replicate                                                                                  | Can't replicate |
-| saveUserBook_whenTitleAlreadyExistsForOtherUser_thenReturn201AndMessage | Can't replicate                                                                                  | Can't replicate |
-| saveUserBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage      | Can't replicate                                                                                  | Can't replicate |
-| saveUserBook_whenUnauthenticatedCalls_thenReturn401                     | Can't replicate                                                                                  | Can't replicate |
-| saveUserBook_whenAuthenticatedButNoCSRF_thenReturn403AndBody            | Can't replicate                                                                                  | Can't replicate |
-| getUserBooks_whenCalled_thenReturnBooksAnd200                           | Can't replicate                                                                                  | Can't replicate |
-| getUserBooks_whenOneUserHasBooks_thenOtherUserHasNoneAnd200             | should click like on generated books, and not see them displayed in 'saved books' for other user |
-| getUserBooks_whenListEmpty_thenReturnEmptyListAnd200                    |
-| getUserBooks_whenUnauthenticated_thenReturn401AndNoBody                 |
+| Backend                                                                             | Mobile                                                                                           | Desktop                                                                                          |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| whenBookIsLiked_thenReturn201AndBody                                                | Can't replicate                                                                                  | Can't replicate                                                                                  |
+| whenBookIsAlreadyLikedByOtherUserAndILikeSameBookForNewUser_thenReturn201AndMessage | Can't replicate                                                                                  | Can't replicate                                                                                  |
+| whenBookIsLikedForCurrentUserAndITryToLikeItAgain_thenReturn400AndMessage           | Can't replicate                                                                                  | Can't replicate                                                                                  |
+| whenUnauthenticatedTriesCalling_thenReturn401                                       | Can't replicate                                                                                  | Can't replicate                                                                                  |
+| whenAuthenticatedTriesCallingButNoCSRF_thenReturn403AndBody                         | Can't replicate                                                                                  | Can't replicate                                                                                  |
+| getUserBooks_whenCalled_thenReturnBooksAnd200                                       | Can't replicate                                                                                  | Can't replicate                                                                                  |
+| getUserBooks_whenOneUserHasBooks_thenOtherUserHasNoneAnd200                         | should click like on generated books, and not see them displayed in 'saved books' for other user | should click like on generated books, and not see them displayed in 'saved books' for other user |
+| getUserBooks_whenListEmpty_thenReturnEmptyListAnd200                                |
+| getUserBooks_whenUnauthenticated_thenReturn401AndNoBody                             |
 
 | Backend | Mobile                                                                              | Desktop |
 | ------- | ----------------------------------------------------------------------------------- | ------- |
