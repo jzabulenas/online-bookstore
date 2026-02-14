@@ -25,7 +25,7 @@ class LikeBooksTest {
   @Test
   void whenOneBookIsLiked_thenReturn201AndBody() {
     String csrfToken = this.getCsrfToken();
-    Response logInResponse = createUserThenLogInAndGetSession();
+    Response logInResponse = this.createUserThenLogInAndGetSession();
 
     Response generatedBooksResponse =
         given()
@@ -115,10 +115,10 @@ class LikeBooksTest {
             .contentType(ContentType.JSON)
             .body(
                 """
-                {
-                  "title": "%s"
-                }
-                """
+				{
+				  "title": "%s"
+				}
+				"""
                     .formatted(generatedBooksList.get(0)))
             .when()
             .post("http://localhost:8080/books")
@@ -171,8 +171,8 @@ class LikeBooksTest {
   @Test
   void whenBookIsAlreadyLikedByOtherUserAndILikeSameBookForNewUser_thenReturn201AndMessage() {
     String csrfToken = this.getCsrfToken();
-    Response logInResponse = createUserThenLogInAndGetSession();
-    Response logInResponse2 = createUserThenLogInAndGetSession();
+    Response logInResponse = this.createUserThenLogInAndGetSession();
+    Response logInResponse2 = this.createUserThenLogInAndGetSession();
 
     // First user flow
     Response userResponse =
@@ -238,7 +238,7 @@ class LikeBooksTest {
   @Test
   void whenBookIsLikedForCurrentUserAndITryToLikeItAgain_thenReturn400AndMessage() {
     String csrfToken = this.getCsrfToken();
-    Response logInResponse = createUserThenLogInAndGetSession();
+    Response logInResponse = this.createUserThenLogInAndGetSession();
 
     // First request
     Response userResponse =
@@ -309,7 +309,7 @@ class LikeBooksTest {
 
   @Test
   void whenAuthenticatedTriesCallingButNoCSRF_thenReturn403AndBody() {
-    Response logInResponse = createUserThenLogInAndGetSession();
+    Response logInResponse = this.createUserThenLogInAndGetSession();
 
     given()
         .cookie("JSESSIONID", logInResponse.getSessionId())

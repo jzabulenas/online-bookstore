@@ -2,17 +2,23 @@ package lt.techin.bookreservationapp.end_to_end;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.emptyOrNullString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.junit.jupiter.api.Test;
+
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 
 class GenerateBooksTest {
 
@@ -145,7 +151,7 @@ class GenerateBooksTest {
             .cookie("XSRF-TOKEN", csrfToken)
             .header("X-XSRF-TOKEN", csrfToken)
             .when()
-            .get("/books");
+            .get("http://localhost:8080/books");
     List<String> existingUserBooksList = existingUserBooksResponse.jsonPath().getList("title");
 
     assertThat(
