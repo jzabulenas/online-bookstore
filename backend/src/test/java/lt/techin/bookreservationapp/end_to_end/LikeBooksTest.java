@@ -2,24 +2,32 @@ package lt.techin.bookreservationapp.end_to_end;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.emptyOrNullString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.junit.jupiter.api.Test;
+
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 
 class LikeBooksTest {
 
   @Test
-  void whenBookIsLiked_thenReturn201AndBody() {
+  void whenOneBookIsLiked_thenReturn201AndBody() {
     String csrfToken = this.getCsrfToken();
     Response logInResponse = createUserThenLogInAndGetSession();
 
-    Response response =
+    Response generatedBooksResponse =
         given()
             .cookie("JSESSIONID", logInResponse.getSessionId())
             .cookie("XSRF-TOKEN", csrfToken)
@@ -28,9 +36,32 @@ class LikeBooksTest {
             .body(
                 """
                 {
-                  "title": "Dracula by Bram Stoker"
+                  "message": "Dracula by Bram Stoker"
                 }
                 """)
+            .when()
+            .post("http://localhost:8080/generate-books")
+            .then()
+            .statusCode(200)
+            .body("$", aMapWithSize(1))
+            .body("result", hasSize(3))
+            .extract()
+            .response();
+    List<String> generatedBooksList = generatedBooksResponse.jsonPath().getList("result");
+
+    Response likedBookResponse =
+        given()
+            .cookie("JSESSIONID", logInResponse.getSessionId())
+            .cookie("XSRF-TOKEN", csrfToken)
+            .header("X-XSRF-TOKEN", csrfToken)
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {
+                  "title": "%s"
+                }
+                """
+                    .formatted(generatedBooksList.get(0)))
             .when()
             .post("http://localhost:8080/books")
             .then()
@@ -40,12 +71,12 @@ class LikeBooksTest {
             .extract()
             .response();
 
-    int bookId = response.path("bookId");
-    int userId = response.path("userId");
+    int bookId = likedBookResponse.path("bookId");
+    int userId = likedBookResponse.path("userId");
     assertThat(bookId, greaterThan(0));
     assertThat(userId, greaterThan(0));
     assertThat(
-        response.getHeader("Location"),
+        likedBookResponse.getHeader("Location"),
         equalTo("http://localhost:8080/books/" + bookId + "/users/" + userId));
   }
 
