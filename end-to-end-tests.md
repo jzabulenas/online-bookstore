@@ -51,7 +51,8 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 
 | Backend                                                                             | Mobile                                          | Desktop                                         |
 | ----------------------------------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
-| whenBookIsLiked_thenReturn201AndBody                                                |                                                 |                                                 |
+| whenOneBookIsLiked_thenReturn201AndBody                                             |                                                 |                                                 |
+| whenTwoBooksAreLiked_thenReturn201AndBody                                           |                                                 |                                                 |
 | whenBookIsAlreadyLikedByOtherUserAndILikeSameBookForNewUser_thenReturn201AndMessage | Can't replicate                                 | Can't replicate                                 |
 | whenBookIsLikedForCurrentUserAndITryToLikeItAgain_thenReturn400AndMessage           | Can't replicate (clicking again shows no error) | Can't replicate (clicking again shows no error) |
 | whenUnauthenticatedTriesCalling_thenReturn401                                       | Can't replicate                                 | Can't replicate                                 |
