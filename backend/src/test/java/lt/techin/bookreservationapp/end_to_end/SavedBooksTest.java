@@ -195,6 +195,44 @@ class SavedBooksTest {
         .body("$", empty());
   }
 
+  @Test
+  void whenNoSavedBooksExist_thenReturnEmptyListAnd200() {
+    String csrfToken = this.getCsrfToken();
+    Response logInResponse = this.createUserThenLogInAndGetSession();
+
+    // Generate books
+    Response generatedBooksResponse =
+        given()
+            .cookie("JSESSIONID", logInResponse.getSessionId())
+            .cookie("XSRF-TOKEN", csrfToken)
+            .header("X-XSRF-TOKEN", csrfToken)
+            .contentType(ContentType.JSON)
+            .body(
+                """
+                {
+                  "message": "Dracula by Bram Stoker"
+                }
+                """)
+            .when()
+            .post("http://localhost:8080/generate-books")
+            .then()
+            .statusCode(200)
+            .body("$", aMapWithSize(1))
+            .body("result", hasSize(3))
+            .extract()
+            .response();
+    List<String> generatedBooksList = generatedBooksResponse.jsonPath().getList("result");
+
+    // Check that no books are saved
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .when()
+        .get("http://localhost:8080/books")
+        .then()
+        .statusCode(200)
+        .body("$", empty());
+  }
+
   private String getCsrfToken() {
     Response csrfResponse =
         given().when().get("http://localhost:8080/open").then().extract().response();
