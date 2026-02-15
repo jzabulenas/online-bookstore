@@ -47,7 +47,7 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 | whenAuthenticatedButNoCSRF_thenReturn403AndBody                     | Can't replicate                                                         | Can't replicate                                                         |
 | whenBookGenerationIsCalledMoreThan6Times_thenReturn429AndBody       | should display error message when books are generated more than 6 times | should display error message when books are generated more than 6 times |
 
-## Like books
+## Like books (Calling it "Save books" would probably have been better, because "liking" actually just saves it for you, so you can later find it)
 
 | Backend                                                                             | Mobile                                          | Desktop                                         |
 | ----------------------------------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
@@ -59,13 +59,8 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 | whenUnauthenticatedTriesCalling_thenReturn401                                       | Can't replicate                                 | Can't replicate                                 |
 | whenAuthenticatedTriesCallingButNoCSRF_thenReturn403AndBody                         | Can't replicate                                 | Can't replicate                                 |
 
-| getUserBooks_whenOneUserHasBooks_thenOtherUserHasNoneAnd200                         | should click like on generated books, and not see them displayed in 'saved books' for other user | should click like on generated books, and not see them displayed in 'saved books' for other user |
-| getUserBooks_whenListEmpty_thenReturnEmptyListAnd200                                |
-| getUserBooks_whenUnauthenticated_thenReturn401AndNoBody                             |
+## Saved books
 
-| Backend | Mobile                                                                              | Desktop |
-| ------- | ----------------------------------------------------------------------------------- | ------- |
-|         | should click like on a single generated book, and see it displayed in 'saved books' |         |
-|         | should click like on two generated books, and see them displayed in 'saved books'   |         |
-|         | should click like on three generated books, and see them displayed in 'saved books' |         |
-|         | should not see liked books if no books are liked after generating books             |         |
+| Backend                                                                       | Mobile                                                                                           | Desktop                                                                                          |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| whenOneUserHasBooksTheySaved_thenOtherUserHasNoneAnd200                       | should click like on generated books, and not see them displayed in 'saved books' for other user | should click like on generated books, and not see them displayed in 'saved books' for other user |
