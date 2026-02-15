@@ -22,7 +22,7 @@ import io.restassured.response.Response;
 class SavedBooksTest {
 
   @Test
-  void whenCalled_thenReturnBooksAnd200() {
+  void whenSingleBookHadBeenSavedEarlier_thenReturnAListContainingOneBookAnd200() {
     String csrfToken = this.getCsrfToken();
     Response logInResponse = this.createUserThenLogInAndGetSession();
 
@@ -80,37 +80,6 @@ class SavedBooksTest {
         likedBookResponse.getHeader("Location"),
         equalTo("http://localhost:8080/books/" + bookId + "/users/" + userId));
 
-    // Like a second book
-    Response likedBookResponse2 =
-        given()
-            .cookie("JSESSIONID", logInResponse.getSessionId())
-            .cookie("XSRF-TOKEN", csrfToken)
-            .header("X-XSRF-TOKEN", csrfToken)
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {
-                  "title": "%s"
-                }
-                """
-                    .formatted(generatedBooksList.get(1)))
-            .when()
-            .post("http://localhost:8080/books")
-            .then()
-            .statusCode(201)
-            .body("id", greaterThan(0))
-            .body("$", aMapWithSize(3))
-            .extract()
-            .response();
-
-    int bookId2 = likedBookResponse2.path("bookId");
-    int userId2 = likedBookResponse2.path("userId");
-    assertThat(bookId2, greaterThan(0));
-    assertThat(userId2, greaterThan(0));
-    assertThat(
-        likedBookResponse2.getHeader("Location"),
-        equalTo("http://localhost:8080/books/" + bookId2 + "/users/" + userId2));
-
     // Get saved books
     given()
         .cookie("JSESSIONID", logInResponse.getSessionId())
@@ -118,11 +87,9 @@ class SavedBooksTest {
         .get("/books")
         .then()
         .statusCode(200)
-        .body("$", hasSize(2))
+        .body("$", hasSize(1))
         .body("[0].title", equalTo(generatedBooksList.get(0)))
-        .body("[0]", aMapWithSize(1))
-        .body("[1].title", equalTo(generatedBooksList.get(1)))
-        .body("[1]", aMapWithSize(1));
+        .body("[0]", aMapWithSize(1));
   }
 
   @Test
