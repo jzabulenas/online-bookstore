@@ -33,17 +33,17 @@ class SignUpTest {
             .contentType(ContentType.JSON)
             .body(
                 """
-            {
-              "email": "%s",
-              "password": "r9$CbHEaGXLUsP",
-              "roles": [
-                 1
-              ]
-            }
-            """
+                {
+                  "email": "%s",
+                  "password": "r9$CbHEaGXLUsP",
+                  "roles": [
+                     1
+                  ]
+                }
+                """
                     .formatted(email))
             .when()
-            .post("/signup")
+            .post("http://localhost:8080/signup")
             .then()
             .statusCode(201)
             .body("$", aMapWithSize(3))
@@ -57,7 +57,7 @@ class SignUpTest {
     assertThat(id, greaterThan(0));
     assertThat(response.getHeader("Location"), equalTo("http://localhost:8080/signup/" + id));
 
-    // Extract verification link from message
+    // Extract verification link from email message
     String verificationSnippet =
         given()
             .when()
@@ -98,17 +98,17 @@ class SignUpTest {
             .contentType(ContentType.JSON)
             .body(
                 """
-            {
-              "email": "%s",
-              "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
-              "roles": [
-                 1
-              ]
-            }
-            """
+                {
+                  "email": "%s",
+                  "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+                  "roles": [
+                     1
+                  ]
+                }
+                """
                     .formatted(email))
             .when()
-            .post("/signup")
+            .post("http://localhost:8080/signup")
             .then()
             .statusCode(201)
             .body("$", aMapWithSize(3))
@@ -122,7 +122,7 @@ class SignUpTest {
     assertThat(id, greaterThan(0));
     assertThat(response.getHeader("Location"), equalTo("http://localhost:8080/signup/" + id));
 
-    // Extract verification link from message
+    // Extract verification link from email message
     String verificationSnippet =
         given()
             .when()
@@ -174,7 +174,7 @@ class SignUpTest {
             }
             """)
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -200,7 +200,7 @@ class SignUpTest {
             }
             """)
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -217,16 +217,16 @@ class SignUpTest {
         .contentType(ContentType.JSON)
         .body(
             """
-                {
-                  "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrv@gmail.com",
-                  "password": "r9$CbHEaGXLUsP",
-                  "roles": [
-                     1
-                  ]
-                }
-                """)
+	        {
+	          "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrv@gmail.com",
+	          "password": "r9$CbHEaGXLUsP",
+	          "roles": [
+	             1
+	          ]
+	        }
+	        """)
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -243,16 +243,16 @@ class SignUpTest {
         .contentType(ContentType.JSON)
         .body(
             """
-                {
-                  "email": "jurgis@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegw.com",
-                  "password": "r9$CbHEaGXLUsP",
-                  "roles": [
-                     1
-                  ]
-                }
-                """)
+            {
+              "email": "jurgis@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegw.com",
+              "password": "r9$CbHEaGXLUsP",
+              "roles": [
+                 1
+              ]
+            }
+            """)
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -269,16 +269,16 @@ class SignUpTest {
         .contentType(ContentType.JSON)
         .body(
             """
-                {
-                  "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrrsdfsdfse@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegwasdasde.com",
-                  "password": "r9$CbHEaGXLUsP",
-                  "roles": [
-                     1
-                  ]
-                }
-                """)
+            {
+              "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrrsdfsdfse@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegwasdasde.com",
+              "password": "r9$CbHEaGXLUsP",
+              "roles": [
+                 1
+              ]
+            }
+            """)
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -299,17 +299,17 @@ class SignUpTest {
             .contentType(ContentType.JSON)
             .body(
                 """
-            {
-              "email": "%s",
-              "password": "r9$CbHEaGXLUsP",
-              "roles": [
-                 1
-              ]
-            }
-            """
+                {
+                  "email": "%s",
+                  "password": "r9$CbHEaGXLUsP",
+                  "roles": [
+                     1
+                  ]
+                }
+                """
                     .formatted(email))
             .when()
-            .post("/signup")
+            .post("http://localhost:8080/signup")
             .then()
             .statusCode(201)
             .body("$", aMapWithSize(3))
@@ -323,7 +323,7 @@ class SignUpTest {
     assertThat(id, greaterThan(0));
     assertThat(response.getHeader("Location"), equalTo("http://localhost:8080/signup/" + id));
 
-    // Extract verification link from message
+    // Extract verification link from email message
     String verificationSnippet =
         given()
             .when()
@@ -366,7 +366,7 @@ class SignUpTest {
             """
                 .formatted(email))
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -401,7 +401,7 @@ class SignUpTest {
             """
                 .formatted(email))
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -431,7 +431,7 @@ class SignUpTest {
             """
                 .formatted(email))
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -461,7 +461,7 @@ class SignUpTest {
             """
                 .formatted(email))
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(1))
@@ -490,7 +490,7 @@ class SignUpTest {
             """
                 .formatted(email))
         .when()
-        .post("/signup")
+        .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
         .body("$", aMapWithSize(5))
