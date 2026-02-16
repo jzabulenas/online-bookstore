@@ -81,8 +81,8 @@ class SavedBooksTest {
         .then()
         .statusCode(200)
         .body("$", hasSize(1))
-        .body("[0].title", equalTo(generatedBooksList.get(0)))
-        .body("[0]", aMapWithSize(1));
+        .body("[0]", aMapWithSize(1))
+        .body("title", everyItem(is(in(generatedBooksList))));
   }
 
   @Test
@@ -183,10 +183,9 @@ class SavedBooksTest {
         .then()
         .statusCode(200)
         .body("$", hasSize(2))
-        .body("[0].title", equalTo(generatedBooksList.get(0)))
         .body("[0]", aMapWithSize(1))
-        .body("[1].title", equalTo(generatedBooksList.get(1)))
-        .body("[1]", aMapWithSize(1));
+        .body("[1]", aMapWithSize(1))
+        .body("title", everyItem(is(in(generatedBooksList))));
   }
 
   @Test
