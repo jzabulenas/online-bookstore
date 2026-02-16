@@ -81,8 +81,8 @@ class SavedBooksTest {
         .then()
         .statusCode(200)
         .body("$", hasSize(1))
-        .body("[0]", aMapWithSize(1))
-        .body("title", everyItem(is(in(generatedBooksList))));
+        .body("[0].title", is(in(generatedBooksList)))
+        .body("[0]", aMapWithSize(1));
   }
 
   @Test
@@ -183,9 +183,10 @@ class SavedBooksTest {
         .then()
         .statusCode(200)
         .body("$", hasSize(2))
+        .body("[0].title", is(in(generatedBooksList)))
         .body("[0]", aMapWithSize(1))
-        .body("[1]", aMapWithSize(1))
-        .body("title", everyItem(is(in(generatedBooksList))));
+        .body("[1].title", is(in(generatedBooksList)))
+        .body("[1]", aMapWithSize(1));
   }
 
   @Test
@@ -317,10 +318,12 @@ class SavedBooksTest {
         .then()
         .statusCode(200)
         .body("$", hasSize(3))
+        .body("[0].title", is(in(generatedBooksList)))
         .body("[0]", aMapWithSize(1))
+        .body("[1].title", is(in(generatedBooksList)))
         .body("[1]", aMapWithSize(1))
-        .body("[2]", aMapWithSize(1))
-        .body("title", everyItem(is(in(generatedBooksList))));
+        .body("[2].title", is(in(generatedBooksList)))
+        .body("[2]", aMapWithSize(1));
   }
 
   @Test
