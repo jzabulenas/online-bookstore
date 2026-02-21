@@ -29,10 +29,10 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 
 ## Log in
 
-| Backend | Mobile                                                              | Desktop                                                             |
-| ------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| NEED    | should log in, when correct credentials are provided                | should log in, when correct credentials are provided                |
-| NEED    | should display error message, when log in credentials are incorrect | should display error message, when log in credentials are incorrect |
+| Backend                                                    | Mobile                                                              | Desktop                                                             |
+| ---------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| whenCorrectCredentialsAreProvided_shouldReturn200AndNoBody | should log in, when correct credentials are provided                | should log in, when correct credentials are provided                |
+| NEED                                                       | should display error message, when log in credentials are incorrect | should display error message, when log in credentials are incorrect |
 
 ## Generate books
 
