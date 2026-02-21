@@ -143,11 +143,15 @@ export default function GenerateBooks() {
             <p key={index}>
               {book}
               {likedBooks.includes(book) ? (
-                <BsHandThumbsUpFill className="ms-1 fs-4" />
+                <BsHandThumbsUpFill
+                  className="ms-1 fs-4"
+                  data-testid={`liked-${book}`}
+                />
               ) : (
                 <BsHandThumbsUp
                   onClick={() => clickThumbsUp(book)}
                   className="ms-1 fs-4"
+                  data-testid={`like-${book}`}
                 />
               )}
             </p>
