@@ -30,6 +30,7 @@
 | ------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
 | whenCorrectCredentialsAreProvided_shouldReturn200AndNoBody   | should log in, when correct credentials are provided                | should log in, when correct credentials are provided                |
 | whenIncorrectCredentialsAreProvided_shouldReturn401AndNoBody | should display error message, when log in credentials are incorrect | should display error message, when log in credentials are incorrect |
+| whenNoCSRF_thenReturn401AndEmptyBody                         | Can't replicate                                                     | Can't replicate                                                     |
 
 ## Generate books
 

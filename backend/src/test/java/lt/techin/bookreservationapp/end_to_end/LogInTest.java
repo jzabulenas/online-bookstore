@@ -47,6 +47,19 @@ public class LogInTest {
         .body(emptyOrNullString());
   }
 
+  @Test
+  void whenNoCSRF_thenReturn401AndEmptyBody() {
+    String emailForLoggingIn = this.createUser();
+
+    given()
+        .contentType(ContentType.URLENC)
+        .body("username=%s&password=r9$CbHEaGXLUsP".formatted(emailForLoggingIn))
+        .post("http://localhost:8080/login")
+        .then()
+        .statusCode(401)
+        .body(emptyOrNullString());
+  }
+
   private String getCsrfToken() {
     Response csrfResponse =
         given().when().get("http://localhost:8080/open").then().extract().response();
