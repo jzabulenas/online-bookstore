@@ -49,15 +49,15 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 
 ## Like books (Calling it "Save books" would probably have been better, because "liking" actually just saves it for you, so you can later find it)
 
-| Backend                                                                             | Mobile                                                                       | Desktop                                         |
-| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------- |
-| whenOneBookIsLiked_thenReturn201AndBody                                             | should click like on a single generated book, and see the icon change color  |                                                 |
-| whenTwoBooksAreLiked_thenReturn201AndBody                                           | should click like on two generated books, and see their icons change color   |                                                 |
-| whenThreeBooksAreLiked_thenReturn201AndBody                                         | should click like on three generated books, and see their icons change color |                                                 |
-| whenBookIsAlreadyLikedByOtherUserAndILikeSameBookForNewUser_thenReturn201AndMessage | Can't replicate                                                              | Can't replicate                                 |
-| whenBookIsLikedForCurrentUserAndITryToLikeItAgain_thenReturn400AndMessage           | Can't replicate (clicking again shows no error)                              | Can't replicate (clicking again shows no error) |
-| whenUnauthenticatedTriesCalling_thenReturn401                                       | Can't replicate                                                              | Can't replicate                                 |
-| whenAuthenticatedTriesCallingButNoCSRF_thenReturn403AndBody                         | Can't replicate                                                              | Can't replicate                                 |
+| Backend                                                                             | Mobile                                                                       | Desktop                                                                      |
+| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| whenOneBookIsLiked_thenReturn201AndBody                                             | should click like on a single generated book, and see the icon change color  | should click like on a single generated book, and see the icon change color  |
+| whenTwoBooksAreLiked_thenReturn201AndBody                                           | should click like on two generated books, and see their icons change color   | should click like on two generated books, and see their icons change color   |
+| whenThreeBooksAreLiked_thenReturn201AndBody                                         | should click like on three generated books, and see their icons change color | should click like on three generated books, and see their icons change color |
+| whenBookIsAlreadyLikedByOtherUserAndILikeSameBookForNewUser_thenReturn201AndMessage | Can't replicate                                                              | Can't replicate                                                              |
+| whenBookIsLikedForCurrentUserAndITryToLikeItAgain_thenReturn400AndMessage           | Can't replicate (clicking again shows no error)                              | Can't replicate (clicking again shows no error)                              |
+| whenUnauthenticatedTriesCalling_thenReturn401                                       | Can't replicate                                                              | Can't replicate                                                              |
+| whenAuthenticatedTriesCallingButNoCSRF_thenReturn403AndBody                         | Can't replicate                                                              | Can't replicate                                                              |
 
 ## Saved books
 
