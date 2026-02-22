@@ -22,6 +22,7 @@
 | whenPasswordIsFoundToBeCompromised_thenReturn400AndBody         | should display an error message when password is compromised                                                        | should display an error message when password is compromised                                                        |
 | Can't replicate                                                 | should display an error message when confirm password is null                                                       | should display an error message when confirm password is null                                                       |
 | Can't replicate                                                 | should display an error message when confirm password does not match password                                       | should display an error message when confirm password does not match password                                       |
+| whenNoCSRF_thenReturn401AndEmptyBody                            | Can't replicate                                                                                                     | Can't replicate                                                                                                     |
 
 ## Log in
 
