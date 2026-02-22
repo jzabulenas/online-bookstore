@@ -30,6 +30,23 @@ public class LogInTest {
         .body(emptyOrNullString());
   }
 
+  @Test
+  void whenIncorrectCredentialsAreProvided_shouldReturn401AndNoBody() {
+    String csrfToken = this.getCsrfToken();
+    String emailForLoggingIn = this.createUser();
+
+    // Here, password is incorrect
+    given()
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.URLENC)
+        .body("username=%s&password=r9$CbHEaGXLUsO".formatted(emailForLoggingIn))
+        .post("http://localhost:8080/login")
+        .then()
+        .statusCode(401)
+        .body(emptyOrNullString());
+  }
+
   private String getCsrfToken() {
     Response csrfResponse =
         given().when().get("http://localhost:8080/open").then().extract().response();
