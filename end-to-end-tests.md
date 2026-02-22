@@ -1,12 +1,8 @@
-I guess it is more important to match frontend tests, because this is what the user actually uses.
-
-The thing is, if you call repositories in your backend tests, it may not be on par to frontend tests. Because frontend tests always call endpoints.
-
 ## Homepage
 
-| Backend    | Mobile                  | Desktop                 |
-| ---------- | ----------------------- | ----------------------- |
-| Not needed | should display homepage | should display homepage |
+| Backend         | Mobile                  | Desktop                 |
+| --------------- | ----------------------- | ----------------------- |
+| Can't replicate | should display homepage | should display homepage |
 
 ## Sign up
 
@@ -24,8 +20,8 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 | whenPasswordIsTooShort_shouldReturn400AndBody                   | should display an error message when password is too short                                                          | should display an error message when password is too short                                                          |
 | whenPasswordIsTooLong_shouldReturn400AndBody                    | should display an error message when password is too long                                                           | should display an error message when password is too long                                                           |
 | whenPasswordIsFoundToBeCompromised_thenReturn400AndBody         | should display an error message when password is compromised                                                        | should display an error message when password is compromised                                                        |
-| Not needed                                                      | should display an error message when confirm password is null                                                       | should display an error message when confirm password is null                                                       |
-| Not needed                                                      | should display an error message when confirm password does not match password                                       | should display an error message when confirm password does not match password                                       |
+| Can't replicate                                                 | should display an error message when confirm password is null                                                       | should display an error message when confirm password is null                                                       |
+| Can't replicate                                                 | should display an error message when confirm password does not match password                                       | should display an error message when confirm password does not match password                                       |
 
 ## Log in
 
