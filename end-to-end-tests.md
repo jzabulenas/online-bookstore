@@ -29,10 +29,10 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 
 ## Log in
 
-| Backend | Mobile                                                              | Desktop                                                             |
-| ------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| NEED    | should log in, when correct credentials are provided                | should log in, when correct credentials are provided                |
-| NEED    | should display error message, when log in credentials are incorrect | should display error message, when log in credentials are incorrect |
+| Backend                                                    | Mobile                                                              | Desktop                                                             |
+| ---------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| whenCorrectCredentialsAreProvided_shouldReturn200AndNoBody | should log in, when correct credentials are provided                | should log in, when correct credentials are provided                |
+| NEED                                                       | should display error message, when log in credentials are incorrect | should display error message, when log in credentials are incorrect |
 
 ## Generate books
 
@@ -47,25 +47,25 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 | whenAuthenticatedButNoCSRF_thenReturn403AndBody                     | Can't replicate                                                         | Can't replicate                                                         |
 | whenBookGenerationIsCalledMoreThan6Times_thenReturn429AndBody       | should display error message when books are generated more than 6 times | should display error message when books are generated more than 6 times |
 
-## Like books
+## Like books (Calling it "Save books" would probably have been better, because "liking" actually just saves it for you, so you can later find it)
 
-| Backend                                                                             | Mobile                                          | Desktop                                         |
-| ----------------------------------------------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
-| whenOneBookIsLiked_thenReturn201AndBody                                             |                                                 |                                                 |
-| whenTwoBooksAreLiked_thenReturn201AndBody                                           |                                                 |                                                 |
-| whenThreeBooksAreLiked_thenReturn201AndBody                                         |                                                 |                                                 |
-| whenBookIsAlreadyLikedByOtherUserAndILikeSameBookForNewUser_thenReturn201AndMessage | Can't replicate                                 | Can't replicate                                 |
-| whenBookIsLikedForCurrentUserAndITryToLikeItAgain_thenReturn400AndMessage           | Can't replicate (clicking again shows no error) | Can't replicate (clicking again shows no error) |
-| whenUnauthenticatedTriesCalling_thenReturn401                                       | Can't replicate                                 | Can't replicate                                 |
-| whenAuthenticatedTriesCallingButNoCSRF_thenReturn403AndBody                         | Can't replicate                                 | Can't replicate                                 |
+| Backend                                                                             | Mobile                                                                       | Desktop                                         |
+| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------- |
+| whenOneBookIsLiked_thenReturn201AndBody                                             | should click like on a single generated book, and see the icon change color  |                                                 |
+| whenTwoBooksAreLiked_thenReturn201AndBody                                           | should click like on two generated books, and see their icons change color   |                                                 |
+| whenThreeBooksAreLiked_thenReturn201AndBody                                         | should click like on three generated books, and see their icons change color |                                                 |
+| whenBookIsAlreadyLikedByOtherUserAndILikeSameBookForNewUser_thenReturn201AndMessage | Can't replicate                                                              | Can't replicate                                 |
+| whenBookIsLikedForCurrentUserAndITryToLikeItAgain_thenReturn400AndMessage           | Can't replicate (clicking again shows no error)                              | Can't replicate (clicking again shows no error) |
+| whenUnauthenticatedTriesCalling_thenReturn401                                       | Can't replicate                                                              | Can't replicate                                 |
+| whenAuthenticatedTriesCallingButNoCSRF_thenReturn403AndBody                         | Can't replicate                                                              | Can't replicate                                 |
 
-| getUserBooks_whenOneUserHasBooks_thenOtherUserHasNoneAnd200                         | should click like on generated books, and not see them displayed in 'saved books' for other user | should click like on generated books, and not see them displayed in 'saved books' for other user |
-| getUserBooks_whenListEmpty_thenReturnEmptyListAnd200                                |
-| getUserBooks_whenUnauthenticated_thenReturn401AndNoBody                             |
+## Saved books
 
-| Backend | Mobile                                                                              | Desktop |
-| ------- | ----------------------------------------------------------------------------------- | ------- |
-|         | should click like on a single generated book, and see it displayed in 'saved books' |         |
-|         | should click like on two generated books, and see them displayed in 'saved books'   |         |
-|         | should click like on three generated books, and see them displayed in 'saved books' |         |
-|         | should not see liked books if no books are liked after generating books             |         |
+| Backend                                                                     | Mobile                                                                                           | Desktop                                                                                          |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| whenSingleBookHadBeenSavedEarlier_thenReturnAListContainingOneBookAnd200    | should click like on a single generated book, and see it displayed in 'saved books'              | should click like on a single generated book, and see it displayed in 'saved books'              |
+| whenTwoBooksHadBeenSavedEarlier_thenReturnAListContainingTwoBooksAnd200     | should click like on two generated books, and see them displayed in 'saved books'                | should click like on two generated books, and see them displayed in 'saved books'                |
+| whenThreeBooksHadBeenSavedEarlier_thenReturnAListContainingThreeBooksAnd200 | should click like on three generated books, and see them displayed in 'saved books'              | should click like on three generated books, and see them displayed in 'saved books'              |
+| whenOneUserHasBooksTheySaved_thenOtherUserHasNoneAnd200                     | should click like on generated books, and not see them displayed in 'saved books' for other user | should click like on generated books, and not see them displayed in 'saved books' for other user |
+| whenNoSavedBooksExist_thenReturnEmptyListAnd200                             | should not see liked books if no books are liked after generating books                          | should not see liked books if no books are liked after generating books                          |
+| whenUnauthenticated_thenReturn401AndNoBody                                  | Can't replicate                                                                                  | Can't replicate                                                                                  |
