@@ -2,20 +2,14 @@ package lt.techin.bookreservationapp.end_to_end;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.aMapWithSize;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.hasSize;
-
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.junit.jupiter.api.Test;
+import static org.hamcrest.Matchers.*;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.junit.jupiter.api.Test;
 
 class SignUpTest {
 
@@ -498,6 +492,31 @@ class SignUpTest {
             "detail",
             equalTo(
                 "The provided password is compromised and cannot be used. Use something more unique"));
+  }
+
+  @Test
+  void whenNoCSRF_thenReturn401AndEmptyBody() {
+    UUID uuid = UUID.randomUUID();
+    String email = "antanas" + uuid + "@gmail.com";
+
+    given()
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "email": "%s",
+              "password": "r9$CbHEaGXLUsP",
+              "roles": [
+                 1
+              ]
+            }
+            """
+                .formatted(email))
+        .when()
+        .post("http://localhost:8080/signup")
+        .then()
+        .statusCode(401)
+        .body(emptyOrNullString());
   }
 
   private String getCsrfToken() {

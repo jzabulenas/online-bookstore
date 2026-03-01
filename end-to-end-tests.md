@@ -1,12 +1,8 @@
-I guess it is more important to match frontend tests, because this is what the user actually uses.
-
-The thing is, if you call repositories in your backend tests, it may not be on par to frontend tests. Because frontend tests always call endpoints.
-
 ## Homepage
 
-| Backend    | Mobile                  | Desktop                 |
-| ---------- | ----------------------- | ----------------------- |
-| Not needed | should display homepage | should display homepage |
+| Backend         | Mobile                  | Desktop                 |
+| --------------- | ----------------------- | ----------------------- |
+| Can't replicate | should display homepage | should display homepage |
 
 ## Sign up
 
@@ -24,15 +20,17 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 | whenPasswordIsTooShort_shouldReturn400AndBody                   | should display an error message when password is too short                                                          | should display an error message when password is too short                                                          |
 | whenPasswordIsTooLong_shouldReturn400AndBody                    | should display an error message when password is too long                                                           | should display an error message when password is too long                                                           |
 | whenPasswordIsFoundToBeCompromised_thenReturn400AndBody         | should display an error message when password is compromised                                                        | should display an error message when password is compromised                                                        |
-| Not needed                                                      | should display an error message when confirm password is null                                                       | should display an error message when confirm password is null                                                       |
-| Not needed                                                      | should display an error message when confirm password does not match password                                       | should display an error message when confirm password does not match password                                       |
+| Can't replicate                                                 | should display an error message when confirm password is null                                                       | should display an error message when confirm password is null                                                       |
+| Can't replicate                                                 | should display an error message when confirm password does not match password                                       | should display an error message when confirm password does not match password                                       |
+| whenNoCSRF_thenReturn401AndEmptyBody                            | Can't replicate                                                                                                     | Can't replicate                                                                                                     |
 
 ## Log in
 
-| Backend                                                    | Mobile                                                              | Desktop                                                             |
-| ---------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| whenCorrectCredentialsAreProvided_shouldReturn200AndNoBody | should log in, when correct credentials are provided                | should log in, when correct credentials are provided                |
-| NEED                                                       | should display error message, when log in credentials are incorrect | should display error message, when log in credentials are incorrect |
+| Backend                                                      | Mobile                                                              | Desktop                                                             |
+| ------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| whenCorrectCredentialsAreProvided_shouldReturn200AndNoBody   | should log in, when correct credentials are provided                | should log in, when correct credentials are provided                |
+| whenIncorrectCredentialsAreProvided_shouldReturn401AndNoBody | should display error message, when log in credentials are incorrect | should display error message, when log in credentials are incorrect |
+| whenNoCSRF_thenReturn401AndEmptyBody                         | Can't replicate                                                     | Can't replicate                                                     |
 
 ## Generate books
 
@@ -49,15 +47,15 @@ The thing is, if you call repositories in your backend tests, it may not be on p
 
 ## Like books (Calling it "Save books" would probably have been better, because "liking" actually just saves it for you, so you can later find it)
 
-| Backend                                                                             | Mobile                                                                       | Desktop                                         |
-| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------- |
-| whenOneBookIsLiked_thenReturn201AndBody                                             | should click like on a single generated book, and see the icon change color  |                                                 |
-| whenTwoBooksAreLiked_thenReturn201AndBody                                           | should click like on two generated books, and see their icons change color   |                                                 |
-| whenThreeBooksAreLiked_thenReturn201AndBody                                         | should click like on three generated books, and see their icons change color |                                                 |
-| whenBookIsAlreadyLikedByOtherUserAndILikeSameBookForNewUser_thenReturn201AndMessage | Can't replicate                                                              | Can't replicate                                 |
-| whenBookIsLikedForCurrentUserAndITryToLikeItAgain_thenReturn400AndMessage           | Can't replicate (clicking again shows no error)                              | Can't replicate (clicking again shows no error) |
-| whenUnauthenticatedTriesCalling_thenReturn401                                       | Can't replicate                                                              | Can't replicate                                 |
-| whenAuthenticatedTriesCallingButNoCSRF_thenReturn403AndBody                         | Can't replicate                                                              | Can't replicate                                 |
+| Backend                                                                             | Mobile                                                                       | Desktop                                                                      |
+| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| whenOneBookIsLiked_thenReturn201AndBody                                             | should click like on a single generated book, and see the icon change color  | should click like on a single generated book, and see the icon change color  |
+| whenTwoBooksAreLiked_thenReturn201AndBody                                           | should click like on two generated books, and see their icons change color   | should click like on two generated books, and see their icons change color   |
+| whenThreeBooksAreLiked_thenReturn201AndBody                                         | should click like on three generated books, and see their icons change color | should click like on three generated books, and see their icons change color |
+| whenBookIsAlreadyLikedByOtherUserAndILikeSameBookForNewUser_thenReturn201AndMessage | Can't replicate                                                              | Can't replicate                                                              |
+| whenBookIsLikedForCurrentUserAndITryToLikeItAgain_thenReturn400AndMessage           | Can't replicate (clicking again shows no error)                              | Can't replicate (clicking again shows no error)                              |
+| whenUnauthenticatedTriesCalling_thenReturn401                                       | Can't replicate                                                              | Can't replicate                                                              |
+| whenAuthenticatedTriesCallingButNoCSRF_thenReturn403AndBody                         | Can't replicate                                                              | Can't replicate                                                              |
 
 ## Saved books
 
