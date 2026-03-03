@@ -1,17 +1,18 @@
 package lt.techin.bookreservationapp.book;
 
-import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.List;
 import lt.techin.bookreservationapp.user_book.UserBook;
+import org.jspecify.annotations.NullUnmarked;
 
 @Entity
 @Table(name = "books")
+@NullUnmarked
 public class Book {
 
   @Id

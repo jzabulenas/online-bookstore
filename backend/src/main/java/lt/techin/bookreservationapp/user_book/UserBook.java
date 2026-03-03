@@ -9,9 +9,11 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.user.User;
+import org.jspecify.annotations.NullUnmarked;
 
 @Entity
 @Table(name = "users_books")
+@NullUnmarked
 public class UserBook {
 
   @Id

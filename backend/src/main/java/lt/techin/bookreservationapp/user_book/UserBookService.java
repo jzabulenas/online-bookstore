@@ -2,13 +2,7 @@ package lt.techin.bookreservationapp.user_book;
 
 import java.security.Principal;
 import java.util.List;
-
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
+import java.util.Objects;
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.book.BookRepository;
 import lt.techin.bookreservationapp.book.BookTitleAlreadyExistsException;
@@ -16,6 +10,12 @@ import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.book.MessageResponseDTO;
 import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
+import org.jspecify.annotations.Nullable;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 class UserBookService {
@@ -25,7 +25,7 @@ class UserBookService {
   private final UserRepository userRepository;
   private final UserBookRepository userBookRepository;
   // I do this in hopes that it does not generate same books on consecutive call
-  private String resultFromApiCall;
+  private @Nullable String resultFromApiCall;
 
   @Autowired
   UserBookService(
@@ -56,7 +56,7 @@ class UserBookService {
             .call()
             .content();
 
-    String[] books = result.split("\\|");
+    String[] books = Objects.requireNonNull(result).split("\\|");
     // TODO:
     // Wait a minute... is "resultFromApiCall" bound to each and every user?
     // And even then, if Playwright for each browser calls this endpoint again,
@@ -98,8 +98,6 @@ class UserBookService {
 
     List<String> titles = this.userBookRepository.findAllTitles();
 
-    List<UserBookTitleResponseDTO> books = UserBookMapper.toEntities(titles);
-
-    return books;
+    return UserBookMapper.toEntities(titles);
   }
 }

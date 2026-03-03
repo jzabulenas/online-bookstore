@@ -2,7 +2,8 @@ package lt.techin.bookreservationapp.validation;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.Objects;
+import lt.techin.bookreservationapp.user.EmailAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import lt.techin.bookreservationapp.user.EmailAlreadyExistsException;
 
 @RestControllerAdvice
 class BeanValidation {
@@ -29,7 +28,7 @@ class BeanValidation {
             (error) -> {
               String fieldName = ((FieldError) error).getField();
               String errorMessage = error.getDefaultMessage();
-              errors.put(fieldName, errorMessage);
+              errors.put(fieldName, Objects.requireNonNull(errorMessage));
             });
 
     return errors;

@@ -1,16 +1,14 @@
 package lt.techin.bookreservationapp.user;
 
 import java.util.List;
-
+import lt.techin.bookreservationapp.role.Role;
+import lt.techin.bookreservationapp.role.RoleMapper;
+import lt.techin.bookreservationapp.role.RoleRepository;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.authentication.password.CompromisedPasswordException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import lt.techin.bookreservationapp.role.Role;
-import lt.techin.bookreservationapp.role.RoleMapper;
-import lt.techin.bookreservationapp.role.RoleRepository;
 
 @Service
 public class UserService {
@@ -80,7 +78,7 @@ public class UserService {
         .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
   }
 
-  User saveUser(User user) {
-    return this.userRepository.save(user);
+  void saveUser(User user) {
+    this.userRepository.save(user);
   }
 }

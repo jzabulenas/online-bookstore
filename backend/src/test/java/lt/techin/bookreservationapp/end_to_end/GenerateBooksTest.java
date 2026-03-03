@@ -8,24 +8,22 @@ import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.junit.jupiter.api.Test;
-
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 
 class GenerateBooksTest {
 
   @Test
   void whenBooksAreGenerated_thenReturn200AndListOfBooks() {
     String csrfToken = this.getCsrfToken();
-    Response logInResponse = createUserThenLogInAndGetSession();
+    Response logInResponse = this.createUserThenLogInAndGetSession();
 
     given()
         .cookie("JSESSIONID", logInResponse.getSessionId())
@@ -49,7 +47,7 @@ class GenerateBooksTest {
   @Test
   void whenUserHasBooksTheyLikedBefore_thenNotSeeThemInNewlyGeneratedBooks() {
     String csrfToken = this.getCsrfToken();
-    Response logInResponse = createUserThenLogInAndGetSession();
+    Response logInResponse = this.createUserThenLogInAndGetSession();
 
     // Generate new books
     Response newlyGeneratedBooksResponse =
@@ -161,7 +159,7 @@ class GenerateBooksTest {
   @Test
   void whenMessageIsNull_thenReturn400AndMessage() {
     String csrfToken = this.getCsrfToken();
-    Response logInResponse = createUserThenLogInAndGetSession();
+    Response logInResponse = this.createUserThenLogInAndGetSession();
 
     given()
         .cookie("JSESSIONID", logInResponse.getSessionId())
@@ -185,7 +183,7 @@ class GenerateBooksTest {
   @Test
   void whenMessageIsTooShort_thenReturn400AndMessage() {
     String csrfToken = this.getCsrfToken();
-    Response logInResponse = createUserThenLogInAndGetSession();
+    Response logInResponse = this.createUserThenLogInAndGetSession();
 
     given()
         .cookie("JSESSIONID", logInResponse.getSessionId())
@@ -209,7 +207,7 @@ class GenerateBooksTest {
   @Test
   void whenMessageIsTooLong_thenReturn400AndMessage() {
     String csrfToken = this.getCsrfToken();
-    Response logInResponse = createUserThenLogInAndGetSession();
+    Response logInResponse = this.createUserThenLogInAndGetSession();
 
     given()
         .cookie("JSESSIONID", logInResponse.getSessionId())
@@ -249,7 +247,7 @@ class GenerateBooksTest {
 
   @Test
   void whenAuthenticatedButNoCSRF_thenReturn403AndBody() {
-    Response logInResponse = createUserThenLogInAndGetSession();
+    Response logInResponse = this.createUserThenLogInAndGetSession();
 
     given()
         .cookie("JSESSIONID", logInResponse.getSessionId())
@@ -273,7 +271,7 @@ class GenerateBooksTest {
   @Test
   void whenBookGenerationIsCalledMoreThan6Times_thenReturn429AndBody() {
     String csrfToken = this.getCsrfToken();
-    Response logInResponse = createUserThenLogInAndGetSession();
+    Response logInResponse = this.createUserThenLogInAndGetSession();
 
     // Call one
     given()

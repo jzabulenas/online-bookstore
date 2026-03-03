@@ -1,7 +1,6 @@
 package lt.techin.bookreservationapp.rate_limiting;
 
 import java.time.Instant;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 interface GenerateBooksRequestLimitRepository
