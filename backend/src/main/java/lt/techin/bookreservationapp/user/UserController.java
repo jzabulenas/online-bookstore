@@ -23,10 +23,7 @@ class UserController {
   private final String frontendUrl;
 
   @Autowired
-  UserController(
-      UserService userService,
-      UserRepository userRepository,
-      @Value("${FRONTEND_URL}") String frontendUrl) {
+  UserController(UserService userService, @Value("${FRONTEND_URL}") String frontendUrl) {
     this.userService = userService;
     this.frontendUrl = frontendUrl;
   }

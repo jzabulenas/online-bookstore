@@ -403,27 +403,25 @@ class SavedBooksTest {
     Response logInResponse = this.createUserThenLogInAndGetSession();
 
     // Generate books
-    Response generatedBooksResponse =
-        given()
-            .cookie("JSESSIONID", logInResponse.getSessionId())
-            .cookie("XSRF-TOKEN", csrfToken)
-            .header("X-XSRF-TOKEN", csrfToken)
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {
-                  "message": "Dracula by Bram Stoker"
-                }
-                """)
-            .when()
-            .post("http://localhost:8080/generate-books")
-            .then()
-            .statusCode(200)
-            .body("$", aMapWithSize(1))
-            .body("result", hasSize(3))
-            .extract()
-            .response();
-    List<String> generatedBooksList = generatedBooksResponse.jsonPath().getList("result");
+    given()
+        .cookie("JSESSIONID", logInResponse.getSessionId())
+        .cookie("XSRF-TOKEN", csrfToken)
+        .header("X-XSRF-TOKEN", csrfToken)
+        .contentType(ContentType.JSON)
+        .body(
+            """
+            {
+              "message": "Dracula by Bram Stoker"
+            }
+            """)
+        .when()
+        .post("http://localhost:8080/generate-books")
+        .then()
+        .statusCode(200)
+        .body("$", aMapWithSize(1))
+        .body("result", hasSize(3))
+        .extract()
+        .response();
 
     // Check that no books are saved
     given()

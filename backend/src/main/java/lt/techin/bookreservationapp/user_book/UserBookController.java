@@ -1,6 +1,5 @@
 package lt.techin.bookreservationapp.user_book;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import java.util.List;
@@ -36,9 +35,7 @@ class UserBookController {
 
   @PostMapping("/generate-books")
   ResponseEntity<MessageResponseDTO> generateBooks(
-      @RequestBody @Valid MessageRequestDTO messageRequestDTO,
-      Authentication authentication,
-      HttpServletRequest request) {
+      @RequestBody @Valid MessageRequestDTO messageRequestDTO, Authentication authentication) {
     User user = (User) authentication.getPrincipal();
 
     this.generateBooksRateLimitService.checkLimit(

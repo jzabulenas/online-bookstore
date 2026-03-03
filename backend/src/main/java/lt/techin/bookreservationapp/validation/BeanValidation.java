@@ -35,7 +35,7 @@ class BeanValidation {
   }
 
   @ExceptionHandler(EmailAlreadyExistsException.class)
-  ResponseEntity<Object> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
+  ResponseEntity<Object> handleEmailAlreadyExistsException() {
     Map<String, String> response = new HashMap<>();
     response.put("email", "Such email address is already in use");
 
