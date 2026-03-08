@@ -1,10 +1,9 @@
 package lt.techin.bookreservationapp.rate_limiting;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 class ApiErrorMessage {

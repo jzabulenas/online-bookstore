@@ -1,5 +1,7 @@
 package lt.techin.bookreservationapp.user;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -7,9 +9,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 
 @Service
 class EmailService {
@@ -31,7 +30,7 @@ class EmailService {
   /**
    * Constructs the HTML content of the email message.
    *
-   * @param entity User who's verification code will be used in the URL for verification.
+   * @param entity User whose verification code will be used in the URL for verification.
    * @return String containing the HTML code.
    */
   private String getVerificationMailContent(User entity) {
@@ -52,7 +51,6 @@ class EmailService {
    * @param entity User to who's email the message will be addressed.
    * @param content content containing HTML message.
    * @return MimeMessage
-   * @throws MessagingException
    */
   private MimeMessage createMessage(User entity, String content) throws MessagingException {
     MimeMessage mimeMessage = this.mailSender.createMimeMessage();

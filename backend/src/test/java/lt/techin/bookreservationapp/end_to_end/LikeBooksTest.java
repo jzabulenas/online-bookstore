@@ -9,16 +9,14 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.junit.jupiter.api.Test;
-
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 
 class LikeBooksTest {
 

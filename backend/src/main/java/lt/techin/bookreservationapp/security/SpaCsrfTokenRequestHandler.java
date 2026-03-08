@@ -1,15 +1,14 @@
 package lt.techin.bookreservationapp.security;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.function.Supplier;
-
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 import org.springframework.util.StringUtils;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 final class SpaCsrfTokenRequestHandler implements CsrfTokenRequestHandler {
 
@@ -32,7 +31,7 @@ final class SpaCsrfTokenRequestHandler implements CsrfTokenRequestHandler {
   }
 
   @Override
-  public String resolveCsrfTokenValue(HttpServletRequest request, CsrfToken csrfToken) {
+  public @Nullable String resolveCsrfTokenValue(HttpServletRequest request, CsrfToken csrfToken) {
     String headerValue = request.getHeader(csrfToken.getHeaderName());
     /*
      * If the request contains a request header, use

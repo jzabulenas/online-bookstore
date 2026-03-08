@@ -1,7 +1,6 @@
 package lt.techin.bookreservationapp.role;
 
 import java.util.List;
-
 import lt.techin.bookreservationapp.user.User;
 
 public class RoleMapper {
@@ -11,6 +10,6 @@ public class RoleMapper {
   }
 
   public static List<Long> toIds(User user) {
-    return user.getRoles().stream().map(r -> r.getId()).toList();
+    return user.getRoles().stream().map(Role::getId).toList();
   }
 }

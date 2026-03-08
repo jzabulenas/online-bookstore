@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 
-public class LogInTest {
+class LogInTest {
 
   @Test
   void whenCorrectCredentialsAreProvided_shouldReturn200AndNoBody() {

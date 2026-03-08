@@ -10,6 +10,6 @@ class UserBookMapper {
   }
 
   static List<UserBookTitleResponseDTO> toEntities(List<String> titles) {
-    return titles.stream().map(title -> new UserBookTitleResponseDTO(title)).toList();
+    return titles.stream().map(UserBookTitleResponseDTO::new).toList();
   }
 }

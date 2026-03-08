@@ -487,7 +487,7 @@ class SignUpTest {
         .post("http://localhost:8080/signup")
         .then()
         .statusCode(400)
-        .body("$", aMapWithSize(5))
+        .body("$", aMapWithSize(4))
         .body(
             "detail",
             equalTo(

@@ -1,11 +1,9 @@
 package lt.techin.bookreservationapp.user;
 
 import java.util.List;
-
+import lt.techin.bookreservationapp.role.Role;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import lt.techin.bookreservationapp.role.Role;
 
 class UserMapper {
 

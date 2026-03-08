@@ -1,11 +1,5 @@
 package lt.techin.bookreservationapp.user;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,11 +10,17 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Collection;
+import java.util.List;
 import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.user_book.UserBook;
+import org.jspecify.annotations.NullUnmarked;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "Users")
+@NullUnmarked
 public class User implements UserDetails {
 
   @Id
@@ -111,15 +111,15 @@ public class User implements UserDetails {
     return this.isEnabled;
   }
 
-  void setEnabled(boolean isEnabled) {
-    this.isEnabled = isEnabled;
+  void setEnabled() {
+    this.isEnabled = true;
   }
 
   String getVerificationCode() {
     return this.verificationCode;
   }
 
-  void setVerificationCode(String verificationCode) {
-    this.verificationCode = verificationCode;
+  void setVerificationCodeToNull() {
+    this.verificationCode = null;
   }
 }
