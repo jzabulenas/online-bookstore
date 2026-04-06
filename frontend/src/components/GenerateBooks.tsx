@@ -4,18 +4,26 @@ import { BsHandThumbsUp, BsHandThumbsUpFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import csrfToken from "../util/getCsrfToken";
 
+type GenerateBooksFormData = {
+  book: string;
+};
+
+type BooksResponse = {
+  result: string[];
+};
+
 export default function GenerateBooks() {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm();
-  const [books, setBooks] = useState(null);
-  const [likedBooks, setLikedBooks] = useState([]); // Track liked books
+  } = useForm<GenerateBooksFormData>();
+  const [books, setBooks] = useState<BooksResponse | null>(null);
+  const [likedBooks, setLikedBooks] = useState<string[]>([]); // Track liked books
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: GenerateBooksFormData) => {
     async function postData() {
       const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/generate-books`;
 
@@ -46,7 +54,7 @@ export default function GenerateBooks() {
         // This was done so Playwright can run other tests normally
         if (response.status === 429) {
           setError("root.serverError", {
-            type: response.status,
+            type: response.status.toString(),
             message: json.error,
           });
         }
@@ -58,14 +66,14 @@ export default function GenerateBooks() {
         setBooks(json);
         console.log(json);
       } catch (error) {
-        console.error(error.message);
+        if (error instanceof Error) console.error(error.message);
       }
     }
 
     postData();
   };
 
-  const clickThumbsUp = async (bookTitle) => {
+  const clickThumbsUp = async (bookTitle: string) => {
     const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/books`;
 
     try {
@@ -93,7 +101,7 @@ export default function GenerateBooks() {
       // On successful save, update the liked state
       setLikedBooks((prev) => [...prev, bookTitle]);
     } catch (error) {
-      console.error(error.message);
+      if (error instanceof Error) console.error(error.message);
     }
   };
 
@@ -130,7 +138,7 @@ export default function GenerateBooks() {
         {errors.book && errors.book.type === "maxLength" && (
           <p className="text-danger">Must be at most 100 characters long.</p>
         )}
-        {errors.root?.serverError?.type === 429 && (
+        {errors.root?.serverError?.type === "429" && (
           <p className="text-danger">{errors.root?.serverError?.message}</p>
         )}
 

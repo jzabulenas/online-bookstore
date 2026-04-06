@@ -14,12 +14,12 @@ test("should log out, when it is performed", async ({ page }) => {
     .waitFor();
 
   // Log out
-  await page.getByRole("link", { name: "Log out" }).click();
+  await page.getByRole("button", { name: "Log out" }).click();
 
   // Assert
   await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
-    page.getByRole("heading", { name: "Book recommendation app" })
+    page.getByRole("heading", { name: "Book recommendation app" }),
   ).toBeVisible();
   await expect(page.locator("h1")).toContainText("Book recommendation app");
   await expect(page).toHaveScreenshot();

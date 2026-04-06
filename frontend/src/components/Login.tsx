@@ -2,16 +2,21 @@ import { useForm } from "react-hook-form";
 import csrfToken from "../util/getCsrfToken";
 import { useNavigate } from "react-router-dom";
 
+type LoginFormData = {
+  email: string;
+  password: string;
+};
+
 export default function Login() {
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm();
+  } = useForm<LoginFormData>();
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: LoginFormData) => {
     async function postData() {
       const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/login`;
 
@@ -31,7 +36,7 @@ export default function Login() {
 
         if (response.status === 401) {
           setError("root.serverError", {
-            type: response.status,
+            type: response.status.toString(),
           });
         }
 
@@ -44,7 +49,7 @@ export default function Login() {
         }
       } catch (error) {
         console.log("This is caught");
-        console.error(error.message);
+        if (error instanceof Error) console.error(error.message);
       }
     }
 
@@ -65,7 +70,6 @@ export default function Login() {
               </label>
               <input
                 type="email"
-                name="email"
                 id="email"
                 className="form-control"
                 {...register("email")}
@@ -81,14 +85,13 @@ export default function Login() {
               </label>
               <input
                 type="password"
-                name="password"
                 id="password"
                 className="form-control"
                 {...register("password")}
               />
             </div>
 
-            {errors.root?.serverError?.type === 401 && (
+            {errors.root?.serverError?.type === "401" && (
               <p className="text-danger">Username or password is incorrect.</p>
             )}
 

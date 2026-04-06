@@ -5,7 +5,7 @@ import csrfToken from "../util/getCsrfToken";
 import "./Navbar.css";
 
 export default function Navbar() {
-  const roles = useLocalStorage("roles");
+  const roles = useLocalStorage<string[]>("roles");
   const navigate = useNavigate();
 
   const logout = () => {
@@ -13,16 +13,13 @@ export default function Navbar() {
     localStorage.removeItem("roles");
 
     const callLogoutEndpoint = async () => {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_BASE_URL}/logout`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "X-XSRF-TOKEN": csrfToken(),
-          },
-        }
-      );
+      await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/logout`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "X-XSRF-TOKEN": csrfToken(),
+        },
+      });
     };
 
     callLogoutEndpoint();
@@ -52,7 +49,7 @@ export default function Navbar() {
     const navbarCollapse = document.querySelector(".navbar-collapse");
 
     // Toggle the 'show' class on the navbar collapse element to hide it
-    navbarCollapse.classList.remove("show");
+    navbarCollapse?.classList.remove("show");
   };
 
   return (
@@ -143,12 +140,12 @@ export default function Navbar() {
                   </NavLink>
 
                   <li className="nav-item">
-                    <Link
+                    <button
                       className="nav-link"
                       onClick={logout}
                     >
                       Log out
-                    </Link>
+                    </button>
                   </li>
                 </>
               )}

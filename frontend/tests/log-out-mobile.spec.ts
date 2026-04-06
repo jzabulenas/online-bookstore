@@ -22,12 +22,12 @@ test("should log out, when it is performed", async ({ page }) => {
   // Log out
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
-  await page.getByRole("link", { name: "Log out" }).tap();
+  await page.getByRole("button", { name: "Log out" }).tap();
 
   // Assert
   await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
-    page.getByRole("heading", { name: "Book recommendation app" })
+    page.getByRole("heading", { name: "Book recommendation app" }),
   ).toBeVisible();
   await expect(page.locator("h1")).toContainText("Book recommendation app");
   await expect(page).toHaveScreenshot();

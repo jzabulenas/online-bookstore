@@ -292,7 +292,7 @@ test("should click like on generated books, and not see them displayed in 'saved
   // Log out
   await page.getByRole("button", { name: "Toggle navigation" }).tap();
   await page.locator(".navbar-collapse.collapse.show").waitFor();
-  await page.getByRole("link", { name: "Log out" }).tap();
+  await page.getByRole("button", { name: "Log out" }).tap();
 
   // Sign up again
   await page.goto("http://localhost:5173/");

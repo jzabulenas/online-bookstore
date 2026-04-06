@@ -1,6 +1,8 @@
-export default function getCsrfToken() {
-  return document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("XSRF-TOKEN="))
-    ?.split("=")[1];
+export default function getCsrfToken(): string {
+  return (
+    document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("XSRF-TOKEN="))
+      ?.split("=")[1] ?? ""
+  );
 }

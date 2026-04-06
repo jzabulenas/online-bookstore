@@ -3,12 +3,17 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import GenerateBooks from "./GenerateBooks";
 import { useEffect } from "react";
 
-export default function Home({ isSignedUp, setIsSignedUp }) {
+type HomeProps = {
+  isSignedUp: boolean;
+  setIsSignedUp: (value: boolean) => void;
+};
+
+export default function Home({ isSignedUp, setIsSignedUp }: HomeProps) {
   const email = localStorage.getItem("email");
 
   // I do this so a render would happen when roles
   // are removed from session storage.
-  const roles = useLocalStorage("roles");
+  useLocalStorage("roles");
 
   // Using this for receiving CSRF token
   useEffect(() => {
@@ -25,7 +30,7 @@ export default function Home({ isSignedUp, setIsSignedUp }) {
           throw new Error(`Response status: ${response.status}`);
         }
       } catch (error) {
-        console.error(error.message);
+        if (error instanceof Error) console.error(error.message);
         // sessionStorage.clear();
         // navigate("/login");
       }

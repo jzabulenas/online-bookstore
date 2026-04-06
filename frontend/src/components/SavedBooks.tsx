@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function SavedBooks() {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<{ title: string }[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
