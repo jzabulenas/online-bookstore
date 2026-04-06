@@ -9,8 +9,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -47,10 +46,11 @@ import org.testcontainers.utility.DockerImageName;
 @ActiveProfiles("test")
 class UserBookControllerTest {
 
-  @LocalServerPort private Integer port;
+  @LocalServerPort
+  private Integer port;
 
-  private static final MariaDBContainer mariaDB =
-      new MariaDBContainer(DockerImageName.parse("mariadb:11.4"));
+  private static final MariaDBContainer mariaDB = new MariaDBContainer(
+      DockerImageName.parse("mariadb:11.4"));
 
   @BeforeAll
   static void beforeAll() {
@@ -69,11 +69,16 @@ class UserBookControllerTest {
     registry.add("spring.datasource.password", mariaDB::getPassword);
   }
 
-  @Autowired private UserRepository userRepository;
-  @Autowired private RoleRepository roleRepository;
-  @Autowired private PasswordEncoder passwordEncoder;
-  @Autowired private BookRepository bookRepository;
-  @Autowired private UserBookRepository userBookRepository;
+  @Autowired
+  private UserRepository userRepository;
+  @Autowired
+  private RoleRepository roleRepository;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+  @Autowired
+  private BookRepository bookRepository;
+  @Autowired
+  private UserBookRepository userBookRepository;
 
   // TODO: why don't I do this in frontend? I mean, delete after each and every
   // test
@@ -89,8 +94,7 @@ class UserBookControllerTest {
   class GenerateBooksTests {
 
     @Test
-    void generateBooks_whenBookIsGenerated_thenReturn200AndListOfBooks()
-        throws JsonProcessingException {
+    void generateBooks_whenBookIsGenerated_thenReturn200AndListOfBooks() {
       UserBookControllerTest.this.createUser();
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
@@ -112,56 +116,52 @@ class UserBookControllerTest {
     }
 
     @Test
-    void generateBooks_whenUserBooksExist_thenNotSeeThemInNewlyGeneratedBooks()
-        throws JsonProcessingException {
+    void generateBooks_whenUserBooksExist_thenNotSeeThemInNewlyGeneratedBooks() {
       User user = UserBookControllerTest.this.createUser();
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
 
-      RequestSpecification spec =
-          given()
-              .cookie("JSESSIONID", loginResponse.getSessionId())
-              .cookie("XSRF-TOKEN", csrfToken)
-              .header("X-XSRF-TOKEN", csrfToken)
-              .contentType(ContentType.JSON)
-              .body(
-                  new ObjectMapper()
-                      .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
+      RequestSpecification spec = given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
 
-      Response responseOne =
-          spec.when()
-              .post("/generate-books")
-              .then()
-              .statusCode(200)
-              .body("$", aMapWithSize(1))
-              .body("result", hasSize(3))
-              .extract()
-              .response();
+      Response responseOne = spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
       List<String> resultOne = responseOne.jsonPath().getList("result");
 
-      Book bookOne =
-          UserBookControllerTest.this.bookRepository.save(new Book(resultOne.get(0), null));
-      Book bookTwo =
-          UserBookControllerTest.this.bookRepository.save(new Book(resultOne.get(1), null));
-      Book bookThree =
-          UserBookControllerTest.this.bookRepository.save(new Book(resultOne.get(2), null));
+      Book bookOne = UserBookControllerTest.this.bookRepository
+          .save(new Book(resultOne.get(0), null));
+      Book bookTwo = UserBookControllerTest.this.bookRepository
+          .save(new Book(resultOne.get(1), null));
+      Book bookThree = UserBookControllerTest.this.bookRepository
+          .save(new Book(resultOne.get(2), null));
 
       UserBookControllerTest.this.userBookRepository.save(new UserBook(user, bookOne));
       UserBookControllerTest.this.userBookRepository.save(new UserBook(user, bookTwo));
       UserBookControllerTest.this.userBookRepository.save(new UserBook(user, bookThree));
 
-      List<String> existingUserBooks =
-          UserBookControllerTest.this.userBookRepository.findAllTitlesByEmail(user.getEmail());
+      List<String> existingUserBooks = UserBookControllerTest.this.userBookRepository
+          .findAllTitlesByEmail(user.getEmail());
 
-      Response response =
-          spec.when()
-              .post("/generate-books")
-              .then()
-              .statusCode(200)
-              .body("$", aMapWithSize(1))
-              .body("result", hasSize(3))
-              .extract()
-              .response();
+      Response response = spec.when()
+          .post("/generate-books")
+          .then()
+          .statusCode(200)
+          .body("$", aMapWithSize(1))
+          .body("result", hasSize(3))
+          .extract()
+          .response();
       List<String> result = response.jsonPath().getList("result");
 
       assertNotEquals(existingUserBooks, result, "Expected different results for repeated calls");
@@ -226,7 +226,7 @@ class UserBookControllerTest {
     //
 
     @Test
-    void generateBooks_whenMessageIsNull_thenReturn400AndMessage() throws JsonProcessingException {
+    void generateBooks_whenMessageIsNull_thenReturn400AndMessage() {
       UserBookControllerTest.this.createUser();
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
@@ -246,8 +246,7 @@ class UserBookControllerTest {
     }
 
     @Test
-    void generateBooks_whenMessageIsTooShort_thenReturn400AndMessage()
-        throws JsonProcessingException {
+    void generateBooks_whenMessageIsTooShort_thenReturn400AndMessage() {
       UserBookControllerTest.this.createUser();
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
@@ -267,8 +266,7 @@ class UserBookControllerTest {
     }
 
     @Test
-    void generateBooks_whenMessageIsTooLong_thenReturn400AndMessage()
-        throws JsonProcessingException {
+    void generateBooks_whenMessageIsTooLong_thenReturn400AndMessage() {
       UserBookControllerTest.this.createUser();
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
@@ -292,7 +290,7 @@ class UserBookControllerTest {
     }
 
     @Test
-    void generateBooks_whenUnauthenticated_thenReturn401() throws JsonProcessingException {
+    void generateBooks_whenUnauthenticated_thenReturn401() {
       given()
           .contentType(ContentType.JSON)
           .body(
@@ -306,8 +304,7 @@ class UserBookControllerTest {
     }
 
     @Test
-    void generateBooks_whenAuthenticatedButNoCSRF_thenReturn403AndBody()
-        throws JsonProcessingException {
+    void generateBooks_whenAuthenticatedButNoCSRF_thenReturn403AndBody() {
       UserBookControllerTest.this.createUser();
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
@@ -329,21 +326,19 @@ class UserBookControllerTest {
     }
 
     @Test
-    void generateBooks_whenCalledMoreThan6Times_thenReturn429AndBody()
-        throws JsonProcessingException {
+    void generateBooks_whenCalledMoreThan6Times_thenReturn429AndBody() {
       UserBookControllerTest.this.createUser();
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
 
-      RequestSpecification spec =
-          given()
-              .cookie("JSESSIONID", loginResponse.getSessionId())
-              .cookie("XSRF-TOKEN", csrfToken)
-              .header("X-XSRF-TOKEN", csrfToken)
-              .contentType(ContentType.JSON)
-              .body(
-                  new ObjectMapper()
-                      .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
+      RequestSpecification spec = given()
+          .cookie("JSESSIONID", loginResponse.getSessionId())
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.JSON)
+          .body(
+              new ObjectMapper()
+                  .writeValueAsString(new MessageRequestDTO("Dracula by Bram Stoker")));
 
       // Response one
       spec.when()
@@ -421,7 +416,7 @@ class UserBookControllerTest {
   class SaveUserBookTests {
 
     @Test
-    void saveUserBook_whenBookIsSaved_thenReturn201AndBody() throws JsonProcessingException {
+    void saveUserBook_whenBookIsSaved_thenReturn201AndBody() {
       User user = UserBookControllerTest.this.createUser();
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
@@ -457,23 +452,21 @@ class UserBookControllerTest {
     }
 
     @Test
-    void saveUserBook_whenTitleAlreadyExistsForOtherUser_thenReturn201AndMessage()
-        throws JsonProcessingException {
+    void saveUserBook_whenTitleAlreadyExistsForOtherUser_thenReturn201AndMessage() {
       User user = UserBookControllerTest.this.createUser();
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
       String bookTitle = "Dracula by Bram Stoker";
 
       Optional<Role> role = UserBookControllerTest.this.roleRepository.findByName("ROLE_USER");
-      User otherUser =
-          UserBookControllerTest.this.userRepository.save(
-              new User(
-                  "antanas@inbox.lt",
-                  UserBookControllerTest.this.passwordEncoder.encode("123456"),
-                  true,
-                  null,
-                  List.of(role.orElseThrow()),
-                  null));
+      User otherUser = UserBookControllerTest.this.userRepository.save(
+          new User(
+              "antanas@inbox.lt",
+              UserBookControllerTest.this.passwordEncoder.encode("123456"),
+              true,
+              null,
+              List.of(role.orElseThrow()),
+              null));
       Book book = UserBookControllerTest.this.bookRepository.save(new Book(bookTitle, null));
       UserBookControllerTest.this.userBookRepository.save(new UserBook(otherUser, book));
 
@@ -518,13 +511,12 @@ class UserBookControllerTest {
     //
 
     @Test
-    void saveUserBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage()
-        throws JsonProcessingException {
+    void saveUserBook_whenTitleAlreadyExistsForUser_thenReturn400AndMessage() {
       User user = UserBookControllerTest.this.createUser();
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
-      Book book =
-          UserBookControllerTest.this.bookRepository.save(new Book("Dracula by Bram Stoker", null));
+      Book book = UserBookControllerTest.this.bookRepository
+          .save(new Book("Dracula by Bram Stoker", null));
       UserBookControllerTest.this.userBookRepository.save(new UserBook(user, book));
 
       given()
@@ -544,7 +536,7 @@ class UserBookControllerTest {
     }
 
     @Test
-    void saveUserBook_whenUnauthenticatedCalls_thenReturn401() throws JsonProcessingException {
+    void saveUserBook_whenUnauthenticatedCalls_thenReturn401() {
       given()
           .contentType(ContentType.JSON)
           .body(
@@ -558,8 +550,7 @@ class UserBookControllerTest {
     }
 
     @Test
-    void saveUserBook_whenAuthenticatedButNoCSRF_thenReturn403AndBody()
-        throws JsonProcessingException {
+    void saveUserBook_whenAuthenticatedButNoCSRF_thenReturn403AndBody() {
       UserBookControllerTest.this.createUser();
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
@@ -590,13 +581,11 @@ class UserBookControllerTest {
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
       Response loginResponse = UserBookControllerTest.this.loginAndGetSession(csrfToken);
 
-      Book bookOne =
-          UserBookControllerTest.this.bookRepository.save(
-              new Book("Pride and Prejudice by Jane Austen", null));
+      Book bookOne = UserBookControllerTest.this.bookRepository.save(
+          new Book("Pride and Prejudice by Jane Austen", null));
 
-      Book bookTwo =
-          UserBookControllerTest.this.bookRepository.save(
-              new Book("Romeo and Juliet by William Shakespeare", null));
+      Book bookTwo = UserBookControllerTest.this.bookRepository.save(
+          new Book("Romeo and Juliet by William Shakespeare", null));
 
       UserBookControllerTest.this.userBookRepository.save(new UserBook(user, bookOne));
       UserBookControllerTest.this.userBookRepository.save(new UserBook(user, bookTwo));
@@ -617,12 +606,10 @@ class UserBookControllerTest {
     @Test
     void getUserBooks_whenOneUserHasBooks_thenOtherUserHasNoneAnd200() {
       User user = UserBookControllerTest.this.createUser();
-      Book bookOne =
-          UserBookControllerTest.this.bookRepository.save(
-              new Book("Pride and Prejudice by Jane Austen", null));
-      Book bookTwo =
-          UserBookControllerTest.this.bookRepository.save(
-              new Book("Romeo and Juliet by William Shakespeare", null));
+      Book bookOne = UserBookControllerTest.this.bookRepository.save(
+          new Book("Pride and Prejudice by Jane Austen", null));
+      Book bookTwo = UserBookControllerTest.this.bookRepository.save(
+          new Book("Romeo and Juliet by William Shakespeare", null));
       UserBookControllerTest.this.userBookRepository.save(new UserBook(user, bookOne));
       UserBookControllerTest.this.userBookRepository.save(new UserBook(user, bookTwo));
 
@@ -636,17 +623,16 @@ class UserBookControllerTest {
               List.of(role.orElseThrow()),
               null));
       String csrfToken = UserBookControllerTest.this.getCsrfToken();
-      Response response =
-          given()
-              .cookie("XSRF-TOKEN", csrfToken)
-              .header("X-XSRF-TOKEN", csrfToken)
-              .contentType(ContentType.URLENC)
-              .body("username=antanas%40inbox.lt&password=myqgrqrbvobhwm")
-              .post("/login")
-              .then()
-              .statusCode(200)
-              .extract()
-              .response();
+      Response response = given()
+          .cookie("XSRF-TOKEN", csrfToken)
+          .header("X-XSRF-TOKEN", csrfToken)
+          .contentType(ContentType.URLENC)
+          .body("username=antanas%40inbox.lt&password=myqgrqrbvobhwm")
+          .post("/login")
+          .then()
+          .statusCode(200)
+          .extract()
+          .response();
 
       given()
           .cookie("JSESSIONID", response.getSessionId())
