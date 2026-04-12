@@ -5,8 +5,7 @@ import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -34,10 +33,11 @@ import org.testcontainers.utility.DockerImageName;
 @ActiveProfiles("test")
 class UserControllerTest {
 
-  @LocalServerPort private Integer port;
+  @LocalServerPort
+  private Integer port;
 
-  private static final MariaDBContainer mariaDB =
-      new MariaDBContainer(DockerImageName.parse("mariadb:11.4"));
+  private static final MariaDBContainer mariaDB = new MariaDBContainer(
+      DockerImageName.parse("mariadb:11.4"));
 
   @BeforeAll
   static void beforeAll() {
@@ -56,8 +56,10 @@ class UserControllerTest {
     registry.add("spring.datasource.password", mariaDB::getPassword);
   }
 
-  @Autowired private UserRepository userRepository;
-  @Autowired private RoleRepository roleRepository;
+  @Autowired
+  private UserRepository userRepository;
+  @Autowired
+  private RoleRepository roleRepository;
 
   @BeforeEach
   void setUp() {
@@ -69,7 +71,7 @@ class UserControllerTest {
   class SignUpTests {
 
     @Test
-    void signup_whenUserSignsUp_thenReturn201AndBody() throws JsonProcessingException {
+    void signup_whenUserSignsUp_thenReturn201AndBody() {
       String csrfToken = UserControllerTest.this.getCsrfToken();
       String email = "jurgis@inbox.lt";
 
@@ -99,8 +101,7 @@ class UserControllerTest {
     }
 
     @Test
-    void signup_whenUserSignsUpWithAsBigPasswordAsPossible_thenReturn201AndBody()
-        throws JsonProcessingException {
+    void signup_whenUserSignsUpWithAsBigPasswordAsPossible_thenReturn201AndBody() {
       String csrfToken = UserControllerTest.this.getCsrfToken();
       String email = "jurgis@inbox.lt";
 
@@ -141,7 +142,7 @@ class UserControllerTest {
     //
 
     @Test
-    void signup_whenEmailIsNull_thenReturn400AndBody() throws JsonProcessingException {
+    void signup_whenEmailIsNull_thenReturn400AndBody() {
       String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
@@ -160,7 +161,7 @@ class UserControllerTest {
     }
 
     @Test
-    void signup_whenEmailIsTooShort_thenReturn400AndBody() throws JsonProcessingException {
+    void signup_whenEmailIsTooShort_thenReturn400AndBody() {
       String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
@@ -179,7 +180,7 @@ class UserControllerTest {
     }
 
     @Test
-    void signup_whenEmailLocalPartIsTooLong_thenReturn400AndBody() throws JsonProcessingException {
+    void signup_whenEmailLocalPartIsTooLong_thenReturn400AndBody() {
       String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
@@ -202,7 +203,7 @@ class UserControllerTest {
     }
 
     @Test
-    void signup_whenEmailDomainPartIsTooLong_thenReturn400AndBody() throws JsonProcessingException {
+    void signup_whenEmailDomainPartIsTooLong_thenReturn400AndBody() {
       String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
@@ -225,8 +226,7 @@ class UserControllerTest {
     }
 
     @Test
-    void signup_whenEmailLocalPartAndDomainPartIsTooLong_thenReturn400AndBody()
-        throws JsonProcessingException {
+    void signup_whenEmailLocalPartAndDomainPartIsTooLong_thenReturn400AndBody() {
       String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
@@ -249,7 +249,7 @@ class UserControllerTest {
     }
 
     @Test
-    void signup_whenEmailAlreadyExists_thenReturn400AndBody() throws JsonProcessingException {
+    void signup_whenEmailAlreadyExists_thenReturn400AndBody() {
       String csrfToken = UserControllerTest.this.getCsrfToken();
       String email = "jurgis@inbox.lt";
       String password = "r9$CbHEaGXLUsP";
@@ -279,7 +279,7 @@ class UserControllerTest {
     //
 
     @Test
-    void signup_whenPasswordIsNull_shouldReturn400AndBody() throws JsonProcessingException {
+    void signup_whenPasswordIsNull_shouldReturn400AndBody() {
       String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
@@ -298,7 +298,7 @@ class UserControllerTest {
     }
 
     @Test
-    void signup_whenPasswordIsTooShort_shouldReturn400AndBody() throws JsonProcessingException {
+    void signup_whenPasswordIsTooShort_shouldReturn400AndBody() {
       String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
@@ -318,7 +318,7 @@ class UserControllerTest {
     }
 
     @Test
-    void signup_whenPasswordIsTooLong_shouldReturn400AndBody() throws JsonProcessingException {
+    void signup_whenPasswordIsTooLong_shouldReturn400AndBody() {
       String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
@@ -342,8 +342,7 @@ class UserControllerTest {
     }
 
     @Test
-    void signup_whenPasswordIsFoundToBeCompromised_thenReturn400AndBody()
-        throws JsonProcessingException {
+    void signup_whenPasswordIsFoundToBeCompromised_thenReturn400AndBody() {
       String csrfToken = UserControllerTest.this.getCsrfToken();
 
       given()
@@ -358,7 +357,7 @@ class UserControllerTest {
           .post("/signup")
           .then()
           .statusCode(400)
-          .body("$", aMapWithSize(5))
+          .body("$", aMapWithSize(4))
           .body(
               "detail",
               equalTo(

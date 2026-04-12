@@ -2,17 +2,27 @@ import { useForm } from "react-hook-form";
 import csrfToken from "../util/getCsrfToken";
 import { useNavigate } from "react-router-dom";
 
-export default function Signup({ setIsSignedUp }) {
+type SignupProps = {
+  setIsSignedUp: (value: boolean) => void;
+};
+
+type SignupFormData = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+export default function Signup({ setIsSignedUp }: SignupProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
     watch,
-  } = useForm();
+  } = useForm<SignupFormData>();
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: SignupFormData) => {
     async function postData() {
       const url = `${import.meta.env.VITE_BACKEND_BASE_URL}/signup`;
 
@@ -38,7 +48,7 @@ export default function Signup({ setIsSignedUp }) {
           body.email === "Such email address is already in use"
         ) {
           setError("root.serverErrorEmail", {
-            type: response.status,
+            type: response.status.toString(),
             message: body.email,
           });
         }
@@ -49,7 +59,7 @@ export default function Signup({ setIsSignedUp }) {
             "The provided password is compromised and cannot be used. Use something more unique"
         ) {
           setError("root.serverErrorPassword", {
-            type: response.status,
+            type: response.status.toString(),
             message: body.detail,
           });
         }
@@ -63,7 +73,7 @@ export default function Signup({ setIsSignedUp }) {
         setIsSignedUp(true);
         navigate("/");
       } catch (error) {
-        console.error(error.message);
+        if (error instanceof Error) console.error(error.message);
       }
     }
 
@@ -83,7 +93,6 @@ export default function Signup({ setIsSignedUp }) {
             </label>
             <input
               type="email"
-              name="email"
               id="email"
               className="form-control"
               {...register("email", {
@@ -106,7 +115,7 @@ export default function Signup({ setIsSignedUp }) {
               Email must be at most 255 characters long.
             </p>
           )}
-          {errors.root?.serverErrorEmail?.type === 400 && (
+          {errors.root?.serverErrorEmail?.type === "400" && (
             <p className="text-danger">
               {errors.root?.serverErrorEmail?.message}
             </p>
@@ -121,7 +130,6 @@ export default function Signup({ setIsSignedUp }) {
             </label>
             <input
               type="password"
-              name="password"
               id="password"
               className="form-control"
               {...register("password", {
@@ -144,7 +152,7 @@ export default function Signup({ setIsSignedUp }) {
               Password must be at most 64 characters long.
             </p>
           )}
-          {errors.root?.serverErrorPassword?.type === 400 && (
+          {errors.root?.serverErrorPassword?.type === "400" && (
             <p className="text-danger">
               {errors.root?.serverErrorPassword?.message}
             </p>
@@ -159,7 +167,6 @@ export default function Signup({ setIsSignedUp }) {
             </label>
             <input
               type="password"
-              name="confirm-password"
               id="confirm-password"
               className="form-control"
               {...register("confirmPassword", {

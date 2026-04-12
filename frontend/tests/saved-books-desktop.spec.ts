@@ -261,7 +261,7 @@ test("should click like on generated books, and not see them displayed in 'saved
   const bookTitle3 = await books.nth(2).innerText();
 
   // Log out
-  await page.getByRole("link", { name: "Log out" }).click();
+  await page.getByRole("button", { name: "Log out" }).click();
 
   // Sign up again
   await page.goto("http://localhost:5173/");
