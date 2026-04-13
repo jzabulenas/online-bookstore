@@ -54,6 +54,7 @@ test("should click like on a single generated book, and see it displayed in 'sav
   await page.getByRole("button", { name: "Submit" }).click();
   const books = page.getByTestId("generated-books").locator("p"); // Selects all paragraphs in 'generated-books' test-id
   await books.nth(0).getByRole("img").click(); // Clicks on the like button of the first paragraph
+  await expect(books.nth(0).getByTestId(/^liked-/)).toBeVisible(); // Wait for API to confirm save
   const bookTitle = await books.nth(0).innerText(); // Get the book title of previously clicked book
   await page.getByRole("link", { name: "Saved books" }).click();
 
@@ -116,7 +117,9 @@ test("should click like on two generated books, and see them displayed in 'saved
   await page.getByRole("button", { name: "Submit" }).click();
   const books = page.getByTestId("generated-books").locator("p"); // Selects all paragraphs in 'generated-books' test-id
   await books.nth(0).getByRole("img").click(); // Clicks on the like button of the first book
+  await expect(books.nth(0).getByTestId(/^liked-/)).toBeVisible(); // Wait for API to confirm save
   await books.nth(1).getByRole("img").click(); // Clicks on the like button of the second book
+  await expect(books.nth(1).getByTestId(/^liked-/)).toBeVisible(); // Wait for API to confirm save
   const bookTitle1 = await books.nth(0).innerText(); // Get the book title of previously clicked first book
   const bookTitle2 = await books.nth(1).innerText(); // Get the book title of previously clicked second book
   await page.getByRole("link", { name: "Saved books" }).click();
@@ -182,8 +185,11 @@ test("should click like on three generated books, and see them displayed in 'sav
   await page.getByRole("button", { name: "Submit" }).click();
   const books = page.getByTestId("generated-books").locator("p"); // Selects all paragraphs in 'generated-books' test-id
   await books.nth(0).getByRole("img").click(); // Clicks on the like button of the first book
+  await expect(books.nth(0).getByTestId(/^liked-/)).toBeVisible(); // Wait for API to confirm save
   await books.nth(1).getByRole("img").click(); // Clicks on the like button of the second book
+  await expect(books.nth(1).getByTestId(/^liked-/)).toBeVisible(); // Wait for API to confirm save
   await books.nth(2).getByRole("img").click(); // Clicks on the like button of the third book
+  await expect(books.nth(2).getByTestId(/^liked-/)).toBeVisible(); // Wait for API to confirm save
   const bookTitle1 = await books.nth(0).innerText(); // Get the book title of previously clicked first book
   const bookTitle2 = await books.nth(1).innerText(); // Get the book title of previously clicked second book
   const bookTitle3 = await books.nth(2).innerText(); // Get the book title of previously clicked third book
