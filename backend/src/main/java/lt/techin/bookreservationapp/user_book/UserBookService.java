@@ -1,6 +1,7 @@
 package lt.techin.bookreservationapp.user_book;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import lt.techin.bookreservationapp.book.Book;
@@ -10,17 +11,20 @@ import lt.techin.bookreservationapp.book.MessageRequestDTO;
 import lt.techin.bookreservationapp.book.MessageResponseDTO;
 import lt.techin.bookreservationapp.user.User;
 import lt.techin.bookreservationapp.user.UserRepository;
+
 import org.jspecify.annotations.Nullable;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 class UserBookService {
 
   private final ChatClient chatClient;
+  private final RestClient restClient;
   private final BookRepository bookRepository;
   private final UserRepository userRepository;
   private final UserBookRepository userBookRepository;
@@ -30,10 +34,12 @@ class UserBookService {
   @Autowired
   UserBookService(
       ChatClient chatClient,
+      RestClient.Builder restClientBuilder,
       BookRepository bookRepository,
       UserRepository userRepository,
       UserBookRepository userBookRepository) {
     this.chatClient = chatClient;
+    this.restClient = restClientBuilder.baseUrl("https://openlibrary.org").build();
     this.bookRepository = bookRepository;
     this.userRepository = userRepository;
     this.userBookRepository = userBookRepository;
@@ -42,21 +48,22 @@ class UserBookService {
   MessageResponseDTO generateBooks(MessageRequestDTO messageRequestDTO) {
     List<String> titles = this.userBookRepository.findAllTitles();
 
-    String result =
-        this.chatClient
-            .prompt()
-            .user(
-                "I have read "
-                    + messageRequestDTO.message()
-                    + " and liked it. Suggest me 3 new books to read. They must adhere this format: 'Amet Consectetur by Adipisicing Elit|Necessitatibus Eum by Numquam Architecto|Eem Illum by Dolorem Error'."
-                    + "Return only the three comma separated values. Also make sure to not include these books in the result: "
-                    + titles
-                    + " and: "
-                    + this.resultFromApiCall)
-            .call()
-            .content();
+    String result = this.chatClient
+        .prompt()
+        .user(
+            "I have read "
+                + messageRequestDTO.message()
+                + " and liked it. Suggest me 6 books that closely match its specific themes, subject matter, writing style, and tone — not just its broad genre. They must adhere this format: 'Amet Consectetur by Adipisicing Elit|Necessitatibus Eum by Numquam Architecto|Eem Illum by Dolorem Error'."
+                + " Return only the six pipe-separated values. Also make sure to not include these books in the result: "
+                + titles)
+        .call()
+        .content();
 
-    String[] books = Objects.requireNonNull(result).split("\\|");
+    String[] verified = Arrays.stream(Objects.requireNonNull(result).split("\\|"))
+        .map(String::trim)
+        .filter(this::bookExists)
+        .limit(3)
+        .toArray(String[]::new);
     // TODO:
     // Wait a minute... is "resultFromApiCall" bound to each and every user?
     // And even then, if Playwright for each browser calls this endpoint again,
@@ -65,15 +72,37 @@ class UserBookService {
     // resultFromApiCall = result;
     // System.out.println(resultFromApiCall);
 
-    return new MessageResponseDTO(books);
+    return new MessageResponseDTO(verified);
+  }
+
+  private boolean bookExists(String candidate) {
+    String[] parts = candidate.split(" by ", 2);
+    if (parts.length < 2)
+      return false;
+
+    String title = parts[0].trim();
+    String author = parts[1].trim();
+
+    try {
+      OpenLibraryResponse response = this.restClient
+          .get()
+          .uri("/search.json?title={title}&author={author}&limit=1", title, author)
+          .retrieve()
+          .body(OpenLibraryResponse.class);
+      return response != null && response.numFound() > 0;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  private record OpenLibraryResponse(int numFound) {
   }
 
   UserBookResponseDTO saveUserBook(UserBookRequestDTO userBookRequestDTO, Principal principal) {
 
-    User user =
-        this.userRepository
-            .findByEmail(principal.getName())
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    User user = this.userRepository
+        .findByEmail(principal.getName())
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
     if (this.userBookRepository.existsByBookTitleAndUser(userBookRequestDTO.title(), user)) {
       throw new BookTitleAlreadyExistsException();
