@@ -3,7 +3,9 @@ package lt.techin.bookreservationapp.user_book;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import lt.techin.bookreservationapp.book.Book;
 import lt.techin.bookreservationapp.book.BookRepository;
 import lt.techin.bookreservationapp.book.BookTitleAlreadyExistsException;
@@ -15,6 +17,7 @@ import lt.techin.bookreservationapp.user.UserRepository;
 import org.jspecify.annotations.Nullable;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -30,16 +33,21 @@ class UserBookService {
   private final UserBookRepository userBookRepository;
   // I do this in hopes that it does not generate same books on consecutive call
   private @Nullable String resultFromApiCall;
+  private final Map<String, Boolean> bookExistsCache = new ConcurrentHashMap<>();
 
   @Autowired
   UserBookService(
       ChatClient chatClient,
       RestClient.Builder restClientBuilder,
+      @Value("${open-library.user-agent}") String userAgent,
       BookRepository bookRepository,
       UserRepository userRepository,
       UserBookRepository userBookRepository) {
     this.chatClient = chatClient;
-    this.restClient = restClientBuilder.baseUrl("https://openlibrary.org").build();
+    this.restClient = restClientBuilder
+        .baseUrl("https://openlibrary.org")
+        .defaultHeader("User-Agent", userAgent)
+        .build();
     this.bookRepository = bookRepository;
     this.userRepository = userRepository;
     this.userBookRepository = userBookRepository;
@@ -76,6 +84,10 @@ class UserBookService {
   }
 
   private boolean bookExists(String candidate) {
+    return this.bookExistsCache.computeIfAbsent(candidate, this::lookupBook);
+  }
+
+  private boolean lookupBook(String candidate) {
     String[] parts = candidate.split(" by ", 2);
     if (parts.length < 2)
       return false;
