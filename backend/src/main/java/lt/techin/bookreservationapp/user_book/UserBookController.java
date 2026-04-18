@@ -25,9 +25,10 @@ class UserBookController {
   private final GenerateBooksRateLimitService generateBooksRateLimitService;
 
   UserBookController(
-      UserRepository userRepository,
-      UserBookService bookService,
-      GenerateBooksRateLimitService generateBooksRateLimitService) {
+    UserRepository userRepository,
+    UserBookService bookService,
+    GenerateBooksRateLimitService generateBooksRateLimitService
+  ) {
     this.userRepository = userRepository;
     this.userBookService = bookService;
     this.generateBooksRateLimitService = generateBooksRateLimitService;
@@ -35,32 +36,41 @@ class UserBookController {
 
   @PostMapping("/generate-books")
   ResponseEntity<MessageResponseDTO> generateBooks(
-      @RequestBody @Valid MessageRequestDTO messageRequestDTO, Authentication authentication) {
+    @RequestBody @Valid MessageRequestDTO messageRequestDTO,
+    Authentication authentication
+  ) {
     User user = (User) authentication.getPrincipal();
 
     this.generateBooksRateLimitService.checkLimit(
-        Objects.requireNonNull(user).getId(), "/generate-books");
+      Objects.requireNonNull(user).getId(),
+      "/generate-books"
+    );
 
-    return ResponseEntity.ok(this.userBookService.generateBooks(messageRequestDTO));
+    return ResponseEntity.ok(
+      this.userBookService.generateBooks(messageRequestDTO)
+    );
   }
 
   @PostMapping("/books")
   ResponseEntity<UserBookResponseDTO> saveUserBook(
-      @Valid @RequestBody UserBookRequestDTO userBookRequestDTO, Principal principal) {
-
-    UserBookResponseDTO userBookResponseDTO =
-        this.userBookService.saveUserBook(userBookRequestDTO, principal);
+    @Valid @RequestBody UserBookRequestDTO userBookRequestDTO,
+    Principal principal
+  ) {
+    UserBookResponseDTO userBookResponseDTO = this.userBookService.saveUserBook(
+      userBookRequestDTO,
+      principal
+    );
 
     String email = principal.getName();
 
     User user = this.userRepository.findByEmail(email).orElseThrow();
 
     return ResponseEntity.created(
-            ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}/users/{userId}")
-                .buildAndExpand(userBookResponseDTO.bookId(), user.getId())
-                .toUri())
-        .body(userBookResponseDTO);
+      ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}/users/{userId}")
+        .buildAndExpand(userBookResponseDTO.bookId(), user.getId())
+        .toUri()
+    ).body(userBookResponseDTO);
   }
 
   @GetMapping("/books")

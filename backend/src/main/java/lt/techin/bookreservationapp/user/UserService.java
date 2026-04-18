@@ -4,9 +4,9 @@ import java.util.List;
 import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.role.RoleMapper;
 import lt.techin.bookreservationapp.role.RoleRepository;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.authentication.password.CompromisedPasswordException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +20,12 @@ public class UserService {
   private final CompromisedPasswordChecker compromisedPasswordChecker;
 
   UserService(
-      UserRepository userRepository,
-      RoleRepository roleRepository,
-      PasswordEncoder passwordEncoder,
-      EmailService emailService,
-      CompromisedPasswordChecker compromisedPasswordChecker) {
+    UserRepository userRepository,
+    RoleRepository roleRepository,
+    PasswordEncoder passwordEncoder,
+    EmailService emailService,
+    CompromisedPasswordChecker compromisedPasswordChecker
+  ) {
     this.userRepository = userRepository;
     this.roleRepository = roleRepository;
     this.passwordEncoder = passwordEncoder;
@@ -37,14 +38,23 @@ public class UserService {
       throw new EmailAlreadyExistsException();
     }
 
-    if (this.compromisedPasswordChecker.check(userRequestDTO.password()).isCompromised()) {
+    if (
+      this.compromisedPasswordChecker.check(
+        userRequestDTO.password()
+      ).isCompromised()
+    ) {
       throw new CompromisedPasswordException(
-          "The provided password is compromised and cannot be used. Use something more unique");
+        "The provided password is compromised and cannot be used. Use something more unique"
+      );
     }
 
     Role userRole = this.roleRepository.findByName("ROLE_USER").orElseThrow();
     List<Role> toRoles = List.of(userRole);
-    User toUser = UserMapper.toEntity(userRequestDTO, this.passwordEncoder, toRoles);
+    User toUser = UserMapper.toEntity(
+      userRequestDTO,
+      this.passwordEncoder,
+      toRoles
+    );
     User savedUser = this.userRepository.save(toUser);
     List<Long> toRolesIds = RoleMapper.toIds(savedUser);
 
@@ -76,9 +86,9 @@ public class UserService {
   }
 
   public User findUserByEmail(String email) {
-    return this.userRepository
-        .findByEmail(email)
-        .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+    return this.userRepository.findByEmail(email).orElseThrow(() ->
+      new UsernameNotFoundException("User not found: " + email)
+    );
   }
 
   void saveUser(User user) {

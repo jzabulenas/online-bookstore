@@ -8,12 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface UserBookRepository extends JpaRepository<UserBook, Long> {
-
   Optional<UserBook> findByUserAndBook(User user, Book book);
 
   Optional<UserBook> findByUserIdAndBookTitle(long id, String title);
 
-  @Query("SELECT ub.book.title FROM UserBook ub WHERE ub.user.email = :#{authentication.name}")
+  @Query(
+    "SELECT ub.book.title FROM UserBook ub WHERE ub.user.email = :#{authentication.name}"
+  )
   List<String> findAllTitles();
 
   // I use this method in a test, so I am able to retrieve books belonging to a

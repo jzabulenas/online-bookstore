@@ -19,9 +19,10 @@ class EmailService {
 
   @Autowired
   EmailService(
-      JavaMailSender mailSender,
-      SpringTemplateEngine templateEngine,
-      @Value("${backend.url}") String backendUrl) {
+    JavaMailSender mailSender,
+    SpringTemplateEngine templateEngine,
+    @Value("${backend.url}") String backendUrl
+  ) {
     this.mailSender = mailSender;
     this.templateEngine = templateEngine;
     this.backendUrl = backendUrl;
@@ -36,7 +37,8 @@ class EmailService {
   private String getVerificationMailContent(User entity) {
     Context context = new Context();
 
-    String verificationUrl = this.backendUrl + "/verify?code=" + entity.getVerificationCode();
+    String verificationUrl =
+      this.backendUrl + "/verify?code=" + entity.getVerificationCode();
 
     // Injects the URL to the `applicationUrl` variable inside
     // `user-verify.html` file
@@ -52,7 +54,8 @@ class EmailService {
    * @param content content containing HTML message.
    * @return MimeMessage
    */
-  private MimeMessage createMessage(User entity, String content) throws MessagingException {
+  private MimeMessage createMessage(User entity, String content)
+    throws MessagingException {
     MimeMessage mimeMessage = this.mailSender.createMimeMessage();
     MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
     message.setText(content, true);
@@ -75,7 +78,11 @@ class EmailService {
       this.mailSender.send(this.createMessage(entity, content));
     } catch (MessagingException ex) {
       throw new UserMailFailedException(
-          "Could not send e-mail to verify user with e-mail '" + entity.getEmail() + "'", ex);
+        "Could not send e-mail to verify user with e-mail '" +
+          entity.getEmail() +
+          "'",
+        ex
+      );
     }
   }
 }

@@ -29,30 +29,35 @@ class SecurityConfig {
 
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) {
-
-    http.csrf(
-            (csrf) ->
-                csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                    .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler()))
-        .cors(cors -> cors.configurationSource(this.corsConfigurationSource()))
-        .exceptionHandling(
-            e -> e.authenticationEntryPoint(new HttpStatusHandler(HttpStatus.UNAUTHORIZED)))
-        .formLogin(
-            f ->
-                f.failureHandler(new HttpStatusHandler(HttpStatus.UNAUTHORIZED))
-                    .successHandler(new HttpStatusHandler(HttpStatus.OK)))
-        .logout(l -> l.logoutSuccessHandler(new HttpStatusHandler(HttpStatus.OK)))
-        .authorizeHttpRequests(
-            authorize ->
-                authorize
-                    .requestMatchers("/signup")
-                    .permitAll()
-                    .requestMatchers("/open")
-                    .permitAll()
-                    .requestMatchers("/verify")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated());
+    http
+      .csrf(csrf ->
+        csrf
+          .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+          .csrfTokenRequestHandler(new SpaCsrfTokenRequestHandler())
+      )
+      .cors(cors -> cors.configurationSource(this.corsConfigurationSource()))
+      .exceptionHandling(e ->
+        e.authenticationEntryPoint(
+          new HttpStatusHandler(HttpStatus.UNAUTHORIZED)
+        )
+      )
+      .formLogin(f ->
+        f
+          .failureHandler(new HttpStatusHandler(HttpStatus.UNAUTHORIZED))
+          .successHandler(new HttpStatusHandler(HttpStatus.OK))
+      )
+      .logout(l -> l.logoutSuccessHandler(new HttpStatusHandler(HttpStatus.OK)))
+      .authorizeHttpRequests(authorize ->
+        authorize
+          .requestMatchers("/signup")
+          .permitAll()
+          .requestMatchers("/open")
+          .permitAll()
+          .requestMatchers("/verify")
+          .permitAll()
+          .anyRequest()
+          .authenticated()
+      );
 
     return http.build();
   }
@@ -67,8 +72,11 @@ class SecurityConfig {
     configuration.setAllowCredentials(true);
 
     UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource =
-        new UrlBasedCorsConfigurationSource();
-    urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
+      new UrlBasedCorsConfigurationSource();
+    urlBasedCorsConfigurationSource.registerCorsConfiguration(
+      "/**",
+      configuration
+    );
 
     return urlBasedCorsConfigurationSource;
   }

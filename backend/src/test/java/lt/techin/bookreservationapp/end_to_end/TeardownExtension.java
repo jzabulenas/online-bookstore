@@ -19,10 +19,14 @@ public class TeardownExtension implements LauncherSessionListener {
     String username = System.getenv("MARIADB_USERNAME");
     String password = System.getenv("MARIADB_PASSWORD");
 
-    try (Connection conn = DriverManager.getConnection(
-        "jdbc:mariadb://localhost:3306/online_bookstore", username, password);
-        Statement stmt = conn.createStatement()) {
-
+    try (
+      Connection conn = DriverManager.getConnection(
+        "jdbc:mariadb://localhost:3306/online_bookstore",
+        username,
+        password
+      );
+      Statement stmt = conn.createStatement()
+    ) {
       stmt.execute("DELETE FROM users_roles");
       stmt.execute("DELETE FROM users_books");
       stmt.execute("DELETE FROM books");

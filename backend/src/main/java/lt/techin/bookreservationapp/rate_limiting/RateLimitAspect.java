@@ -15,8 +15,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 class RateLimitAspect {
 
   private static final String ERROR_MESSAGE =
-      "Too many requests at endpoint %s from IP %s! Please try again after %d milliseconds!";
-  private final ConcurrentHashMap<String, List<Long>> requestCounts = new ConcurrentHashMap<>();
+    "Too many requests at endpoint %s from IP %s! Please try again after %d milliseconds!";
+  private final ConcurrentHashMap<String, List<Long>> requestCounts =
+    new ConcurrentHashMap<>();
 
   @Value("${APP_RATE_LIMIT:#{10}}")
   private int rateLimit;
@@ -35,11 +36,12 @@ class RateLimitAspect {
    */
   // TODO: Do I even need this? Because I already have the 5 requests in 24 hour
   // limit
-  @Before("@annotation(lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection)")
+  @Before(
+    "@annotation(lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection)"
+  )
   void rateLimit() {
-
     final ServletRequestAttributes requestAttributes =
-        (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+      (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 
     final String key = requestAttributes.getRequest().getRemoteAddr();
 
@@ -56,16 +58,20 @@ class RateLimitAspect {
 
     if (this.requestCounts.get(key).size() > this.rateLimit) {
       throw new RateLimitException(
-          String.format(
-              ERROR_MESSAGE,
-              requestAttributes.getRequest().getRequestURI(),
-              key,
-              this.rateDuration));
+        String.format(
+          ERROR_MESSAGE,
+          requestAttributes.getRequest().getRequestURI(),
+          key,
+          this.rateDuration
+        )
+      );
     }
   }
 
   private void cleanUpRequestCounts(final long currentTime) {
-    this.requestCounts.values().forEach(l -> l.removeIf(t -> this.timeIsTooOld(currentTime, t)));
+    this.requestCounts.values().forEach(l ->
+      l.removeIf(t -> this.timeIsTooOld(currentTime, t))
+    );
   }
 
   private boolean timeIsTooOld(final long currentTime, final long timeToCheck) {

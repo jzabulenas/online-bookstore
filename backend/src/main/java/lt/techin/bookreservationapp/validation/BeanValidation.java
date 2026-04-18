@@ -19,17 +19,18 @@ class BeanValidation {
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-
+  Map<String, String> handleValidationExceptions(
+    MethodArgumentNotValidException ex
+  ) {
     Map<String, String> errors = new HashMap<>();
-    ex.getBindingResult()
-        .getAllErrors()
-        .forEach(
-            (error) -> {
-              String fieldName = ((FieldError) error).getField();
-              String errorMessage = error.getDefaultMessage();
-              errors.put(fieldName, Objects.requireNonNull(errorMessage));
-            });
+    ex
+      .getBindingResult()
+      .getAllErrors()
+      .forEach(error -> {
+        String fieldName = ((FieldError) error).getField();
+        String errorMessage = error.getDefaultMessage();
+        errors.put(fieldName, Objects.requireNonNull(errorMessage));
+      });
 
     return errors;
   }
@@ -44,6 +45,9 @@ class BeanValidation {
 
   @ExceptionHandler(CompromisedPasswordException.class)
   ProblemDetail handle(CompromisedPasswordException exception) {
-    return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+    return ProblemDetail.forStatusAndDetail(
+      HttpStatus.BAD_REQUEST,
+      exception.getMessage()
+    );
   }
 }

@@ -12,9 +12,10 @@ class RateLimitException extends RuntimeException {
 
   ApiErrorMessage toApiErrorMessage(final String path) {
     return new ApiErrorMessage(
-        HttpStatus.TOO_MANY_REQUESTS.value(),
-        HttpStatus.TOO_MANY_REQUESTS.name(),
-        this.getMessage(),
-        path);
+      HttpStatus.TOO_MANY_REQUESTS.value(),
+      HttpStatus.TOO_MANY_REQUESTS.name(),
+      this.getMessage(),
+      path
+    );
   }
 }

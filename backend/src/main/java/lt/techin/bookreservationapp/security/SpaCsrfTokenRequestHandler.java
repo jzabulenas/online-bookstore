@@ -12,12 +12,17 @@ import org.springframework.util.StringUtils;
 
 final class SpaCsrfTokenRequestHandler implements CsrfTokenRequestHandler {
 
-  private final CsrfTokenRequestHandler plain = new CsrfTokenRequestAttributeHandler();
-  private final CsrfTokenRequestHandler xor = new XorCsrfTokenRequestAttributeHandler();
+  private final CsrfTokenRequestHandler plain =
+    new CsrfTokenRequestAttributeHandler();
+  private final CsrfTokenRequestHandler xor =
+    new XorCsrfTokenRequestAttributeHandler();
 
   @Override
   public void handle(
-      HttpServletRequest request, HttpServletResponse response, Supplier<CsrfToken> csrfToken) {
+    HttpServletRequest request,
+    HttpServletResponse response,
+    Supplier<CsrfToken> csrfToken
+  ) {
     /*
      * Always use XorCsrfTokenRequestAttributeHandler to provide BREACH protection
      * of the CsrfToken when it is rendered in the response body.
@@ -31,7 +36,10 @@ final class SpaCsrfTokenRequestHandler implements CsrfTokenRequestHandler {
   }
 
   @Override
-  public @Nullable String resolveCsrfTokenValue(HttpServletRequest request, CsrfToken csrfToken) {
+  public @Nullable String resolveCsrfTokenValue(
+    HttpServletRequest request,
+    CsrfToken csrfToken
+  ) {
     String headerValue = request.getHeader(csrfToken.getHeaderName());
     /*
      * If the request contains a request header, use
@@ -44,7 +52,8 @@ final class SpaCsrfTokenRequestHandler implements CsrfTokenRequestHandler {
      * when a server-side rendered form includes the _csrf request parameter as a
      * hidden input.
      */
-    return (StringUtils.hasText(headerValue) ? this.plain : this.xor)
-        .resolveCsrfTokenValue(request, csrfToken);
+    return (
+      StringUtils.hasText(headerValue) ? this.plain : this.xor
+    ).resolveCsrfTokenValue(request, csrfToken);
   }
 }

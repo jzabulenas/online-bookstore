@@ -24,8 +24,9 @@ class BookReservationAppApplication {
   @Bean
   ChatClient chatClient(ChatClient.Builder builder) {
     return builder
-        .defaultSystem(
-            "You are a book recommendation assistant. Only recommend books that genuinely exist and have been published. Never invent or fabricate book titles or authors.")
-        .build();
+      .defaultSystem(
+        "You are a book recommendation assistant. Only recommend books that genuinely exist and have been published. Never invent or fabricate book titles or authors."
+      )
+      .build();
   }
 }

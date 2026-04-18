@@ -6,7 +6,10 @@ class UserBookMapper {
 
   static UserBookResponseDTO toDTO(UserBook userBook) {
     return new UserBookResponseDTO(
-        userBook.getId(), userBook.getUser().getId(), userBook.getBook().getId());
+      userBook.getId(),
+      userBook.getUser().getId(),
+      userBook.getBook().getId()
+    );
   }
 
   static List<UserBookTitleResponseDTO> toEntities(List<String> titles) {
