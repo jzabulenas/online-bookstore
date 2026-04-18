@@ -37,7 +37,6 @@ export default function Signup({ setIsSignedUp }: SignupProps) {
           body: JSON.stringify({
             email: data.email,
             password: data.password,
-            roles: [1],
           }),
         });
 

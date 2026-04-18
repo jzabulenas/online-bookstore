@@ -4,9 +4,9 @@ import java.util.List;
 import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.role.RoleMapper;
 import lt.techin.bookreservationapp.role.RoleRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.authentication.password.CompromisedPasswordException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +42,8 @@ public class UserService {
           "The provided password is compromised and cannot be used. Use something more unique");
     }
 
-    List<Role> toRoles = RoleMapper.toEntities(userRequestDTO.roles(), this.roleRepository);
+    Role userRole = this.roleRepository.findByName("ROLE_USER").orElseThrow();
+    List<Role> toRoles = List.of(userRole);
     User toUser = UserMapper.toEntity(userRequestDTO, this.passwordEncoder, toRoles);
     User savedUser = this.userRepository.save(toUser);
     List<Long> toRolesIds = RoleMapper.toIds(savedUser);
@@ -62,10 +63,12 @@ public class UserService {
   }
 
   /**
-   * Retrieves the user based on the unique verification code. This method is used to find the user
+   * Retrieves the user based on the unique verification code. This method is used
+   * to find the user
    * based on code that was delivered to an email address, for verification.
    *
-   * @param code the verification code that uniquely identifies the user
+   * @param code
+   *               the verification code that uniquely identifies the user
    * @return User found based on that code
    */
   User findUserByVerificationCode(String code) {

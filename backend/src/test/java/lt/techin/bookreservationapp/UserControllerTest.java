@@ -81,7 +81,7 @@ class UserControllerTest {
           .contentType(ContentType.JSON)
           .body(
               new ObjectMapper()
-                  .writeValueAsString(new UserRequestDTO(email, "r9$CbHEaGXLUsP", List.of(1L))))
+                  .writeValueAsString(new UserRequestDTO(email, "r9$CbHEaGXLUsP")))
           .when()
           .post("/signup")
           .then()
@@ -115,8 +115,7 @@ class UserControllerTest {
                       new UserRequestDTO(
                           email,
                           // This is 64 characters
-                          "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
-                          List.of(1L))))
+                          "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp")))
           .when()
           .post("/signup")
           .then()
@@ -151,7 +150,7 @@ class UserControllerTest {
           .contentType(ContentType.JSON)
           .body(
               new ObjectMapper()
-                  .writeValueAsString(new UserRequestDTO(null, "r9$CbHEaGXLUsP", List.of(1L))))
+                  .writeValueAsString(new UserRequestDTO(null, "r9$CbHEaGXLUsP")))
           .when()
           .post("/signup")
           .then()
@@ -170,7 +169,7 @@ class UserControllerTest {
           .contentType(ContentType.JSON)
           .body(
               new ObjectMapper()
-                  .writeValueAsString(new UserRequestDTO("f@b.c", "r9$CbHEaGXLUsP", List.of(1L))))
+                  .writeValueAsString(new UserRequestDTO("f@b.c", "r9$CbHEaGXLUsP")))
           .when()
           .post("/signup")
           .then()
@@ -192,8 +191,7 @@ class UserControllerTest {
                   .writeValueAsString(
                       new UserRequestDTO(
                           "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrv@gmail.com",
-                          "r8@D^6PCg7&3Zn",
-                          List.of(1L))))
+                          "r8@D^6PCg7&3Zn")))
           .when()
           .post("/signup")
           .then()
@@ -215,8 +213,7 @@ class UserControllerTest {
                   .writeValueAsString(
                       new UserRequestDTO(
                           "jurgis@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegw.com",
-                          "r9$CbHEaGXLUsP",
-                          List.of(1L))))
+                          "r9$CbHEaGXLUsP")))
           .when()
           .post("/signup")
           .then()
@@ -238,8 +235,7 @@ class UserControllerTest {
                   .writeValueAsString(
                       new UserRequestDTO(
                           "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrrsdfsdfse@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegwasdasde.com",
-                          "r8@D^6PCg7&3Zn",
-                          List.of(1L))))
+                          "r8@D^6PCg7&3Zn")))
           .when()
           .post("/signup")
           .then()
@@ -263,7 +259,7 @@ class UserControllerTest {
           .contentType(ContentType.JSON)
           .body(
               new ObjectMapper()
-                  .writeValueAsString(new UserRequestDTO(email, password, List.of(1L))))
+                  .writeValueAsString(new UserRequestDTO(email, password)))
           .when()
           .post("/signup")
           .then()
@@ -288,7 +284,7 @@ class UserControllerTest {
           .contentType(ContentType.JSON)
           .body(
               new ObjectMapper()
-                  .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", null, List.of(1L))))
+                  .writeValueAsString(new UserRequestDTO("jurgis@inbox.lt", null)))
           .when()
           .post("/signup")
           .then()
@@ -308,7 +304,7 @@ class UserControllerTest {
           .body(
               new ObjectMapper()
                   .writeValueAsString(
-                      new UserRequestDTO("jurgis@inbox.lt", "grxnqdgnsqbqj", List.of(1L))))
+                      new UserRequestDTO("jurgis@inbox.lt", "grxnqdgnsqbqj")))
           .when()
           .post("/signup")
           .then()
@@ -331,8 +327,7 @@ class UserControllerTest {
                       new UserRequestDTO(
                           "jurgis@inbox.lt",
                           // This is 65 characters
-                          "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbpr",
-                          List.of(1L))))
+                          "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbpr")))
           .when()
           .post("/signup")
           .then()
@@ -352,7 +347,7 @@ class UserControllerTest {
           .body(
               new ObjectMapper()
                   .writeValueAsString(
-                      new UserRequestDTO("jurgis@inbox.lt", "12345678912345", List.of(1L))))
+                      new UserRequestDTO("jurgis@inbox.lt", "12345678912345")))
           .when()
           .post("/signup")
           .then()
@@ -377,7 +372,7 @@ class UserControllerTest {
     // .body(
     // new ObjectMapper()
     // .writeValueAsString(
-    // new UserRequestDTO("jurgis@inbox.lt", "oif3r2t^x^k%n9", List.of(1L))))
+    // new UserRequestDTO("jurgis@inbox.lt", "oif3r2t^x^k%n9")))
     // .when()
     // .post("/signup")
     // .then()
@@ -403,7 +398,7 @@ class UserControllerTest {
     // .body(
     // new ObjectMapper()
     // .writeValueAsString(
-    // new UserRequestDTO("jurgis@inbox.lt", "$EES#!CZ28L#$2", List.of(1L))))
+    // new UserRequestDTO("jurgis@inbox.lt", "$EES#!CZ28L#$2")))
     // .when()
     // .post("/signup")
     // .then()
@@ -429,7 +424,7 @@ class UserControllerTest {
     // .body(
     // new ObjectMapper()
     // .writeValueAsString(
-    // new UserRequestDTO("jurgis@inbox.lt", "QFUWmF$YsrBS#h", List.of(1L))))
+    // new UserRequestDTO("jurgis@inbox.lt", "QFUWmF$YsrBS#h")))
     // .when()
     // .post("/signup")
     // .then()
@@ -455,7 +450,7 @@ class UserControllerTest {
     // .body(
     // new ObjectMapper()
     // .writeValueAsString(
-    // new UserRequestDTO("jurgis@inbox.lt", "TSK3bgRXkduc66", List.of(1L))))
+    // new UserRequestDTO("jurgis@inbox.lt", "TSK3bgRXkduc66")))
     // .when()
     // .post("/signup")
     // .then()
