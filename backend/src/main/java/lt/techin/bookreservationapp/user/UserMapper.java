@@ -1,8 +1,8 @@
 package lt.techin.bookreservationapp.user;
 
 import java.util.List;
+import java.util.UUID;
 import lt.techin.bookreservationapp.role.Role;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class UserMapper {
@@ -16,7 +16,7 @@ class UserMapper {
       userRequestDTO.email(),
       passwordEncoder.encode(userRequestDTO.password()),
       false,
-      RandomStringUtils.randomAlphanumeric(32),
+      UUID.randomUUID().toString().replace("-", ""),
       roles,
       null
     );
