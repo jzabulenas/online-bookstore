@@ -20,9 +20,13 @@ public class UserBook {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotNull @ManyToOne private User user;
+  @NotNull
+  @ManyToOne
+  private User user;
 
-  @NotNull @ManyToOne private Book book;
+  @NotNull
+  @ManyToOne
+  private Book book;
 
   public UserBook(User user, Book book) {
     this.user = user;

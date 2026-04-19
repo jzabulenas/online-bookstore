@@ -29,6 +29,9 @@ spring:
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
 
+open-library:
+  user-agent: ${OPEN_LIBRARY_USER_AGENT:OnlineBookstore (contact@example.com)}
+
 frontend:
   url: ${FRONTEND_URL}
 

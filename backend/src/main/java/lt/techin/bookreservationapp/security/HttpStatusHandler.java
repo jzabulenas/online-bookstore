@@ -12,10 +12,12 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 class HttpStatusHandler
-    implements AuthenticationFailureHandler,
-        AuthenticationSuccessHandler,
-        LogoutSuccessHandler,
-        AuthenticationEntryPoint {
+  implements
+    AuthenticationFailureHandler,
+    AuthenticationSuccessHandler,
+    LogoutSuccessHandler,
+    AuthenticationEntryPoint
+{
 
   private final HttpStatus status;
 
@@ -29,29 +31,37 @@ class HttpStatusHandler
 
   @Override
   public void onAuthenticationFailure(
-      HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) {
+    HttpServletRequest request,
+    HttpServletResponse response,
+    AuthenticationException exception
+  ) {
     this.handle(response);
   }
 
   @Override
   public void onAuthenticationSuccess(
-      HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    HttpServletRequest request,
+    HttpServletResponse response,
+    Authentication authentication
+  ) {
     this.handle(response);
   }
 
   @Override
   public void onLogoutSuccess(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      @Nullable Authentication authentication) {
+    HttpServletRequest request,
+    HttpServletResponse response,
+    @Nullable Authentication authentication
+  ) {
     this.handle(response);
   }
 
   @Override
   public void commence(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      AuthenticationException authException) {
+    HttpServletRequest request,
+    HttpServletResponse response,
+    AuthenticationException authException
+  ) {
     this.handle(response);
   }
 }

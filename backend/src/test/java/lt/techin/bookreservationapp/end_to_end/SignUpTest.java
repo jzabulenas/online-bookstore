@@ -20,50 +20,55 @@ class SignUpTest {
     String email = "antanas" + uuid + "@gmail.com";
 
     // Send sign up request
-    Response response =
-        given()
-            .cookie("XSRF-TOKEN", csrfToken)
-            .header("X-XSRF-TOKEN", csrfToken)
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {
-                  "email": "%s",
-                  "password": "r9$CbHEaGXLUsP",
-                  "roles": [
-                     1
-                  ]
-                }
-                """
-                    .formatted(email))
-            .when()
-            .post("http://localhost:8080/signup")
-            .then()
-            .statusCode(201)
-            .body("$", aMapWithSize(3))
-            .body("email", equalTo(email))
-            .body("roles", hasSize(1))
-            .body("roles[0]", equalTo(1))
-            .extract()
-            .response();
+    Response response = given()
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      .body(
+        """
+        {
+          "email": "%s",
+          "password": "r9$CbHEaGXLUsP",
+          "roles": [
+             1
+          ]
+        }
+        """.formatted(email)
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(201)
+      .body("$", aMapWithSize(3))
+      .body("email", equalTo(email))
+      .body("roles", hasSize(1))
+      .body("roles[0]", equalTo(1))
+      .extract()
+      .response();
 
     int id = response.path("id");
     assertThat(id, greaterThan(0));
-    assertThat(response.getHeader("Location"), equalTo("http://localhost:8080/signup/" + id));
+    assertThat(
+      response.getHeader("Location"),
+      equalTo("http://localhost:8080/signup/" + id)
+    );
 
     // Extract verification link from email message
-    String verificationSnippet =
-        given()
-            .when()
-            .get("http://localhost:8025/api/v1/messages")
-            .then()
-            .statusCode(200)
-            .extract()
-            .path(
-                "messages.find { msg -> msg.To.any { it.Address == '%s' } }.Snippet"
-                    .formatted(email));
+    String verificationSnippet = given()
+      .when()
+      .get("http://localhost:8025/api/v1/messages")
+      .then()
+      .statusCode(200)
+      .extract()
+      .path(
+        "messages.find { msg -> msg.To.any { it.Address == '%s' } }.Snippet".formatted(
+          email
+        )
+      );
 
-    Pattern pattern = Pattern.compile("(http://localhost:8080/verify\\?code=[^\\s]+)");
+    Pattern pattern = Pattern.compile(
+      "(http://localhost:8080/verify\\?code=[^\\s]+)"
+    );
     Matcher matcher = pattern.matcher(verificationSnippet);
 
     assertThat(matcher.find(), equalTo(true));
@@ -71,11 +76,11 @@ class SignUpTest {
 
     // Send verification request to extracted link
     given()
-        .when()
-        .get(verificationLink)
-        .then()
-        .statusCode(200)
-        .body(containsString("Book recommendation app"));
+      .when()
+      .get(verificationLink)
+      .then()
+      .statusCode(200)
+      .body(containsString("Book recommendation app"));
   }
 
   @Test
@@ -85,50 +90,55 @@ class SignUpTest {
     String email = "antanas" + uuid + "@gmail.com";
 
     // Send sign up request
-    Response response =
-        given()
-            .cookie("XSRF-TOKEN", csrfToken)
-            .header("X-XSRF-TOKEN", csrfToken)
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {
-                  "email": "%s",
-                  "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
-                  "roles": [
-                     1
-                  ]
-                }
-                """
-                    .formatted(email))
-            .when()
-            .post("http://localhost:8080/signup")
-            .then()
-            .statusCode(201)
-            .body("$", aMapWithSize(3))
-            .body("email", equalTo(email))
-            .body("roles", hasSize(1))
-            .body("roles[0]", equalTo(1))
-            .extract()
-            .response();
+    Response response = given()
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      .body(
+        """
+        {
+          "email": "%s",
+          "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbp",
+          "roles": [
+             1
+          ]
+        }
+        """.formatted(email)
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(201)
+      .body("$", aMapWithSize(3))
+      .body("email", equalTo(email))
+      .body("roles", hasSize(1))
+      .body("roles[0]", equalTo(1))
+      .extract()
+      .response();
 
     int id = response.path("id");
     assertThat(id, greaterThan(0));
-    assertThat(response.getHeader("Location"), equalTo("http://localhost:8080/signup/" + id));
+    assertThat(
+      response.getHeader("Location"),
+      equalTo("http://localhost:8080/signup/" + id)
+    );
 
     // Extract verification link from email message
-    String verificationSnippet =
-        given()
-            .when()
-            .get("http://localhost:8025/api/v1/messages")
-            .then()
-            .statusCode(200)
-            .extract()
-            .path(
-                "messages.find { msg -> msg.To.any { it.Address == '%s' } }.Snippet"
-                    .formatted(email));
+    String verificationSnippet = given()
+      .when()
+      .get("http://localhost:8025/api/v1/messages")
+      .then()
+      .statusCode(200)
+      .extract()
+      .path(
+        "messages.find { msg -> msg.To.any { it.Address == '%s' } }.Snippet".formatted(
+          email
+        )
+      );
 
-    Pattern pattern = Pattern.compile("(http://localhost:8080/verify\\?code=[^\\s]+)");
+    Pattern pattern = Pattern.compile(
+      "(http://localhost:8080/verify\\?code=[^\\s]+)"
+    );
     Matcher matcher = pattern.matcher(verificationSnippet);
 
     assertThat(matcher.find(), equalTo(true));
@@ -136,11 +146,11 @@ class SignUpTest {
 
     // Send verification request to extracted link
     given()
-        .when()
-        .get(verificationLink)
-        .then()
-        .statusCode(200)
-        .body(containsString("Book recommendation app"));
+      .when()
+      .get(verificationLink)
+      .then()
+      .statusCode(200)
+      .body(containsString("Book recommendation app"));
   }
 
   // Email
@@ -154,25 +164,26 @@ class SignUpTest {
     String csrfToken = this.getCsrfToken();
 
     given()
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(
-            """
-            {
-              "email": null,
-              "password": "r9$CbHEaGXLUsP",
-              "roles": [
-                 1
-              ]
-            }
-            """)
-        .when()
-        .post("http://localhost:8080/signup")
-        .then()
-        .statusCode(400)
-        .body("$", aMapWithSize(1))
-        .body("email", equalTo("must not be null"));
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      .body(
+        """
+        {
+          "email": null,
+          "password": "r9$CbHEaGXLUsP",
+          "roles": [
+             1
+          ]
+        }
+        """
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(400)
+      .body("$", aMapWithSize(1))
+      .body("email", equalTo("must not be null"));
   }
 
   @Test
@@ -180,25 +191,26 @@ class SignUpTest {
     String csrfToken = this.getCsrfToken();
 
     given()
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(
-            """
-            {
-              "email": "f@b.c",
-              "password": "r9$CbHEaGXLUsP",
-              "roles": [
-                 1
-              ]
-            }
-            """)
-        .when()
-        .post("http://localhost:8080/signup")
-        .then()
-        .statusCode(400)
-        .body("$", aMapWithSize(1))
-        .body("email", equalTo("Email must be at least 7 characters long"));
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      .body(
+        """
+        {
+          "email": "f@b.c",
+          "password": "r9$CbHEaGXLUsP",
+          "roles": [
+             1
+          ]
+        }
+        """
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(400)
+      .body("$", aMapWithSize(1))
+      .body("email", equalTo("Email must be at least 7 characters long"));
   }
 
   @Test
@@ -206,25 +218,26 @@ class SignUpTest {
     String csrfToken = this.getCsrfToken();
 
     given()
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(
-            """
-	        {
-	          "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrv@gmail.com",
-	          "password": "r9$CbHEaGXLUsP",
-	          "roles": [
-	             1
-	          ]
-	        }
-	        """)
-        .when()
-        .post("http://localhost:8080/signup")
-        .then()
-        .statusCode(400)
-        .body("$", aMapWithSize(1))
-        .body("email", equalTo("must be a well-formed email address"));
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      .body(
+        """
+        {
+          "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrv@gmail.com",
+          "password": "r9$CbHEaGXLUsP",
+          "roles": [
+             1
+          ]
+        }
+        """
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(400)
+      .body("$", aMapWithSize(1))
+      .body("email", equalTo("must be a well-formed email address"));
   }
 
   @Test
@@ -232,25 +245,26 @@ class SignUpTest {
     String csrfToken = this.getCsrfToken();
 
     given()
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(
-            """
-            {
-              "email": "jurgis@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegw.com",
-              "password": "r9$CbHEaGXLUsP",
-              "roles": [
-                 1
-              ]
-            }
-            """)
-        .when()
-        .post("http://localhost:8080/signup")
-        .then()
-        .statusCode(400)
-        .body("$", aMapWithSize(1))
-        .body("email", equalTo("must be a well-formed email address"));
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      .body(
+        """
+        {
+          "email": "jurgis@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegw.com",
+          "password": "r9$CbHEaGXLUsP",
+          "roles": [
+             1
+          ]
+        }
+        """
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(400)
+      .body("$", aMapWithSize(1))
+      .body("email", equalTo("must be a well-formed email address"));
   }
 
   @Test
@@ -258,25 +272,26 @@ class SignUpTest {
     String csrfToken = this.getCsrfToken();
 
     given()
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(
-            """
-            {
-              "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrrsdfsdfse@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegwasdasde.com",
-              "password": "r9$CbHEaGXLUsP",
-              "roles": [
-                 1
-              ]
-            }
-            """)
-        .when()
-        .post("http://localhost:8080/signup")
-        .then()
-        .statusCode(400)
-        .body("$", aMapWithSize(1))
-        .body("email", equalTo("must be a well-formed email address"));
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      .body(
+        """
+        {
+          "email": "ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicezrrsdfsdfse@ivctsadyhqcfxzjinykxemzadbyajutuqzawknkckrgbzcjlwgufbrcycrdicegwasdasde.com",
+          "password": "r9$CbHEaGXLUsP",
+          "roles": [
+             1
+          ]
+        }
+        """
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(400)
+      .body("$", aMapWithSize(1))
+      .body("email", equalTo("must be a well-formed email address"));
   }
 
   @Test
@@ -286,50 +301,55 @@ class SignUpTest {
     String email = "antanas" + uuid + "@gmail.com";
 
     // Send sign up request
-    Response response =
-        given()
-            .cookie("XSRF-TOKEN", csrfToken)
-            .header("X-XSRF-TOKEN", csrfToken)
-            .contentType(ContentType.JSON)
-            .body(
-                """
-                {
-                  "email": "%s",
-                  "password": "r9$CbHEaGXLUsP",
-                  "roles": [
-                     1
-                  ]
-                }
-                """
-                    .formatted(email))
-            .when()
-            .post("http://localhost:8080/signup")
-            .then()
-            .statusCode(201)
-            .body("$", aMapWithSize(3))
-            .body("email", equalTo(email))
-            .body("roles", hasSize(1))
-            .body("roles[0]", equalTo(1))
-            .extract()
-            .response();
+    Response response = given()
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      .body(
+        """
+        {
+          "email": "%s",
+          "password": "r9$CbHEaGXLUsP",
+          "roles": [
+             1
+          ]
+        }
+        """.formatted(email)
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(201)
+      .body("$", aMapWithSize(3))
+      .body("email", equalTo(email))
+      .body("roles", hasSize(1))
+      .body("roles[0]", equalTo(1))
+      .extract()
+      .response();
 
     int id = response.path("id");
     assertThat(id, greaterThan(0));
-    assertThat(response.getHeader("Location"), equalTo("http://localhost:8080/signup/" + id));
+    assertThat(
+      response.getHeader("Location"),
+      equalTo("http://localhost:8080/signup/" + id)
+    );
 
     // Extract verification link from email message
-    String verificationSnippet =
-        given()
-            .when()
-            .get("http://localhost:8025/api/v1/messages")
-            .then()
-            .statusCode(200)
-            .extract()
-            .path(
-                "messages.find { msg -> msg.To.any { it.Address == '%s' } }.Snippet"
-                    .formatted(email));
+    String verificationSnippet = given()
+      .when()
+      .get("http://localhost:8025/api/v1/messages")
+      .then()
+      .statusCode(200)
+      .extract()
+      .path(
+        "messages.find { msg -> msg.To.any { it.Address == '%s' } }.Snippet".formatted(
+          email
+        )
+      );
 
-    Pattern pattern = Pattern.compile("(http://localhost:8080/verify\\?code=[^\\s]+)");
+    Pattern pattern = Pattern.compile(
+      "(http://localhost:8080/verify\\?code=[^\\s]+)"
+    );
     Matcher matcher = pattern.matcher(verificationSnippet);
 
     assertThat(matcher.find(), equalTo(true));
@@ -337,34 +357,34 @@ class SignUpTest {
 
     // Send verification request to extracted link
     given()
-        .when()
-        .get(verificationLink)
-        .then()
-        .statusCode(200)
-        .body(containsString("Book recommendation app"));
+      .when()
+      .get(verificationLink)
+      .then()
+      .statusCode(200)
+      .body(containsString("Book recommendation app"));
 
     // Do not allow second user to register with same email
     given()
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(
-            """
-            {
-              "email": "%s",
-              "password": "r9$CbHEaGXLUsP",
-              "roles": [
-                 1
-              ]
-            }
-            """
-                .formatted(email))
-        .when()
-        .post("http://localhost:8080/signup")
-        .then()
-        .statusCode(400)
-        .body("$", aMapWithSize(1))
-        .body("email", equalTo("Such email address is already in use"));
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      .body(
+        """
+        {
+          "email": "%s",
+          "password": "r9$CbHEaGXLUsP",
+          "roles": [
+             1
+          ]
+        }
+        """.formatted(email)
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(400)
+      .body("$", aMapWithSize(1))
+      .body("email", equalTo("Such email address is already in use"));
   }
 
   // Password
@@ -380,26 +400,26 @@ class SignUpTest {
     String email = "antanas" + uuid + "@gmail.com";
 
     given()
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(
-            """
-            {
-              "email": "%s",
-              "password": null,
-              "roles": [
-                 1
-              ]
-            }
-            """
-                .formatted(email))
-        .when()
-        .post("http://localhost:8080/signup")
-        .then()
-        .statusCode(400)
-        .body("$", aMapWithSize(1))
-        .body("password", equalTo("must not be null"));
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      .body(
+        """
+        {
+          "email": "%s",
+          "password": null,
+          "roles": [
+             1
+          ]
+        }
+        """.formatted(email)
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(400)
+      .body("$", aMapWithSize(1))
+      .body("password", equalTo("must not be null"));
   }
 
   @Test
@@ -409,27 +429,27 @@ class SignUpTest {
     String email = "antanas" + uuid + "@gmail.com";
 
     given()
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        // The password is 13 characters long
-        .body(
-            """
-            {
-              "email": "%s",
-              "password": "grxnqdgnsqbqj",
-              "roles": [
-                 1
-              ]
-            }
-            """
-                .formatted(email))
-        .when()
-        .post("http://localhost:8080/signup")
-        .then()
-        .statusCode(400)
-        .body("$", aMapWithSize(1))
-        .body("password", equalTo("size must be between 14 and 64"));
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      // The password is 13 characters long
+      .body(
+        """
+        {
+          "email": "%s",
+          "password": "grxnqdgnsqbqj",
+          "roles": [
+             1
+          ]
+        }
+        """.formatted(email)
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(400)
+      .body("$", aMapWithSize(1))
+      .body("password", equalTo("size must be between 14 and 64"));
   }
 
   @Test
@@ -439,27 +459,27 @@ class SignUpTest {
     String email = "antanas" + uuid + "@gmail.com";
 
     given()
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        // The provided password is 65 characters long
-        .body(
-            """
-            {
-              "email": "%s",
-              "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbpr",
-              "roles": [
-                 1
-              ]
-            }
-            """
-                .formatted(email))
-        .when()
-        .post("http://localhost:8080/signup")
-        .then()
-        .statusCode(400)
-        .body("$", aMapWithSize(1))
-        .body("password", equalTo("size must be between 14 and 64"));
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      // The provided password is 65 characters long
+      .body(
+        """
+        {
+          "email": "%s",
+          "password": "metyjwgaqakvjdrbpqsoywhrqzpesbrtsbtqfseffbivpfsaaihttjnjbmrbexbpr",
+          "roles": [
+             1
+          ]
+        }
+        """.formatted(email)
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(400)
+      .body("$", aMapWithSize(1))
+      .body("password", equalTo("size must be between 14 and 64"));
   }
 
   @Test
@@ -469,29 +489,31 @@ class SignUpTest {
     String email = "antanas" + uuid + "@gmail.com";
 
     given()
-        .cookie("XSRF-TOKEN", csrfToken)
-        .header("X-XSRF-TOKEN", csrfToken)
-        .contentType(ContentType.JSON)
-        .body(
-            """
-            {
-              "email": "%s",
-              "password": "12345678912345",
-              "roles": [
-                 1
-              ]
-            }
-            """
-                .formatted(email))
-        .when()
-        .post("http://localhost:8080/signup")
-        .then()
-        .statusCode(400)
-        .body("$", aMapWithSize(4))
-        .body(
-            "detail",
-            equalTo(
-                "The provided password is compromised and cannot be used. Use something more unique"));
+      .cookie("XSRF-TOKEN", csrfToken)
+      .header("X-XSRF-TOKEN", csrfToken)
+      .contentType(ContentType.JSON)
+      .body(
+        """
+        {
+          "email": "%s",
+          "password": "12345678912345",
+          "roles": [
+             1
+          ]
+        }
+        """.formatted(email)
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(400)
+      .body("$", aMapWithSize(4))
+      .body(
+        "detail",
+        equalTo(
+          "The provided password is compromised and cannot be used. Use something more unique"
+        )
+      );
   }
 
   @Test
@@ -500,28 +522,32 @@ class SignUpTest {
     String email = "antanas" + uuid + "@gmail.com";
 
     given()
-        .contentType(ContentType.JSON)
-        .body(
-            """
-            {
-              "email": "%s",
-              "password": "r9$CbHEaGXLUsP",
-              "roles": [
-                 1
-              ]
-            }
-            """
-                .formatted(email))
-        .when()
-        .post("http://localhost:8080/signup")
-        .then()
-        .statusCode(401)
-        .body(emptyOrNullString());
+      .contentType(ContentType.JSON)
+      .body(
+        """
+        {
+          "email": "%s",
+          "password": "r9$CbHEaGXLUsP",
+          "roles": [
+             1
+          ]
+        }
+        """.formatted(email)
+      )
+      .when()
+      .post("http://localhost:8080/signup")
+      .then()
+      .statusCode(401)
+      .body(emptyOrNullString());
   }
 
   private String getCsrfToken() {
-    Response csrfResponse =
-        given().when().get("http://localhost:8080/open").then().extract().response();
+    Response csrfResponse = given()
+      .when()
+      .get("http://localhost:8080/open")
+      .then()
+      .extract()
+      .response();
 
     return csrfResponse.cookie("XSRF-TOKEN");
   }

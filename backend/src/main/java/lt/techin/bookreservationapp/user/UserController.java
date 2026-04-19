@@ -23,7 +23,10 @@ class UserController {
   private final String frontendUrl;
 
   @Autowired
-  UserController(UserService userService, @Value("${FRONTEND_URL}") String frontendUrl) {
+  UserController(
+    UserService userService,
+    @Value("${FRONTEND_URL}") String frontendUrl
+  ) {
     this.userService = userService;
     this.frontendUrl = frontendUrl;
   }
@@ -31,15 +34,17 @@ class UserController {
   // TODO: change this to /users? Because the Location header is something like
   // this: /signup/113
   @PostMapping("/signup")
-  ResponseEntity<Object> signup(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+  ResponseEntity<Object> signup(
+    @RequestBody @Valid UserRequestDTO userRequestDTO
+  ) {
     UserResponseDTO savedUser = this.userService.saveUser(userRequestDTO);
 
     return ResponseEntity.created(
-            ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(savedUser.id())
-                .toUri())
-        .body(savedUser);
+      ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(savedUser.id())
+        .toUri()
+    ).body(savedUser);
   }
 
   @GetMapping("/user")
@@ -47,8 +52,9 @@ class UserController {
     User user = (User) authentication.getPrincipal();
 
     return new UserAuthenticationResponseDTO(
-        Objects.requireNonNull(user).getEmail(),
-        user.getRoles().stream().map(Role::getName).toList());
+      Objects.requireNonNull(user).getEmail(),
+      user.getRoles().stream().map(Role::getName).toList()
+    );
   }
 
   @GetMapping("/open")
