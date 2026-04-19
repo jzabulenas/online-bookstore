@@ -117,6 +117,7 @@ test("should not generate particular books if they were liked before", async ({
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
 
   // Log in
   await page.goto("http://localhost:5173");
@@ -269,6 +270,7 @@ test("should display error message when books are generated more than 6 times", 
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
 
   // Log in
   await page.goto("http://localhost:5173");

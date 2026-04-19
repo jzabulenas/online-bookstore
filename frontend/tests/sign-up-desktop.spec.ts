@@ -38,6 +38,7 @@ test("should sign up", async ({ page }) => {
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
 
   // Assert final page
   await expect(page1).toHaveURL("http://localhost:5173/verification-success");
@@ -88,6 +89,7 @@ test("should sign up with longest password possible", async ({ page }) => {
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
 
   // Assert final page
   await expect(page1).toHaveURL("http://localhost:5173/verification-success");
