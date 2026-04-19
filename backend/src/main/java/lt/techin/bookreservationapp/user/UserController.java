@@ -2,6 +2,7 @@ package lt.techin.bookreservationapp.user;
 
 import jakarta.validation.Valid;
 import java.util.Objects;
+import lt.techin.bookreservationapp.rate_limiting.WithRateLimitProtection;
 import lt.techin.bookreservationapp.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +34,7 @@ class UserController {
 
   // TODO: change this to /users? Because the Location header is something like
   // this: /signup/113
+  @WithRateLimitProtection
   @PostMapping("/signup")
   ResponseEntity<Object> signup(
     @RequestBody @Valid UserRequestDTO userRequestDTO
