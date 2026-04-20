@@ -64,7 +64,6 @@ export default function GenerateBooks() {
         }
 
         setBooks(json);
-        console.log(json);
       } catch (error) {
         if (error instanceof Error) console.error(error.message);
       }
