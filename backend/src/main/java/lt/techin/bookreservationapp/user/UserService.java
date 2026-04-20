@@ -4,6 +4,8 @@ import java.util.List;
 import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.role.RoleMapper;
 import lt.techin.bookreservationapp.role.RoleRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.authentication.password.CompromisedPasswordException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+
+  private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
@@ -61,8 +65,11 @@ public class UserService {
     try {
       this.emailService.sendVerificationMail(savedUser);
     } catch (UserMailFailedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      LOG.error(
+        "Failed to send verification email to {}",
+        savedUser.getEmail(),
+        e
+      );
     }
 
     return UserMapper.toDTO(savedUser, toRolesIds);
