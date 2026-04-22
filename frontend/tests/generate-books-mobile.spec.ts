@@ -21,7 +21,11 @@ test("should generate 3 books to read when provided input", async ({
   await page
     .getByRole("textbox", { name: "Input your book:" })
     .fill("The Merry Adventures of Robin Hood by Howard Pyle");
+  const responsePromise = page.waitForResponse(
+    "http://localhost:8080/generate-books",
+  );
   await page.getByRole("button", { name: "Submit" }).tap();
+  await responsePromise;
 
   await expect(page).toHaveURL("http://localhost:5173/");
   await expect(page.getByRole("main")).toMatchAriaSnapshot(`
