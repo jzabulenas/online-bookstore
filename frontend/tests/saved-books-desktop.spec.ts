@@ -37,6 +37,7 @@ test("should click like on a single generated book, and see it displayed in 'sav
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
 
   // Log in
   await page.goto("http://localhost:5173");
@@ -100,6 +101,7 @@ test("should click like on two generated books, and see them displayed in 'saved
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
 
   // Log in
   await page.goto("http://localhost:5173");
@@ -168,6 +170,7 @@ test("should click like on three generated books, and see them displayed in 'sav
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
 
   // Log in
   await page.goto("http://localhost:5173");
@@ -242,6 +245,7 @@ test("should click like on generated books, and not see them displayed in 'saved
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
 
   // Log in
   await page.goto("http://localhost:5173");
@@ -296,6 +300,7 @@ test("should click like on generated books, and not see them displayed in 'saved
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page2 = await page2Promise;
+  await page2.waitForURL("**/verification-success");
 
   // Log in
   await page.goto("http://localhost:5173");
@@ -352,6 +357,7 @@ test("should not see liked books if no books are liked after generating books", 
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
 
   // Log in
   await page.goto("http://localhost:5173");

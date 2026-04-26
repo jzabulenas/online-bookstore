@@ -43,3 +43,4 @@ server:
     session:
       cookie:
         max-age: 30m
+        same-site: strict

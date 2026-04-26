@@ -48,7 +48,6 @@ export default function Login() {
           navigate("/oauth2/redirect");
         }
       } catch (error) {
-        console.log("This is caught");
         if (error instanceof Error) console.error(error.message);
       }
     }

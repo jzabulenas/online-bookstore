@@ -1,6 +1,7 @@
 package lt.techin.bookreservationapp.security;
 
 import java.util.List;
+import lt.techin.bookreservationapp.rate_limiting.LoginRateLimitFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
@@ -22,9 +24,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 class SecurityConfig {
 
   private final String frontendUrl;
+  private final LoginRateLimitFilter loginRateLimitFilter;
 
-  SecurityConfig(@Value("${frontend.url}") String frontendUrl) {
+  SecurityConfig(
+    @Value("${frontend.url}") String frontendUrl,
+    LoginRateLimitFilter loginRateLimitFilter
+  ) {
     this.frontendUrl = frontendUrl;
+    this.loginRateLimitFilter = loginRateLimitFilter;
   }
 
   @Bean
@@ -57,6 +64,10 @@ class SecurityConfig {
           .permitAll()
           .anyRequest()
           .authenticated()
+      )
+      .addFilterBefore(
+        this.loginRateLimitFilter,
+        UsernamePasswordAuthenticationFilter.class
       );
 
     return http.build();

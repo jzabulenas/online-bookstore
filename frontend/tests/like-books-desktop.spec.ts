@@ -33,6 +33,7 @@ test("should click like on a single generated book, and see the icon change colo
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
 
   // Log in
   await page.goto("http://localhost:5173");
@@ -106,6 +107,7 @@ test("should click like on two generated books, and see their icons change color
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
 
   // Log in
   await page.goto("http://localhost:5173");
@@ -180,6 +182,7 @@ test("should click like on three generated books, and see their icons change col
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .click();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
 
   // Log in
   await page.goto("http://localhost:5173");

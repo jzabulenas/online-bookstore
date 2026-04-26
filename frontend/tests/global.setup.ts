@@ -45,6 +45,7 @@ setup("create default user", async ({ page }) => {
     .getByRole("link", { name: "http://localhost:8080/verify?" })
     .tap();
   const page1 = await page1Promise;
+  await page1.waitForURL("**/verification-success");
   await page.goto("http://localhost:8025");
   await page.getByRole("link", { name: "noreply@myapp.xyz" }).tap();
   // Clicks on the trash icon logo to delete the email. Not sure how this 
