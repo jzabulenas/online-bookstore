@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import csrfToken from "../util/getCsrfToken";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type LoginFormData = {
   email: string;
@@ -100,6 +100,9 @@ export default function Login() {
             >
               Submit
             </button>
+            <p className="mt-2">
+              <Link to="/forgot-password">Forgot password?</Link>
+            </p>
           </form>
         </div>
       </div>

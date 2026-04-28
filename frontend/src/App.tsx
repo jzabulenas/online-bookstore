@@ -2,10 +2,13 @@ import { Route, Routes } from "react-router-dom";
 import About from "./components/About";
 import ErrorPage from "./components/ErrorPage";
 import Footer from "./components/Footer";
+import ForgotPassword from "./components/ForgotPassword";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import OAuth2RedirectHandler from "./components/OAuth2RedirectHandler";
+import ResetPassword from "./components/ResetPassword";
+import ResetPasswordSuccess from "./components/ResetPasswordSuccess";
 import SavedBooks from "./components/SavedBooks";
 import Signup from "./components/Signup";
 import { useState } from "react";
@@ -51,6 +54,18 @@ function App() {
           <Route
             path="/verification-success"
             element={<VerificationSuccess />}
+          />
+          <Route
+            path="/forgot-password"
+            element={<ForgotPassword />}
+          />
+          <Route
+            path="/reset-password"
+            element={<ResetPassword />}
+          />
+          <Route
+            path="/reset-password-success"
+            element={<ResetPasswordSuccess />}
           />
           <Route
             path="*"

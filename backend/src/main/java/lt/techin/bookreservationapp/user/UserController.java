@@ -64,6 +64,24 @@ class UserController {
     return "This is an open endpoint";
   }
 
+  @WithRateLimitProtection
+  @PostMapping("/forgot-password")
+  ResponseEntity<Void> forgotPassword(
+    @RequestBody @Valid ForgotPasswordRequestDTO dto
+  ) {
+    this.userService.initiatePasswordReset(dto.email());
+    return ResponseEntity.ok().build();
+  }
+
+  @WithRateLimitProtection
+  @PostMapping("/reset-password")
+  ResponseEntity<Void> resetPassword(
+    @RequestBody @Valid ResetPasswordRequestDTO dto
+  ) {
+    this.userService.resetPassword(dto.token(), dto.password());
+    return ResponseEntity.ok().build();
+  }
+
   @GetMapping("/verify")
   RedirectView verify(@RequestParam String code) {
     User user = this.userService.findUserByVerificationCode(code);

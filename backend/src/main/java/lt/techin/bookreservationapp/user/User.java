@@ -10,6 +10,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import lt.techin.bookreservationapp.role.Role;
@@ -31,6 +32,8 @@ public class User implements UserDetails {
   private String password;
   private boolean isEnabled;
   private String verificationCode;
+  private String passwordResetCode;
+  private LocalDateTime passwordResetExpiry;
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
@@ -123,5 +126,26 @@ public class User implements UserDetails {
 
   void setVerificationCodeToNull() {
     this.verificationCode = null;
+  }
+
+  String getPasswordResetCode() {
+    return this.passwordResetCode;
+  }
+
+  LocalDateTime getPasswordResetExpiry() {
+    return this.passwordResetExpiry;
+  }
+
+  void setPasswordResetCode(String code) {
+    this.passwordResetCode = code;
+  }
+
+  void setPasswordResetExpiry(LocalDateTime expiry) {
+    this.passwordResetExpiry = expiry;
+  }
+
+  void clearPasswordResetToken() {
+    this.passwordResetCode = null;
+    this.passwordResetExpiry = null;
   }
 }
