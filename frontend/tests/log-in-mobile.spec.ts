@@ -19,7 +19,7 @@ test("should log in, when correct credentials are provided", async ({
 
   await expect(page).toHaveURL("http://localhost:5173/");
   await expect(
-    page.getByRole("heading", { name: "Welcome, jurgis@inbox.lt" })
+    page.getByRole("heading", { name: "Welcome, jurgis@inbox.lt" }),
   ).toBeVisible();
   await expect(page.locator("h1")).toContainText("Welcome, jurgis@inbox.lt");
   await expect(page).toHaveScreenshot();
@@ -39,9 +39,10 @@ test("should display error message, when log in credentials are incorrect", asyn
   await page.getByRole("button", { name: "Submit" }).tap();
 
   await expect(page).toHaveURL("http://localhost:5173/login");
-  await expect(page.getByText("Username or password is")).toBeVisible();
-  await expect(page.getByRole("paragraph")).toContainText(
-    "Username or password is incorrect."
-  );
+  await expect(
+    page
+      .getByRole("paragraph")
+      .filter({ hasText: "Username or password is incorrect." }),
+  ).toBeVisible();
   await expect(page).toHaveScreenshot();
 });

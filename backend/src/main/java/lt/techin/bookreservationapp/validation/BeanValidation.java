@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import lt.techin.bookreservationapp.user.EmailAlreadyExistsException;
+import lt.techin.bookreservationapp.user.InvalidPasswordResetTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -49,5 +50,13 @@ class BeanValidation {
       HttpStatus.BAD_REQUEST,
       exception.getMessage()
     );
+  }
+
+  @ExceptionHandler(InvalidPasswordResetTokenException.class)
+  ResponseEntity<Object> handleInvalidPasswordResetToken() {
+    Map<String, String> response = new HashMap<>();
+    response.put("token", "Invalid or expired password reset link");
+
+    return ResponseEntity.badRequest().body(response);
   }
 }

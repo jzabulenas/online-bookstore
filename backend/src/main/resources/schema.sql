@@ -11,7 +11,9 @@ CREATE TABLE users (
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   is_enabled tinyint(1) NOT NULL,
-  verification_code char(32)
+  verification_code char(32),
+  password_reset_code char(32),
+  password_reset_expiry DATETIME
 );
 
 CREATE TABLE users_roles (

@@ -1,6 +1,10 @@
 package lt.techin.bookreservationapp.user;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import lt.techin.bookreservationapp.role.Role;
 import lt.techin.bookreservationapp.role.RoleMapper;
 import lt.techin.bookreservationapp.role.RoleRepository;
@@ -99,6 +103,57 @@ public class UserService {
   }
 
   void saveUser(User user) {
+    this.userRepository.save(user);
+  }
+
+  void initiatePasswordReset(String email) {
+    Optional<User> userOpt = this.userRepository.findByEmail(email);
+
+    if (userOpt.isEmpty()) {
+      return;
+    }
+
+    User user = userOpt.get();
+    String token = UUID.randomUUID().toString().replace("-", "");
+    user.setPasswordResetCode(token);
+    user.setPasswordResetExpiry(
+      LocalDateTime.now(Clock.systemUTC()).plusHours(1)
+    );
+    this.userRepository.save(user);
+
+    try {
+      this.emailService.sendPasswordResetMail(user);
+    } catch (UserMailFailedException e) {
+      LOG.error(
+        "Failed to send password reset email to {}",
+        user.getEmail(),
+        e
+      );
+    }
+  }
+
+  void resetPassword(String token, String newPassword) {
+    User user = this.userRepository.findByPasswordResetCode(token).orElseThrow(
+      InvalidPasswordResetTokenException::new
+    );
+
+    if (
+      user.getPasswordResetExpiry() == null ||
+      LocalDateTime.now(Clock.systemUTC()).isAfter(
+        user.getPasswordResetExpiry()
+      )
+    ) {
+      throw new InvalidPasswordResetTokenException();
+    }
+
+    if (this.compromisedPasswordChecker.check(newPassword).isCompromised()) {
+      throw new CompromisedPasswordException(
+        "The provided password is compromised and cannot be used. Use something more unique"
+      );
+    }
+
+    user.setPassword(this.passwordEncoder.encode(newPassword));
+    user.clearPasswordResetToken();
     this.userRepository.save(user);
   }
 }
